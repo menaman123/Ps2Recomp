@@ -1,6 +1,7 @@
 #include <capstone/capstone.h>
 #include <rabbitizer.h>
 #include "instructions/RabbitizerInstructionR5900.h"
+#include "Function.h"
 #include <elfio/elfio.hpp>
 #include <iostream>
 #include <vector>

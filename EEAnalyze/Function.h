@@ -6,7 +6,7 @@
 #include <string>
 #include "generated/Registers_enums.h"
 #include "instructions/RabbitizerInstruction.h"
-#include "RegisterState.h"
+#include "register_state.h"
 
 // Represents a single Basic Block of MIPS instructions.
 struct Block {
@@ -42,6 +42,11 @@ private:
     // --- Helper Methods ---
     // These are the individual analysis steps, now private to the class.
     void find_basic_blocks(const uint8_t* code, uint32_t code_size);
+
+    // Builds the control flow within the function
+    // Based on the last instruction, it fills in the taken_branch_successor_index and fall_through_successor_index for each block. After this method runs, the simple list of blocks has been transformed into a complete Control Flow Graph (CFG) that represents every possible path the original code could take.
     void build_control_flow_graph();
+
+    // It populates the this->registerStateAfterPrologue map with its findings. This gives you a snapshot of the register states right after the function's setup code has run, which is invaluable for the final code translation.
     void analyze_prologue();
 };

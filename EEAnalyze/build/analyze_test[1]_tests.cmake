@@ -1,7 +1,1 @@
-add_test([=[Analysis.SimpleLinearFunction]=]  C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/EEAnalyze/build/Release/analyze_test.exe [==[--gtest_filter=Analysis.SimpleLinearFunction]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[Analysis.SimpleLinearFunction]=]  PROPERTIES WORKING_DIRECTORY C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/EEAnalyze/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-add_test([=[Analysis.ForwardBranch]=]  C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/EEAnalyze/build/Release/analyze_test.exe [==[--gtest_filter=Analysis.ForwardBranch]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[Analysis.ForwardBranch]=]  PROPERTIES WORKING_DIRECTORY C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/EEAnalyze/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-add_test([=[Analysis.BackwardBranchLoop]=]  C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/EEAnalyze/build/Release/analyze_test.exe [==[--gtest_filter=Analysis.BackwardBranchLoop]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[Analysis.BackwardBranchLoop]=]  PROPERTIES WORKING_DIRECTORY C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/EEAnalyze/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  analyze_test_TESTS Analysis.SimpleLinearFunction Analysis.ForwardBranch Analysis.BackwardBranchLoop)
+set(  analyze_test_TESTS)

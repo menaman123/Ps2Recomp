@@ -33,6 +33,8 @@ add_library(rabbitizer STATIC ${RABBITIZER_SOURCES})
 target_include_directories(rabbitizer PUBLIC
     "${RABBITIZER_ROOT}/cplusplus/include"
     "${RABBITIZER_ROOT}/include"
+    "${RABBITIZER_ROOT}/include/generated"
+    
 )
 
 # Fetch GoogleTest automatically
