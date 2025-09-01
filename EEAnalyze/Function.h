@@ -49,4 +49,6 @@ private:
 
     // It populates the this->registerStateAfterPrologue map with its findings. This gives you a snapshot of the register states right after the function's setup code has run, which is invaluable for the final code translation.
     void analyze_prologue();
+
+    void dump_to_console() const;
 };

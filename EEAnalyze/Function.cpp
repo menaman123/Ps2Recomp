@@ -4,6 +4,8 @@
 #include <set>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <iomanip>
 
 void Function::find_basic_blocks(const uint8_t* code, uint32_t code_size) {
     if (code_size == 0) return;
@@ -214,4 +216,56 @@ void Function::analyze_prologue() {
             break;
         }
     }
+}
+
+void Function::analyze(const uint8_t* code, uint32_t code_size) {
+
+    // Step 1: Discover all basic blocks from the raw code.
+    // This populates the 'this->blocks' vector with instructions.
+    this->find_basic_blocks(code, code_size);
+
+    // Step 2: Connect the blocks together into a graph.
+    // This populates the successor indices in each block.
+    this->build_control_flow_graph();
+
+    // Step 3: Analyze the entry block for prologue information.
+    // This populates the 'registerStateAfterPrologue' and 'savedRegisterLocations' maps.
+    this->analyze_prologue();
+}
+
+void Function::dump_to_console() const {
+    // Print a header for the entire function
+    std::cout << "=========================================================" << std::endl;
+    std::cout << "Function: " << this->name << " at 0x" << std::hex << this->base_address << std::dec << std::endl;
+    std::cout << "=========================================================" << std::endl;
+
+    if (this->blocks.empty()) {
+        std::cout << "  (No basic blocks found for this function)" << std::endl;
+        return;
+    }
+
+    // Loop through each basic block that was found
+    for (size_t i = 0; i < this->blocks.size(); ++i) {
+        const Block& block = this->blocks[i];
+
+        // Print a header for the block, including its successor information
+        std::cout << "\n--- Block " << i << " at 0x" << std::hex << block.start_address
+                  << " (Ends at 0x" << block.end_address << ")" << std::dec << std::endl;
+        std::cout << "      Successors -> Taken: " << block.taken_branch_successor_index
+                  << ", Fall-through: " << block.fall_through_successor_index << std::endl;
+
+        // Loop through each instruction within the block
+        for (const RabbitizerInstruction& instr : block.instructions) {
+            char buffer[256];
+            // Get the disassembled instruction as a string
+            RabbitizerInstruction_disassemble(&instr, buffer, nullptr, 0, 0);
+
+            // Print the VRAM address, the raw machine code, and the disassembled string
+            std::cout << "  0x" << std::hex << instr.vram << ":  "
+                      << std::setw(8) << std::setfill('0') << instr.word << "    "
+                      << std::dec // Switch cout back to decimal for the next loop
+                      << buffer << std::endl;
+        }
+    }
+    std::cout << "\n================ End of Function (" << this->name << ") ================" << std::endl << std::endl;
 }

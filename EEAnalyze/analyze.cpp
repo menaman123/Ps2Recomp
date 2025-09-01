@@ -180,3 +180,91 @@ static uint64_t get_mips_branch_target(const cs_insn& insn) {
     return 0;
 }
 */
+
+#include "analyze.h"
+#include <algorithm> // For std::sort
+#include <vector>
+#include "instructions/RabbitizerInstructionR5900.h"
+#include "instructions/RabbitizerInstrDescriptor.h"
+
+// The main entry point for the analysis phase.
+std::vector<Function> analyze_executable(const uint8_t* text_buffer, uint32_t text_size, uint32_t text_vram_start) {
+
+    // --- Step 1: Global Analysis ---
+    // Find the VRAM address of every function in the .text section.
+    std::set<uint32_t> function_starts_set = find_function_starts(text_buffer, text_size, text_vram_start);
+
+    // Convert to a vector and sort so we can determine function sizes.
+    std::vector<uint32_t> sorted_starts(function_starts_set.begin(), function_starts_set.end());
+    std::sort(sorted_starts.begin(), sorted_starts.end());
+
+    std::vector<Function> all_functions;
+
+    // --- Step 2: Per-Function Analysis ---
+    // Iterate through the list of function start addresses.
+    for (size_t i = 0; i < sorted_starts.size(); ++i) {
+        uint32_t func_start_vram = sorted_starts[i];
+
+        // Determine the function's size by looking at where the next function starts.
+        uint32_t next_func_start_vram = (i + 1 < sorted_starts.size())
+                                      ? sorted_starts[i+1]
+                                      : (text_vram_start + text_size);
+        uint32_t func_size = next_func_start_vram - func_start_vram;
+
+        // Calculate a pointer to this specific function's code within the larger .text buffer.
+        uint32_t func_offset_in_buffer = func_start_vram - text_vram_start;
+        const uint8_t* func_code_ptr = text_buffer + func_offset_in_buffer;
+
+        // --- Step 3: Create and Analyze ---
+        // Create the Function object with its VRAM address.
+        Function func(func_start_vram);
+
+        // Tell the function to analyze itself, giving it a pointer to its own
+        // code and its specific size.
+        func.analyze(func_code_ptr, func_size);
+        func.dump_to_console();
+
+        all_functions.push_back(func);
+    }
+
+    return all_functions;
+}
+
+/**
+ * Scans the entire .text section to find the starting address of every function.
+ * It does this by finding all instructions that are targets of a JAL instruction.
+ * @param code A pointer to the raw bytes of the .text section.
+ * @param code_size The size of the .text section in bytes.
+ * @param text_vram_start The virtual memory address where the .text section starts.
+ * @return A set of unique addresses, each being the start of a function.
+ */
+std::set<uint32_t> find_function_starts(const uint8_t* code, uint32_t code_size, uint32_t text_vram_start) {
+    std::set<uint32_t> function_starts;
+
+    // Note: A more advanced version of this function would also parse the ELF's
+    // symbol table (.symtab) to find named functions, which is another
+    // excellent source for function entry points.
+
+    // Loop through the entire .text section to find all 'jal' targets.
+    for (uint32_t offset = 0; offset + 4 <= code_size; offset += 4) {
+        uint32_t current_vram = text_vram_start + offset;
+        uint32_t instruction_word = *(reinterpret_cast<const uint32_t*>(code + offset));
+
+        RabbitizerInstruction instr;
+        RabbitizerInstructionR5900_init(&instr, instruction_word, current_vram);
+        RabbitizerInstructionR5900_processUniqueId(&instr);
+
+        const RabbitizerInstrDescriptor* descriptor = instr.descriptor;
+
+        // The `doesLink` property is true for instructions that save a return address, like 'jal'.
+        // `isJumpWithAddress` distinguishes `jal` from `jalr`.
+        if (descriptor->doesLink && descriptor->isJumpWithAddress) {
+            uint32_t target_vram = RabbitizerInstruction_getInstrIndexAsVram(&instr);
+            function_starts.insert(target_vram);
+        }
+
+        RabbitizerInstruction_destroy(&instr);
+    }
+
+    return function_starts;
+}
