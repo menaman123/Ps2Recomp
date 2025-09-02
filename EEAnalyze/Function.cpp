@@ -1,11 +1,17 @@
 #include "Function.h"
 #include "instructions/RabbitizerInstructionR5900.h"
-#include "RegisterState.h"
 #include <set>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+
+Function::Function(uint32_t address) {
+    this->base_address = address;
+
+    // Create a default name, like "func_100238". This can be improved later.
+    this->name = "func_" + std::to_string(address);
+}
 
 void Function::find_basic_blocks(const uint8_t* code, uint32_t code_size) {
     if (code_size == 0) return;
@@ -35,7 +41,10 @@ void Function::find_basic_blocks(const uint8_t* code, uint32_t code_size) {
             } else {
                 target_vram = RabbitizerInstruction_getBranchVramGeneric(&instr);
             }
-            leader_addresses.insert(target_vram);
+            // Boundary check: Only add the target as a leader if it's within the function's code.
+            if (target_vram >= this->base_address && target_vram < this->base_address + code_size) {
+                leader_addresses.insert(target_vram);
+            }
         }
         RabbitizerInstruction_destroy(&instr);
     }
@@ -170,8 +179,8 @@ void Function::analyze_prologue() {
         // --- Pattern 1: Stack Allocation ---
         // Look for: daddiu sp, sp, -<size>
         if (instr.uniqueId == RABBITIZER_INSTR_ID_cpu_addiu &&
-            RabbitizerInstruction_get_rd(&instr) == RABBITIZER_REG_GPR_O32_sp &&
-            RabbitizerInstruction_get_rs(&instr) == RABBITIZER_REG_GPR_O32_sp) {
+            RAB_INSTR_GET_rd(&instr) == RABBITIZER_REG_GPR_O32_sp &&
+            RAB_INSTR_GET_rs(&instr) == RABBITIZER_REG_GPR_O32_sp) {
 
             int32_t stack_adjustment = RabbitizerInstruction_getProcessedImmediate(&instr);
             if (stack_adjustment < 0) {
@@ -183,9 +192,9 @@ void Function::analyze_prologue() {
         // --- Pattern 2: Saving Callee-Saved Registers ---
         // Look for: sd <s_reg_or_ra>, <offset>(sp)
         else if (instr.uniqueId == RABBITIZER_INSTR_ID_cpu_sd &&
-                 RabbitizerInstruction_get_rs(&instr) == RABBITIZER_REG_GPR_O32_sp) {
+                 RAB_INSTR_GET_rs(&instr) == RABBITIZER_REG_GPR_O32_sp) {
 
-            uint8_t saved_reg_num = RabbitizerInstruction_get_rt(&instr);
+            uint8_t saved_reg_num = RAB_INSTR_GET_rt(&instr);
             // Check if it's the return address ($ra) or a saved register ($s0-$s7)
             if (saved_reg_num == RABBITIZER_REG_GPR_O32_ra || (saved_reg_num >= RABBITIZER_REG_GPR_O32_s0 && saved_reg_num <= RABBITIZER_REG_GPR_O32_s7)) {
                 int32_t stack_offset = RabbitizerInstruction_getProcessedImmediate(&instr);
@@ -197,8 +206,8 @@ void Function::analyze_prologue() {
         // --- Pattern 3: Copying an Argument to a Saved Register ---
         // Look for: move s0, a0 (often `or s0, a0, $zero`)
         else if (descriptor->maybeIsMove && RabbitizerInstrDescriptor_modifiesRd(descriptor)) {
-            uint8_t dest_reg = RabbitizerInstruction_get_rd(&instr);
-            uint8_t source_reg = RabbitizerInstruction_get_rs(&instr);
+            uint8_t dest_reg = RAB_INSTR_GET_rd(&instr);
+            uint8_t source_reg = RAB_INSTR_GET_rs(&instr);
 
             // Check if it's a move from an argument register (a0-a3) to a saved register (s0-s7)
             if (dest_reg >= RABBITIZER_REG_GPR_O32_s0 && dest_reg <= RABBITIZER_REG_GPR_O32_s7 &&
@@ -218,18 +227,76 @@ void Function::analyze_prologue() {
     }
 }
 
-void Function::analyze(const uint8_t* code, uint32_t code_size) {
+void Function::cull_unreachable_blocks() {
+    if (this->blocks.empty()) {
+        return;
+    }
 
+    std::vector<Block> reachable_blocks;
+    std::set<uint32_t> reachable_addresses;
+    std::vector<uint32_t> worklist;
+    std::unordered_map<uint32_t, int> address_to_block_index;
+
+    // Create a quick lookup map
+    for (int i = 0; i < this->blocks.size(); ++i) {
+        address_to_block_index[this->blocks[i].start_address] = i;
+    }
+
+    // Start traversal at the function's entry point (block 0)
+    worklist.push_back(this->blocks[0].start_address);
+    reachable_addresses.insert(this->blocks[0].start_address);
+
+    while (!worklist.empty()) {
+        uint32_t current_addr = worklist.back();
+        worklist.pop_back();
+
+        if (address_to_block_index.count(current_addr) == 0) continue;
+
+        const Block& current_block = this->blocks[address_to_block_index.at(current_addr)];
+
+        // Add fall-through successor to worklist if it exists and hasn't been seen
+        if (current_block.fall_through_successor_index != -1) {
+            const Block& successor = this->blocks[current_block.fall_through_successor_index];
+            if (reachable_addresses.find(successor.start_address) == reachable_addresses.end()) {
+                reachable_addresses.insert(successor.start_address);
+                worklist.push_back(successor.start_address);
+            }
+        }
+        // Add taken branch successor to worklist if it exists and hasn't been seen
+        if (current_block.taken_branch_successor_index != -1) {
+            const Block& successor = this->blocks[current_block.taken_branch_successor_index];
+            if (reachable_addresses.find(successor.start_address) == reachable_addresses.end()) {
+                reachable_addresses.insert(successor.start_address);
+                worklist.push_back(successor.start_address);
+            }
+        }
+    }
+
+    // Build the final list of blocks containing only the ones we could reach.
+    std::vector<Block> final_blocks;
+    for (const auto& block : this->blocks) {
+        if (reachable_addresses.count(block.start_address)) {
+            final_blocks.push_back(block);
+        }
+    }
+    this->blocks = final_blocks;
+}
+
+void Function::analyze(const uint8_t* code, uint32_t code_size) {
+    std::cout << "    [1/4] Finding basic blocks..." << std::endl;
     // Step 1: Discover all basic blocks from the raw code.
-    // This populates the 'this->blocks' vector with instructions.
     this->find_basic_blocks(code, code_size);
 
+    std::cout << "    [2/4] Building Control Flow Graph..." << std::endl;
     // Step 2: Connect the blocks together into a graph.
-    // This populates the successor indices in each block.
     this->build_control_flow_graph();
 
-    // Step 3: Analyze the entry block for prologue information.
-    // This populates the 'registerStateAfterPrologue' and 'savedRegisterLocations' maps.
+    std::cout << "    [3/4] Culling unreachable blocks..." << std::endl;
+    // Step 3: Prune any blocks that are not reachable from the entry point.
+    this->cull_unreachable_blocks();
+
+    std::cout << "    [4/4] Analyzing prologue..." << std::endl;
+    // Step 4: Analyze the entry block for prologue information.
     this->analyze_prologue();
 }
 

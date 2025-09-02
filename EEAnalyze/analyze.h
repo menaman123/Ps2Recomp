@@ -13,15 +13,8 @@
  * @param code_size The size of the .text section.
  * @return A set of unique addresses, each being the start of a function.
  */
-std::set<uint32_t> find_function_starts(const uint8_t* code, uint32_t code_size);
+#include <elfio/elfio.hpp>
 
+std::set<uint32_t> find_function_starts(const ELFIO::elfio& reader, const uint8_t* code, uint32_t code_size, uint32_t text_vram_start);
 
-/**
- * The main entry point for the entire analysis phase.
- * It finds all function starts and then analyzes each one to produce a complete
- * representation of the program.
- * @param code A pointer to the raw bytes of the .text section.
- * @param code_size The size of the .text section.
- * @return A vector of fully analyzed Function objects.
- */
-std::vector<Function> build_functions(const uint8_t* code, uint32_t code_size);
+std::vector<Function> analyze_executable(const ELFIO::elfio& reader, uint32_t entry_point, const uint8_t* text_buffer, uint32_t text_size, uint32_t text_vram_start);

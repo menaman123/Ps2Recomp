@@ -180,7 +180,9 @@ static uint64_t get_mips_branch_target(const cs_insn& insn) {
     return 0;
 }
 */
-
+#include <iostream>
+#include <vector>
+#include <string>
 #include "analyze.h"
 #include <algorithm> // For std::sort
 #include <vector>
@@ -188,11 +190,14 @@ static uint64_t get_mips_branch_target(const cs_insn& insn) {
 #include "instructions/RabbitizerInstrDescriptor.h"
 
 // The main entry point for the analysis phase.
-std::vector<Function> analyze_executable(const uint8_t* text_buffer, uint32_t text_size, uint32_t text_vram_start) {
+std::vector<Function> analyze_executable(uint32_t entry_point, const uint8_t* text_buffer, uint32_t text_size, uint32_t text_vram_start) {
 
     // --- Step 1: Global Analysis ---
     // Find the VRAM address of every function in the .text section.
     std::set<uint32_t> function_starts_set = find_function_starts(text_buffer, text_size, text_vram_start);
+
+    // Manually add the main program entry point, as it's not called by a 'jal'.
+    function_starts_set.insert(entry_point);
 
     // Convert to a vector and sort so we can determine function sizes.
     std::vector<uint32_t> sorted_starts(function_starts_set.begin(), function_starts_set.end());
@@ -215,6 +220,8 @@ std::vector<Function> analyze_executable(const uint8_t* text_buffer, uint32_t te
         uint32_t func_offset_in_buffer = func_start_vram - text_vram_start;
         const uint8_t* func_code_ptr = text_buffer + func_offset_in_buffer;
 
+        std::cout << "[+] Analyzing function #" << (i + 1) << " at VRAM 0x" << std::hex << func_start_vram << " (Size: " << std::dec << func_size << " bytes)" << std::endl;
+
         // --- Step 3: Create and Analyze ---
         // Create the Function object with its VRAM address.
         Function func(func_start_vram);
@@ -222,9 +229,9 @@ std::vector<Function> analyze_executable(const uint8_t* text_buffer, uint32_t te
         // Tell the function to analyze itself, giving it a pointer to its own
         // code and its specific size.
         func.analyze(func_code_ptr, func_size);
-        func.dump_to_console();
 
         all_functions.push_back(func);
+        std::cout << "    -> Successfully analyzed and stored function 0x" << std::hex << func_start_vram << std::dec << std::endl;
     }
 
     return all_functions;
@@ -260,6 +267,9 @@ std::set<uint32_t> find_function_starts(const uint8_t* code, uint32_t code_size,
         // `isJumpWithAddress` distinguishes `jal` from `jalr`.
         if (descriptor->doesLink && descriptor->isJumpWithAddress) {
             uint32_t target_vram = RabbitizerInstruction_getInstrIndexAsVram(&instr);
+            std::cout << "Found JAL at 0x" << std::hex << current_vram
+                      << "  ->  Target: 0x" << target_vram << std::dec << std::endl;
+
             function_starts.insert(target_vram);
         }
 

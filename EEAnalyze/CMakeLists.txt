@@ -5,15 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 
-# --- Dependencies ---
-
-# Fetch Capstone automatically
-FetchContent_Declare(
-  capstone
-  URL https://github.com/capstone-engine/capstone/archive/5.0.1.zip
-)
-FetchContent_MakeAvailable(capstone)
-
 # Add Rabbitizer from the include directory
 set(RABBITIZER_ROOT "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/include/rabbitizer")
 
@@ -47,18 +38,35 @@ FetchContent_MakeAvailable(googletest)
 
 # --- EEAnalyze Library and Tests ---
 
-add_library(EEAnalyze STATIC analyze.cpp)
-target_include_directories(EEAnalyze PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(EEAnalyze PRIVATE capstone)
+# Create a library for our analysis source files
+add_library(EEAnalyze STATIC 
+    Function.cpp
+    analyze.cpp
+)
+# The EEAnalyze library needs to link to rabbitizer to use its functions
+target_link_libraries(EEAnalyze PUBLIC rabbitizer)
 
+# The EEAnalyze library needs access to its own headers and rabbitizer's headers
+target_include_directories(EEAnalyze PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR} 
+    "${RABBITIZER_ROOT}/include"
+)
+
+# Create the test executable
 add_executable(analyze_test analyze_test.cpp)
-target_link_libraries(analyze_test PRIVATE EEAnalyze gtest_main capstone)
+# The test executable needs to link to our library and gtest
+target_link_libraries(analyze_test PRIVATE EEAnalyze gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(analyze_test)
+gtest_add_tests(TARGET analyze_test AUTO)
 
 # --- Disassembler Executable ---
 
+# Create the main executable
 add_executable(disasm main.cpp)
-target_link_libraries(disasm PRIVATE rabbitizer capstone)
-target_include_directories(disasm PRIVATE "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\ELFIO")
+
+# The main executable needs to link to our analysis library and rabbitizer
+target_link_libraries(disasm PRIVATE EEAnalyze rabbitizer)
+
+# The main executable needs to know where the ELFIO headers are
+target_include_directories(disasm PRIVATE "C:/Users/Owner/Desktop/PS2_Recomp/ELFIO")
