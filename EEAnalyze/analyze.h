@@ -15,6 +15,6 @@
  */
 #include <elfio/elfio.hpp>
 
-std::set<uint32_t> find_function_starts(const ELFIO::elfio& reader, const uint8_t* code, uint32_t code_size, uint32_t text_vram_start);
+std::set<uint32_t> find_function_starts(const uint8_t* code, uint32_t code_size, uint32_t text_vram_start);
 
-std::vector<Function> analyze_executable(const ELFIO::elfio& reader, uint32_t entry_point, const uint8_t* text_buffer, uint32_t text_size, uint32_t text_vram_start);
+std::vector<Function> analyze_executable(uint32_t entry_point, const uint8_t* text_buffer, uint32_t text_size, uint32_t text_vram_start);

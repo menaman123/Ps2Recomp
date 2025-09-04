@@ -50,6 +50,7 @@ target_link_libraries(EEAnalyze PUBLIC rabbitizer)
 target_include_directories(EEAnalyze PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR} 
     "${RABBITIZER_ROOT}/include"
+    "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/include/ELFIO"
 )
 
 # Create the test executable
@@ -69,4 +70,15 @@ add_executable(disasm main.cpp)
 target_link_libraries(disasm PRIVATE EEAnalyze rabbitizer)
 
 # The main executable needs to know where the ELFIO headers are
-target_include_directories(disasm PRIVATE "C:/Users/Owner/Desktop/PS2_Recomp/ELFIO")
+target_include_directories(disasm PRIVATE "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/include/ELFIO")
+
+# --- Jump Table Analysis Script ---
+
+# Create the jump table analysis executable
+add_executable(jump_table_analysis jump_table_analysis.cpp)
+
+# The jump table analysis executable needs to link to our analysis library and rabbitizer
+target_link_libraries(jump_table_analysis PRIVATE EEAnalyze rabbitizer)
+
+# The jump table analysis executable needs to know where the ELFIO headers are
+target_include_directories(jump_table_analysis PRIVATE "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/include/ELFIO")

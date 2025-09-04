@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\575a5cac7d69ef0a95c6ca8cca610ce2\googletest-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\79847b93cdc4a230d090e7687b6a750d\googletest-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\5fb06e20017664e362372b27bd798cf9\googletest-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\_deps\googletest-subbuild\CMakeFiles\googletest-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{69FB4798-E223-337C-9EA2-9C03CA8B2787}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
