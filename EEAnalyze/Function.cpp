@@ -7,6 +7,31 @@
 #include <iomanip>
 #include <queue>
 
+// --- HELPER FUNCTIONS for Data Flow Analysis ---
+
+// Merges two individual register states.
+static RegisterState merge_individual_states(const RegisterState& state1, const RegisterState& state2) {
+    if (state1 == state2) {
+        return state1;
+    }
+    return RegisterState{StateUnknown{}};
+}
+
+// Merges the "source" state map into the "destination" state map.
+static RegisterStateMap merge_register_states(const RegisterStateMap& dest, const RegisterStateMap& source) {
+    RegisterStateMap merged_state = dest;
+    for (const auto& [reg, src_state] : source) {
+        if (merged_state.find(reg) != merged_state.end()) {
+            merged_state[reg] = merge_individual_states(merged_state.at(reg), src_state);
+        } else {
+            merged_state[reg] = src_state;
+        }
+    }
+    return merged_state;
+}
+
+// --- CONSTRUCTOR AND OTHER METHODS ---
+
 Function::Function(uint32_t address) {
     this->base_address = address;
     this->name = "func_" + std::to_string(address);
@@ -71,82 +96,73 @@ void Function::find_basic_blocks(const uint8_t* code, uint32_t code_size) {
 }
 
 void Function::build_control_flow_graph() {
-    // Create the address-to-index map for performance
     std::unordered_map<uint32_t, int> address_to_block_index;
     for (int i = 0; i < this->blocks.size(); ++i) {
         address_to_block_index[this->blocks[i].start_address] = i;
     }
 
-    // Loop through each block to set its successors
     for (int i = 0; i < this->blocks.size(); ++i) {
         Block& current_block = this->blocks[i];
         if (current_block.instructions.empty()) continue;
 
         const RabbitizerInstruction* control_flow_instr = nullptr;
 
-        // Check if the second-to-last instruction is a branch/jump.
         if (current_block.instructions.size() > 1) {
             const auto& potential_branch = current_block.instructions[current_block.instructions.size() - 2];
             if (RabbitizerInstruction_hasDelaySlot(&potential_branch)) {
                 control_flow_instr = &potential_branch;
             }
         }
-
-        // If not, check if the very last instruction is a branch/jump.
+        
         if (control_flow_instr == nullptr) {
             const auto& last_instr = current_block.instructions.back();
-            // --- FIX IS HERE ---
-            // Pass the pointer 'last_instr.descriptor' directly, not its address.
             if (RabbitizerInstruction_hasDelaySlot(&last_instr) || RabbitizerInstrDescriptor_isJump(last_instr.descriptor)) {
                 control_flow_instr = &last_instr;
             }
         }
-        
-        // If we found a branch/jump, analyze it.
+
         if (control_flow_instr != nullptr) {
             const RabbitizerInstrDescriptor* descriptor = control_flow_instr->descriptor;
 
             if (RabbitizerInstrDescriptor_isBranch(descriptor) && control_flow_instr->uniqueId != RABBITIZER_INSTR_ID_cpu_b) {
-                // Two successors
                 uint32_t target_address = RabbitizerInstruction_getBranchVramGeneric(control_flow_instr);
                 if (address_to_block_index.count(target_address)) {
                     current_block.taken_branch_successor_index = address_to_block_index.at(target_address);
+                    blocks[address_to_block_index.at(target_address)].predecessors.push_back(i);
                 }
                 uint32_t fallthrough_address = current_block.end_address;
                 if (address_to_block_index.count(fallthrough_address)) {
                     current_block.fall_through_successor_index = address_to_block_index.at(fallthrough_address);
+                     blocks[address_to_block_index.at(fallthrough_address)].predecessors.push_back(i);
                 }
             } else if (RabbitizerInstrDescriptor_isJump(descriptor) || control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_b) {
                 if (control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_jr && RAB_INSTR_GET_rs(control_flow_instr) == RABBITIZER_REG_GPR_O32_ra) {
                     // This is a 'jr $ra', a function return, so it has no successors.
                 } else {
-                    // One successor
                     uint32_t target_address = 0;
                     if (RabbitizerInstrDescriptor_isJumpWithAddress(descriptor)) {
                         target_address = RabbitizerInstruction_getInstrIndexAsVram(control_flow_instr);
                     } else {
                         target_address = RabbitizerInstruction_getBranchVramGeneric(control_flow_instr);
                     }
-
                     if (address_to_block_index.count(target_address)) {
                         current_block.fall_through_successor_index = address_to_block_index.at(target_address);
+                        blocks[address_to_block_index.at(target_address)].predecessors.push_back(i);
                     }
                 }
             }
         } else {
-            // It's a normal block of instructions.
             uint32_t fallthrough_address = current_block.end_address;
             if (address_to_block_index.count(fallthrough_address)) {
                 current_block.fall_through_successor_index = address_to_block_index.at(fallthrough_address);
+                blocks[address_to_block_index.at(fallthrough_address)].predecessors.push_back(i);
             }
         }
     }
 }
 
 void Function::analyze_prologue() {
-    if (this->blocks.empty()) {
-        return;
-    }
+    if (this->blocks.empty()) return;
 
     const Block& entry_block = this->blocks[0];
 
@@ -182,9 +198,7 @@ void Function::analyze_prologue() {
 }
 
 void Function::cull_unreachable_blocks() {
-    if (this->blocks.empty()) {
-        return;
-    }
+    if (this->blocks.empty()) return;
 
     std::set<uint32_t> reachable_addresses;
     std::vector<uint32_t> worklist;
@@ -232,49 +246,71 @@ void Function::cull_unreachable_blocks() {
 
 void Function::run_data_flow_analysis() {
     if (blocks.empty()) return;
+    std::cout << "      [DFA] Starting data flow analysis for " << name << std::endl;
 
     std::unordered_map<uint32_t, RegisterStateMap> block_start_states;
-    std::vector<uint32_t> worklist;
-    std::set<uint32_t> worklist_set; 
+    std::queue<int> worklist;
     std::unordered_map<uint32_t, int> address_to_block_index;
-    for (int i = 0; i < this->blocks.size(); ++i) {
+     for (int i = 0; i < this->blocks.size(); ++i) {
         address_to_block_index[this->blocks[i].start_address] = i;
     }
 
-    // Initialize with prologue state and add entry block to worklist
-    block_start_states[base_address] = registerStateAfterPrologue;
-    worklist.push_back(base_address);
-    worklist_set.insert(base_address);
+    block_start_states[base_address] = this->registerStateAfterPrologue;
+    worklist.push(0);
 
-    while(!worklist.empty()) {
-        uint32_t current_block_addr = worklist.back();
-        worklist.pop_back();
-        worklist_set.erase(current_block_addr);
+    int iterations = 0;
 
-        int block_index = address_to_block_index.at(current_block_addr);
-        const Block& current_block = blocks[block_index];
-        
-        RegisterStateMap final_state = DataFlowEngine::analyze_block(current_block, block_start_states[current_block_addr]);
+    while (!worklist.empty()) {
+        iterations++;
+        if (iterations > blocks.size() * 100) { 
+            std::cout << "      [DFA] WARNING: Exceeded max iterations (" << iterations << "), breaking." << std::endl;
+            break;
+        }
 
-        block_end_states[current_block_addr] = final_state;
+        int current_block_index = worklist.front();
+        worklist.pop();
 
-        auto process_successor = [&](int successor_index) {
-            if (successor_index != -1) {
-                const Block& successor_block = blocks[successor_index];
-                // For simplicity, we just overwrite. A real implementation would merge states.
-                block_start_states[successor_block.start_address] = final_state;
-                if (worklist_set.find(successor_block.start_address) == worklist_set.end()) {
-                    worklist.push_back(successor_block.start_address);
-                    worklist_set.insert(successor_block.start_address);
+        Block& current_block = blocks[current_block_index];
+        std::cout << "      [DFA] Iteration " << iterations << ": Processing Block " << current_block_index 
+                  << " at 0x" << std::hex << current_block.start_address << std::dec 
+                  << ". Worklist size: " << worklist.size() << std::endl;
+
+        RegisterStateMap merged_start_state;
+        if (current_block_index != 0) {
+            for (int pred_index : current_block.predecessors) {
+                const Block& pred_block = blocks[pred_index];
+                if (block_end_states.count(pred_block.start_address)) {
+                    merged_start_state = merge_register_states(merged_start_state, block_end_states.at(pred_block.start_address));
                 }
             }
-        };
+        } else {
+            merged_start_state = block_start_states.at(current_block.start_address);
+        }
+        
+        block_start_states[current_block.start_address] = merged_start_state;
+        
+        RegisterStateMap final_state = DataFlowEngine::analyze_block(current_block, merged_start_state);
 
-        process_successor(current_block.fall_through_successor_index);
-        process_successor(current_block.taken_branch_successor_index);
+        bool state_has_changed = false;
+        if (block_end_states.count(current_block.start_address) == 0 || block_end_states.at(current_block.start_address) != final_state) {
+            state_has_changed = true;
+        }
+        
+        if(state_has_changed) {
+            std::cout << "        -> State has CHANGED. Pushing successors to worklist." << std::endl;
+            block_end_states[current_block.start_address] = final_state;
+            if (current_block.fall_through_successor_index != -1) {
+                worklist.push(current_block.fall_through_successor_index);
+            }
+            if (current_block.taken_branch_successor_index != -1) {
+                worklist.push(current_block.taken_branch_successor_index);
+            }
+        } else {
+             std::cout << "        -> State is STABLE. No changes." << std::endl;
+        }
     }
+     std::cout << "      [DFA] Analysis for " << name << " finished after " << iterations << " iterations." << std::endl;
 }
-
 
 void Function::analyze(const uint8_t* code, uint32_t code_size) {
     std::cout << "    [1/5] Finding basic blocks..." << std::endl;
