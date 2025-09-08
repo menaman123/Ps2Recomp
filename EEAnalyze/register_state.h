@@ -1,47 +1,52 @@
+#pragma once
 #include <cstdint>
+#include <variant>
+#include <optional>
 #include "generated/Registers_enums.h"
+#include "generated/InstrId_enum.h"
 
-// The different kinds of states a register can be in
-enum class StateType {
-    UNKNOWN,          // Default state
-    CONSTANT,         // A known 32-bit or 64-bit integer value
-    SYMBOLIC,         // A copy of another register's value (e.g., from a 'move' instruction)
-    STACK_POINTER_RELATIVE // An offset from the initial stack pointer
+// --- State Definitions ---
+// Default/unknown state
+struct StateUnknown {};
+// A known 64-bit integer value
+struct StateConstant {
+    uint64_t value;
 };
-
-// A class to hold the details of the state
+// A copy of another register's value (e.g., from a 'move' instruction)
+struct StateSymbolic {
+    RabbitizerRegister_GprO32 source_register;
+};
+// An offset from the initial stack pointer
+struct StateStackRelative {
+    int32_t offset;
+};
+// The result of an arithmetic operation.
+// The analysis engine will look up the states of the source registers when needed.
+struct StateComputed {
+    RabbitizerInstrId op;
+    RabbitizerRegister_GprO32 rs;
+    RabbitizerRegister_GprO32 rt;
+};
+// A value loaded from memory.
+struct StateMemoryLoad {
+    RabbitizerRegister_GprO32 base_reg;
+    int32_t offset;
+};
+// A class to hold the details of the state using a std::variant
+using RegisterStateVariant = std::variant<
+    StateUnknown,
+    StateConstant,
+    StateSymbolic,
+    StateStackRelative,
+    StateComputed,
+    StateMemoryLoad
+>;
 class RegisterState {
 public:
-    StateType type = StateType::UNKNOWN;
-
-    // Use a union to save space, since a state can only be one type at a time
-    union {
-        uint64_t constantValue;
-        RabbitizerRegister_GprO32 sourceRegister;
-        int32_t stackOffset;
-    } value;
-
-    // Helper constructors to make creating states easier
-    RegisterState() : type(StateType::UNKNOWN) {}
-
-    static RegisterState asConstant(uint64_t val) {
-        RegisterState state;
-        state.type = StateType::CONSTANT;
-        state.value.constantValue = val;
-        return state;
-    }
-
-    static RegisterState asSymbolic(RabbitizerRegister_GprO32 reg) {
-        RegisterState state;
-        state.type = StateType::SYMBOLIC;
-        state.value.sourceRegister = reg;
-        return state;
-    }
-
-    static RegisterState asStackRelative(int32_t offset) {
-        RegisterState state;
-        state.type = StateType::STACK_POINTER_RELATIVE;
-        state.value.stackOffset = offset;
-        return state;
-    }
+    RegisterStateVariant state;
+    // Default constructor to initialize with an unknown state
+    RegisterState() : state(StateUnknown{}) {}
+    // Constructor to create a state from a specific type
+    template<typename T>
+    RegisterState(T&& s) : state(std::forward<T>(s)) {}
 };

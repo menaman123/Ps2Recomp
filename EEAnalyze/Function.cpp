@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <queue>
 
 Function::Function(uint32_t address) {
     this->base_address = address;
@@ -185,7 +186,7 @@ void Function::analyze_prologue() {
             int32_t stack_adjustment = RabbitizerInstruction_getProcessedImmediate(&instr);
             if (stack_adjustment < 0) {
                 // Found it. Record the new symbolic state of the stack pointer.
-                this->registerStateAfterPrologue[RABBITIZER_REG_GPR_O32_sp] = RegisterState::asStackRelative(stack_adjustment);
+                this->registerStateAfterPrologue[RABBITIZER_REG_GPR_O32_sp] = StateStackRelative{stack_adjustment};
             }
         }
 
@@ -215,7 +216,7 @@ void Function::analyze_prologue() {
 
                 // Record that the 's' register is now a symbolic copy of the 'a' register.
                 this->registerStateAfterPrologue[(RabbitizerRegister_GprO32)dest_reg] =
-                    RegisterState::asSymbolic((RabbitizerRegister_GprO32)source_reg);
+                    StateSymbolic{(RabbitizerRegister_GprO32)source_reg};
             }
         }
 

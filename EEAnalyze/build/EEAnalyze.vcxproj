@@ -282,6 +282,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\Function.cpp" />
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\analyze.cpp" />
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\DataFlowEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\build\ZERO_CHECK.vcxproj">

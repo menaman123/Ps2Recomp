@@ -7,6 +7,7 @@
 #include "generated/Registers_enums.h"
 #include "instructions/RabbitizerInstruction.h"
 #include "register_state.h"
+#include "DataFlowEngine.h" // Include the new engine
 
 // Represents a single Basic Block of MIPS instructions.
 struct Block {
@@ -30,6 +31,7 @@ public:
     std::vector<Block> blocks;
     std::unordered_map<RabbitizerRegister_GprO32, RegisterState> registerStateAfterPrologue;
     std::unordered_map<RabbitizerRegister_GprO32, int32_t> savedRegisterLocations;
+    std::unordered_map<uint32_t, RegisterStateMap> block_end_states; // Stores analysis results
 
     // --- Constructor ---
     Function(uint32_t address);
@@ -47,4 +49,5 @@ private:
     void build_control_flow_graph();
     void analyze_prologue();
     void cull_unreachable_blocks();
+    void run_data_flow_analysis(); // The new analysis orchestrator
 };

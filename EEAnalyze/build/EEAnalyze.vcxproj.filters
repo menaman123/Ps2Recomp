@@ -7,6 +7,9 @@
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\analyze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\DataFlowEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\EEAnalyze\CMakeLists.txt" />

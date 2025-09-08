@@ -42,6 +42,7 @@ FetchContent_MakeAvailable(googletest)
 add_library(EEAnalyze STATIC 
     Function.cpp
     analyze.cpp
+    DataFlowEngine.cpp
 )
 # The EEAnalyze library needs to link to rabbitizer to use its functions
 target_link_libraries(EEAnalyze PUBLIC rabbitizer)
