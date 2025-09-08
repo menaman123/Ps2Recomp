@@ -13,7 +13,6 @@
 struct Block {
     uint32_t start_address = 0;
     uint32_t end_address = 0;
-
     std::vector<RabbitizerInstruction> instructions;
 
     // --- ADDED THIS LINE ---
@@ -36,7 +35,6 @@ public:
     std::unordered_map<uint32_t, RegisterStateMap> block_end_states;
 
     Function(uint32_t address);
-
     void analyze(const uint8_t* code, uint32_t code_size);
     void dump_to_console() const;
 

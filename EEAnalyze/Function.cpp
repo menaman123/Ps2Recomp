@@ -30,7 +30,6 @@ static RegisterStateMap merge_register_states(const RegisterStateMap& dest, cons
     return merged_state;
 }
 
-// --- CONSTRUCTOR AND OTHER METHODS ---
 
 Function::Function(uint32_t address) {
     this->base_address = address;
@@ -137,7 +136,6 @@ void Function::build_control_flow_graph() {
                 }
             } else if (RabbitizerInstrDescriptor_isJump(descriptor) || control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_b) {
                 if (control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_jr && RAB_INSTR_GET_rs(control_flow_instr) == RABBITIZER_REG_GPR_O32_ra) {
-                    // This is a 'jr $ra', a function return, so it has no successors.
                 } else {
                     uint32_t target_address = 0;
                     if (RabbitizerInstrDescriptor_isJumpWithAddress(descriptor)) {
@@ -256,7 +254,7 @@ void Function::run_data_flow_analysis() {
     }
 
     block_start_states[base_address] = this->registerStateAfterPrologue;
-    worklist.push(0);
+    worklist.push(0); 
 
     int iterations = 0;
 
