@@ -233,12 +233,55 @@ void Function::cull_unreachable_blocks() {
         }
     }
 
+    // Create new vector with only reachable blocks
     std::vector<Block> final_blocks;
+    std::unordered_map<uint32_t, int> new_address_to_index;
+    
     for (const auto& block : this->blocks) {
         if (reachable_addresses.count(block.start_address)) {
+            new_address_to_index[block.start_address] = final_blocks.size();
             final_blocks.push_back(block);
         }
     }
+
+    // **CRITICAL FIX**: Update all successor indices and predecessors to match new positions
+    for (auto& block : final_blocks) {
+        // Update fall-through successor index
+        if (block.fall_through_successor_index != -1) {
+            uint32_t successor_addr = this->blocks[block.fall_through_successor_index].start_address;
+            if (new_address_to_index.count(successor_addr)) {
+                block.fall_through_successor_index = new_address_to_index[successor_addr];
+            } else {
+                block.fall_through_successor_index = -1; // Block was culled
+            }
+        }
+
+        // Update taken branch successor index
+        if (block.taken_branch_successor_index != -1) {
+            uint32_t successor_addr = this->blocks[block.taken_branch_successor_index].start_address;
+            if (new_address_to_index.count(successor_addr)) {
+                block.taken_branch_successor_index = new_address_to_index[successor_addr];
+            } else {
+                block.taken_branch_successor_index = -1; // Block was culled
+            }
+        }
+
+        // Clear and rebuild predecessors list with new indices
+        block.predecessors.clear();
+    }
+
+    // Rebuild predecessor relationships with new indices
+    for (int i = 0; i < final_blocks.size(); ++i) {
+        const Block& current_block = final_blocks[i];
+        
+        if (current_block.fall_through_successor_index != -1) {
+            final_blocks[current_block.fall_through_successor_index].predecessors.push_back(i);
+        }
+        if (current_block.taken_branch_successor_index != -1) {
+            final_blocks[current_block.taken_branch_successor_index].predecessors.push_back(i);
+        }
+    }
+
     this->blocks = final_blocks;
 }
 
@@ -249,7 +292,8 @@ void Function::run_data_flow_analysis() {
     std::unordered_map<uint32_t, RegisterStateMap> block_start_states;
     std::queue<int> worklist;
     std::unordered_map<uint32_t, int> address_to_block_index;
-     for (int i = 0; i < this->blocks.size(); ++i) {
+    
+    for (int i = 0; i < this->blocks.size(); ++i) {
         address_to_block_index[this->blocks[i].start_address] = i;
     }
 
@@ -268,6 +312,13 @@ void Function::run_data_flow_analysis() {
         int current_block_index = worklist.front();
         worklist.pop();
 
+        // **DEFENSIVE CHECK**: Ensure block index is valid
+        if (current_block_index < 0 || current_block_index >= static_cast<int>(blocks.size())) {
+            std::cout << "      [DFA] ERROR: Invalid block index " << current_block_index 
+                      << " (valid range: 0 to " << (blocks.size() - 1) << ")" << std::endl;
+            continue;
+        }
+
         Block& current_block = blocks[current_block_index];
         std::cout << "      [DFA] Iteration " << iterations << ": Processing Block " << current_block_index 
                   << " at 0x" << std::hex << current_block.start_address << std::dec 
@@ -276,6 +327,12 @@ void Function::run_data_flow_analysis() {
         RegisterStateMap merged_start_state;
         if (current_block_index != 0) {
             for (int pred_index : current_block.predecessors) {
+                // **DEFENSIVE CHECK**: Ensure predecessor index is valid
+                if (pred_index < 0 || pred_index >= static_cast<int>(blocks.size())) {
+                    std::cout << "      [DFA] WARNING: Invalid predecessor index " << pred_index << std::endl;
+                    continue;
+                }
+                
                 const Block& pred_block = blocks[pred_index];
                 if (block_end_states.count(pred_block.start_address)) {
                     merged_start_state = merge_register_states(merged_start_state, block_end_states.at(pred_block.start_address));
@@ -294,20 +351,34 @@ void Function::run_data_flow_analysis() {
             state_has_changed = true;
         }
         
-        if(state_has_changed) {
+        if (state_has_changed) {
             std::cout << "        -> State has CHANGED. Pushing successors to worklist." << std::endl;
             block_end_states[current_block.start_address] = final_state;
+            
+            // **DEFENSIVE CHECKS**: Ensure successor indices are valid before pushing
             if (current_block.fall_through_successor_index != -1) {
-                worklist.push(current_block.fall_through_successor_index);
+                if (current_block.fall_through_successor_index >= 0 && 
+                    current_block.fall_through_successor_index < static_cast<int>(blocks.size())) {
+                    worklist.push(current_block.fall_through_successor_index);
+                } else {
+                    std::cout << "      [DFA] WARNING: Invalid fall-through successor index " 
+                              << current_block.fall_through_successor_index << std::endl;
+                }
             }
             if (current_block.taken_branch_successor_index != -1) {
-                worklist.push(current_block.taken_branch_successor_index);
+                if (current_block.taken_branch_successor_index >= 0 && 
+                    current_block.taken_branch_successor_index < static_cast<int>(blocks.size())) {
+                    worklist.push(current_block.taken_branch_successor_index);
+                } else {
+                    std::cout << "      [DFA] WARNING: Invalid taken branch successor index " 
+                              << current_block.taken_branch_successor_index << std::endl;
+                }
             }
         } else {
-             std::cout << "        -> State is STABLE. No changes." << std::endl;
+            std::cout << "        -> State is STABLE. No changes." << std::endl;
         }
     }
-     std::cout << "      [DFA] Analysis for " << name << " finished after " << iterations << " iterations." << std::endl;
+    std::cout << "      [DFA] Analysis for " << name << " finished after " << iterations << " iterations." << std::endl;
 }
 
 void Function::analyze(const uint8_t* code, uint32_t code_size) {
