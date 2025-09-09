@@ -1,45 +1,45 @@
+cmake_minimum_required(VERSION 3.16)
 
-cmake_minimum_required(VERSION 3.14)
-project(Ps2Recomp CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# --- Define Paths to Capstone EXPLICITLY ---
-set(CAPSTONE_INCLUDE_DIR "C:/Users/Owner/vcpkg/packages/capstone_x64-windows/include")
-set(CAPSTONE_LIBRARY "C:/Users/Owner/vcpkg/packages/capstone_x64-windows/lib/capstone.lib")
-
-# --- Build Your Tool ---
-add_executable(recompiler_tool main.cpp recompiler.cpp)
-
-target_include_directories(recompiler_tool PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../host_app)
-target_include_directories(recompiler_tool PRIVATE ${CAPSTONE_INCLUDE_DIR})
-target_link_libraries(recompiler_tool PRIVATE ${CAPSTONE_LIBRARY})
-
-# --- Testing Setup ---
-
-# Enable testing
-enable_testing()
-
-# Force gtest to use the same dynamic runtime as our project (for MSVC)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-# Download GoogleTest automatically
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+add_library(elfio INTERFACE)
+target_include_directories(elfio INTERFACE
+    # CMAKE_SOURCE_DIR points to the root of the project (Ps2Recomp)
+    "${CMAKE_SOURCE_DIR}/include/ELFIO"
 )
-FetchContent_MakeAvailable(googletest)
 
-# Create the test executable
-add_executable(RecompilerTests recompiler_test.cpp recompiler.cpp)
+# --- Rabbitizer Dependency ---
+set(RABBITIZER_ROOT "${CMAKE_SOURCE_DIR}/include/rabbitizer")
+file(GLOB_RECURSE RABBITIZER_SOURCES
+    "${RABBITIZER_ROOT}/cplusplus/src/*.cpp"
+    "${RABBITIZER_ROOT}/src/*.c"
+)
+add_library(rabbitizer STATIC ${RABBITIZER_SOURCES})
+target_include_directories(rabbitizer PUBLIC
+    "${RABBITIZER_ROOT}/cplusplus/include"
+    "${RABBITIZER_ROOT}/include"
+    "${RABBITIZER_ROOT}/include/generated"
+    "${RABBITIZER_ROOT}/tables"
+)
 
-# Link the test executable against GoogleTest and Capstone
-target_include_directories(RecompilerTests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../host_app)
-target_include_directories(RecompilerTests PRIVATE ${CAPSTONE_INCLUDE_DIR})
-target_link_libraries(RecompilerTests PRIVATE gtest_main ${CAPSTONE_LIBRARY})
+add_executable(recompiler_tool
+    main.cpp
+    Recompiler.cpp
+)
 
-# Discover and add the tests to CTest
-include(GoogleTest)
-gtest_discover_tests(RecompilerTests)
+# Link recompiler_tool against the EEAnalyze library.
+target_link_libraries(recompiler_tool PRIVATE EEAnalyze)
+
+target_link_libraries(recompiler_tool PUBLIC
+    rabbitizer
+    elfio
+)
+
+# --- EXPLICIT INCLUDES (NEW) ---
+# Directly add the include paths needed by the headers used in main.cpp
+# and the headers included by EEAnalyze. This is less clean but more robust
+# if property propagation is failing.
+target_include_directories(recompiler_tool PRIVATE
+    ../host_app
+    "${CMAKE_SOURCE_DIR}/include/ELFIO"
+    "${CMAKE_SOURCE_DIR}/include/rabbitizer/include"
+    "${CMAKE_SOURCE_DIR}/include/rabbitizer/include/generated"
+)

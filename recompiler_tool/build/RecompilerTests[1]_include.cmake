@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool/build/RecompilerTests[1]_tests.cmake")
-  include("C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool/build/RecompilerTests[1]_tests.cmake")
-else()
-  add_test(RecompilerTests_NOT_BUILT RecompilerTests_NOT_BUILT)
-endif()

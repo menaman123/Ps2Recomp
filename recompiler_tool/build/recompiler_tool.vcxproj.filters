@@ -4,7 +4,7 @@
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\recompiler_tool\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\recompiler_tool\recompiler.cpp">
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\recompiler_tool\Recompiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

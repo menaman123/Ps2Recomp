@@ -1,6 +1,6 @@
 ^C:\USERS\OWNER\DESKTOP\PS2_RECOMP\PS2RECOMP\RECOMPILER_TOOL\BUILD\CMAKEFILES\2F0EA8F2843922DD81F3FAD4193BAC40\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool -BC:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool/build/Ps2Recomp.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool -BC:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/recompiler_tool/build/Project.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

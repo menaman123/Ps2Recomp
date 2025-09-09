@@ -1,0 +1,11 @@
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\analysis\JrRegData.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\JrRegData.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\analysis\LoPairingInfo.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\LoPairingInfo.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\analysis\RegistersTracker.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\RegistersTracker.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstrId.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstrId.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstrIdType.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstrIdType.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstructionBase.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstructionBase.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstructionCpu.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstructionCpu.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstructionR3000GTE.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstructionR3000GTE.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstructionR4000Allegrex.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstructionR4000Allegrex.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstructionR5900.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstructionR5900.obj
+C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\src\instructions\InstructionRsp.cpp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\rabbitizer.dir\Debug\InstructionRsp.obj
