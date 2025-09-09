@@ -4,7 +4,7 @@
 #include <vector>
 #include <elfio/elfio.hpp>
 
-#include "analyze.h"      // Your analysis engine
+#include "EEAnalyze/analyze.h"      // Your analysis engine
 #include "Recompiler.h"      // Your recompiler engine
 
 int main(int argc, char* argv[]) {

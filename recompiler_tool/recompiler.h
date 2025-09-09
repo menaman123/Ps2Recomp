@@ -3,7 +3,14 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "Function.h"
+#include <filesystem>
+#include "EEAnalyze/Function.h" // Include your Function analysis class
+
+// Forward-declare the rabbitizer C++ instruction class to avoid including the full header.
+// This is a best practice for header files to improve compilation times.
+namespace rabbitizer {
+    class InstructionCpu;
+}
 
 class Recompiler {
 public:
@@ -14,7 +21,10 @@ private:
     const std::vector<Function>& m_functions;
 
     void write_header_file(std::ofstream& file);
-    void write_cpp_file(std::ofstream& file);
+    void write_cpp_file(std::ofstream& file, const std::string& output_header_filename);
     void recompile_function(const Function& func, std::ofstream& file);
-    void translate_instruction(const RabbitizerInstruction& instr, std::ofstream& file);
+    void translate_instruction(const rabbitizer::InstructionCpu& instr, std::ofstream& file);
+
+    // Helper function to identify instructions that have a delay slot.
+    bool has_delay_slot(const rabbitizer::InstructionCpu& instr) const;
 };

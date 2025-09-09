@@ -2,7 +2,6 @@
 
 #include "cpu_state.h"
 #include <vector>
-#include <capstone/capstone.h>
 #include <iostream>
 
 

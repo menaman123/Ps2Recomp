@@ -1,5 +1,4 @@
 #include "memory.h"
-#include <capstone/capstone.h>
 #include "cpu_state.h"
 #include <iostream>
 

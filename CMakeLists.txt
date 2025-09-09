@@ -1,13 +1,13 @@
 # --- Single, All-in-One Build Script ---
 cmake_minimum_required(VERSION 3.16)
-project(Ps2RecompProject CXX)
+# FIX: Explicitly enable both C++ and C languages for the project.
+project(Ps2RecompProject CXX C)
 set(CMAKE_CXX_STANDARD 17)
 
-# --- Define Project Root ---
+# Define the project root directory to make paths easier
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
-# --- ELFIO Dependency ---
-# Define an INTERFACE library for ELFIO, which is header-only.
+# --- ELFIO Dependency (Header-Only) ---
 add_library(elfio INTERFACE)
 target_include_directories(elfio INTERFACE "${PROJECT_ROOT}/include/ELFIO")
 
@@ -25,26 +25,37 @@ target_include_directories(rabbitizer PUBLIC
     "${RABBITIZER_ROOT}/tables"
 )
 
+# FIX: Add a compile definition to enable static linking.
+# This tells the rabbitizer headers to not use __declspec(dllimport/dllexport).
+target_compile_definitions(rabbitizer PUBLIC RABBITIZER_STATIC)
+
 # --- EEAnalyze Library ---
-# Define the EEAnalyze library and its source files explicitly.
 add_library(EEAnalyze STATIC
     "${PROJECT_ROOT}/EEAnalyze/Function.cpp"
     "${PROJECT_ROOT}/EEAnalyze/analyze.cpp"
     "${PROJECT_ROOT}/EEAnalyze/DataFlowEngine.cpp"
 )
-# Add its own include directory so its headers can be found.
-target_include_directories(EEAnalyze PUBLIC "${PROJECT_ROOT}/EEAnalyze")
-# Link EEAnalyze to the dependencies it needs.
-target_link_libraries(EEAnalyze PUBLIC rabbitizer elfio)
-
+# Add the EEAnalyze directory to its own include paths
+target_include_directories(EEAnalyze PUBLIC "${PROJECT_ROOT}")
 
 # --- Recompiler Tool Executable ---
-# Define the final executable and its source files.
 add_executable(recompiler_tool
     "${PROJECT_ROOT}/recompiler_tool/main.cpp"
     "${PROJECT_ROOT}/recompiler_tool/Recompiler.cpp"
 )
-# Link the executable to the EEAnalyze library we just defined.
+
+# --- Host App Executable ---
+add_executable(host_app
+    "${PROJECT_ROOT}/host_app/main.cpp"
+    "${PROJECT_ROOT}/host_app/memory.cpp"
+    "${PROJECT_ROOT}/host_app/recomp_test.cpp"
+)
+
+# --- Linking ---
+# Link EEAnalyze to its dependencies.
+# Because it's PUBLIC, any target linking EEAnalyze gets these automatically.
+target_link_libraries(EEAnalyze PUBLIC rabbitizer elfio)
+
+# Link the final executables to the EEAnalyze library.
 target_link_libraries(recompiler_tool PRIVATE EEAnalyze)
-# Add the include path for host_app (for cpu_state.h)
-target_include_directories(recompiler_tool PRIVATE "${PROJECT_ROOT}/host_app")
+target_link_libraries(host_app PRIVATE EEAnalyze)
