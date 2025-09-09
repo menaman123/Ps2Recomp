@@ -10177,9 +10177,6 @@ block_129c78:
         // b           . + 4 + (0x4 << 2)
     // UNIMPLEMENTED INSTRUCTION: 36
     throw std::runtime_error("Unimplemented instruction in recompiler");
-block_129c80:
-        // xor         $v0, $a2, $t4
-    ctx.gpr[2] = ctx.gpr[6] ^ ctx.gpr[12];
 block_129c84:
         // movn        $v1, $t1, $t5
     // UNIMPLEMENTED INSTRUCTION: 4f
@@ -12582,9 +12579,6 @@ block_132000:
     throw std::runtime_error("Unimplemented instruction in recompiler");
         // jr          $ra
     return;
-block_132008:
-        // lwc1        $f0, 0x4($a1)
-    ctx.fpr[0] = memory.read_u32(ctx.gpr[5] + 4);
 block_13200c:
         // lui         $at, 0xBF80
     ctx.gpr[1] = bf80 << 16;
@@ -13243,10 +13237,6 @@ block_133128:
 block_13312c:
         // addiu       $v0, $zero, 0xE
     ctx.gpr[2] = ctx.gpr[0] + e;
-        // jr          $ra
-    return;
-block_133134:
-    // WARNING: Branch at end of block has no delay slot instruction.
         // jr          $ra
     return;
 }
@@ -162368,29 +162358,6 @@ block_1e3394:
         // b           . + 4 + (0xB << 2)
     // UNIMPLEMENTED INSTRUCTION: 36
     throw std::runtime_error("Unimplemented instruction in recompiler");
-block_1e33ac:
-        // addiu       $v0, $zero, 0x5
-    ctx.gpr[2] = ctx.gpr[0] + 5;
-        // beq         $v1, $v0, . + 4 + (0x3 << 2)
-    if (ctx.gpr[3] == ctx.gpr[2]) { goto block_1e33bc; }
-block_1e33b4:
-        // addiu       $v1, $zero, 0x1
-    ctx.gpr[3] = ctx.gpr[0] + 1;
-        // bne         $v1, $v0, . + 4 + (0xB << 2)
-    if (ctx.gpr[3] != ctx.gpr[2]) { goto block_1e33e4; }
-block_1e33bc:
-        // addiu       $v0, $zero, 0x6
-    ctx.gpr[2] = ctx.gpr[0] + 6;
-        // sw          $zero, 0x20($t4)
-    memory.write_u32(ctx.gpr[12] + 20, ctx.gpr[0]);
-        // sb          $v0, 0x11($t4)
-    memory.write_u8(ctx.gpr[12] + 11, ctx.gpr[2]);
-        // sll         $t7, $t6, 1
-    ctx.gpr[15] = static_cast<uint32_t>(ctx.gpr[14]) << ;
-        // sb          $zero, 0x42($t4)
-    memory.write_u8(ctx.gpr[12] + 42, ctx.gpr[0]);
-        // sll         $t5, $t6, 2
-    ctx.gpr[13] = static_cast<uint32_t>(ctx.gpr[14]) << ;
 block_1e33d4:
         // sb          $zero, 0x43($t4)
     memory.write_u8(ctx.gpr[12] + 43, ctx.gpr[0]);
@@ -162401,82 +162368,6 @@ block_1e33d4:
         // b           . + 4 + (0x23 << 2)
     // UNIMPLEMENTED INSTRUCTION: 36
     throw std::runtime_error("Unimplemented instruction in recompiler");
-block_1e33e4:
-        // lui         $v0, 0x2E
-    ctx.gpr[2] = 2e << 16;
-        // sll         $t0, $t6, 1
-    ctx.gpr[8] = static_cast<uint32_t>(ctx.gpr[14]) << ;
-        // sb          $v1, 0x11($t4)
-    memory.write_u8(ctx.gpr[12] + 11, ctx.gpr[3]);
-        // addiu       $v0, $v0, 0x7590
-    ctx.gpr[2] = ctx.gpr[2] + 7590;
-        // lui         $a1, 0x3B
-    ctx.gpr[5] = 3b << 16;
-        // addu        $v0, $t0, $v0
-    ctx.gpr[2] = ctx.gpr[8] + ctx.gpr[2];
-        // sll         $a3, $t6, 2
-    ctx.gpr[7] = static_cast<uint32_t>(ctx.gpr[14]) << ;
-        // lh          $v1, 0x0($v0)
-    ctx.gpr[3] = static_cast<int16_t>(memory.read_u16(ctx.gpr[2] + 0));
-        // addiu       $a1, $a1, 0x3C40
-    ctx.gpr[5] = ctx.gpr[5] + 3c40;
-        // addu        $a1, $a3, $a1
-    ctx.gpr[5] = ctx.gpr[7] + ctx.gpr[5];
-        // addiu       $a0, $zero, 0xE10
-    ctx.gpr[4] = ctx.gpr[0] + e10;
-        // sw          $v1, 0x20($t4)
-    memory.write_u32(ctx.gpr[12] + 20, ctx.gpr[3]);
-        // addiu       $a2, $zero, 0x3C
-    ctx.gpr[6] = ctx.gpr[0] + 3c;
-        // lui         $v1, 0x3
-    ctx.gpr[3] = 3 << 16;
-        // daddu       $t7, $t0, $zero
-    // UNIMPLEMENTED INSTRUCTION: 61
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // lw          $v0, 0x0($a1)
-    ctx.gpr[2] = memory.read_u32(ctx.gpr[5] + 0);
-        // ori         $v1, $v1, 0x4BC0
-    ctx.gpr[3] = ctx.gpr[3] | 4bc0;
-        // daddu       $t5, $a3, $zero
-    // UNIMPLEMENTED INSTRUCTION: 61
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // divu        $zero, $v0, $a0
-    // UNIMPLEMENTED INSTRUCTION: 51
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // mflo        $a0
-    ctx.gpr[4] = ctx.lo;
-        // divu        $zero, $v0, $a2
-    // UNIMPLEMENTED INSTRUCTION: 51
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // mflo        $t0
-    ctx.gpr[8] = ctx.lo;
-        // mfhi        $a1
-    ctx.gpr[5] = ctx.hi;
-        // sb          $a1, 0x42($t4)
-    memory.write_u8(ctx.gpr[12] + 42, ctx.gpr[5]);
-        // divu        $zero, $v0, $v1
-    // UNIMPLEMENTED INSTRUCTION: 51
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // mflo        $v0
-    ctx.gpr[2] = ctx.lo;
-        // divu        $zero, $a0, $a2
-    // UNIMPLEMENTED INSTRUCTION: 51
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // andi        $v0, $v0, 0xFF
-    ctx.gpr[2] = ctx.gpr[2] & ff;
-        // sw          $v0, 0x48($t4)
-    memory.write_u32(ctx.gpr[12] + 48, ctx.gpr[2]);
-        // mfhi        $a3
-    ctx.gpr[7] = ctx.hi;
-        // divu        $zero, $t0, $a2
-    // UNIMPLEMENTED INSTRUCTION: 51
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // sb          $a3, 0x44($t4)
-    memory.write_u8(ctx.gpr[12] + 44, ctx.gpr[7]);
-        // mfhi        $v1
-    ctx.gpr[3] = ctx.hi;
-        // sb          $v1, 0x43($t4)
-    memory.write_u8(ctx.gpr[12] + 43, ctx.gpr[3]);
 block_1e346c:
         // lui         $v0, 0x2E
     ctx.gpr[2] = 2e << 16;
@@ -198882,16 +198773,6 @@ block_202308:
     ctx.gpr[2] = ctx.gpr[0] + 25;
         // jr          $ra
     return;
-block_202310:
-        // addiu       $v1, $zero, 0x26
-    ctx.gpr[3] = ctx.gpr[0] + 26;
-        // addiu       $v0, $zero, 0x27
-    ctx.gpr[2] = ctx.gpr[0] + 27;
-        // movn        $v0, $v1, $a0
-    // UNIMPLEMENTED INSTRUCTION: 4f
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // jr          $ra
-    return;
 block_202320:
         // sltiu       $v0, $a0, 0xB9
     ctx.gpr[2] = (ctx.gpr[4] < b9) ? 1 : 0;
@@ -203816,24 +203697,10 @@ block_20609c:
     memory.write_u32(ctx.gpr[5] + 0, ctx.gpr[2]);
         // jr          $ra
     return;
-block_2060a4:
-        // addiu       $v0, $zero, 0xFA
-    ctx.gpr[2] = ctx.gpr[0] + fa;
-    // WARNING: Branch at end of block has no delay slot instruction.
-        // jr          $ra
-    return;
 block_2060b0:
         // addiu       $v0, $zero, 0xF9
     ctx.gpr[2] = ctx.gpr[0] + f9;
     // WARNING: Branch at end of block has no delay slot instruction.
-        // jr          $ra
-    return;
-block_2060bc:
-        // addiu       $v0, $zero, 0xEF
-    ctx.gpr[2] = ctx.gpr[0] + ef;
-block_2060c0:
-        // sw          $v0, 0x0($a1)
-    memory.write_u32(ctx.gpr[5] + 0, ctx.gpr[2]);
         // jr          $ra
     return;
 block_2060c8:
@@ -203880,12 +203747,6 @@ block_206104:
 block_20610c:
         // sw          $v0, 0x0($a1)
     memory.write_u32(ctx.gpr[5] + 0, ctx.gpr[2]);
-        // jr          $ra
-    return;
-block_206114:
-        // addiu       $v0, $zero, 0xF3
-    ctx.gpr[2] = ctx.gpr[0] + f3;
-    // WARNING: Branch at end of block has no delay slot instruction.
         // jr          $ra
     return;
 block_206120:
@@ -232370,76 +232231,6 @@ block_23d710:
     memory.write_u8(ctx.gpr[4] + 154, ctx.gpr[2]);
         // jr          $ra
     return;
-block_23d718:
-        // lui         $at, 0x2C8C
-    ctx.gpr[1] = 2c8c << 16;
-        // ori         $at, $at, 0xBCCC
-    ctx.gpr[1] = ctx.gpr[1] | bccc;
-        // mtc1        $at, $f0
-    ctx.fpr[0] = ctx.gpr[1];
-        // nop
-    /* NOP */ ;
-        // c.olt.s     $f0, $f12
-    // UNIMPLEMENTED INSTRUCTION: b6
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // nop
-    /* NOP */ ;
-    // WARNING: Branch at end of block has no delay slot instruction.
-        // bc1f        . + 4 + (0x7 << 2)
-    // UNIMPLEMENTED INSTRUCTION: 9b
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_23d734:
-        // nop
-    /* NOP */ ;
-block_23d738:
-        // lbu         $v1, 0x154($a0)
-    ctx.gpr[3] = memory.read_u8(ctx.gpr[4] + 154);
-        // slti        $v0, $v1, 0xFE
-    ctx.gpr[2] = (static_cast<int32_t>(ctx.gpr[3]) < fe) ? 1 : 0;
-        // addiu       $v0, $v1, 0x2
-    ctx.gpr[2] = ctx.gpr[3] + 2;
-        // beqz        $v0, . + 4 + (0x10 << 2)
-    // UNIMPLEMENTED INSTRUCTION: 37
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_23d748:
-        // sb          $v0, 0x154($a0)
-    memory.write_u8(ctx.gpr[4] + 154, ctx.gpr[2]);
-        // jr          $ra
-    return;
-block_23d750:
-        // lui         $at, 0x2B8C
-    ctx.gpr[1] = 2b8c << 16;
-        // ori         $at, $at, 0xBCCC
-    ctx.gpr[1] = ctx.gpr[1] | bccc;
-        // mtc1        $at, $f0
-    ctx.fpr[0] = ctx.gpr[1];
-        // nop
-    /* NOP */ ;
-        // c.olt.s     $f0, $f12
-    // UNIMPLEMENTED INSTRUCTION: b6
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // nop
-    /* NOP */ ;
-    // WARNING: Branch at end of block has no delay slot instruction.
-        // bc1f        . + 4 + (0x6 << 2)
-    // UNIMPLEMENTED INSTRUCTION: 9b
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_23d76c:
-        // nop
-    /* NOP */ ;
-block_23d770:
-        // lbu         $v1, 0x154($a0)
-    ctx.gpr[3] = memory.read_u8(ctx.gpr[4] + 154);
-        // sltiu       $v0, $v1, 0xFF
-    ctx.gpr[2] = (ctx.gpr[3] < ff) ? 1 : 0;
-        // addiu       $v0, $v1, 0x1
-    ctx.gpr[2] = ctx.gpr[3] + 1;
-        // beqz        $v0, . + 4 + (0x2 << 2)
-    // UNIMPLEMENTED INSTRUCTION: 37
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_23d780:
-        // sb          $v0, 0x154($a0)
-    memory.write_u8(ctx.gpr[4] + 154, ctx.gpr[2]);
 block_23d784:
         // nop
     /* NOP */ ;
@@ -348681,200 +348472,6 @@ block_2c206c:
 block_2c2070:
         // addiu       $v0, $zero, -0x3
     ctx.gpr[2] = ctx.gpr[0] + fffd;
-        // jr          $ra
-    return;
-block_2c2078:
-        // sltiu       $v0, $t3, 0x7
-    ctx.gpr[2] = (ctx.gpr[11] < 7) ? 1 : 0;
-    // WARNING: Branch at end of block has no delay slot instruction.
-        // bnez        $v0, . + 4 + (0x3 << 2)
-    // UNIMPLEMENTED INSTRUCTION: 38
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_2c2080:
-        // lui         $v0, 0x30
-    ctx.gpr[2] = 30 << 16;
-block_2c2084:
-        // addiu       $v0, $zero, -0x4
-    ctx.gpr[2] = ctx.gpr[0] + fffc;
-        // jr          $ra
-    return;
-block_2c208c:
-        // lbu         $v1, 0x0($t1)
-    ctx.gpr[3] = memory.read_u8(ctx.gpr[9] + 0);
-        // addiu       $v0, $v0, 0x7B28
-    ctx.gpr[2] = ctx.gpr[2] + 7b28;
-block_2c2094:
-        // lui         $a0, 0x30
-    ctx.gpr[4] = 30 << 16;
-        // lbu         $a1, 0x1($t1)
-    ctx.gpr[5] = memory.read_u8(ctx.gpr[9] + 1);
-        // addu        $v1, $v1, $v0
-    ctx.gpr[3] = ctx.gpr[3] + ctx.gpr[2];
-        // addiu       $a0, $a0, 0x7B38
-    ctx.gpr[4] = ctx.gpr[4] + 7b38;
-        // lbu         $t0, 0x0($v1)
-    ctx.gpr[8] = memory.read_u8(ctx.gpr[3] + 0);
-block_2c20a8:
-        // addu        $a1, $a1, $a0
-    ctx.gpr[5] = ctx.gpr[5] + ctx.gpr[4];
-        // lui         $v0, 0xFFFF
-    ctx.gpr[2] = ffff << 16;
-        // ori         $v0, $v0, 0xFFCF
-    ctx.gpr[2] = ctx.gpr[2] | ffcf;
-        // lui         $a0, 0x30
-    ctx.gpr[4] = 30 << 16;
-        // lbu         $a3, 0x2($t1)
-    ctx.gpr[7] = memory.read_u8(ctx.gpr[9] + 2);
-        // and         $v0, $t2, $v0
-    ctx.gpr[2] = ctx.gpr[10] & ctx.gpr[2];
-        // addiu       $a0, $a0, 0x7B48
-    ctx.gpr[4] = ctx.gpr[4] + 7b48;
-        // sll         $t0, $t0, 4
-    ctx.gpr[8] = static_cast<uint32_t>(ctx.gpr[8]) << ;
-        // lbu         $a2, 0x0($a1)
-    ctx.gpr[6] = memory.read_u8(ctx.gpr[5] + 0);
-        // lui         $v1, 0xFFFF
-    ctx.gpr[3] = ffff << 16;
-        // or          $t2, $v0, $t0
-    ctx.gpr[10] = ctx.gpr[2] | ctx.gpr[8];
-        // addu        $a3, $a3, $a0
-    ctx.gpr[7] = ctx.gpr[7] + ctx.gpr[4];
-        // ori         $v1, $v1, 0xFF3F
-    ctx.gpr[3] = ctx.gpr[3] | ff3f;
-        // sll         $a2, $a2, 6
-    ctx.gpr[6] = static_cast<uint32_t>(ctx.gpr[6]) << ;
-        // and         $v1, $t2, $v1
-    ctx.gpr[3] = ctx.gpr[10] & ctx.gpr[3];
-        // lbu         $a0, 0x0($a3)
-    ctx.gpr[4] = memory.read_u8(ctx.gpr[7] + 0);
-        // lui         $v0, 0xFFFF
-    ctx.gpr[2] = ffff << 16;
-        // or          $t2, $v1, $a2
-    ctx.gpr[10] = ctx.gpr[3] | ctx.gpr[6];
-        // ori         $v0, $v0, 0xFFF3
-    ctx.gpr[2] = ctx.gpr[2] | fff3;
-        // sll         $a0, $a0, 2
-    ctx.gpr[4] = static_cast<uint32_t>(ctx.gpr[4]) << ;
-        // and         $v0, $t2, $v0
-    ctx.gpr[2] = ctx.gpr[10] & ctx.gpr[2];
-        // or          $t2, $v0, $a0
-    ctx.gpr[10] = ctx.gpr[2] | ctx.gpr[4];
-        // beqz        $t3, . + 4 + (0xA << 2)
-    // UNIMPLEMENTED INSTRUCTION: 37
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_2c2104:
-        // lbu         $v1, 0x3($t1)
-    ctx.gpr[3] = memory.read_u8(ctx.gpr[9] + 3);
-        // lui         $v0, 0xFFFF
-    ctx.gpr[2] = ffff << 16;
-        // ori         $t2, $t2, 0x2
-    ctx.gpr[10] = ctx.gpr[10] | 2;
-        // ori         $v0, $v0, 0xFCFF
-    ctx.gpr[2] = ctx.gpr[2] | fcff;
-        // addiu       $v1, $v1, -0x1
-    ctx.gpr[3] = ctx.gpr[3] + ffff;
-        // and         $v0, $t2, $v0
-    ctx.gpr[2] = ctx.gpr[10] & ctx.gpr[2];
-        // sll         $v1, $v1, 8
-    ctx.gpr[3] = static_cast<uint32_t>(ctx.gpr[3]) << ;
-        // or          $t2, $v0, $v1
-    ctx.gpr[10] = ctx.gpr[2] | ctx.gpr[3];
-        // b           . + 4 + (0x4 << 2)
-    // UNIMPLEMENTED INSTRUCTION: 36
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-block_2c2128:
-        // lui         $v0, 0xFFFF
-    ctx.gpr[2] = ffff << 16;
-        // ori         $v0, $v0, 0xFFFD
-    ctx.gpr[2] = ctx.gpr[2] | fffd;
-        // and         $t2, $t2, $v0
-    ctx.gpr[10] = ctx.gpr[10] & ctx.gpr[2];
-block_2c2134:
-        // lhu         $v0, 0x4($t1)
-    ctx.gpr[2] = memory.read_u16(ctx.gpr[9] + 4);
-        // lui         $a0, 0x1000
-    ctx.gpr[4] = 1000 << 16;
-        // lhu         $a2, 0x6($t1)
-    ctx.gpr[6] = memory.read_u16(ctx.gpr[9] + 6);
-        // ori         $a0, $a0, 0xE000
-    ctx.gpr[4] = ctx.gpr[4] | e000;
-        // lhu         $a1, 0xA($t1)
-    ctx.gpr[5] = memory.read_u16(ctx.gpr[9] + a);
-        // sll         $v0, $v0, 16
-    ctx.gpr[2] = static_cast<uint32_t>(ctx.gpr[2]) << ;
-        // lw          $t0, 0x10($t1)
-    ctx.gpr[8] = memory.read_u32(ctx.gpr[9] + 10);
-        // or          $a2, $v0, $a2
-    ctx.gpr[6] = ctx.gpr[2] | ctx.gpr[6];
-        // lhu         $a3, 0x8($t1)
-    ctx.gpr[7] = memory.read_u16(ctx.gpr[9] + 8);
-        // lui         $v1, 0x1000
-    ctx.gpr[3] = 1000 << 16;
-        // sw          $t2, 0x0($a0)
-    memory.write_u32(ctx.gpr[4] + 0, ctx.gpr[10]);
-        // ori         $v1, $v1, 0xE020
-    ctx.gpr[3] = ctx.gpr[3] | e020;
-        // sll         $a1, $a1, 16
-    ctx.gpr[5] = static_cast<uint32_t>(ctx.gpr[5]) << ;
-        // lui         $v0, 0x1000
-    ctx.gpr[2] = 1000 << 16;
-        // sw          $a2, 0x0($v1)
-    memory.write_u32(ctx.gpr[3] + 0, ctx.gpr[6]);
-        // or          $a1, $a1, $a3
-    ctx.gpr[5] = ctx.gpr[5] | ctx.gpr[7];
-        // ori         $v0, $v0, 0xE030
-    ctx.gpr[2] = ctx.gpr[2] | e030;
-        // lw          $a2, 0xC($t1)
-    ctx.gpr[6] = memory.read_u32(ctx.gpr[9] + c);
-        // sw          $a1, 0x0($v0)
-    memory.write_u32(ctx.gpr[2] + 0, ctx.gpr[5]);
-        // lui         $v1, 0x1000
-    ctx.gpr[3] = 1000 << 16;
-        // ori         $v1, $v1, 0xE050
-    ctx.gpr[3] = ctx.gpr[3] | e050;
-        // lui         $v0, 0x1000
-    ctx.gpr[2] = 1000 << 16;
-        // sw          $a2, 0x0($v1)
-    memory.write_u32(ctx.gpr[3] + 0, ctx.gpr[6]);
-        // ori         $v0, $v0, 0xE040
-    ctx.gpr[2] = ctx.gpr[2] | e040;
-        // sw          $t0, 0x0($v0)
-    memory.write_u32(ctx.gpr[2] + 0, ctx.gpr[8]);
-        // lui         $v1, 0x3C
-    ctx.gpr[3] = 3c << 16;
-        // addiu       $a2, $v1, 0x6E00
-    ctx.gpr[6] = ctx.gpr[3] + 6e00;
-        // ldl         $v0, 0x7($t1)
-    // UNIMPLEMENTED INSTRUCTION: 15
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // ldr         $v0, 0x0($t1)
-    // UNIMPLEMENTED INSTRUCTION: 16
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // ldl         $a0, 0xF($t1)
-    // UNIMPLEMENTED INSTRUCTION: 15
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // ldr         $a0, 0x8($t1)
-    // UNIMPLEMENTED INSTRUCTION: 16
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // lw          $a1, 0x10($t1)
-    ctx.gpr[5] = memory.read_u32(ctx.gpr[9] + 10);
-        // sdl         $v0, 0x7($a2)
-    // UNIMPLEMENTED INSTRUCTION: 23
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // sdr         $v0, 0x0($a2)
-    // UNIMPLEMENTED INSTRUCTION: 24
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // sdl         $a0, 0xF($a2)
-    // UNIMPLEMENTED INSTRUCTION: 23
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // sdr         $a0, 0x8($a2)
-    // UNIMPLEMENTED INSTRUCTION: 24
-    throw std::runtime_error("Unimplemented instruction in recompiler");
-        // sw          $a1, 0x10($a2)
-    memory.write_u32(ctx.gpr[6] + 10, ctx.gpr[5]);
-        // daddu       $v0, $zero, $zero
-    // UNIMPLEMENTED INSTRUCTION: 61
-    throw std::runtime_error("Unimplemented instruction in recompiler");
         // jr          $ra
     return;
 }

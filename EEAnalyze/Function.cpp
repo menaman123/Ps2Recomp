@@ -50,7 +50,7 @@ void Function::find_basic_blocks(const uint8_t* code, uint32_t code_size) {
         RabbitizerInstructionR5900_init(&instr, instruction_word, current_vram);
         RabbitizerInstructionR5900_processUniqueId(&instr);
         const RabbitizerInstrDescriptor* descriptor = instr.descriptor;
-        if (RabbitizerInstrDescriptor_isBranch(descriptor) || RabbitizerInstrDescriptor_isJump(descriptor)) {
+        if (RabbitizerInstruction_hasDelaySlot(&instr)) {
             if (offset + 8 <= code_size) {
                 leader_addresses.insert(current_vram + 8);
             }
@@ -63,6 +63,8 @@ void Function::find_basic_blocks(const uint8_t* code, uint32_t code_size) {
             if (target_vram >= this->base_address && target_vram < this->base_address + code_size) {
                 leader_addresses.insert(target_vram);
             }
+
+            offset += 4;
         }
         RabbitizerInstruction_destroy(&instr);
     }
@@ -104,38 +106,36 @@ void Function::build_control_flow_graph() {
         Block& current_block = this->blocks[i];
         if (current_block.instructions.empty()) continue;
 
+        const RabbitizerInstruction& last_instr = current_block.instructions.back();
         const RabbitizerInstruction* control_flow_instr = nullptr;
 
-        if (current_block.instructions.size() > 1) {
-            const auto& potential_branch = current_block.instructions[current_block.instructions.size() - 2];
-            if (RabbitizerInstruction_hasDelaySlot(&potential_branch)) {
-                control_flow_instr = &potential_branch;
-            }
-        }
-        
-        if (control_flow_instr == nullptr) {
-            const auto& last_instr = current_block.instructions.back();
-            if (RabbitizerInstruction_hasDelaySlot(&last_instr) || RabbitizerInstrDescriptor_isJump(last_instr.descriptor)) {
-                control_flow_instr = &last_instr;
-            }
+        // In a correctly formed block, the control flow instruction is the one
+        // BEFORE the delay slot instruction.
+        if (current_block.instructions.size() > 1 && RabbitizerInstruction_hasDelaySlot(&current_block.instructions[current_block.instructions.size() - 2])) {
+            control_flow_instr = &current_block.instructions[current_block.instructions.size() - 2];
+        } else if (RabbitizerInstrDescriptor_isJump(last_instr.descriptor)) {
+            // This handles rare cases of jumps without a delay slot.
+            control_flow_instr = &last_instr;
         }
 
         if (control_flow_instr != nullptr) {
             const RabbitizerInstrDescriptor* descriptor = control_flow_instr->descriptor;
 
-            if (RabbitizerInstrDescriptor_isBranch(descriptor) && control_flow_instr->uniqueId != RABBITIZER_INSTR_ID_cpu_b) {
+            if (RabbitizerInstrDescriptor_isBranch(descriptor) && control_flow_instr->uniqueId != RABBITIZER_INSTR_ID_cpu_b) { // Conditional branch
                 uint32_t target_address = RabbitizerInstruction_getBranchVramGeneric(control_flow_instr);
                 if (address_to_block_index.count(target_address)) {
                     current_block.taken_branch_successor_index = address_to_block_index.at(target_address);
                     blocks[address_to_block_index.at(target_address)].predecessors.push_back(i);
                 }
-                uint32_t fallthrough_address = current_block.end_address;
+                
+                uint32_t fallthrough_address = control_flow_instr->vram + 8;
                 if (address_to_block_index.count(fallthrough_address)) {
                     current_block.fall_through_successor_index = address_to_block_index.at(fallthrough_address);
                      blocks[address_to_block_index.at(fallthrough_address)].predecessors.push_back(i);
                 }
-            } else if (RabbitizerInstrDescriptor_isJump(descriptor) || control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_b) {
+            } else if (RabbitizerInstrDescriptor_isJump(descriptor) || control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_b) { // Unconditional jump or branch
                 if (control_flow_instr->uniqueId == RABBITIZER_INSTR_ID_cpu_jr && RAB_INSTR_GET_rs(control_flow_instr) == RABBITIZER_REG_GPR_O32_ra) {
+                    // This is a return instruction, so it has no successor in the graph.
                 } else {
                     uint32_t target_address = 0;
                     if (RabbitizerInstrDescriptor_isJumpWithAddress(descriptor)) {
@@ -149,7 +149,7 @@ void Function::build_control_flow_graph() {
                     }
                 }
             }
-        } else {
+        } else { // No branch/jump at the end of the block
             uint32_t fallthrough_address = current_block.end_address;
             if (address_to_block_index.count(fallthrough_address)) {
                 current_block.fall_through_successor_index = address_to_block_index.at(fallthrough_address);
