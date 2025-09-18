@@ -5,6 +5,7 @@
 #include <fstream>
 #include <filesystem>
 #include "EEAnalyze/Function.h" // Include your Function analysis class
+#include "map"
 
 // Forward-declare the rabbitizer C++ instruction class to avoid including the full header.
 // This is a best practice for header files to improve compilation times.
@@ -14,11 +15,11 @@ namespace rabbitizer {
 
 class Recompiler {
 public:
-    Recompiler(const std::vector<Function>& functions);
+    Recompiler(const std::map<uint32_t, Function>& functions);
     bool recompile_to_files(const std::string& output_header, const std::string& output_cpp);
 
 private:
-    const std::vector<Function>& m_functions;
+    std::map<uint32_t, Function> m_functions;
 
     void write_header_file(std::ofstream& file);
     void write_cpp_file(std::ofstream& file, const std::string& output_header_filename);

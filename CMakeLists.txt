@@ -38,12 +38,15 @@ add_library(EEAnalyze STATIC
 # Add the EEAnalyze directory to its own include paths
 target_include_directories(EEAnalyze PUBLIC "${PROJECT_ROOT}")
 
+
+
 # --- Recompiler Tool Executable ---
 add_executable(recompiler_tool
     "${PROJECT_ROOT}/recompiler_tool/main.cpp"
     "${PROJECT_ROOT}/recompiler_tool/Recompiler.cpp"
 )
 
+target_link_libraries(recompiler_tool PRIVATE EEAnalyze)
 # --- Host App Executable ---
 add_executable(host_app
     "${PROJECT_ROOT}/host_app/main.cpp"

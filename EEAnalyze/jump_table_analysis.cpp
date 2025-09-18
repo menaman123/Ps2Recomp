@@ -20,72 +20,31 @@
 
 using namespace ELFIO;
 
-// Function to load Ghidra's function list
-std::set<Elf64_Addr> load_ghidra_functions(const std::string& path) {
-    std::set<Elf64_Addr> ghidra_functions;
+// Generic function to load a set of addresses from a text file (one hex address per line)
+std::set<Elf64_Addr> load_addresses_from_file(const std::string& path) {
+    std::set<Elf64_Addr> addresses;
     std::ifstream infile(path);
     std::string line;
-    const std::string addr_prefix = "Address: ";
     while (std::getline(infile, line)) {
-        size_t pos = line.find(addr_prefix);
-        if (pos != std::string::npos) {
-            size_t start = pos + addr_prefix.length();
-            size_t end = line.find(" |", start);
-            if (end != std::string::npos) {
-                std::string addr_str = line.substr(start, end - start);
-                try {
-                    ghidra_functions.insert(std::stoull(addr_str, nullptr, 16));
-                }
-                catch (const std::invalid_argument& ia) {
-                    // Could not parse hex string, ignore.
-                }
-            }
+        // Remove potential prefixes and suffixes, just in case
+        size_t first = line.find_first_not_of(" \t\r\n");
+        if (first == std::string::npos) continue;
+        size_t last = line.find_last_not_of(" \t\r\n");
+        line = line.substr(first, (last - first + 1));
+
+        try {
+            addresses.insert(std::stoull(line, nullptr, 16));
+        }
+        catch (const std::invalid_argument& ia) {
+            // Ignore lines that are not valid hex numbers
         }
     }
-    return ghidra_functions;
+    return addresses;
 }
 
-int main(int argc, const char* argv[]) {
-    if (argc != 3) {
-        std::cout << "Usage: function_finder <elf_file> <ghidra_function_list.txt>" << std::endl;
-        return 1;
-    }
-
-    elfio reader;
-    if (!reader.load(argv[1])) {
-        std::cout << "Can't find or process ELF file " << argv[1] << std::endl;
-        return 2;
-    }
-
-
-
-    section* text_sec = reader.sections[".text"];
-    if (!text_sec) {
-        std::cout << "'.text' section not found." << std::endl;
-        return 3;
-    }
-
-    std::cout << "--- Section List ---\n";
-    for (int i = 0; i < reader.sections.size(); ++i) {
-        section* psec = reader.sections[i];
-        std::cout << "Section " << i << ": " << psec->get_name()
-                  << " | Addr: 0x" << std::hex << psec->get_address()
-                  << " | Size: 0x" << psec->get_size()
-                  << " | Flags: " << psec->get_flags() << std::dec << std::endl;
-    }
-
-    const char* text_data = text_sec->get_data();
-    Elf_Xword text_size = text_sec->get_size();
-    Elf64_Addr text_addr = text_sec->get_address();
-
+// --- Sweep 1: Find all JAL targets ---
+std::set<Elf64_Addr> find_jal_targets(const char* text_data, Elf_Xword text_size, Elf64_Addr text_addr) {
     std::set<Elf64_Addr> jal_targets;
-    std::set<Elf64_Addr> fallthrough_prologue_targets;
-    std::set<Elf64_Addr> symbol_targets;
-
-    // --- Add ELF entry point ---
-    symbol_targets.insert(reader.get_entry());
-
-    // --- Sweep 1: Find all JAL targets ---
     for (unsigned int i = 0; i < text_size; i += 4) {
         uint32_t instr_word = *(reinterpret_cast<const uint32_t*>(text_data + i));
         RabbitizerInstruction instr;
@@ -100,8 +59,12 @@ int main(int argc, const char* argv[]) {
 
         RabbitizerInstruction_destroy(&instr);
     }
+    return jal_targets;
+}
 
-    // --- Sweep 2: Check for remaining functions proceeding jr instructions but not called by JAL ---
+// --- Sweep 2: Check for remaining functions proceeding jr instructions but not called by JAL ---
+std::set<Elf64_Addr> find_fallthrough_prologues(const char* text_data, Elf_Xword text_size, Elf64_Addr text_addr, const std::set<Elf64_Addr>& jal_targets) {
+    std::set<Elf64_Addr> fallthrough_prologue_targets;
     for (unsigned int i = 0; i < text_size; i += 4) {
         uint32_t instr_word = *(reinterpret_cast<const uint32_t*>(text_data + i));
         RabbitizerInstruction instr;
@@ -109,7 +72,6 @@ int main(int argc, const char* argv[]) {
         RabbitizerInstructionR5900_processUniqueId(&instr);
 
         if (instr.uniqueId == RABBITIZER_INSTR_ID_cpu_jr && GET_rs(&instr) == 31) { // jr ra
-            // --- Skip Padding after jr ra ---
             unsigned int current_offset = i + 8; // Start after the delay slot
             while (current_offset < text_size) {
                 uint32_t word = *(reinterpret_cast<const uint32_t*>(text_data + current_offset));
@@ -117,10 +79,9 @@ int main(int argc, const char* argv[]) {
                 RabbitizerInstruction_init(&padding_check_instr, word, text_addr + current_offset);
                 RabbitizerInstructionR5900_processUniqueId(&padding_check_instr);
                 
-                // A real instruction is not a NOP and is not invalid.
                 if (padding_check_instr.uniqueId != RABBITIZER_INSTR_ID_cpu_nop && padding_check_instr.uniqueId != RABBITIZER_INSTR_ID_cpu_INVALID) {
                     RabbitizerInstruction_destroy(&padding_check_instr);
-                    break; // Found a real instruction
+                    break;
                 }
                 
                 RabbitizerInstruction_destroy(&padding_check_instr);
@@ -129,9 +90,7 @@ int main(int argc, const char* argv[]) {
 
             if (current_offset < text_size) {
                 Elf64_Addr potential_func_start = text_addr + current_offset;
-
-                // --- Lookahead for Prologue ---
-                for (int j = 0; j < 10; ++j) { // Look ahead 10 instructions
+                for (int j = 0; j < 10; ++j) {
                     unsigned int lookahead_offset = current_offset + (j * 4);
                     if (lookahead_offset >= text_size) break;
 
@@ -141,38 +100,34 @@ int main(int argc, const char* argv[]) {
                     RabbitizerInstructionR5900_processUniqueId(&next_instr);
 
                     bool is_prologue = false;
-                    // Check for addiu sp, sp, -N
-                    if (next_instr.uniqueId == RABBITIZER_INSTR_ID_cpu_addiu &&
-                        GET_rs(&next_instr) == 29 && GET_rt(&next_instr) == 29) {
-                        int16_t immediate = GET_immediate(&next_instr);
-                        if (immediate < 0) {
-                            is_prologue = true;
-                        }
+                    if (next_instr.uniqueId == RABBITIZER_INSTR_ID_cpu_addiu && GET_rs(&next_instr) == 29 && GET_rt(&next_instr) == 29) {
+                        if (static_cast<int16_t>(GET_immediate(&next_instr)) < 0) is_prologue = true;
                     }
-                    // Check for sw ra, offset(sp) or sd ra, offset(sp)
-                    else if ((next_instr.uniqueId == RABBITIZER_INSTR_ID_cpu_sw || next_instr.uniqueId == RABBITIZER_INSTR_ID_cpu_sd) &&
-                             GET_rs(&next_instr) == 29 && GET_rt(&next_instr) == 31) {
+                    else if ((next_instr.uniqueId == RABBITIZER_INSTR_ID_cpu_sw || next_instr.uniqueId == RABBITIZER_INSTR_ID_cpu_sd) && GET_rs(&next_instr) == 29 && GET_rt(&next_instr) == 31) {
                         is_prologue = true;
                     }
 
                     if (is_prologue) {
-                        // Check if the address is already a known JAL target
                         if (jal_targets.find(potential_func_start) == jal_targets.end()) {
                             fallthrough_prologue_targets.insert(potential_func_start);
                         }
                         RabbitizerInstruction_destroy(&next_instr);
-                        break; // Found prologue, stop lookahead
+                        break;
                     }
                     
                     RabbitizerInstruction_destroy(&next_instr);
                 }
             }
         }
-
         RabbitizerInstruction_destroy(&instr);
     }
+    return fallthrough_prologue_targets;
+}
 
-    // --- Sweep 4: Find functions from symbol table ---
+// --- Sweep 4: Find functions from symbol table ---
+std::set<Elf64_Addr> find_symbol_table_functions(elfio& reader) {
+    std::set<Elf64_Addr> symbol_targets;
+    symbol_targets.insert(reader.get_entry()); // Add ELF entry point
     for (int i = 0; i < reader.sections.size(); ++i) {
         section* psec = reader.sections[i];
         if (psec->get_type() == SHT_SYMTAB) {
@@ -192,36 +147,26 @@ int main(int argc, const char* argv[]) {
             }
         }
     }
+    return symbol_targets;
+}
 
-    // --- Sweep 5: Scan for function pointers in data sections ---
-    std::cout << "--- ELF Properties ---\n";
-    std::cout << "Class: " << (reader.get_class() == ELFCLASS32 ? "32-bit" : "64-bit") << std::endl;
-    std::cout << "Encoding: " << (reader.get_encoding() == ELFDATA2LSB ? "Little Endian" : "Big Endian") << std::endl;
-
+// --- Sweep 5: Programmatically scan for function pointers in data sections ---
+std::set<Elf64_Addr> find_pointers_in_data_sections(elfio& reader, Elf64_Addr text_addr, Elf_Xword text_size) {
     std::set<Elf64_Addr> pointer_targets;
-    const std::set<std::string> sections_to_scan = {".data", ".rodata", ".sdata"};
+    const std::set<std::string> sections_to_scan = { ".data", ".rodata", ".sdata" };
 
     for (const auto& sec_name : sections_to_scan) {
         section* psec = reader.sections[sec_name];
         if (psec) {
-            std::cout << "Scanning section: " << sec_name << std::endl;
             const char* sec_data = psec->get_data();
             Elf_Xword sec_size = psec->get_size();
 
             for (Elf_Xword j = 0; j < sec_size; j += 4) {
                 if (j + 4 > sec_size) continue;
 
-                uint32_t potential_ptr = (reinterpret_cast<const uint32_t>(sec_data + j));
+                uint32_t potential_ptr = *(reinterpret_cast<const uint32_t*>(sec_data + j));
 
-                // --- START OF NEW DEBUG CODE ---
-                if (sec_name == ".rodata") {
-                    std::cout << "  .rodata offset 0x" << std::hex << j << ": 0x" << potential_ptr << std::dec << std::endl;
-                }
-                // --- END OF NEW DEBUG CODE ---
-
-                // Check if the pointer is within the .text section range
                 if (potential_ptr >= text_addr && potential_ptr < (text_addr + text_size)) {
-                    // Check if the address is 4-byte aligned
                     if ((potential_ptr % 4) == 0) {
                         pointer_targets.insert(potential_ptr);
                     }
@@ -229,16 +174,55 @@ int main(int argc, const char* argv[]) {
             }
         }
     }
+    return pointer_targets;
+}
+
+
+int main(int argc, const char* argv[]) {
+    if (argc != 4) {
+        std::cout << "Usage: function_finder <elf_file> <ghidra_function_list.txt> <ghidra_data_addresses.txt>" << std::endl;
+        return 1;
+    }
+
+    elfio reader;
+    if (!reader.load(argv[1])) {
+        std::cout << "Can't find or process ELF file " << argv[1] << std::endl;
+        return 2;
+    }
+
+    section* text_sec = reader.sections[ ".text" ];
+    if (!text_sec) {
+        std::cout << "'.text' section not found." << std::endl;
+        return 3;
+    }
+
+    const char* text_data = text_sec->get_data();
+    const Elf_Xword text_size = text_sec->get_size();
+    const Elf64_Addr text_addr = text_sec->get_address();
+
+    // --- Run analysis sweeps ---
+    std::set<Elf64_Addr> jal_targets = find_jal_targets(text_data, text_size, text_addr);
+    std::set<Elf64_Addr> fallthrough_prologue_targets = find_fallthrough_prologues(text_data, text_size, text_addr, jal_targets);
+    std::set<Elf64_Addr> symbol_targets = find_symbol_table_functions(reader);
+    
+    // --- This is the original programmatic scan, preserved as requested ---
+    std::set<Elf64_Addr> programmatically_found_pointers = find_pointers_in_data_sections(reader, text_addr, text_size);
+
+    // --- Load addresses from Ghidra-generated files ---
+    std::set<Elf64_Addr> ghidra_functions = load_addresses_from_file(argv[2]);
+    // --- This is the new functionality: load data addresses from a Ghidra file ---
+    std::set<Elf64_Addr> ghidra_data_pointers = load_addresses_from_file(argv[3]);
+
 
     // --- Combine results ---
+    // We now use the Ghidra-provided data pointers as the main source for this category
     std::set<Elf64_Addr> all_found_functions = jal_targets;
     all_found_functions.insert(fallthrough_prologue_targets.begin(), fallthrough_prologue_targets.end());
     all_found_functions.insert(symbol_targets.begin(), symbol_targets.end());
-    all_found_functions.insert(pointer_targets.begin(), pointer_targets.end());
+    all_found_functions.insert(ghidra_data_pointers.begin(), ghidra_data_pointers.end());
 
-    // --- Load Ghidra results and compare ---
-    std::set<Elf64_Addr> ghidra_functions = load_ghidra_functions(argv[2]);
 
+    // --- Comparison Logic (using Ghidra function list as ground truth) ---
     std::set<Elf64_Addr> correct_functions;
     std::set_intersection(all_found_functions.begin(), all_found_functions.end(),
                           ghidra_functions.begin(), ghidra_functions.end(),
@@ -254,60 +238,21 @@ int main(int argc, const char* argv[]) {
                         ghidra_functions.begin(), ghidra_functions.end(),
                         std::inserter(incorrect_functions, incorrect_functions.begin()));
 
-    std::cout << "\n--- INCORRECT Functions ---\n";
-    /*
-    for (const auto& addr : incorrect_functions) {
-        std::cout << "0x" << std::hex << addr << std::endl;
-    }
-    */
-
-
-    std::cout << std::dec;
-
     // --- Report Results ---
-    std::cout << "Analysis Report" << std::endl;
-    std::cout << "Ghidra Functions: " << ghidra_functions.size() << std::endl;
-    std::cout << "Functions Found (Total): " << jal_targets.size() + fallthrough_prologue_targets.size() << std::endl;
+    std::cout << std::dec << std::endl;
+    std::cout << "--- Analysis Report ---" << std::endl;
+    std::cout << "Ghidra Ground Truth Functions: " << ghidra_functions.size() << std::endl;
+    std::cout << "Total Functions Found (using Ghidra data pointers): " << all_found_functions.size() << std::endl;
     std::cout << "  - Via JAL: " << jal_targets.size() << std::endl;
     std::cout << "  - Via Fallthrough Prologue: " << fallthrough_prologue_targets.size() << std::endl;
     std::cout << "  - Via Symbols: " << symbol_targets.size() << std::endl;
-    std::cout << "  - Via Pointers: " << pointer_targets.size() << std::endl;
-    std::cout << "Comparison" << std::endl;
+    std::cout << "  - Via Ghidra Data Pointers File: " << ghidra_data_pointers.size() << std::endl;
+    std::cout << "  (For reference, programmatic pointer scan found: " << programmatically_found_pointers.size() << ")" << std::endl;
+    
+    std::cout << "\n--- Comparison vs. Ghidra Function List ---" << std::endl;
     std::cout << "Correctly Identified: " << correct_functions.size() << std::endl;
     std::cout << "Incorrectly Identified (False Positives): " << incorrect_functions.size() << std::endl;
     std::cout << "Missed Functions (False Negatives): " << missed_functions.size() << std::endl;
-
-    // --- Detailed Lists ---
-    /*
-        std::cout << "\n--- Missed Functions ---\n";
-        for (const auto& addr : missed_functions) {
-            std::cout << "0x" << std::hex << addr << std::endl;
-        }
-    */
-
-
-    std::set<Elf64_Addr> non_jal_functions;
-    non_jal_functions.insert(fallthrough_prologue_targets.begin(), fallthrough_prologue_targets.end());
-    non_jal_functions.insert(symbol_targets.begin(), symbol_targets.end());
-
-    std::set<Elf64_Addr> correct_non_jal_functions;
-    std::set_intersection(non_jal_functions.begin(), non_jal_functions.end(),
-                          correct_functions.begin(), correct_functions.end(),
-                          std::inserter(correct_non_jal_functions, correct_non_jal_functions.begin()));
-
-    std::set<Elf64_Addr> final_non_jal_list;
-    std::set_difference(correct_non_jal_functions.begin(), correct_non_jal_functions.end(),
-                        jal_targets.begin(), jal_targets.end(),
-                        std::inserter(final_non_jal_list, final_non_jal_list.begin()));
-
-    std::cout << "\n--- Correctly Identified Functions Not Found Via JAL ---\n";
-    std::cout << "Count: " << final_non_jal_list.size() << std::endl;
-    /*
-        for (const auto& addr : final_non_jal_list) {
-        std::cout << "0x" << std::hex << addr << std::endl;
-    }
-    */
-
 
     return 0;
 }

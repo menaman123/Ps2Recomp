@@ -12,6 +12,26 @@
 #include "analyze.h" // Main header for our new analysis pipeline
 #include "Function.h"  // The Function class definition
 #include "instructions/RabbitizerInstructionR5900.h"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+#include <elfio/elfio.hpp>
+#include <fstream>
+#include <sstream>
+#include <algorithm> // For std::remove
+#include "analyze.h"
+#include "Function.h"
+#include "instructions/RabbitizerInstructionR5900.h"
+
+static std::string trim(const std::string& str) {
+    const std::string whitespace = " \t";
+    const auto strBegin = str.find_first_not_of(whitespace);
+    if (strBegin == std::string::npos) return ""; // no content
+    const auto strEnd = str.find_last_not_of(whitespace);
+    const auto strRange = strEnd - strBegin + 1;
+    return str.substr(strBegin, strRange);
+}
 
 void log_functions_to_file(const std::vector<Function>& functions, const std::string& output_filename) {                                                                                                                                        
     std::ofstream log_file(output_filename);                                                                                                                                                                                                    
@@ -59,7 +79,7 @@ static void linear_disassemble_and_print(const uint8_t* code, size_t size, uint6
     }
 }
 
-
+/*
 int main(int argc, char** argv) {
     std::string filePath = argv[1];
 
@@ -102,7 +122,8 @@ int main(int argc, char** argv) {
 
 
     // --- Write the detailed, block-by-block analysis to separate files ---
-    for (const auto& func : analyzed_functions) {
+    /*
+        for (const auto& func : analyzed_functions) {
         func.dump_to_console();
     }
 
@@ -110,5 +131,35 @@ int main(int argc, char** argv) {
 
     std::cout << "\nLog files written successfully." << std::endl;
 
+    return 0;
+}
+    */
+
+int main(int argc, char** argv) {
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <path_to_elf_file> <path_to_ghidra_analysis.txt>" << std::endl;
+        return 1;
+    }
+    std::string elf_path = argv[1];
+    std::string ghidra_path = argv[2];
+    ELFIO::elfio reader;
+    if (!reader.load(elf_path)) {
+        std::cerr << "[-] Could not load ELF file: " << elf_path << "\n";
+        return 1;
+    }
+    std::cout << "--- STARTING GHIDRA FILE PARSING ---" << std::endl;
+    const ELFIO::section* text_section = reader.sections[".text"];
+    const uint8_t* text_section_data = reinterpret_cast<const uint8_t*>(text_section->get_data());
+    uint32_t text_section_size = text_section->get_size();
+
+      // Now call the parser with the new arguments
+    std::vector<Function> analyzed_functions = parse_ghidra_analysis_file(ghidra_path, text_section_data, text_section_size);
+    std::cout << "--- PARSING COMPLETE ---" << std::endl;
+    std::cout << "\n======================================================================" << std::endl;
+    std::cout << "---                       FUNCTION SUMMARY                       ---" << std::endl;
+    std::cout << "======================================================================" << std::endl;
+    std::cout << "Found " << analyzed_functions.size() << " functions." << std::endl;
+    log_functions_to_file(analyzed_functions, "function_log.txt");
+    std::cout << "\nLog file written successfully." << std::endl;
     return 0;
 }

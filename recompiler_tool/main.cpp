@@ -8,8 +8,8 @@
 #include "Recompiler.h"      // Your recompiler engine
 
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cerr << "Usage: recompiler_tool <path_to_elf_file>" << std::endl;
+    if (argc != 3) {
+        std::cerr << "Usage: recompiler_tool <path_to_elf_file> <path_to_ghidra_analysis.txt>" << std::endl;
         return 1;
     }
 
@@ -22,6 +22,13 @@ int main(int argc, char* argv[]) {
         std::cerr << "[-] Failed to load ELF file." << std::endl;
         return 1;
     }
+
+    // --- Step 2: Load the Ghidra text file
+    std::string ghidra_path = argv[2];
+    std::cout << "[+] Loading Ghidra analysis file: " << ghidra_path << std::endl;
+    
+
+
 
     const ELFIO::section* text_section = reader.sections[".text"];
     if (text_section == nullptr) {
@@ -39,6 +46,7 @@ int main(int argc, char* argv[]) {
 
     // --- Step 2: Analyze the executable to find all functions ---
     std::cout << "[+] Starting analysis phase..." << std::endl;
+    /*
     std::vector<Function> functions = analyze_executable(entry_point, text_data, text_size, text_vram);
     
     if (functions.empty()) {
@@ -46,10 +54,24 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     std::cout << "[+] Analysis complete. Found " << functions.size() << " functions." << std::endl;
+    */
+    std::vector<Function> analyzed_functions = parse_ghidra_analysis_file(ghidra_path, text_data, text_size);
+
+    if (analyzed_functions.empty()) {
+        std::cerr << "[-] Analysis failed or no functions were found." << std::endl;
+        return 1;
+    }
+    std::cout << "[+] Analysis complete. Found " << analyzed_functions.size() << " functions." << std::endl;
+
+    // --- NEW: Convert the vector to a map ---
+    std::map<uint32_t, Function> functions_map;
+    for (const auto& func : analyzed_functions) {
+        functions_map[func.base_address] = func;
+    }
 
     // --- Step 3: Feed the function list into the recompiler ---
     std::cout << "[+] Starting recompilation phase..." << std::endl;
-    Recompiler recompiler(functions);
+    Recompiler recompiler(functions_map);
 
     // --- Step 4: Generate the final C++ files ---
     bool success = recompiler.recompile_to_files("recompiled_functions.h", "recompiled_functions.cpp");

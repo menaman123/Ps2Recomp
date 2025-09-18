@@ -17,8 +17,11 @@ static std::string get_gpr_name(uint8_t reg_num) {
 static std::string get_fpr_name(uint8_t reg_num) {
     return "ctx.fpr[" + std::to_string(reg_num) + "]";
 }
+static std::string get_vr_name(uint8_t reg_num) {
+    return "ctx.vr[" + std::to_string(reg_num) + "]";
+}
 
-Recompiler::Recompiler(const std::vector<Function>& functions) : m_functions(functions) {}
+Recompiler::Recompiler(const std::map<uint32_t, Function>& functions) : m_functions(functions) {}
 
 bool Recompiler::recompile_to_files(const std::string& output_header, const std::string& output_cpp) {
     std::ofstream header_file(output_header);
@@ -48,8 +51,9 @@ void Recompiler::write_header_file(std::ofstream& file) {
     file << "#pragma once\n\n";
     file << "#include \"host_app/cpu_state.h\"\n\n";
 
-    for (const auto& func : m_functions) {
-        file << "void func_" << std::hex << func.base_address << "(CpuContext& ctx);\n";
+    for (const auto& pair : m_functions) {
+        const Function& func = pair.second; // Get the Function object from the pair
+        file << func.name << "(CpuContext& ctx);\n";
     }
 }
 
@@ -58,7 +62,8 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "#include \"host_app/memory.h\"\n\n";
     file << "extern Memory memory; // Assume a global memory object for now\n\n";
 
-    for (const auto& func : m_functions) {
+    for (const auto& pair : m_functions) {
+        const Function& func = pair.second; // Get the Function object from the pair
         recompile_function(func, file);
     }
 }
@@ -69,9 +74,11 @@ bool Recompiler::has_delay_slot(const rabbitizer::InstructionCpu& instr) const {
 
 void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     file << "// Function at 0x" << std::hex << func.base_address << "\n";
-    file << "void func_" << std::hex << func.base_address << "(CpuContext& ctx) {\n";
+    file << func.name << "(CpuContext& ctx) {\n";
 
     for (const auto& block : func.blocks) {
+
+        std::cout << "block_" << std::hex << block.start_address << ":\n";
         file << "block_" << std::hex << block.start_address << ":\n";
         
         for (size_t i = 0; i < block.instructions.size(); ++i) {
@@ -104,137 +111,152 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
 }
 
 void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, std::ofstream& file) {
-    file << "    // " << instr.disassemble(0) << "\n";
-    
-    const auto imm = static_cast<int16_t>(instr.getProcessedImmediate());
-
-    // FIX: Cast all register enum returns to uint8_t before passing to helper functions.
     switch (instr.getUniqueId()) {
-        case RABBITIZER_INSTR_ID_cpu_nop:
-            file << "    /* NOP */ ;\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_addiu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ";\n";
-            break;
+        //
+        // MIPS I - Arithmetic instructions
+        //
+        case RABBITIZER_INSTR_ID_cpu_add:
         case RABBITIZER_INSTR_ID_cpu_addu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_sub:
         case RABBITIZER_INSTR_ID_cpu_subu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " - " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_or:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " | " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+        case RABBITIZER_INSTR_ID_cpu_addi:
+        case RABBITIZER_INSTR_ID_cpu_addiu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_ori:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " | " << static_cast<uint16_t>(imm) << ";\n";
+        case RABBITIZER_INSTR_ID_cpu_multu:
+            file << "    {\n";
+            file << "        int64_t result = static_cast<int64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") * static_cast<int64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            file << "        ctx.lo = static_cast<uint32_t>(result);\n";
+            file << "        ctx.hi = static_cast<uint32_t>(result >> 32);\n";
+            file << "    }\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_div:
+        case RABBITIZER_INSTR_ID_cpu_divu:
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " != 0) {\n";
+            file << "        ctx.lo = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " / " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+            file << "        ctx.hi = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " % " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+            file << "    }\n";
+            break;
+        //
+        // MIPS I - Logical instructions
+        //
         case RABBITIZER_INSTR_ID_cpu_and:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_andi:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & " << static_cast<uint16_t>(imm) << ";\n";
+        case RABBITIZER_INSTR_ID_cpu_or:
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " | " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_xor:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " ^ " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " ^ " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_lui:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << static_cast<uint16_t>(imm) << " << 16;\n";
+        case RABBITIZER_INSTR_ID_cpu_nor:
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = ~(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " | " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_andi:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & " << instr.Get_immediate() << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_ori:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " | " << instr.Get_immediate() << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_xori:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " ^ " << instr.Get_immediate() << ";\n";
+            break;
+        //
+        // MIPS I - Shift instructions
+        //
         case RABBITIZER_INSTR_ID_cpu_sll:
-             if (instr.getRaw() == 0) {
-                 file << "    /* NOP */ ;\n";
-             } else {
-                file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = static_cast<uint32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") << " << instr.Get_sa() << ";\n";
-             }
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " << " << instr.Get_sa() << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_srl:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = static_cast<uint32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") >> " << instr.Get_sa() << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " >> " << instr.Get_sa() << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_sra:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") >> " << instr.Get_sa() << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") >> " << instr.Get_sa() << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_lw:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = memory.read_u32(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ");\n";
+        case RABBITIZER_INSTR_ID_cpu_sllv:
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " << (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & 0x1F);\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_sw:
-            file << "    memory.write_u32(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+        case RABBITIZER_INSTR_ID_cpu_srlv:
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " >> (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & 0x1F);\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_lb:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = static_cast<int8_t>(memory.read_u8(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << "));\n";
+        case RABBITIZER_INSTR_ID_cpu_srav:
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") >> (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " & 0x1F);\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_lbu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = memory.read_u8(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ");\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_sb:
-            file << "    memory.write_u8(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_lh:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = static_cast<int16_t>(memory.read_u16(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << "));\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_lhu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = memory.read_u16(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ");\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_sh:
-            file << "    memory.write_u16(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
-            break;
+        //
+        // MIPS I - Branch instructions
+        //
         case RABBITIZER_INSTR_ID_cpu_beq:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") { goto block_" << std::hex << instr.getBranchVramGeneric() << std::dec << "; }\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") ctx.pc += " << (instr.Get_immediate() << 2) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bne:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") { goto block_" << std::hex << instr.getBranchVramGeneric() << std::dec << "; }\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") ctx.pc += " << (instr.Get_immediate() << 2) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_blez:
-            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") <= 0) { goto block_" << std::hex << instr.getBranchVramGeneric() << std::dec << "; }\n";
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") <= 0) ctx.pc += " << (instr.Get_immediate() << 2) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bgtz:
-            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") > 0) { goto block_" << std::hex << instr.getBranchVramGeneric() << std::dec << "; }\n";
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") > 0) ctx.pc += " << (instr.Get_immediate() << 2) << ";\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_bltz:
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") < 0) ctx.pc += " << (instr.Get_immediate() << 2) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_bgez:
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") >= 0) ctx.pc += " << (instr.Get_immediate() << 2) << ";\n";
+            break;
+        //
+        // MIPS I - Jump instructions
+        //
         case RABBITIZER_INSTR_ID_cpu_j:
-            file << "    goto block_" << std::hex << instr.getBranchVramGeneric() << std::dec << ";\n";
+            file << "    ctx.pc = (ctx.pc & 0xF0000000) | (" << (instr.Get_instr_index() << 2) << ");\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_jal:
-            file << "    " << get_gpr_name(RABBITIZER_REG_GPR_O32_ra) << " = 0x" << std::hex << (instr.getVram() + 8) << std::dec << "; // Set return address\n";
-            file << "    func_" << std::hex << instr.getBranchVramGeneric() << std::dec << "(ctx);\n";
+            file << "    " << get_gpr_name(31) << " = ctx.pc + 8;\n";
+            file << "    ctx.pc = (ctx.pc & 0xF0000000) | (" << (instr.Get_instr_index() << 2) << ");\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_jr:
-            // FIX: Cast the enum to its underlying type for comparison.
-            if (static_cast<uint8_t>(instr.GetO32_rs()) == RABBITIZER_REG_GPR_O32_ra) {
-                file << "    return;\n";
-            } else {
-                file << "    // Dynamic jump not yet implemented!\n";
-                file << "    throw std::runtime_error(\"Dynamic jump not implemented\");\n";
-            }
+            file << "    ctx.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_slt:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") < static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ")) ? 1 : 0;\n";
+        case RABBITIZER_INSTR_ID_cpu_jalr:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = ctx.pc + 8;\n";
+            file << "    ctx.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ";\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_slti:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") < " << imm << ") ? 1 : 0;\n";
+        //
+        // MIPS I - Load/Store instructions
+        //
+        case RABBITIZER_INSTR_ID_cpu_lb:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = static_cast<int8_t>(memory::read<uint8_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << "));\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_sltiu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " < " << static_cast<uint16_t>(imm) << ") ? 1 : 0;\n";
+        case RABBITIZER_INSTR_ID_cpu_lbu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = memory::read<uint8_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ");\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_mfhi:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = ctx.hi;\n";
+        case RABBITIZER_INSTR_ID_cpu_lh:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = static_cast<int16_t>(memory::read<uint16_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << "));\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_mflo:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = ctx.lo;\n";
+        case RABBITIZER_INSTR_ID_cpu_lhu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = memory::read<uint16_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ");\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_syscall:
-            file << "    ctx.handle_syscall();\n";
+        case RABBITIZER_INSTR_ID_cpu_lw:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = memory::read<uint32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ");\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_mfc0:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = ctx.cp0_gpr[" << std::to_string(static_cast<uint8_t>(instr.Get_cop0d())) << "];\n";
+        case RABBITIZER_INSTR_ID_cpu_sb:
+            file << "    memory::write<uint8_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_mtc0:
-            file << "    ctx.cp0_gpr[" << std::to_string(static_cast<uint8_t>(instr.Get_cop0d())) << "] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+        case RABBITIZER_INSTR_ID_cpu_sh:
+            file << "    memory::write<uint16_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_lwc1:
-            file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << " = memory.read_u32(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ");\n";
+        case RABBITIZER_INSTR_ID_cpu_sw:
+            file << "    memory::write<uint32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
-        case RABBITIZER_INSTR_ID_cpu_swc1:
-            file << "    memory.write_u32(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << imm << ", " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ");\n";
+        case RABBITIZER_INSTR_ID_cpu_lui:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << (instr.Get_immediate() << 16) << ";\n";
             break;
+        //
+        // FPU Instructions
+        //
         case RABBITIZER_INSTR_ID_cpu_add_s:
             file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fd())) << " = " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " + " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ";\n";
             break;
@@ -248,14 +270,130 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fd())) << " = " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " / " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_mtc1:
-            file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+            file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " = std::bit_cast<float>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_mfc1:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ";\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = std::bit_cast<uint32_t>(" << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ");\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_bnez:
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " != 0) ctx.pc += " << (static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_bnel:
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") { /* Branch likely, not executing delay slot on fallthrough */ } else { ctx.pc += 4; }\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_beql:
+             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " == 0) { /* Branch likely */ } else { ctx.pc += 4; }\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_blezl:
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") <= 0) { /* Branch likely */ } else { ctx.pc += 4; }\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_bltzl:
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") < 0) { /* Branch likely */ } else { ctx.pc += 4; }\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_bgezl:
+            file << "    if (static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") >= 0) { /* Branch likely */ } else { ctx.pc += 4; }\n";
+            break;
+
+        // Doubleword and Logical Instructions
+        case RABBITIZER_INSTR_ID_cpu_daddiu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << static_cast<int16_t>(instr.Get_immediate()) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_daddu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_ddivu:
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " != 0) {\n";
+            file << "        ctx.lo = static_cast<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") / static_cast<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            file << "        ctx.hi = static_cast<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ") % static_cast<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            file << "    }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_sltiu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " < " << static_cast<int16_t>(instr.Get_immediate()) << ") ? 1 : 0;\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_sltu:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " < " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ") ? 1 : 0;\n";
+            break;
+
+        // Load/Store and Move Instructions
+        case RABBITIZER_INSTR_ID_r5900_lq:
+            file << "    // lq instruction - 128-bit load\n";
+            file << "    memory::read_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << static_cast<int16_t>(instr.Get_immediate()) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_lwl:
+            file << "    // lwl instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_lwr:
+            file << "    // lwr instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_movz:
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << " == 0) " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << " = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_mult:
+            file << "    {\n";
+            file << "        int64_t result = static_cast<int64_t>(static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ")) * static_cast<int64_t>(static_cast<int32_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
+            file << "        ctx.lo = static_cast<uint32_t>(result);\n";
+            file << "        ctx.hi = static_cast<uint32_t>(result >> 32);\n";
+            file << "    }\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_sq:
+            file << "    // sq instruction - 128-bit store\n";
+            file << "    memory::write_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << static_cast<int16_t>(instr.Get_immediate()) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            break;
+        
+        // System and MMI Instructions
+        case RABBITIZER_INSTR_ID_r5900_pextlw:
+            file << "    // pextlw instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_pextuw:
+            file << "    // pextuw instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_ppach:
+            file << "    // ppach instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_ppacw:
+            file << "    // ppacw instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_psraw:
+            file << "    // psraw instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_psrlw:
+            file << "    // psrlw instruction\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_sync:
+            file << "    // sync instruction - memory barrier\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_syscall:
+            file << "    // syscall instruction\n";
+            break;
+
+        // Vector Unit (VU) Instructions
+        case RABBITIZER_INSTR_ID_r5900_vaddx:
+            file << "    " << get_vr_name(0) << ".x = " << get_vr_name(1) << ".x + " << get_vr_name(2) << ".x;\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_vadd:
+            file << "    " << get_vr_name(0) << " = " << get_vr_name(1) << " + " << get_vr_name(2) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_vsub:
+            file << "    " << get_vr_name(0) << " = " << get_vr_name(1) << " - " << get_vr_name(2) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_vmul:
+            file << "    " << get_vr_name(0) << " = " << get_vr_name(1) << " * " << get_vr_name(2) << ";\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_vdiv:
+            file << "    " << get_vr_name(0) << ".x = " << get_vr_name(1) << ".x / " << get_vr_name(2) << ".x;\n";
+            file << "    " << get_vr_name(0) << ".y = " << get_vr_name(1) << ".y / " << get_vr_name(2) << ".y;\n";
+            file << "    " << get_vr_name(0) << ".z = " << get_vr_name(1) << ".z / " << get_vr_name(2) << ".z;\n";
+            file << "    " << get_vr_name(0) << ".w = " << get_vr_name(1) << ".w / " << get_vr_name(2) << ".w;\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_vsqrt:
+            file << "    " << get_vr_name(0) << ".x = sqrt(" << get_vr_name(1) << ".x);\n";
+            // ... and so on for y, z, w
+            break;
+
         default:
-            file << "    // UNIMPLEMENTED INSTRUCTION: " << static_cast<int>(instr.getUniqueId()) << "\n";
-            file << "    throw std::runtime_error(\"Unimplemented instruction in recompiler\");\n";
+            file << "    // Unhandled instruction: " << instr.getOpcodeName() << "\n";
             break;
     }
 }
