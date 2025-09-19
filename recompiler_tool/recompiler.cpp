@@ -389,7 +389,19 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             break;
         case RABBITIZER_INSTR_ID_r5900_vsqrt:
             file << "    " << get_vr_name(0) << ".x = sqrt(" << get_vr_name(1) << ".x);\n";
+            file << "    " << get_vr_name(0) << ".y = sqrt(" << get_vr_name(1) << ".y);\n";
+            file << "    " << get_vr_name(0) << ".z = sqrt(" << get_vr_name(1) << ".z);\n";
+            file << "    " << get_vr_name(0) << ".w = sqrt(" << get_vr_name(1) << ".w);\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_vabs:
+            file << "    " << get_vr_name(0) << ".x = abs(" << get_vr_name(1) << ".x);\n";
+            file << "    " << get_vr_name(0) << ".y = abs(" << get_vr_name(1) << ".y);\n";
+            file << "    " << get_vr_name(0) << ".z = abs(" << get_vr_name(1) << ".z);\n";
+            file << "    " << get_vr_name(0) << ".w = abs(" << get_vr_name(1) << ".w);\n";
             // ... and so on for y, z, w
+            break;
+        case RABBITIZER_INSTR_ID_cpu_sd:
+            file << "    memory::write<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << " + " << instr.Get_immediate() << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
 
         default:
