@@ -175,3 +175,4 @@ struct EmotionEngineState {
     cpuRegisters cpuRegs;
     fpuRegisters fpuRegs;
 };
+typedef EmotionEngineState CpuContext;
