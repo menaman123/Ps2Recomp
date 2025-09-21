@@ -11,16 +11,16 @@ std::string read_string_from_guest(uint32_t address) {
 
 // Exit syscall
 void sceExit(CpuState& ctx) {
-    int exit_code = static_cast<int>(ctx.gpr[4]); // $a0
+    int exit_code = static_cast<int>(ctx.cpuRegisters.GPR[4]); // $a0
     std::cout << "Syscall: exit(" << exit_code << ")" << std::endl;
     exit(exit_code);
 }
 
 // Write syscall
 void sceWrite(CpuState& ctx) {
-    int fd = static_cast<int>(ctx.gpr[4]); // $a0
+    int fd = static_cast<int>(ctx.cpuRegisters.GPR[4]); // $a0
     uint32_t ptr = ctx.gpr[5]; // $a1
-    int len = static_cast<int>(ctx.gpr[6]); // $a2
+    int len = static_cast<int>(ctx.cpuRegisters.GPR[6]); // $a2
 
     std::string str = read_string_from_guest(ptr);
     std::cout << "Syscall: write(" << fd << ", \"" << str << "\", " << len << ")" << std::endl;
@@ -37,8 +37,8 @@ void sceWrite(CpuState& ctx) {
 // Placeholder for open syscall
 void sceOpen(CpuState& ctx) {
     // Arguments: const char* filename, int flags
-    uint32_t filename_ptr = ctx.gpr[4]; // $a0
-    int flags = static_cast<int>(ctx.gpr[5]); // $a1
+    uint32_t filename_ptr = ctx.cpuRegisters.GPR[4]; // $a0
+    int flags = static_cast<int>(ctx.cpuRegisters.GPR[5]); // $a1
     
     std::string filename = read_string_from_guest(filename_ptr);
     std::cout << "System Call: sceOpen(filename: \"" << filename << "\", flags: " << flags << ") called!" << std::endl;

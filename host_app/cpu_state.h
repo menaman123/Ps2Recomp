@@ -1,33 +1,6 @@
 #pragma once
 
-#include <cstdint>
-
-// Basic type definitions from PCSX2's Pcsx2Defs.h
-using u8 = uint8_t;
-using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-
-using s8 = int8_t;
-using s16 = int16_t;
-using s32 = int32_t;
-using s64 = int64_t;
-
-// Basic vector types that GPRs can be viewed as.
-union u128 {
-    u64 UD[2];
-    u32 UL[4];
-    u16 US[8];
-    u8 UC[16];
-};
-
-union s128 {
-    s64 SD[2];
-    s32 SL[4];
-    s16 SS[8];
-    s8 SC[16];
-};
-
+#include "common/Pcsx2Types.h"
 
 // --- Structs from R5900.h, simplified for recompilation ---
 union PERFregs {

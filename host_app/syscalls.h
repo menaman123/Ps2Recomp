@@ -3,8 +3,8 @@
 #include "cpu_state.h"
 
 // Syscall handler functions
-void sceOpen(CpuState& ctx);
+void sceOpen(CpuContext& ctx);
 // Add declarations for other syscall handlers here...
 
 // The main dispatcher function
-void runtime_syscall_dispatcher(uint32_t syscall_num, CpuState& ctx);
+void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx);

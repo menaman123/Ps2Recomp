@@ -4,23 +4,23 @@
 #include <iostream>
 
 // A simple execution loop
-void execute_recompiled_code(CpuState& ctx) {
+void execute_recompiled_code(CpuContext& ctx) {
     // This is a basic loop. A more advanced implementation would handle interrupts
     // and other complexities of the PS2's execution flow.
     while (true) {
         // Find the function pointer for the current PC
-        auto it = recompiled_functions.find(ctx.pc);
+        auto it = recompiled_functions.find(ctx.cpuRegs.pc);
         if (it != recompiled_functions.end()) {
             it->second(ctx); // Execute the recompiled block
         } else {
             std::cerr << "Error: No recompiled function found for PC 0x"
-                      << std::hex << ctx.pc << std::endl;
+                      << std::hex << ctx.cpuRegs.pc << std::endl;
             break; // Halt execution
         }
 
         // A simple way to stop execution for now.
         // You'll want to replace this with a proper exit syscall.
-        if (ctx.pc == 0) {
+        if (ctx.cpuRegs.pc == 0) {
             break;
         }
     }
@@ -30,7 +30,7 @@ int main() {
     std::cout << "Starting the host application..." << std::endl;
 
     // Initialize the CPU state.
-    CpuState ctx;
+    CpuContext ctx;
     init_cpu_context(ctx);
 
     // This map is defined in recompiled_functions.cpp and holds pointers
