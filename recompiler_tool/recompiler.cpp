@@ -365,7 +365,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             file << "    // sync instruction - memory barrier\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_syscall:
-            file << "    // syscall instruction\n";
+            file << "      runtime_syscall_dispatcher(ctx.gpr[3], ctx);\n";
             break;
 
         // Vector Unit (VU) Instructions

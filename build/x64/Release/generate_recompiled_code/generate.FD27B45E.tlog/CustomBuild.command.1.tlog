@@ -1,0 +1,28 @@
+^C:\USERS\OWNER\DESKTOP\PS2_RECOMP\PS2RECOMP\BUILD\CMAKEFILES\AE2971C62E6C289820C581D2CEDC14B2\RECOMPILED_FUNCTIONS.H.RULE
+setlocal
+Release\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled_functions.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled_functions.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\OWNER\DESKTOP\PS2_RECOMP\PS2RECOMP\BUILD\CMAKEFILES\3343D4BC9312BB411F782C61D079FE5B\GENERATE_RECOMPILED_CODE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\OWNER\DESKTOP\PS2_RECOMP\PS2RECOMP\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp -BC:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build --check-stamp-file C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
