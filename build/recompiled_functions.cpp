@@ -729,7 +729,7 @@ block_1017c8:
         // Unhandled instruction: swc1
         if (ctx.cpuRegs.GPR.r[6].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x54e0;
 block_1017ec:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 297) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x297) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_1017f8:
@@ -753,7 +753,7 @@ block_106ce8:
         if (ctx.cpuRegs.GPR.r[6].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x20f4;
 block_106cfc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 286) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x286) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_106d0c:
@@ -819,7 +819,7 @@ block_108ef8:
         ctx.cpuRegs.GPR.r[20].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[18].UL[0]) ctx.cpuRegs.pc += 0x3b4;
 block_108f50:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_108f5c:
@@ -951,7 +951,7 @@ block_109610:
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[3].UL[0]) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[0].UL[0];
 block_109620:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 9c5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x9c5) ? 1 : 0;
         // Unhandled instruction: nop
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x78;
 block_10962c:
@@ -991,7 +991,7 @@ block_1096b4:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0x1f;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[17].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
         // Unhandled instruction: beqz
@@ -1542,7 +1542,7 @@ block_10a610:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_10a624:
         ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[19].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] << 2;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff60;
 block_10a634:
@@ -1566,7 +1566,7 @@ block_10a658:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xff;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x5) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_10a68c:
@@ -1630,7 +1630,7 @@ block_10a7cc:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0xc0, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0xc0);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_10a804:
@@ -1682,7 +1682,7 @@ block_10a9c8:
 block_10a9ec:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xc0);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xc) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_10aa00:
@@ -2114,7 +2114,7 @@ block_10c3a0:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_10c3b4:
         ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[19].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] << 2;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff60;
 block_10c3c4:
@@ -2138,7 +2138,7 @@ block_10c3e8:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xff;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x9) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_10c41c:
@@ -3131,7 +3131,7 @@ block_10e50c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffffd;
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
         // Unhandled instruction: dsll
 block_10e524:
@@ -3725,7 +3725,7 @@ block_111084:
 block_1110f0:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0x7;
         ctx.fpuRegs.fpr[2].UL = ctx.cpuRegs.GPR.r[0].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_111104:
@@ -4915,7 +4915,7 @@ block_116b08:
         ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x114);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0x10;
         // Unhandled instruction: beqz
 block_116b38:
@@ -5004,7 +5004,7 @@ block_116f38:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[16].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xc));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_116f58:
@@ -5120,7 +5120,7 @@ block_11719c:
 block_1171d0:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xc));
 block_1171d4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_1171e0:
@@ -5392,7 +5392,7 @@ block_117b68:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x14);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x10);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x14; } else { /* Branch likely, nullify delay slot */ }
 block_117b80:
@@ -5473,8 +5473,8 @@ block_118380:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x14);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3) ? 1 : 0;
         // Unhandled instruction: beqz
 block_118398:
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -5668,7 +5668,7 @@ block_118de8:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x14);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x10);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x14; } else { /* Branch likely, nullify delay slot */ }
 block_118e00:
@@ -5958,7 +5958,7 @@ block_119a70:
 block_119a78:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x60));
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffff9;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_119a8c:
@@ -6045,7 +6045,7 @@ block_119c70:
 block_119ca0:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x60));
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffff9;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_119cb4:
@@ -6127,7 +6127,7 @@ block_119fa8:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[0].UL[0] | 0xf000;
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xf;
         // Unhandled instruction: beqz
 block_119fc4:
@@ -6187,7 +6187,7 @@ block_11a07c:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[0].UL[0] | 0xf000;
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xc8; } else { /* Branch likely, nullify delay slot */ }
 block_11a098:
@@ -6738,7 +6738,7 @@ block_11bc40:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << (ctx.cpuRegs.GPR.r[18].UL[0] & 0x1F);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xffff;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0xa) ? 1 : 0;
         // Unhandled instruction: beqz
 block_11bc58:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[20].UL[0] + 0xe));
@@ -9059,7 +9059,7 @@ block_11ea84:
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_11ea90:
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xffff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd4;
 block_11eaa0:
@@ -9133,7 +9133,7 @@ block_11eb60:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xff;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x5) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_11eb94:
@@ -9353,7 +9353,7 @@ block_11f008:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xff;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x9) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_11f03c:
@@ -9881,7 +9881,7 @@ block_11fe28:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xc);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 3;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_11fe40:
@@ -11178,7 +11178,7 @@ block_121b14:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x14);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_121b34:
@@ -11421,7 +11421,7 @@ block_122148:
 block_122174:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x60));
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffff9;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_122188:
@@ -19027,7 +19027,7 @@ block_12dcf0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 20;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_12dd14:
@@ -19389,7 +19389,7 @@ block_12f8dc:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x9;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x20;
 block_12f8f8:
@@ -19944,7 +19944,7 @@ block_131788:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x14);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         // Unhandled instruction: lwc1
         // Unhandled instruction: beqz
 block_1317a0:
@@ -22448,7 +22448,7 @@ block_138180:
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0xd8, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[20].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[19].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x10;
 block_1381bc:
@@ -23987,7 +23987,7 @@ block_13e0f8:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x14);
         ctx.cpuRegs.GPR.r[20].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xfffffffc;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_13e110:
@@ -24170,7 +24170,7 @@ block_13e9a0:
 block_13e9a8:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x7) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -24506,7 +24506,7 @@ block_13f528:
 block_13f52c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -24660,7 +24660,7 @@ block_13f804:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
 block_13f808:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_13f814:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -24966,7 +24966,7 @@ block_13fc84:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[4].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_13fcb0:
@@ -25121,7 +25121,7 @@ block_13fee4:
 void FUN_0013fef0(CpuContext& ctx) {
 block_13fef0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x233;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 234) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x234) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x40;
 block_13fefc:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x232;
@@ -26565,7 +26565,7 @@ block_141794:
 void FUN_001417a0(CpuContext& ctx) {
 block_1417a0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xfffffffd;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xc) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_1417b0:
@@ -28086,13 +28086,13 @@ block_14415c:
 block_144170:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffffb;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x34c; } else { /* Branch likely, nullify delay slot */ }
 block_144184:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0));
 block_144188:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x7) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_144194:
@@ -28776,7 +28776,7 @@ block_146a30:
 block_146a64:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xe) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_146a78:
@@ -28795,7 +28795,7 @@ block_146aec:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
 block_146af0:
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xe) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_146b00:
@@ -29329,7 +29329,7 @@ block_148648:
         // Unhandled instruction: beqz
 block_148658:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffffe;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_148668:
@@ -29346,7 +29346,7 @@ block_1486a0:
         // Unhandled instruction: b
 block_1486e4:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffffe;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_1486f4:
@@ -30006,7 +30006,7 @@ block_149b78:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[0].UL[0]);
         // Unhandled instruction: b
 block_149b80:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 14) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x14) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_149b8c:
@@ -31072,7 +31072,7 @@ block_14eaf0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_14eb2c:
@@ -31236,7 +31236,7 @@ block_14edb8:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x14eaf0;
 block_14edc8:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x3;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_14edd8:
@@ -31261,7 +31261,7 @@ block_14ee00:
 block_14ee10:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x8);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] - ctx.cpuRegs.GPR.r[4].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
@@ -32504,7 +32504,7 @@ block_154890:
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xe0);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffffd;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x19c; } else { /* Branch likely, nullify delay slot */ }
 block_1548b4:
@@ -32517,7 +32517,7 @@ block_1548c4:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xe4, ctx.cpuRegs.GPR.r[2].UL[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xe4);
 block_1548d0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_1548dc:
@@ -33536,7 +33536,7 @@ block_1590a0:
         // Unhandled instruction: b
 block_1590ac:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x4);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x158; } else { /* Branch likely, nullify delay slot */ }
 block_1590bc:
@@ -34992,7 +34992,7 @@ block_15e1d8:
 block_15e1e0:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x5) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -35002,7 +35002,7 @@ block_15e1f8:
 block_15e200:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x3) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -35543,7 +35543,7 @@ block_15f048:
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[5].SL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffe1ff;
         // Unhandled instruction: beqz
 block_15f06c:
@@ -35572,7 +35572,7 @@ block_15f0a0:
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7f;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[5].SL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 64) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x64) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x28; } else { /* Branch likely, nullify delay slot */ }
 block_15f0c4:
@@ -37980,7 +37980,7 @@ block_1639a8:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: swc1
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x14);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[19].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_1639e8:
@@ -39107,7 +39107,7 @@ block_16682c:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_166840:
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb4;
 block_166850:
@@ -39634,7 +39634,7 @@ block_167590:
         // Unhandled instruction: beqz
 block_1675fc:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x204; } else { /* Branch likely, nullify delay slot */ }
 block_16760c:
@@ -39675,7 +39675,7 @@ block_167850:
         // Unhandled instruction: beqz
 block_167888:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x184; } else { /* Branch likely, nullify delay slot */ }
 block_167898:
@@ -39853,7 +39853,7 @@ block_167ddc:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x23cd30;
 block_167de8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_167df4:
@@ -39861,7 +39861,7 @@ block_167df4:
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x6;
         if (ctx.cpuRegs.GPR.r[20].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x1bc;
 block_167e00:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[20].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[20].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x18; } else { /* Branch likely, nullify delay slot */ }
 block_167e0c:
@@ -39972,7 +39972,7 @@ block_1680e8:
 void FUN_00168110(CpuContext& ctx) {
 block_168110:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xfffffd91;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_168120:
@@ -40245,7 +40245,7 @@ block_168bc0:
         // Unhandled instruction: beqz
 block_168c18:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[19].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x6dc;
 block_168c28:
@@ -40323,7 +40323,7 @@ block_16959c:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_1695b0:
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x4) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x580);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffcc; } else { /* Branch likely, nullify delay slot */ }
 block_1695c0:
@@ -40369,9 +40369,9 @@ block_169690:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 7;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ 0x1;
         ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7f;
-        ctx.cpuRegs.GPR.r[22].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[22].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x88);
-        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_1696c4:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xd4);
@@ -40395,7 +40395,7 @@ block_1696e8:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0xa4, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[16].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[16].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0x3084;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -42066,7 +42066,7 @@ block_171868:
         // Unhandled instruction: beqz
 block_1718bc:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x2ac;
 block_1718cc:
@@ -42260,7 +42260,7 @@ block_1720e4:
 block_1720ec:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x2;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: b
 block_1720fc:
         ctx.cpuRegs.GPR.r[22].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -42871,7 +42871,7 @@ block_172e04:
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
 block_172e18:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
         // Unhandled instruction: nop
@@ -42915,7 +42915,7 @@ block_173040:
         ctx.cpuRegs.GPR.r[21].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[18].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x60, ctx.cpuRegs.GPR.r[30].UD[0]);
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[16].UD[0]);
@@ -42980,7 +42980,7 @@ block_1732f8:
         ctx.cpuRegs.GPR.r[18].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0xffff9724);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x7) ? 1 : 0;
         // Unhandled instruction: beqz
 block_173310:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -43321,7 +43321,7 @@ block_1745d0:
         if (ctx.cpuRegs.GPR.r[4].UL[0] != ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.pc += 0x148;
 block_174620:
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[18].UL[0] = (ctx.cpuRegs.GPR.r[20].UL[0] < 17) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[18].UL[0] = (ctx.cpuRegs.GPR.r[20].UL[0] < 0x17) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: nop
 block_174630:
@@ -44098,7 +44098,7 @@ block_176548:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0xffffffff;
         // Unhandled instruction: beqz
 block_176550:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xc) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_17655c:
@@ -44122,7 +44122,7 @@ block_1765a8:
         // Unhandled instruction: movn
         // Unhandled instruction: b
 block_1765c0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xc) ? 1 : 0;
         // Unhandled instruction: beqz
 block_1765c8:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
@@ -44236,14 +44236,14 @@ block_17678c:
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x278;
 block_1767b4:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[0].UL[0] | 0xc000;
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x260;
 block_1767cc:
@@ -44302,7 +44302,7 @@ block_176878:
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_17689c:
@@ -44399,7 +44399,7 @@ block_176a48:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_176a88:
@@ -44528,7 +44528,7 @@ block_176c90:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_176cd0:
@@ -44701,7 +44701,7 @@ block_17713c:
 block_177140:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x1;
         // Unhandled instruction: slti
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[0].UL[0];
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa8;
 block_177154:
@@ -45354,7 +45354,7 @@ block_1795c0:
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x4;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[8].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x10) ? 1 : 0;
         // Unhandled instruction: movn
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe4;
 block_1795e0:
@@ -45384,12 +45384,12 @@ block_179618:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x4;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[8].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x10) ? 1 : 0;
         // Unhandled instruction: movn
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe4;
 block_179638:
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[11].SL[0] = ctx.cpuRegs.GPR.r[11].SL[0] + ctx.cpuRegs.GPR.r[7].SL[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffbc;
 block_179648:
@@ -45507,7 +45507,7 @@ block_1797a4:
 void FUN_001797c0(CpuContext& ctx) {
 block_1797c0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xfffffd6f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_1797d0:
@@ -46094,7 +46094,7 @@ block_17a1e4:
 void FUN_0017a1f0(CpuContext& ctx) {
 block_17a1f0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xfffffd78;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_17a200:
@@ -48364,7 +48364,7 @@ block_17d130:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x418, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x144;
 block_17d144:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x400;
         // Unhandled instruction: beqz
 block_17d150:
@@ -48386,7 +48386,7 @@ block_17d250:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x4;
         // Unhandled instruction: beqz
 block_17d268:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffe0; } else { /* Branch likely, nullify delay slot */ }
 block_17d274:
@@ -48544,7 +48544,7 @@ block_17d478:
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[16].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[16].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[17].UL[0] != 0) ctx.cpuRegs.pc += 0x40;
 block_17d4a4:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff824c);
@@ -48596,7 +48596,7 @@ block_17d574:
         ctx.cpuRegs.GPR.r[5].UL[0] = 0x320000;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x3530;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] ^ 0x3;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1dffd8;
 block_17d58c:
@@ -48746,7 +48746,7 @@ block_17dae0:
         // Unhandled instruction: nop
 block_17db98:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0xfffffffb;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x2c; } else { /* Branch likely, nullify delay slot */ }
 block_17dba8:
@@ -48754,7 +48754,7 @@ block_17dba8:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x2c1ef0;
 block_17dbd0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0xc;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffc0;
 block_17dbdc:
@@ -48822,7 +48822,7 @@ block_17dc84:
         // Unhandled instruction: b
 block_17dc9c:
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[9].UL[0] & 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff80;
 block_17dcac:
@@ -51258,7 +51258,7 @@ block_1813b8:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x4;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[9].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
@@ -53304,7 +53304,7 @@ void FUN_001836b8(CpuContext& ctx) {
 block_1836b8:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xffffffc0;
         ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x10) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_1836cc:
@@ -53419,7 +53419,7 @@ block_183ed0:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_183ee8:
@@ -63763,7 +63763,7 @@ block_190028:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2;
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x3) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.pc += 0xcc;
 block_190040:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
@@ -64698,7 +64698,7 @@ block_1917a8:
 block_1917c0:
         // Unhandled instruction: swc1
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x8) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -64834,7 +64834,7 @@ block_191954:
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) ctx.cpuRegs.pc += 0x10;
 block_19195c:
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[4].UL[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
 block_191968:
@@ -65056,7 +65056,7 @@ block_191e78:
 block_191e88:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x18) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -65092,7 +65092,7 @@ block_191edc:
 block_191ef0:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_191f04:
@@ -65138,7 +65138,7 @@ block_191f70:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_191f84:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd4; } else { /* Branch likely, nullify delay slot */ }
 block_191f90:
@@ -65179,7 +65179,7 @@ block_191fec:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_192000:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd0; } else { /* Branch likely, nullify delay slot */ }
 block_19200c:
@@ -67111,7 +67111,7 @@ block_195aa8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + ctx.cpuRegs.GPR.r[5].SL[0];
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x10) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
 block_195ac0:
@@ -67143,7 +67143,7 @@ block_195b00:
 block_195b08:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x5c; } else { /* Branch likely, nullify delay slot */ }
 block_195b1c:
@@ -67309,7 +67309,7 @@ block_195d78:
 block_195d7c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x40);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_195d90:
@@ -67395,7 +67395,7 @@ block_196054:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x70);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x40);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_19606c:
@@ -67852,7 +67852,7 @@ block_196a08:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x4;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2000000;
         // Unhandled instruction: beqz
 block_196a20:
@@ -68750,7 +68750,7 @@ block_197a08:
 block_197a18:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
 block_197a1c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -69279,7 +69279,7 @@ block_1989f4:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_1989fc:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe4;
 block_198a08:
@@ -69299,7 +69299,7 @@ block_198a10:
 block_198a28:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x18) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -69856,7 +69856,7 @@ block_199498:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x4, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x8;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
 block_1994b0:
@@ -69902,7 +69902,7 @@ block_199508:
 void FUN_00199510(CpuContext& ctx) {
 block_199510:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x800));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x100) ? 1 : 0;
         // Unhandled instruction: nop
         // Unhandled instruction: beqz
 block_199520:
@@ -70212,7 +70212,7 @@ block_1998d0:
     }
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4)));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -70462,7 +70462,7 @@ block_199f40:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] << (ctx.cpuRegs.GPR.r[6].UL[0] & 0x1F);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -71366,7 +71366,7 @@ block_19b1c0:
 block_19b1cc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[21].SL[0] + ctx.cpuRegs.GPR.r[17].SL[0];
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa4;
 block_19b1e0:
@@ -71726,7 +71726,7 @@ block_19c21c:
         // Unhandled instruction: b
 block_19c28c:
         ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff836c);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 320) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x320) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff8364);
         // Unhandled instruction: beqz
 block_19c29c:
@@ -72736,7 +72736,7 @@ block_19e0c0:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] >> 8;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
 block_19e0d8:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -72847,7 +72847,7 @@ block_19e1f8:
 block_19e300:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[24].SL[0] = ctx.cpuRegs.GPR.r[24].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[24].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[24].UL[0] < 0x9) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -74603,7 +74603,7 @@ block_1a0c48:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x34;
 block_1a0c58:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 141f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x141f) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1407;
         // Unhandled instruction: beqz
 block_1a0c64:
@@ -77503,7 +77503,7 @@ block_1a4894:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a48b4:
@@ -77618,7 +77618,7 @@ block_1a49fc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a4a1c:
@@ -77733,7 +77733,7 @@ block_1a4b64:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a4b84:
@@ -77848,7 +77848,7 @@ block_1a4ccc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a4cec:
@@ -77963,7 +77963,7 @@ block_1a4e34:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a4e54:
@@ -78078,7 +78078,7 @@ block_1a4f9c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a4fbc:
@@ -78193,7 +78193,7 @@ block_1a5104:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a5124:
@@ -78308,7 +78308,7 @@ block_1a526c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a528c:
@@ -78423,7 +78423,7 @@ block_1a53d4:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1a53f4:
@@ -81426,7 +81426,7 @@ block_1aafb8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0x1;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 27) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x27) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1aafe4:
@@ -82622,7 +82622,7 @@ block_1ac9c8:
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x6)));
         ctx.cpuRegs.GPR.r[3].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4)));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -82633,7 +82633,7 @@ block_1aca18:
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x6)));
         ctx.cpuRegs.GPR.r[3].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4)));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -83106,7 +83106,7 @@ block_1adb7c:
 block_1adb8c:
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x2)));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 block_1adb9c:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xff;
@@ -83570,7 +83570,7 @@ block_1ae580:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[14].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[12].SL[0] = ctx.cpuRegs.GPR.r[12].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[13].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[8].UL[0] = (ctx.cpuRegs.GPR.r[12].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[8].UL[0] = (ctx.cpuRegs.GPR.r[12].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x2));
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x2));
         ctx.cpuRegs.GPR.r[6].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x1));
@@ -83635,7 +83635,7 @@ block_1ae580:
 block_1ae684:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x310000;
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xffffa7e0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff92f0, ctx.cpuRegs.GPR.r[2].UL[0]);
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
@@ -84231,7 +84231,7 @@ block_1af610:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + ctx.cpuRegs.GPR.r[5].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x100) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_1af65c:
@@ -91720,7 +91720,7 @@ block_1ba3a8:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48, ctx.cpuRegs.GPR.r[23].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x50, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x10);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x20);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x38c;
 block_1ba3e4:
@@ -93090,7 +93090,7 @@ block_1bc2ac:
 block_1bc2e0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x2c);
         ctx.cpuRegs.GPR.r[24].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[15].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x48;
 block_1bc2f4:
@@ -93305,7 +93305,7 @@ block_1bc5b0:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[9].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[9].SL[0] = ctx.cpuRegs.GPR.r[9].SL[0] + 0x10;
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[10].UL[0] + 0x8));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[11].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x80;
 block_1bc5c8:
@@ -93460,7 +93460,7 @@ block_1bc7e8:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[10].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[10].SL[0] = ctx.cpuRegs.GPR.r[10].SL[0] + 0x10;
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[11].UL[0] + 0x8));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[12].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x3;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x80;
 block_1bc800:
@@ -94731,7 +94731,7 @@ block_1bf6c0:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -95011,7 +95011,7 @@ block_1bfeb0:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -95678,7 +95678,7 @@ block_1c0960:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2;
         if (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x14;
 block_1c0970:
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x3;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0];
@@ -96989,7 +96989,7 @@ block_1c1b80:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c1b94:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -97240,7 +97240,7 @@ block_1c2038:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -97430,7 +97430,7 @@ block_1c2438:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -97620,7 +97620,7 @@ block_1c2838:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -97810,7 +97810,7 @@ block_1c2c38:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -98000,7 +98000,7 @@ block_1c3038:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -98190,7 +98190,7 @@ block_1c3290:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -98380,7 +98380,7 @@ block_1c34e8:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -98570,7 +98570,7 @@ block_1c3740:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99031,7 +99031,7 @@ block_1c4694:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99175,7 +99175,7 @@ block_1c4870:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99363,7 +99363,7 @@ block_1c4ae4:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99544,7 +99544,7 @@ block_1c4f10:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99707,7 +99707,7 @@ block_1c5140:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99838,7 +99838,7 @@ block_1c52e8:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -99986,7 +99986,7 @@ block_1c54e8:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -100186,7 +100186,7 @@ block_1c5790:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffd01;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
@@ -100285,7 +100285,7 @@ block_1c58e0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c58f4:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -100440,7 +100440,7 @@ block_1c5ac8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c5adc:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -100595,7 +100595,7 @@ block_1c5cb0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c5cc4:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -100750,7 +100750,7 @@ block_1c5e98:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c5eac:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -100905,7 +100905,7 @@ block_1c6080:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c6094:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -101060,7 +101060,7 @@ block_1c6268:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c627c:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -101215,7 +101215,7 @@ block_1c6450:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c6464:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -101370,7 +101370,7 @@ block_1c6638:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[10].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[5].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
 block_1c664c:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
@@ -101776,7 +101776,7 @@ block_1c7080:
 block_1c70a0:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x10) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -101956,7 +101956,7 @@ block_1c7318:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1815f0;
 block_1c7324:
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[20].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] << 2;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff90;
 block_1c7334:
@@ -103737,7 +103737,7 @@ block_1cbe68:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x181590;
 block_1cbe74:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 0x4) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffc4;
 block_1cbe80:
@@ -103880,13 +103880,13 @@ block_1cc1b0:
 void FUN_001cc360(CpuContext& ctx) {
 block_1cc360:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xbe;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < bf) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xbf) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x84;
 block_1cc36c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xbc;
         // Unhandled instruction: beqz
 block_1cc374:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < bd) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xbd) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x64;
 block_1cc37c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xbb;
@@ -103899,7 +103899,7 @@ block_1cc38c:
         // Unhandled instruction: b
 block_1cc394:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x10e;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 10f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x10f) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x60;
 block_1cc3a0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x10d;
@@ -104017,7 +104017,7 @@ block_1cc5a8:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xfffffff8, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xfffffff4, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 2b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x2b) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xfffffffc, ctx.cpuRegs.GPR.r[4].UL[0]);
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4c;
@@ -104094,7 +104094,7 @@ block_1cc778:
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[9].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[9].UL[0] + 0x0);
 block_1cc820:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < f1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xf1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[15].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: movn
         // Unhandled instruction: INVALID
@@ -104282,7 +104282,7 @@ block_1cca78:
         // Unhandled instruction: swc1
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x5) ? 1 : 0;
         // Unhandled instruction: mov.s
         // Unhandled instruction: beqz
 block_1ccaa4:
@@ -104314,7 +104314,7 @@ block_1ccbac:
         // Unhandled instruction: ld
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_1ccbc4:
@@ -104935,7 +104935,7 @@ block_1cec98:
 block_1cec9c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[12].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[12].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[12].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[12].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[11].SL[0] = ctx.cpuRegs.GPR.r[11].SL[0] + 0x10;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd4;
 block_1cecb0:
@@ -110089,7 +110089,7 @@ block_1da188:
         ctx.cpuRegs.GPR.r[9].UL[0] = 0x4a000000;
         // Unhandled instruction: nop
 block_1da1f8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < f1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xf1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[11].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: movn
         // Unhandled instruction: INVALID
@@ -113080,7 +113080,7 @@ block_1dd6b0:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1e0fa0;
 block_1dd6b8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff85c8);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffc8;
 block_1dd6c4:
@@ -113143,7 +113143,7 @@ block_1dd768:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x1;
-        ctx.cpuRegs.GPR.r[5].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[5].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x3) ? 1 : 0;
         // Unhandled instruction: beqz
 block_1dd78c:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x40;
@@ -113175,7 +113175,7 @@ block_1dd800:
 block_1dd820:
         ctx.cpuRegs.GPR.r[19].SD[0] = ctx.cpuRegs.GPR.r[20].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 block_1dd824:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 0x4) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff85c8);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xfffffeac;
 block_1dd830:
@@ -113227,7 +113227,7 @@ block_1dd8b0:
 block_1dd8c8:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x40;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x40;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_1dd8dc:
@@ -113259,7 +113259,7 @@ block_1dd928:
         // Unhandled instruction: b
 block_1dd930:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[1].UL[0] = 0x40400000;
         ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[1].UL[0];
         // Unhandled instruction: swc1
@@ -113757,7 +113757,7 @@ block_1decc8:
 block_1decd0:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x114);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] - ctx.cpuRegs.GPR.r[3].SL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[21].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_1dece4:
@@ -113938,7 +113938,7 @@ block_1df094:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1e5c50;
 block_1df0dc:
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x20;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[19].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff88;
 block_1df0ec:
@@ -113950,7 +113950,7 @@ block_1df0f4:
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x34; } else { /* Branch likely, nullify delay slot */ }
 block_1df100:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 12d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x12d) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x20;
 block_1df110:
@@ -113986,7 +113986,7 @@ block_1df160:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_1df188:
@@ -114317,7 +114317,7 @@ block_1df8b0:
         ctx.cpuRegs.GPR.r[19].SL[0] = ctx.cpuRegs.GPR.r[19].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[20].SL[0] = ctx.cpuRegs.GPR.r[20].SL[0] + 0x20;
         ctx.cpuRegs.GPR.r[18].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0x20;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[21].UL[0] = ctx.cpuRegs.GPR.r[21].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff54;
 block_1df8c8:
@@ -114367,7 +114367,7 @@ block_1df93c:
 block_1df94c:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x20;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffc4;
 block_1df960:
@@ -114415,7 +114415,7 @@ block_1df9d0:
 block_1df9d8:
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[18].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0x20;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[20].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa8;
 block_1df9ec:
@@ -114480,7 +114480,7 @@ block_1dfa94:
 block_1dfaa4:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x20;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffc4;
 block_1dfab8:
@@ -114519,7 +114519,7 @@ block_1dfb10:
 block_1dfb18:
         ctx.cpuRegs.GPR.r[19].SL[0] = ctx.cpuRegs.GPR.r[19].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[18].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0x20;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[21].UL[0] = ctx.cpuRegs.GPR.r[21].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa8;
 block_1dfb2c:
@@ -114583,7 +114583,7 @@ block_1dfbd8:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_1dfbf8:
@@ -114613,7 +114613,7 @@ block_1dfc60:
         ctx.cpuRegs.LO.UL[0] = static_cast<uint32_t>(result);
         ctx.cpuRegs.HI.UL[0] = static_cast<uint32_t>(result >> 32);
     }
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0];
         // Unhandled instruction: beqz
 block_1dfc74:
@@ -114683,7 +114683,7 @@ block_1dfd58:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) ctx.cpuRegs.GPR.r[6].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe8;
 block_1dfd74:
@@ -114761,7 +114761,7 @@ block_1dfe30:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1e5c08;
 block_1dfe38:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x1c);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd8; } else { /* Branch likely, nullify delay slot */ }
 block_1dfe44:
@@ -114834,7 +114834,7 @@ block_1e01d0:
 block_1e01e8:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x40;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x40;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_1e01fc:
@@ -114851,7 +114851,7 @@ block_1e0208:
 block_1e0220:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x40;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x40;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_1e0234:
@@ -115252,7 +115252,7 @@ block_1e0fa0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 1;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xa) ? 1 : 0;
         // Unhandled instruction: mov.s
         // Unhandled instruction: beqz
 block_1e0fd4:
@@ -115506,7 +115506,7 @@ block_1e1e10:
         // Unhandled instruction: beqz
 block_1e1e34:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3ff) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffffe;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xec;
 block_1e1e44:
@@ -116289,7 +116289,7 @@ block_1e2b40:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28, ctx.cpuRegs.GPR.r[21].UD[0]);
         ctx.cpuRegs.GPR.r[20].SD[0] = ctx.cpuRegs.GPR.r[8].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[21].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_1e2b80:
@@ -116401,8 +116401,8 @@ block_1e30d0:
         ctx.cpuRegs.GPR.r[23].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_1e312c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 30) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 0x30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x30) ? 1 : 0;
         // Unhandled instruction: beqz
 block_1e3138:
         // Unhandled instruction: ld
@@ -116741,7 +116741,7 @@ block_1e3ce0:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[19].SL[0] + 0x4380;
 block_1e3cf4:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xc);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[19].SL[0] + 0x4380;
         // Unhandled instruction: beqz
 block_1e3d04:
@@ -116782,7 +116782,7 @@ block_1e3d60:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_1e3d7c:
@@ -116839,7 +116839,7 @@ block_1e3e1c:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1e13b0;
 block_1e3e44:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = 0x3b0000;
         // Unhandled instruction: beqz
 block_1e3e50:
@@ -116874,7 +116874,7 @@ block_1e3e80:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[18].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] >> 16;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x30) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] >> 16;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e3ebc:
@@ -116898,7 +116898,7 @@ block_1e4010:
 void FUN_001e4038(CpuContext& ctx) {
 block_1e4038:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xffffffe0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x20) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
@@ -116907,7 +116907,7 @@ block_1e4050:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         // Unhandled instruction: b
 block_1e4058:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x30) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x18;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e4064:
@@ -117786,7 +117786,7 @@ block_1e52f0:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x3;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_1e5308:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -117807,7 +117807,7 @@ block_1e5328:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffffd;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_1e5340:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -118633,7 +118633,7 @@ block_1e61d0:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1e6680;
 block_1e61d8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] + 0xffff85c8);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_1e61e4:
@@ -118647,7 +118647,7 @@ block_1e61e4:
 // Function at 0x1e61f8
 void FUN_001e61f8(CpuContext& ctx) {
 block_1e61f8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] << 5;
         // Unhandled instruction: beqz
 block_1e6204:
@@ -119200,7 +119200,7 @@ block_1e6b50:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x30) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e6b70:
@@ -119246,7 +119246,7 @@ block_1e6d30:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x30) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e6d48:
@@ -119299,7 +119299,7 @@ block_1e6ea8:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x30) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e6ec0:
@@ -119322,7 +119322,7 @@ block_1e6f88:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x30) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e6fa0:
@@ -119502,7 +119502,7 @@ block_1e7740:
 // Function at 0x1e7788
 void FUN_001e7788(CpuContext& ctx) {
 block_1e7788:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x30) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = 0x2e0000;
         // Unhandled instruction: beqz
 block_1e7794:
@@ -119688,17 +119688,17 @@ block_1e7cb8:
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] >> 16;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_1e7cd0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1001) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1001) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[7].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e7cd8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         // Unhandled instruction: b
 block_1e7ce0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 1001) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x1001) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_1e7ce8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffffe;
@@ -119878,14 +119878,14 @@ block_1e7ff0:
 // Function at 0x1e8128
 void FUN_001e8128(CpuContext& ctx) {
 block_1e8128:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 30) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x30) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = 0x2e0000;
         // Unhandled instruction: beqz
 block_1e8134:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x79a8;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_1e8148:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
@@ -120209,7 +120209,7 @@ block_1e8558:
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x6)));
         ctx.cpuRegs.GPR.r[3].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4)));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -120220,7 +120220,7 @@ block_1e85a8:
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x6)));
         ctx.cpuRegs.GPR.r[3].SL[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4)));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -121448,7 +121448,7 @@ block_1ea21c:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x10);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: b
 block_1ea230:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
@@ -122277,7 +122277,7 @@ block_1ebb88:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x181560;
 block_1ebbd8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[19].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff98;
 block_1ebbe4:
@@ -123596,7 +123596,7 @@ block_1ed7d4:
         // Unhandled instruction: beqz
 block_1ed7dc:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x8);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_1ed7ec:
@@ -125973,7 +125973,7 @@ block_1f0a54:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_1f0a68:
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd4;
 block_1f0a78:
@@ -126009,7 +126009,7 @@ block_1f0ad4:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_1f0ae8:
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd4;
 block_1f0af8:
@@ -126164,7 +126164,7 @@ block_1f0df8:
         // Unhandled instruction: lwc1
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
         // Unhandled instruction: lwc1
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x4) ? 1 : 0;
         // Unhandled instruction: lwc1
         ctx.fpuRegs.fpr[5].f = ctx.fpuRegs.fpr[0].f + ctx.fpuRegs.fpr[1].f;
         // Unhandled instruction: lwc1
@@ -128992,7 +128992,7 @@ block_1f4078:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         // Unhandled instruction: nop
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_1f4090:
@@ -129769,7 +129769,7 @@ block_1f5818:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x2) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x1c;
 block_1f5830:
@@ -130520,7 +130520,7 @@ block_1f69c0:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[12].UL[0] | ctx.cpuRegs.GPR.r[9].UL[0];
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         // Unhandled instruction: movn
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[9].UL[0] = ctx.cpuRegs.GPR.r[9].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa0;
 block_1f69dc:
@@ -130556,7 +130556,7 @@ block_1f6a38:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[9].UL[0] | ctx.cpuRegs.GPR.r[11].UL[0];
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         // Unhandled instruction: movn
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[11].UL[0] = ctx.cpuRegs.GPR.r[11].UL[0] << 1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa0;
 block_1f6a54:
@@ -135234,7 +135234,7 @@ block_1fd650:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffea00;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 17) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x17) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_1fd668:
@@ -138272,36 +138272,36 @@ block_2022ac:
 // Function at 0x2022d0
 void FUN_002022d0(CpuContext& ctx) {
 block_2022d0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 95) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 121) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x95) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x121) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x10; } else { /* Branch likely, nullify delay slot */ }
 block_2022dc:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 2;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2022e8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < cd) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xcd) ? 1 : 0;
         // Unhandled instruction: beqz
 block_2022f0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < a9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xa9) ? 1 : 0;
         // Unhandled instruction: beqz
 block_2022f8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 9d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x9d) ? 1 : 0;
         // Unhandled instruction: beqz
 block_202300:
     // WARNING: Branch at end of block has no delay slot instruction.
         // Unhandled instruction: beqz
 block_202304:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < a1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xa1) ? 1 : 0;
 block_202308:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x25;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_202320:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b9) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < c1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xc1) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x18; } else { /* Branch likely, nullify delay slot */ }
 block_20232c:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x28;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x29;
     // WARNING: Branch at end of block has no delay slot instruction.
@@ -138312,11 +138312,11 @@ block_202340:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_202350:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < f1) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < d1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xf1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xd1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_20235c:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < e1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xe1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_202364:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2c;
@@ -138327,8 +138327,8 @@ block_20236c:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_20237c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 101) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 111) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x101) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x111) ? 1 : 0;
         // Unhandled instruction: beqz
 block_202388:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2f;
@@ -138340,14 +138340,14 @@ block_202398:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2023a0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 201) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 171) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x201) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x171) ? 1 : 0;
         // Unhandled instruction: beqz
 block_2023ac:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 131) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x131) ? 1 : 0;
         // Unhandled instruction: beqz
 block_2023b4:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 151) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x151) ? 1 : 0;
         // Unhandled instruction: beqz
 block_2023bc:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x32;
@@ -138358,8 +138358,8 @@ block_2023c4:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2023d4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 191) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1c1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x191) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1c1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_2023e0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x35;
@@ -138371,14 +138371,14 @@ block_2023f0:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2023f8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 401) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 2a1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x401) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x2a1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_202404:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 331) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x331) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x18; } else { /* Branch likely, nullify delay slot */ }
 block_20240c:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 241) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x241) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x38;
 block_202414:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x39;
@@ -138390,8 +138390,8 @@ block_202420:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_202430:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 551) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 801) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x551) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x801) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_20243c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x3d;
@@ -138756,8 +138756,8 @@ block_202e28:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x1c);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 9) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[7].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[7].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_202e70:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
@@ -138802,8 +138802,8 @@ block_202ef0:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x1c);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[18].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 9) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[5].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[5].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_202f40:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
@@ -138831,17 +138831,17 @@ block_203000:
 void FUN_00203018(CpuContext& ctx) {
 block_203018:
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 380) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 140) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x380) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x140) ? 1 : 0;
         // Unhandled instruction: beqz
 block_203028:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < c0) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xc0) ? 1 : 0;
         // Unhandled instruction: beqz
 block_203030:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x100) ? 1 : 0;
         // Unhandled instruction: beqz
 block_203038:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 80) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x80) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x1;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_203044:
@@ -138850,11 +138850,11 @@ block_203044:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_203054:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 240) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 300) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x240) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x300) ? 1 : 0;
         // Unhandled instruction: beqz
 block_203060:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1c0) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1c0) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x4;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x5;
     // WARNING: Branch at end of block has no delay slot instruction.
@@ -138865,14 +138865,14 @@ block_203074:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_203084:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < b80) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 580) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xb80) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x580) ? 1 : 0;
         // Unhandled instruction: beqz
 block_203090:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x100) ? 1 : 0;
         // Unhandled instruction: beqz
 block_203098:
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 480) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x480) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
 block_2030a0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x9;
@@ -138884,8 +138884,8 @@ block_2030ac:
         // Unhandled instruction: movn
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2030bc:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 4000) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 118c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x4000) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x118c) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x20;
 block_2030c8:
         ctx.cpuRegs.GPR.r[3].UL[0] = 0x30000;
@@ -139677,7 +139677,7 @@ block_204470:
 void FUN_002044f8(CpuContext& ctx) {
 block_2044f8:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1000) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1000) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_204508:
@@ -140344,7 +140344,7 @@ block_2051d8:
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c);
-        ctx.cpuRegs.GPR.r[6].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[6].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x4) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[5].UL[0];
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -140828,19 +140828,19 @@ block_205f70:
         if (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x40;
 block_205f80:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 76) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x76) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x154;
 block_205f8c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x24;
         // Unhandled instruction: beqz
 block_205f94:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 25) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x25) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xf8;
 block_205f9c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1d;
         // Unhandled instruction: beqz
 block_205fa4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1e) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x120;
 block_205fac:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1c;
@@ -140863,7 +140863,7 @@ block_205fd8:
     // WARNING: Branch at end of block has no delay slot instruction.
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xc4;
 block_205fe0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 2d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x2d) ? 1 : 0;
 block_205fe4:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x25;
         // Unhandled instruction: beqz
@@ -140885,13 +140885,13 @@ block_206010:
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_206018:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 90) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x90) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xe0;
 block_206024:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x88;
         // Unhandled instruction: beqz
 block_20602c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 89) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x89) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xf0;
 block_206034:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x7a;
@@ -140914,7 +140914,7 @@ block_206060:
     // WARNING: Branch at end of block has no delay slot instruction.
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xac;
 block_206068:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 91) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x91) ? 1 : 0;
 block_20606c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xf1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xbc;
@@ -141197,7 +141197,7 @@ block_206500:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffdff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] << 9;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] | ctx.cpuRegs.GPR.r[3].UL[0];
@@ -141431,7 +141431,7 @@ block_206ac4:
 block_206ac8:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[6].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_206adc:
@@ -141440,10 +141440,10 @@ block_206adc:
         ctx.cpuRegs.GPR.r[4].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x2));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0xff;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ 0xff;
-        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] ^ 0xff;
-        ctx.cpuRegs.GPR.r[18].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[18].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_206b04:
         ctx.fpuRegs.fpr[12].UL = ctx.cpuRegs.GPR.r[0].UL[0];
@@ -141500,7 +141500,7 @@ block_206c54:
 block_206c58:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[6].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_206c6c:
@@ -141509,10 +141509,10 @@ block_206c6c:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x2));
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] ^ 0xff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0xff;
-        ctx.cpuRegs.GPR.r[21].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[21].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ 0xff;
-        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_206c94:
         ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[0].UL[0];
@@ -141645,7 +141645,7 @@ block_206e0c:
 block_206e10:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[6].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_206e24:
@@ -141654,10 +141654,10 @@ block_206e24:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x2));
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] ^ 0xff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0xff;
-        ctx.cpuRegs.GPR.r[21].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[21].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ 0xff;
-        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[20].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         // Unhandled instruction: beqz
 block_206e4c:
         ctx.fpuRegs.fpr[12].UL = ctx.cpuRegs.GPR.r[0].UL[0];
@@ -142145,7 +142145,7 @@ block_207c80:
 void FUN_00207d60(CpuContext& ctx) {
 block_207d60:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -142153,7 +142153,7 @@ block_207d60:
 void FUN_00207d70(CpuContext& ctx) {
 block_207d70:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -142230,13 +142230,13 @@ block_207e40:
         if (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x30;
 block_207e4c:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[6].UL[0]) ctx.cpuRegs.pc += 0x80;
 block_207e58:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x3;
         // Unhandled instruction: beqz
 block_207e60:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x4) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x5c;
 block_207e68:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2;
@@ -142249,7 +142249,7 @@ block_207e78:
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_207e80:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x7c;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 7d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x7d) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x58;
 block_207e8c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x21;
@@ -143700,7 +143700,7 @@ block_209768:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffe800;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 12) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x12) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_209780:
@@ -144576,7 +144576,7 @@ block_20c170:
 block_20c228:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x8) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -144650,7 +144650,7 @@ block_20c3dc:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x197618;
 block_20c3fc:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffcc;
 block_20c408:
@@ -144956,7 +144956,7 @@ block_20dc20:
 block_20dc34:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x2;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 block_20dc44:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xff;
@@ -145048,7 +145048,7 @@ block_20e1fc:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 27;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         // Unhandled instruction: lwc1
         // Unhandled instruction: beqz
 block_20e250:
@@ -146041,7 +146041,7 @@ block_20f390:
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_20f3a4:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd0;
 block_20f3b4:
@@ -146287,7 +146287,7 @@ block_20f740:
 // Function at 0x20f760
 void FUN_0020f760(CpuContext& ctx) {
 block_20f760:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xff) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xff;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_20f76c:
@@ -146387,7 +146387,7 @@ block_20fa48:
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x4);
         // Unhandled instruction: beqz
 block_20fa6c:
@@ -147681,7 +147681,7 @@ block_213f98:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[8].UL[0] + 0xc));
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffff22;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1e) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_213fb8:
@@ -148172,7 +148172,7 @@ block_214a1c:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x192118;
 block_214a8c:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xc));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < de) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xde) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x24; } else { /* Branch likely, nullify delay slot */ }
 block_214a9c:
@@ -149828,7 +149828,7 @@ block_2198d4:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffff7;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
         // Unhandled instruction: b
 block_2198f8:
@@ -149847,7 +149847,7 @@ block_219918:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[6].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xd));
         // Unhandled instruction: slt
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0];
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] - ctx.cpuRegs.GPR.r[6].SL[0];
         ctx.cpuRegs.GPR.r[18].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0x1;
@@ -149864,7 +149864,7 @@ block_219970:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffff7;
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] | ctx.cpuRegs.GPR.r[2].UL[0];
@@ -150000,7 +150000,7 @@ block_219b54:
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffff7;
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] | ctx.cpuRegs.GPR.r[2].UL[0];
@@ -150330,7 +150330,7 @@ block_21aa58:
         // Unhandled instruction: swc1
 block_21aadc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_21aaec:
@@ -151823,7 +151823,7 @@ block_220a38:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xc);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0);
         // Unhandled instruction: beqz
 block_220a5c:
@@ -160874,7 +160874,7 @@ block_22d360:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0xffffff0e;
         if (ctx.cpuRegs.GPR.r[8].UL[0] == ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.pc += 0x2c0;
 block_22d368:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x124);
         // Unhandled instruction: beqz
 block_22d374:
@@ -160972,7 +160972,7 @@ block_22d61c:
         // Unhandled instruction: INVALID
         // Unhandled instruction: swc1
 block_22d624:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 0x8) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[19].UL[0] != 0) ctx.cpuRegs.pc += 0xc8;
 block_22d62c:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
@@ -161018,7 +161018,7 @@ block_22d6e8:
 block_22d6ec:
         // Unhandled instruction: INVALID
 block_22d6f0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[21].UL[0] < 0x8) ? 1 : 0;
         // Unhandled instruction: beqz
 block_22d6f8:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
@@ -161135,7 +161135,7 @@ block_22da00:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 3f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0x3f) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_22da28:
@@ -161651,7 +161651,7 @@ block_22eb04:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x1f1e68;
 block_22eb20:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xff) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_22eb30:
@@ -161924,7 +161924,7 @@ block_22f88c:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] >> 8;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
 block_22f8a4:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
         // Unhandled instruction: nop
@@ -162517,7 +162517,7 @@ block_230900:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 3;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_230920:
@@ -163227,7 +163227,7 @@ block_233a18:
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_233a3c:
@@ -163323,7 +163323,7 @@ block_234068:
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         // Unhandled instruction: beqz
 block_234074:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[8].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffc4; } else { /* Branch likely, nullify delay slot */ }
 block_234080:
@@ -163371,7 +163371,7 @@ block_2340f0:
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x1;
         // Unhandled instruction: beqz
 block_2340fc:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[7].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffc4; } else { /* Branch likely, nullify delay slot */ }
 block_234108:
@@ -163539,7 +163539,7 @@ block_2348d0:
 block_234980:
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[5].UL[0]);
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x8) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x2;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -163828,7 +163828,7 @@ block_235d10:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 3;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_235d30:
@@ -163926,7 +163926,7 @@ block_235e98:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_235eb8:
@@ -164024,7 +164024,7 @@ block_236020:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 9;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_236040:
@@ -164386,7 +164386,7 @@ block_236cb8:
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xbc);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x150);
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x44);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xff) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
         // Unhandled instruction: beqz
 block_236d0c:
@@ -165148,7 +165148,7 @@ block_237c4c:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 28;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_237c74:
@@ -165832,7 +165832,7 @@ block_2389ec:
         if (ctx.cpuRegs.GPR.r[17].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xb8;
 block_2389f4:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x7;
         // Unhandled instruction: beqz
 block_238a04:
@@ -165887,7 +165887,7 @@ block_238af0:
 block_238b18:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_238b2c:
@@ -166183,7 +166183,7 @@ block_239170:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x108));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xffff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 31) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x31) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x108, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0x4e0;
 block_239188:
@@ -166549,7 +166549,7 @@ block_239698:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x239c00;
 block_2396a4:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x3) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x3c8;
 block_2396b0:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
@@ -166879,7 +166879,7 @@ block_23a364:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 3;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0xe4;
         // Unhandled instruction: beqz
 block_23a398:
@@ -166945,7 +166945,7 @@ block_23a484:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0xe8;
         // Unhandled instruction: beqz
 block_23a4b8:
@@ -167011,7 +167011,7 @@ block_23a5a4:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 9;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0xec;
         // Unhandled instruction: beqz
 block_23a5d8:
@@ -168971,7 +168971,7 @@ block_23c900:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[18].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 3f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x3f) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_23c928:
@@ -169061,7 +169061,7 @@ block_23cb40:
 void FUN_0023cb70(CpuContext& ctx) {
 block_23cb70:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
-        ctx.cpuRegs.GPR.r[5].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[5].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_23cb80:
@@ -170563,7 +170563,7 @@ block_23e344:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x20f310;
 block_23e34c:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_23e35c:
@@ -170595,7 +170595,7 @@ block_23e39c:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x20f310;
 block_23e3a8:
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffdc;
 block_23e3b8:
@@ -170940,7 +170940,7 @@ block_23ea18:
 block_23ea2c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x130);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] ^ ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_23ea3c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
@@ -171199,7 +171199,7 @@ block_23edb4:
 void FUN_0023ede0(CpuContext& ctx) {
 block_23ede0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x7) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_23edf0:
@@ -171280,7 +171280,7 @@ block_23ef20:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 3;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         // Unhandled instruction: mov.s
         // Unhandled instruction: beqz
 block_23ef4c:
@@ -171345,7 +171345,7 @@ block_23f030:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 6;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         // Unhandled instruction: mov.s
         // Unhandled instruction: beqz
 block_23f05c:
@@ -171410,7 +171410,7 @@ block_23f140:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x68);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 9;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x6) ? 1 : 0;
         // Unhandled instruction: mov.s
         // Unhandled instruction: beqz
 block_23f16c:
@@ -171681,7 +171681,7 @@ block_23f678:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x8;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x54;
 block_23f6a4:
@@ -171718,7 +171718,7 @@ block_23f740:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x20, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0, ctx.cpuRegs.GPR.r[8].UL[0]);
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x8) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x48, ctx.cpuRegs.GPR.r[7].UL[0]);
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe0;
@@ -172035,7 +172035,7 @@ block_23fbfc:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x5;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x60);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x10; } else { /* Branch likely, nullify delay slot */ }
 block_23fc34:
@@ -172102,7 +172102,7 @@ block_23fd08:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x20, ctx.cpuRegs.GPR.r[7].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x8) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x40, ctx.cpuRegs.GPR.r[6].UL[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe8;
@@ -172427,7 +172427,7 @@ block_240220:
 block_240260:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 28;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x4) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0xd8);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x4c; } else { /* Branch likely, nullify delay slot */ }
 block_240274:
@@ -173170,7 +173170,7 @@ block_242c8c:
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x2));
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x58; } else { /* Branch likely, nullify delay slot */ }
 block_242ca8:
@@ -174244,7 +174244,7 @@ block_245e40:
 block_246120:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0];
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x4) ? 1 : 0;
         // Unhandled instruction: nop
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[6].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -174363,7 +174363,7 @@ block_24639c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x9;
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x9) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[4].UL[0] != ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.pc += 0x20;
 block_2463b0:
         // Unhandled instruction: mov.s
@@ -174376,7 +174376,7 @@ block_2463cc:
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xa0; } else { /* Branch likely, nullify delay slot */ }
 block_2463d4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xc) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x94; } else { /* Branch likely, nullify delay slot */ }
 block_2463e0:
@@ -174464,7 +174464,7 @@ block_246518:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[17].UL[0];
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x88, ctx.cpuRegs.GPR.r[2].UD[0]);
         // Unhandled instruction: beqz
 block_246554:
@@ -174478,7 +174478,7 @@ block_246560:
 block_246570:
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x2c; } else { /* Branch likely, nullify delay slot */ }
 block_246584:
@@ -174495,7 +174495,7 @@ block_246584:
 block_2465ac:
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x94);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x1ec; } else { /* Branch likely, nullify delay slot */ }
 block_2465c0:
@@ -174572,7 +174572,7 @@ block_246888:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & ctx.cpuRegs.GPR.r[17].UL[0];
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x88, ctx.cpuRegs.GPR.r[3].UD[0]);
         // Unhandled instruction: beqz
 block_2468b0:
@@ -174586,7 +174586,7 @@ block_2468bc:
 block_2468cc:
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x194; } else { /* Branch likely, nullify delay slot */ }
 block_2468e0:
@@ -174624,7 +174624,7 @@ block_246988:
         // Unhandled instruction: ld
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xd4);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x4c; } else { /* Branch likely, nullify delay slot */ }
 block_2469a0:
@@ -174634,7 +174634,7 @@ block_2469a0:
 block_2469d0:
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x28;
 block_2469e4:
@@ -174651,7 +174651,7 @@ block_2469f0:
 block_246a08:
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xb8; } else { /* Branch likely, nullify delay slot */ }
 block_246a1c:
@@ -174669,7 +174669,7 @@ block_246a6c:
 block_246a70:
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x94);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x2c; } else { /* Branch likely, nullify delay slot */ }
 block_246a84:
@@ -174714,7 +174714,7 @@ block_246ae0:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[18].UL[0] ^ 0x9;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[19].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = 0x310000;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xffff9734);
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[19].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -176339,7 +176339,7 @@ block_24bc60:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x8c);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[19].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_24bc94:
@@ -176383,7 +176383,7 @@ block_24bd78:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x8c);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < b) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xb) ? 1 : 0;
         ctx.cpuRegs.GPR.r[19].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_24bdac:
@@ -177417,7 +177417,7 @@ block_250048:
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x192118;
 block_250134:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0xe));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < de) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xde) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x14);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x24; } else { /* Branch likely, nullify delay slot */ }
 block_250144:
@@ -178708,7 +178708,7 @@ void FUN_00252430(CpuContext& ctx) {
 block_252430:
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x2));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xff) ? 1 : 0;
         // Unhandled instruction: nop
         // Unhandled instruction: beqz
 block_252444:
@@ -178826,7 +178826,7 @@ void FUN_002525b8(CpuContext& ctx) {
 block_2525b8:
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xff) ? 1 : 0;
         // Unhandled instruction: nop
         // Unhandled instruction: beqz
 block_2525cc:
@@ -179733,7 +179733,7 @@ block_2536c8:
         // Unhandled instruction: dsll
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xff) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0x1;
         // Unhandled instruction: beqz
 block_2536e4:
@@ -180224,7 +180224,7 @@ block_253d8c:
 block_253d9c:
         // Unhandled instruction: dsrl32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x2c; } else { /* Branch likely, nullify delay slot */ }
 block_253db0:
@@ -180241,7 +180241,7 @@ block_253db0:
 block_253dd8:
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x94);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x2c; } else { /* Branch likely, nullify delay slot */ }
 block_253dec:
@@ -181050,7 +181050,7 @@ block_254bf8:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
         // Unhandled instruction: beqz
 block_254c44:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x60);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x1b0; } else { /* Branch likely, nullify delay slot */ }
 block_254c50:
@@ -181117,7 +181117,7 @@ block_254f10:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 4;
 block_254f14:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_254f24:
@@ -181178,7 +181178,7 @@ block_255070:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] >> 4;
 block_255074:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_255084:
@@ -181241,7 +181241,7 @@ block_2551b4:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.pc += 0x48;
 block_2551e8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
         // Unhandled instruction: beqz
 block_2551f4:
@@ -181284,7 +181284,7 @@ block_255254:
 block_255264:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xc);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] - ctx.cpuRegs.GPR.r[2].SL[0];
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
         // Unhandled instruction: beqz
@@ -181352,7 +181352,7 @@ block_2554b0:
         // Unhandled instruction: beqz
 block_2554e4:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xcc; } else { /* Branch likely, nullify delay slot */ }
 block_2554f4:
@@ -181491,7 +181491,7 @@ block_2559e0:
         // Unhandled instruction: beqz
 block_255a14:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xc4; } else { /* Branch likely, nullify delay slot */ }
 block_255a24:
@@ -181561,7 +181561,7 @@ block_255cc0:
         // Unhandled instruction: beqz
 block_255d00:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x1c);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x1dc; } else { /* Branch likely, nullify delay slot */ }
 block_255d10:
@@ -181606,7 +181606,7 @@ block_255d80:
 block_255d8c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x5) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_255da0:
@@ -181706,7 +181706,7 @@ block_255f30:
         // Unhandled instruction: beqz
 block_255f70:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x65c; } else { /* Branch likely, nullify delay slot */ }
 block_255f80:
@@ -181813,7 +181813,7 @@ block_256830:
         // Unhandled instruction: beqz
 block_256860:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xb4; } else { /* Branch likely, nullify delay slot */ }
 block_256870:
@@ -182152,7 +182152,7 @@ block_257208:
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[6].UL[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 4) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x4) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe8;
 block_257224:
@@ -183129,7 +183129,7 @@ block_259b84:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x254ee0;
 block_259b8c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffcc;
 block_259b98:
@@ -183179,7 +183179,7 @@ block_259c24:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x255040;
 block_259c2c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffcc;
 block_259c38:
@@ -183206,7 +183206,7 @@ block_259c60:
 block_259c78:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x40) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -183216,7 +183216,7 @@ block_259c90:
 block_259c98:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UD[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x40) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x8;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -183277,7 +183277,7 @@ block_259d24:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_259d38:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd8; } else { /* Branch likely, nullify delay slot */ }
 block_259d44:
@@ -183311,7 +183311,7 @@ block_259d84:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_259d98:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd8; } else { /* Branch likely, nullify delay slot */ }
 block_259da4:
@@ -183348,7 +183348,7 @@ block_259df0:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_259e04:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd4; } else { /* Branch likely, nullify delay slot */ }
 block_259e10:
@@ -183386,7 +183386,7 @@ block_259e60:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_259e74:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd4; } else { /* Branch likely, nullify delay slot */ }
 block_259e80:
@@ -183421,7 +183421,7 @@ block_259ec4:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[3].UL[0];
 block_259ed8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 40) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x40) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffd8; } else { /* Branch likely, nullify delay slot */ }
 block_259ee4:
@@ -184876,7 +184876,7 @@ block_25bde8:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x34, ctx.cpuRegs.GPR.r[6].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
 block_25be00:
@@ -185369,7 +185369,7 @@ void FUN_0025c840(CpuContext& ctx) {
 block_25c840:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffe4fe;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 17) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x17) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_25c854:
@@ -186023,7 +186023,7 @@ block_25ede8:
         // Unhandled instruction: beqz
 block_25ee10:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25ee20:
@@ -186058,7 +186058,7 @@ block_25ee68:
         // Unhandled instruction: beqz
 block_25ee74:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25ee84:
@@ -186094,7 +186094,7 @@ block_25eed0:
         if (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x5c; } else { /* Branch likely, nullify delay slot */ }
 block_25eedc:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25eeec:
@@ -186126,7 +186126,7 @@ block_25ef34:
         if (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x5c; } else { /* Branch likely, nullify delay slot */ }
 block_25ef3c:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25ef4c:
@@ -186158,7 +186158,7 @@ block_25ef94:
         if (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x5c; } else { /* Branch likely, nullify delay slot */ }
 block_25ef9c:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25efac:
@@ -186190,7 +186190,7 @@ block_25eff4:
         if (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x5c; } else { /* Branch likely, nullify delay slot */ }
 block_25effc:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25f00c:
@@ -186222,7 +186222,7 @@ block_25f054:
         // Unhandled instruction: beqz
 block_25f05c:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_25f06c:
@@ -187768,7 +187768,7 @@ block_2622b0:
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2622d4:
@@ -187878,7 +187878,7 @@ block_262440:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x88, ctx.cpuRegs.GPR.r[31].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[17].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[23].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x68;
 block_262484:
@@ -187886,7 +187886,7 @@ block_262484:
         if (ctx.cpuRegs.GPR.r[17].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x64; } else { /* Branch likely, nullify delay slot */ }
 block_26248c:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 11) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x11) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_26249c:
@@ -188663,7 +188663,7 @@ block_2632e8:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[20].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[21].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_26331c:
@@ -189293,7 +189293,7 @@ block_264524:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264544:
@@ -189340,7 +189340,7 @@ block_2645ac:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2645d0:
@@ -189383,7 +189383,7 @@ block_264634:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264654:
@@ -189425,7 +189425,7 @@ block_2646b4:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2646d4:
@@ -189467,7 +189467,7 @@ block_264734:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264754:
@@ -189509,7 +189509,7 @@ block_2647b4:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2647d4:
@@ -189596,7 +189596,7 @@ block_2648bc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2648dc:
@@ -189673,7 +189673,7 @@ block_2649a0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2649c0:
@@ -189715,7 +189715,7 @@ block_264a1c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264a40:
@@ -189753,7 +189753,7 @@ block_264a94:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264ab4:
@@ -189791,7 +189791,7 @@ block_264b08:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264b28:
@@ -189829,7 +189829,7 @@ block_264b7c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264b9c:
@@ -189867,7 +189867,7 @@ block_264bf0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264c10:
@@ -189917,7 +189917,7 @@ block_264c8c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264cac:
@@ -189957,7 +189957,7 @@ block_264d0c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x6ba0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264d2c:
@@ -189991,7 +189991,7 @@ block_264d78:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x77a0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264d98:
@@ -190025,7 +190025,7 @@ block_264de4:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffff83a0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264e04:
@@ -190059,7 +190059,7 @@ block_264e50:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffff8fa0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264e70:
@@ -190093,7 +190093,7 @@ block_264ebc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffff9ba0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264edc:
@@ -190127,7 +190127,7 @@ block_264f28:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffffa7a0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264f48:
@@ -190161,7 +190161,7 @@ block_264f94:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffffb3a0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_264fb4:
@@ -190195,7 +190195,7 @@ block_265000:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffffbfa0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_265020:
@@ -190229,7 +190229,7 @@ block_26506c:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xffff;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x2, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2ff) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2ff) ? 1 : 0;
         memory::write<uint16_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0xffffcba0, ctx.cpuRegs.GPR.r[4].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_26508c:
@@ -190623,7 +190623,7 @@ block_265d08:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xffff9754);
         ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8);
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0x7;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0);
         // Unhandled instruction: beqz
 block_265d24:
@@ -191033,7 +191033,7 @@ block_2670a0:
         // Unhandled instruction: b
 block_2670a8:
         ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[17].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0);
         // Unhandled instruction: beqz
 block_2670b8:
@@ -192419,7 +192419,7 @@ block_268550:
 block_268558:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3e8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3e8) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -192610,7 +192610,7 @@ block_268860:
 block_268868:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 3e8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x3e8) ? 1 : 0;
         // Unhandled instruction: nop
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -193843,7 +193843,7 @@ block_269cf8:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xffffffe0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffa4;
 block_269d10:
@@ -193877,7 +193877,7 @@ block_269d64:
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[17].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x28;
 block_269d6c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x3) ? 1 : 0;
         // Unhandled instruction: b
 block_269d74:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xa;
@@ -193887,7 +193887,7 @@ block_269d80:
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[17].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x38;
 block_269d88:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x3) ? 1 : 0;
         // Unhandled instruction: b
 block_269d90:
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -194012,7 +194012,7 @@ block_269fe0:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_269ffc:
@@ -194781,7 +194781,7 @@ block_26ac68:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_26ac84:
@@ -197302,11 +197302,11 @@ block_26f200:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x138;
 block_26f214:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1c07) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1c07) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1c03;
         // Unhandled instruction: beqz
 block_26f220:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1c04) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1c04) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0xa8;
 block_26f228:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xa19;
@@ -197332,7 +197332,7 @@ block_26f25c:
         // Unhandled instruction: b
 block_26f264:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1c0c;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1c0d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1c0d) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x1c0;
 block_26f270:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1c09;
@@ -197348,7 +197348,7 @@ block_26f288:
         // Unhandled instruction: b
 block_26f290:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1c0e;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1c0e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1c0e) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x1e4;
 block_26f29c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1c0f;
@@ -206350,7 +206350,7 @@ block_2817f8:
 void FUN_00281908(CpuContext& ctx) {
 block_281908:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_281918:
@@ -206372,7 +206372,7 @@ block_281954:
 void FUN_002819c8(CpuContext& ctx) {
 block_2819c8:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2819d8:
@@ -214610,7 +214610,7 @@ block_2936c0:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x20, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[17].UL[0] != 0) ctx.cpuRegs.pc += 0x20;
 block_29370c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x1) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x4, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 1;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x8, ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -215464,7 +215464,7 @@ block_294868:
         // Unhandled instruction: dsll
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1f;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < c) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xc) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_29489c:
@@ -219499,7 +219499,7 @@ block_29a95c:
         // Unhandled instruction: beqz
 block_29a964:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xd) ? 1 : 0;
         // Unhandled instruction: nop
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_29a974:
@@ -219576,7 +219576,7 @@ block_29ab54:
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x68;
 block_29ab68:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xd) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x5c; } else { /* Branch likely, nullify delay slot */ }
 block_29ab78:
@@ -219720,7 +219720,7 @@ block_29ad30:
 block_29ad68:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1508);
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x2));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 96) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x96) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x74; } else { /* Branch likely, nullify delay slot */ }
 block_29ad7c:
@@ -219732,7 +219732,7 @@ block_29ad7c:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[5].UL[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x2));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 96) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x96) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x48; } else { /* Branch likely, nullify delay slot */ }
 block_29ada8:
@@ -220784,7 +220784,7 @@ block_29e1e0:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x8);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] | ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         if (ctx.cpuRegs.GPR.r[4].UL[0] != 0) ctx.cpuRegs.pc += 0x44;
 block_29e210:
@@ -220956,7 +220956,7 @@ block_29e408:
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x8);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_29e424:
@@ -221367,7 +221367,7 @@ block_29e9dc:
         if (ctx.cpuRegs.GPR.r[8].UL[0] != 0) ctx.cpuRegs.pc += 0x40;
 block_29e9e4:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint16_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xe0));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xf) ? 1 : 0;
         // Unhandled instruction: nop
         // Unhandled instruction: beqz
 block_29e9f4:
@@ -221661,7 +221661,7 @@ block_29ee78:
 void FUN_0029f030(CpuContext& ctx) {
 block_29f030:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xf) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_29f040:
@@ -221703,7 +221703,7 @@ block_29f190:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4, ctx.cpuRegs.GPR.r[0].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x7) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[0].UL[0]);
         // Unhandled instruction: beqz
 block_29f1c4:
@@ -221775,7 +221775,7 @@ block_29f5c0:
         // Unhandled instruction: swc1
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x7) ? 1 : 0;
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1, ctx.cpuRegs.GPR.r[0].UL[0]);
         // Unhandled instruction: beqz
 block_29f600:
@@ -221831,7 +221831,7 @@ block_29f6f8:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[18].SL[0] + 0xffffffff;
         // Unhandled instruction: beqz
 block_29f728:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xf) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_29f734:
@@ -222163,7 +222163,7 @@ block_2a00c0:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xd) ? 1 : 0;
 block_2a00dc:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
         // Unhandled instruction: beqz
@@ -222245,7 +222245,7 @@ block_2a07ec:
         // Unhandled instruction: b
 block_2a07f4:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xf) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xf;
         // Unhandled instruction: beqz
 block_2a0804:
@@ -222261,7 +222261,7 @@ block_2a083c:
         // Unhandled instruction: b
 block_2a0a30:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0xfffffffd;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < d) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0xd) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_2a0a40:
@@ -222325,7 +222325,7 @@ block_2a0bb0:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x7) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2a0bdc:
@@ -222566,7 +222566,7 @@ block_2a1830:
 block_2a1860:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + ctx.cpuRegs.GPR.r[16].SL[0];
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x2) ? 1 : 0;
         // Unhandled instruction: nop
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
@@ -222706,12 +222706,12 @@ block_2a1be8:
 block_2a1c08:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + ctx.cpuRegs.GPR.r[17].SL[0];
         ctx.cpuRegs.GPR.r[17].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x8) ? 1 : 0;
         // Unhandled instruction: nop
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffec;
 block_2a1c20:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xe) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_2a1c2c:
@@ -222844,7 +222844,7 @@ block_2a2100:
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] >> 24;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffe0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0x1;
         // Unhandled instruction: beqz
 block_2a211c:
@@ -222852,35 +222852,35 @@ block_2a211c:
         // Unhandled instruction: b
 block_2a2124:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffd0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffc6;
         // Unhandled instruction: beqz
 block_2a2134:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: b
 block_2a213c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x7) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffbf;
         // Unhandled instruction: beqz
 block_2a2148:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xb;
         // Unhandled instruction: b
 block_2a2150:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1a) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffa5;
         // Unhandled instruction: beqz
 block_2a215c:
         ctx.cpuRegs.GPR.r[9].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
         // Unhandled instruction: b
 block_2a2164:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffff9f;
         // Unhandled instruction: beqz
 block_2a2170:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x25;
         // Unhandled instruction: b
 block_2a2178:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1a) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffff85;
         // Unhandled instruction: beqz
 block_2a2184:
@@ -222970,7 +222970,7 @@ block_2a2548:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xffffffe0;
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xfffffffe;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x8) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[31].UD[0]);
@@ -224516,7 +224516,7 @@ block_2a4b30:
         ctx.cpuRegs.GPR.r[11].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[12].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x6) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x50, ctx.cpuRegs.GPR.r[31].UD[0]);
         // Unhandled instruction: beqz
 block_2a4b54:
@@ -227208,7 +227208,7 @@ block_2a9a48:
         // Unhandled instruction: dsll
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x7f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[30].UL[0]) ctx.cpuRegs.pc += 0x10;
 block_2a9a68:
@@ -227533,7 +227533,7 @@ block_2aa080:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x7) ? 1 : 0;
         ctx.cpuRegs.GPR.r[19].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         // Unhandled instruction: beqz
 block_2aa0a0:
@@ -227711,7 +227711,7 @@ block_2aa8d0:
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x3));
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x0);
 block_2aa928:
@@ -229214,11 +229214,11 @@ block_2acb10:
         if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) ctx.cpuRegs.pc += 0x10;
 block_2acb18:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x1;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2acb24:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -229229,11 +229229,11 @@ block_2acb30:
         if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) ctx.cpuRegs.pc += 0x10;
 block_2acb38:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x3;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2acb44:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffffe;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -229244,11 +229244,11 @@ block_2acb50:
         if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) ctx.cpuRegs.pc += 0x10;
 block_2acb58:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x4;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2acb64:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffffc;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
 
@@ -229995,7 +229995,7 @@ block_2adc30:
 block_2adc3c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ ctx.cpuRegs.GPR.r[4].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2adc4c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
@@ -231409,7 +231409,7 @@ block_2b0660:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[19].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x148);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2b0690:
@@ -231624,7 +231624,7 @@ block_2b0a48:
         ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] & ctx.cpuRegs.GPR.r[16].UL[0];
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xfc);
         ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xf4);
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 2001) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x2001) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0xf0);
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[16].SL[0];
@@ -231823,7 +231823,7 @@ block_2b0f68:
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x48;
 block_2b0f84:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x148);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x50);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x18; } else { /* Branch likely, nullify delay slot */ }
 block_2b0f94:
@@ -232369,7 +232369,7 @@ block_2b19b0:
 // Function at 0x2b19d0
 void FUN_002b19d0(CpuContext& ctx) {
 block_2b19d0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 18) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x18) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2b19dc:
@@ -232385,7 +232385,7 @@ block_2b19dc:
 // Function at 0x2b1f50
 void FUN_002b1f50(CpuContext& ctx) {
 block_2b1f50:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 6) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x6) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2b1f5c:
@@ -232631,7 +232631,7 @@ block_2b2658:
         if (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x79c; } else { /* Branch likely, nullify delay slot */ }
 block_2b2660:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x508);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x300000;
         // Unhandled instruction: beqz
 block_2b2670:
@@ -233575,7 +233575,7 @@ block_2b40f0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 16;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[20].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2b4134:
@@ -233990,7 +233990,7 @@ block_2b4b88:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x2ad1a0;
 block_2b4b90:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffd8;
 block_2b4b9c:
@@ -234012,7 +234012,7 @@ block_2b4bc4:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x2b4738;
 block_2b4bd0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffe0;
 block_2b4bdc:
@@ -234086,7 +234086,7 @@ block_2b4cac:
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
     ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | 0x2b4738;
 block_2b4cd8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[17].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0x4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffc0;
 block_2b4ce4:
@@ -235703,7 +235703,7 @@ block_2b7424:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x834, ctx.cpuRegs.GPR.r[0].UL[0]);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         // Unhandled instruction: nop
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 5) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < 0x5) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[19].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) ctx.cpuRegs.pc += 0x3c;
 block_2b7438:
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -237232,7 +237232,7 @@ block_2b9514:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2b951c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 38;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x38;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsll32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237267,11 +237267,11 @@ block_2b9584:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2b9594:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 28;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x28;
         // Unhandled instruction: b
 block_2b959c:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 28;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x28;
 block_2b95a4:
         // Unhandled instruction: ld
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -237321,7 +237321,7 @@ block_2b9638:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2b9640:
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 18;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x18;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[3].UD[0]);
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: dsrl32
@@ -237379,7 +237379,7 @@ block_2b96ec:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2b96f4:
-        ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 22;
+        ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x22;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[7].UD[0]);
@@ -237426,7 +237426,7 @@ block_2b9784:
         ctx.cpuRegs.GPR.r[14].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] << 30;
         // Unhandled instruction: ld
 block_2b9794:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 3;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x3;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237467,7 +237467,7 @@ block_2b9814:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2b981c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237511,7 +237511,7 @@ block_2b98a4:
         ctx.cpuRegs.GPR.r[11].UL[0] = ctx.cpuRegs.GPR.r[7].UL[0] << 15;
         // Unhandled instruction: ld
 block_2b98b0:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0xf;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237553,7 +237553,7 @@ block_2b9934:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2b993c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237596,7 +237596,7 @@ block_2b99c4:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2b99cc:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0xf;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237637,7 +237637,7 @@ block_2b9a4c:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2b9a54:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237680,7 +237680,7 @@ block_2b9adc:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[13].UL[0] + 0x0, ctx.cpuRegs.GPR.r[10].UL[0]);
 block_2b9ae4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 9;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x9;
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsll
@@ -237723,7 +237723,7 @@ block_2b9b6c:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2b9b74:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 1e;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x1e;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237766,7 +237766,7 @@ block_2b9bfc:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[14].UL[0] | ctx.cpuRegs.GPR.r[11].UL[0];
 block_2b9c04:
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 3;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x3;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[24].UL[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[3].UD[0]);
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[13].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -237812,12 +237812,12 @@ block_2b9c90:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffbc;
 block_2b9ca0:
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x8;
         // Unhandled instruction: b
 block_2b9ca8:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[10].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + 0x8;
 block_2b9cb4:
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < ctx.cpuRegs.GPR.r[12].UL[0]) ? 1 : 0;
@@ -237908,7 +237908,7 @@ block_2b9dd4:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2b9ddc:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 18;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x18;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -237945,12 +237945,12 @@ block_2b9e4c:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2b9e5c:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x8;
         // Unhandled instruction: b
 block_2b9e64:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: dsll32
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x8;
 block_2b9e70:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -237990,11 +237990,11 @@ block_2b9ee4:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2b9ef4:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x10;
         // Unhandled instruction: b
 block_2b9efc:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x10;
 block_2b9f04:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -238083,7 +238083,7 @@ block_2ba01c:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2ba024:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 2;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x2;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238126,7 +238126,7 @@ block_2ba0ac:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0xc, ctx.cpuRegs.GPR.r[11].UL[0]);
 block_2ba0b4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 2;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x2;
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
@@ -238169,7 +238169,7 @@ block_2ba13c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba144:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 4;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x4;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238213,7 +238213,7 @@ block_2ba1cc:
         ctx.cpuRegs.GPR.r[11].UL[0] = ctx.cpuRegs.GPR.r[15].UL[0] & 0x2;
         // Unhandled instruction: ld
 block_2ba1d8:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 2;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x2;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238255,7 +238255,7 @@ block_2ba25c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba264:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238298,7 +238298,7 @@ block_2ba2ec:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba2f4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 4;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x4;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238341,7 +238341,7 @@ block_2ba37c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba384:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238378,11 +238378,11 @@ block_2ba3f4:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2ba404:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x8;
         // Unhandled instruction: b
 block_2ba40c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x8;
 block_2ba414:
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsra32
@@ -238430,7 +238430,7 @@ block_2ba4a4:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba4ac:
-        ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 4;
+        ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x4;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[8].UD[0]);
@@ -238477,7 +238477,7 @@ block_2ba53c:
         ctx.cpuRegs.GPR.r[12].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] << 30;
         // Unhandled instruction: ld
 block_2ba54c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 3;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x3;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238518,7 +238518,7 @@ block_2ba5cc:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba5d4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238562,7 +238562,7 @@ block_2ba65c:
         ctx.cpuRegs.GPR.r[11].UL[0] = ctx.cpuRegs.GPR.r[8].UL[0] << 15;
         // Unhandled instruction: ld
 block_2ba668:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0xf;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238604,7 +238604,7 @@ block_2ba6ec:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba6f4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238647,7 +238647,7 @@ block_2ba77c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba784:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0xf;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238688,7 +238688,7 @@ block_2ba804:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[12].UL[0] | ctx.cpuRegs.GPR.r[11].UL[0];
 block_2ba80c:
-        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[14].UL[0];
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsll32
@@ -238741,7 +238741,7 @@ block_2ba8b4:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2ba8bc:
-        ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 4;
+        ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x4;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[8].UD[0]);
@@ -238788,7 +238788,7 @@ block_2ba94c:
         ctx.cpuRegs.GPR.r[12].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] << 30;
         // Unhandled instruction: ld
 block_2ba95c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 3;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x3;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238829,7 +238829,7 @@ block_2ba9dc:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2ba9e4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238873,7 +238873,7 @@ block_2baa6c:
         ctx.cpuRegs.GPR.r[11].UL[0] = ctx.cpuRegs.GPR.r[8].UL[0] << 15;
         // Unhandled instruction: ld
 block_2baa78:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0xf;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238915,7 +238915,7 @@ block_2baafc:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bab04:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238958,7 +238958,7 @@ block_2bab8c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bab94:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0xf;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -238999,7 +238999,7 @@ block_2bac14:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[12].UL[0] | ctx.cpuRegs.GPR.r[11].UL[0];
 block_2bac1c:
-        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[14].UL[0];
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsll32
@@ -239046,11 +239046,11 @@ block_2bacac:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bacbc:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 30;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x30;
         // Unhandled instruction: b
 block_2bacc4:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 30;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x30;
 block_2baccc:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
 block_2bacd0:
@@ -239148,7 +239148,7 @@ block_2badfc:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2bae04:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239191,7 +239191,7 @@ block_2bae8c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bae94:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239234,7 +239234,7 @@ block_2baf1c:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2baf24:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239277,7 +239277,7 @@ block_2bafac:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bafb4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239318,7 +239318,7 @@ block_2bb034:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bb03c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 3;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x3;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239355,11 +239355,11 @@ block_2bb0ac:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb0bc:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         // Unhandled instruction: b
 block_2bb0c4:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
 block_2bb0cc:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239405,7 +239405,7 @@ block_2bb154:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bb15c:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 30;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x30;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239446,7 +239446,7 @@ block_2bb1dc:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: ld
 block_2bb1e4:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 30;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x30;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsll32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239481,11 +239481,11 @@ block_2bb24c:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb25c:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 20;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x20;
         // Unhandled instruction: b
 block_2bb264:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 20;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x20;
 block_2bb26c:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
@@ -239537,12 +239537,12 @@ block_2bb304:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb314:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x10;
         // Unhandled instruction: b
 block_2bb31c:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[14].SD[0] = ctx.cpuRegs.GPR.r[24].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x10;
 block_2bb328:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
 block_2bb32c:
@@ -239584,11 +239584,11 @@ block_2bb39c:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb3ac:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x10;
         // Unhandled instruction: b
 block_2bb3b4:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x10;
 block_2bb3bc:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x1;
@@ -239637,7 +239637,7 @@ block_2bb44c:
         // Unhandled instruction: ld
         // Unhandled instruction: ld
 block_2bb454:
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18);
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[5].UD[0]);
@@ -239674,11 +239674,11 @@ block_2bb4c4:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb4d4:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 7;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x7;
         // Unhandled instruction: b
 block_2bb4dc:
         ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 7;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x7;
 block_2bb4e4:
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -239722,12 +239722,12 @@ block_2bb560:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffbc;
 block_2bb570:
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x8;
         // Unhandled instruction: b
 block_2bb578:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[11].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x1;
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 8;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x8;
 block_2bb584:
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[11].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < ctx.cpuRegs.GPR.r[12].UL[0]) ? 1 : 0;
@@ -239846,13 +239846,13 @@ block_2bb6fc:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb70c:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 20;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x20;
         // Unhandled instruction: b
 block_2bb714:
         // Unhandled instruction: ld
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[11].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0xfffffff9;
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 20;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x20;
 block_2bb724:
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -239991,13 +239991,13 @@ block_2bb8dc:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x18, ctx.cpuRegs.GPR.r[2].UL[0]);
         if (ctx.cpuRegs.GPR.r[3].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffb8;
 block_2bb8ec:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 20;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x20;
         // Unhandled instruction: b
 block_2bb8f4:
         // Unhandled instruction: ld
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[11].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0xfffffffc;
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 20;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x20;
 block_2bb904:
         // Unhandled instruction: dsrl32
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x8, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -240302,7 +240302,7 @@ block_2bbeb0:
         ctx.cpuRegs.GPR.r[14].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[12].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[10].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[11].UL[0] + 0x60);
         // Unhandled instruction: beqz
 block_2bbecc:
@@ -240712,7 +240712,7 @@ block_2bc5f4:
 block_2bc60c:
         ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1d8);
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1e8);
-        ctx.cpuRegs.GPR.r[23].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[23].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1dc);
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x2;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1ec);
@@ -240992,7 +240992,7 @@ block_2bcb1c:
         // Unhandled instruction: b
 block_2bcb30:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[8].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 3) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x3) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x28;
 block_2bcb40:
@@ -241416,7 +241416,7 @@ block_2bd070:
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[11].UL[0] << 3;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x100;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + ctx.cpuRegs.GPR.r[5].SL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 301) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x301) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[19].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         // Unhandled instruction: beqz
 block_2bd088:
@@ -241890,13 +241890,13 @@ block_2be608:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] - ctx.cpuRegs.GPR.r[4].SL[0];
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[30].UL[0]) ctx.cpuRegs.pc += 0x14;
 block_2be634:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x20) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[23].UL[0]) { ctx.cpuRegs.pc += 0x10; } else { /* Branch likely, nullify delay slot */ }
 block_2be63c:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[5].UL[0] != ctx.cpuRegs.GPR.r[22].UL[0]) { ctx.cpuRegs.pc += 0x34; } else { /* Branch likely, nullify delay slot */ }
 block_2be644:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x20) ? 1 : 0;
 block_2be648:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
@@ -241992,13 +241992,13 @@ block_2be778:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] - ctx.cpuRegs.GPR.r[4].SL[0];
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[30].UL[0]) ctx.cpuRegs.pc += 0x14;
 block_2be7a4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x20) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[5].UL[0] == ctx.cpuRegs.GPR.r[23].UL[0]) { ctx.cpuRegs.pc += 0x10; } else { /* Branch likely, nullify delay slot */ }
 block_2be7ac:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[5].UL[0] != ctx.cpuRegs.GPR.r[22].UL[0]) { ctx.cpuRegs.pc += 0x34; } else { /* Branch likely, nullify delay slot */ }
 block_2be7b4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x20) ? 1 : 0;
 block_2be7b8:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
@@ -242166,7 +242166,7 @@ block_2beb14:
 block_2beb1c:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x184);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x2;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
 block_2beb30:
@@ -243461,7 +243461,7 @@ block_2c1ee4:
 // Function at 0x2c1ef0
 void FUN_002c1ef0(CpuContext& ctx) {
 block_2c1ef0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x2f0000;
         // Unhandled instruction: beqz
 block_2c1efc:
@@ -243544,21 +243544,21 @@ block_2c1ff8:
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0xe040;
         ctx.cpuRegs.GPR.r[8].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[9].UL[0] + 0x1));
         if (ctx.cpuRegs.GPR.r[4].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xc; } else { /* Branch likely, nullify delay slot */ }
 block_2c2048:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2c2050:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[9].UL[0] + 0x2));
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xc; } else { /* Branch likely, nullify delay slot */ }
 block_2c205c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffffffe;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2c2064:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
     // WARNING: Branch at end of block has no delay slot instruction.
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xc; } else { /* Branch likely, nullify delay slot */ }
 block_2c206c:
@@ -245215,7 +245215,7 @@ block_2c4f94:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xffff0000;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0x7000;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[17].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < f1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xf1) ? 1 : 0;
         // Unhandled instruction: nop
         // Unhandled instruction: beqz
 block_2c4fac:
@@ -245768,7 +245768,7 @@ block_2c6084:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 0x54;
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x1) ? 1 : 0;
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x20;
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 }
@@ -246451,7 +246451,7 @@ block_2c6cd0:
 void FUN_002c6ce0(CpuContext& ctx) {
 block_2c6ce0:
         ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[8].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x70;
 block_2c6cf0:
@@ -246465,7 +246465,7 @@ block_2c6d04:
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffe0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x10;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         // Unhandled instruction: INVALID
@@ -246474,14 +246474,14 @@ block_2c6d04:
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         // Unhandled instruction: beqz
 block_2c6d30:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x24;
 block_2c6d3c:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffff8;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x8;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x8;
         // Unhandled instruction: beqz
@@ -246535,7 +246535,7 @@ block_2c6dd8:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[8].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2c6de0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffff;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x74; } else { /* Branch likely, nullify delay slot */ }
 block_2c6dec:
@@ -246549,7 +246549,7 @@ block_2c6e00:
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffe0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x10;
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         // Unhandled instruction: INVALID
@@ -246558,14 +246558,14 @@ block_2c6e00:
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         // Unhandled instruction: beqz
 block_2c6e2c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[7].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x24;
 block_2c6e38:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffff8;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x8;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x8;
         // Unhandled instruction: beqz
@@ -246592,7 +246592,7 @@ block_2c6e80:
 // Function at 0x2c6e88
 void FUN_002c6e88(CpuContext& ctx) {
 block_2c6e88:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x74;
 block_2c6e94:
@@ -246601,12 +246601,12 @@ block_2c6e94:
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x68;
 block_2c6ea0:
         ctx.cpuRegs.GPR.r[9].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[10].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[10].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[8].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] | ctx.cpuRegs.GPR.r[9].UL[0];
         // Unhandled instruction: INVALID
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[10].UL[0] != 0) ctx.cpuRegs.pc += 0x38;
 block_2c6ec0:
         // Unhandled instruction: INVALID
@@ -246614,17 +246614,17 @@ block_2c6ec4:
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xffffffe0;
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         // Unhandled instruction: beqz
 block_2c6ee0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         // Unhandled instruction: b
 block_2c6ee8:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffff8;
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x8;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
 block_2c6ef4:
         // Unhandled instruction: nop
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
@@ -247075,7 +247075,7 @@ block_2c74ac:
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffff0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x10;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x10) ? 1 : 0;
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc8;
@@ -247123,7 +247123,7 @@ block_2c7550:
 block_2c7558:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffff8;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x8;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x8) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x8;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x20;
@@ -247342,7 +247342,7 @@ block_2c78a4:
 block_2c78ac:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 7) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x7) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[0].UL[0]);
         // Unhandled instruction: beqz
 block_2c78c0:
@@ -247387,7 +247387,7 @@ block_2c79b0:
 block_2c79b8:
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] >> 1;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 8) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x8) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffff;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[4].UL[0]);
         {
@@ -247400,7 +247400,7 @@ block_2c79b8:
 block_2c79d8:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[22].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 29) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x29) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30);
         {
         int64_t result = static_cast<int64_t>(ctx.cpuRegs.GPR.r[3].SL[0]) * static_cast<int64_t>(ctx.cpuRegs.GPR.r[18].SL[0]);
@@ -247455,7 +247455,7 @@ block_2c7c34:
         // Unhandled instruction: nop
 block_2c7c50:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0xffffffff;
         // Unhandled instruction: ld
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -247474,7 +247474,7 @@ block_2c7c78:
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[22].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 block_2c7c90:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0)));
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -247598,7 +247598,7 @@ block_2c80a4:
         // Unhandled instruction: dsrl32
 block_2c80b8:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0xffffffff;
         // Unhandled instruction: ld
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -247615,7 +247615,7 @@ block_2c80e0:
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[22].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 block_2c80f0:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0)));
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -247642,7 +247642,7 @@ block_2c8134:
         // Unhandled instruction: dsrl32
 block_2c8148:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0xffffffff;
         // Unhandled instruction: ld
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
@@ -247659,7 +247659,7 @@ block_2c8170:
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 block_2c8180:
         ctx.cpuRegs.GPR.r[3].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0));
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0)));
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
         memory::write<uint8_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -247762,7 +247762,7 @@ block_2c8260:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0xc, ctx.cpuRegs.GPR.r[0].UL[0]);
 block_2c82a8:
         ctx.cpuRegs.GPR.r[3].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x0)));
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2e) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2e) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x310000;
         // Unhandled instruction: beqz
 block_2c82b8:
@@ -247832,7 +247832,7 @@ block_2c8390:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[18].SD[0];
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[2].SD[0];
-        ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ffd0;
+        ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 0xffffffd0;
 block_2c83a0:
         ctx.cpuRegs.GPR.r[21].SL[0] = ctx.cpuRegs.GPR.r[21].SL[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x0)));
@@ -247868,7 +247868,7 @@ block_2c83e8:
 block_2c8400:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffcf;
 block_2c8404:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x65;
         // Unhandled instruction: beqz
 block_2c8410:
@@ -247941,7 +247941,7 @@ block_2c84cc:
         ctx.cpuRegs.GPR.r[4].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x0)));
 block_2c84d4:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffd0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[8].SL[0] = ctx.cpuRegs.GPR.r[21].SL[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffff40;
 block_2c84e4:
@@ -247982,7 +247982,7 @@ block_2c8540:
         ctx.cpuRegs.GPR.r[4].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x0)));
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffd0;
 block_2c854c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x30;
         // Unhandled instruction: beqz
 block_2c8558:
@@ -248001,7 +248001,7 @@ block_2c8568:
 block_2c8580:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffcf;
 block_2c8584:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 9) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x9) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffd0;
         // Unhandled instruction: beqz
 block_2c8590:
@@ -248023,7 +248023,7 @@ block_2c85b8:
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[2].SD[0];
         ctx.cpuRegs.GPR.r[4].SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x0)));
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ffd0;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 0xffffffd0;
         // Unhandled instruction: slti
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[2].UD[0]);
         // Unhandled instruction: beqz
@@ -248469,7 +248469,7 @@ block_2c9ab8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xffffffbb;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 24;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] >> 24;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 23) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x23) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x310000;
         // Unhandled instruction: beqz
 block_2c9ad0:
@@ -248798,7 +248798,7 @@ block_2cbd30:
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[3].SD[0];
         ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] & ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 10;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0x10;
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[22].UL[0] + 0xffffa488);
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsra32
@@ -248808,7 +248808,7 @@ block_2cbdb4:
         // Unhandled instruction: dsll32
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xfffff000;
         // Unhandled instruction: dsrl32
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + fff;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 0xfff;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsra32
@@ -248825,7 +248825,7 @@ block_2cbf98:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xffffffa0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0x13;
         // Unhandled instruction: INVALID
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 1f) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < 0x1f) ? 1 : 0;
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[19].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: INVALID
@@ -248921,7 +248921,7 @@ block_2ccb78:
 // Function at 0x2ccba0
 void FUN_002ccba0(CpuContext& ctx) {
 block_2ccba0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xff;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xa0;
 block_2ccbac:
@@ -248963,7 +248963,7 @@ block_2ccc08:
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x18; } else { /* Branch likely, nullify delay slot */ }
 block_2ccc34:
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[6].SL[0] + 0xfffffff0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[7].SL[0] = ctx.cpuRegs.GPR.r[7].SL[0] + 0x10;
         // Unhandled instruction: beqz
 block_2ccc44:
@@ -250766,7 +250766,7 @@ block_2cf8a8:
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xffffffc0;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffff;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[18].UD[0]);
-        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[4].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x2) ? 1 : 0;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[17].UD[0]);
         ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[31].UD[0]);
@@ -251172,7 +251172,7 @@ block_2cffd0:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffd1;
         runtime_syscall_dispatcher(ctx.cpuRegs.GPR.r[3].UL[0], ctx);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x100) ? 1 : 0;
         if (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[4].UL[0]) ctx.cpuRegs.pc += 0x14;
 block_2cfff0:
         // Unhandled instruction: nop
@@ -251336,7 +251336,7 @@ block_2d0390:
 block_2d0398:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x8);
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[16].SL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 141) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x141) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = 0x310000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2d03ac:
@@ -251550,7 +251550,7 @@ block_2d0838:
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: dsll
         // Unhandled instruction: dsrl32
-        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + fbcd;
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + 0xfffffbcd;
         // Unhandled instruction: slti
         // Unhandled instruction: slti
         // Unhandled instruction: beqz
@@ -251574,7 +251574,7 @@ block_2d0880:
         // Unhandled instruction: dsubu
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x3;
 block_2d0888:
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + fffe;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + 0xfffffffe;
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsra32
         // Unhandled instruction: dsrlv
@@ -251583,7 +251583,7 @@ block_2d0888:
         if (ctx.cpuRegs.GPR.r[4].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) { ctx.cpuRegs.pc += 0x1c; } else { /* Branch likely, nullify delay slot */ }
 block_2d08a4:
         // Unhandled instruction: dsrl
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 0x1;
         // Unhandled instruction: b
 block_2d08b0:
         // Unhandled instruction: dsll32
@@ -251680,7 +251680,7 @@ block_2d0b20:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffffe0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 24;
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] >> 24;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 59) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x59) ? 1 : 0;
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2d0b40:
@@ -251706,7 +251706,7 @@ block_2d0b80:
         ctx.cpuRegs.GPR.r[5].UL[0] = static_cast<uint32_t>(memory::read<uint8_t>(ctx.cpuRegs.GPR.r[22].UL[0] + 0x0));
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0xffffffd0;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[5].SL[0] + 0xffffffd0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < a) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0xa) ? 1 : 0;
         ctx.cpuRegs.GPR.r[16].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xffffffdc;
 block_2d0ba8:
@@ -252267,7 +252267,7 @@ block_2d1dd0:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[18].UD[0]);
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[6].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[8].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 61) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x61) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0xc;
 block_2d1e10:
@@ -253021,7 +253021,7 @@ block_2d32a8:
 block_2d32b4:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + 0xfffffffe;
-        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 19) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[3].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x19) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0x310000;
         // Unhandled instruction: beqz
 block_2d32c8:
@@ -253565,7 +253565,7 @@ block_2d4cfc:
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[16].SL[0] + 0xfffffff5;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] - ctx.cpuRegs.GPR.r[3].SL[0];
 block_2d4d04:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 51) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 0x51) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = 0x310000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_2d4d10:
@@ -253961,7 +253961,7 @@ block_2d56b4:
         // Unhandled instruction: beqz
 block_2d56cc:
         // Unhandled instruction: ld
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + 7333;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + 0x7333;
         // Unhandled instruction: ld
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[4].SD[0];
@@ -253974,7 +253974,7 @@ block_2d56f0:
         // Unhandled instruction: nop
 block_2d56f8:
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + 7333;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + 0x7333;
         // Unhandled instruction: beqz
 block_2d5704:
         // Unhandled instruction: ld
@@ -254138,7 +254138,7 @@ block_2d5928:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[4].UL[0] = 0xffff0000;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] | 0xfbff;
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[20].UL[0] + 0xffffb890, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
@@ -254177,7 +254177,7 @@ block_2d5a78:
         // Unhandled instruction: ld
         ctx.cpuRegs.GPR.r[4].UL[0] = 0xffff0000;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] | 0xfbff;
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + 0x1;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] & ctx.cpuRegs.GPR.r[4].UL[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0xffffb890, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[31].UL[0] = ctx.cpuRegs.pc + 8;
@@ -254209,7 +254209,7 @@ block_2d5b40:
         // Unhandled instruction: beqz
 block_2d5b64:
         // Unhandled instruction: lwu
-        ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[10].SD[0] = ctx.cpuRegs.GPR.r[10].SD[0] + 0x1;
 block_2d5b6c:
         ctx.cpuRegs.GPR.r[8].UL[0] = ctx.cpuRegs.GPR.r[8].UL[0] & 0x3;
         // Unhandled instruction: dsll
@@ -254851,16 +254851,16 @@ block_2d69c4:
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         // Unhandled instruction: beqz
 block_2d69d0:
-        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 0x1;
         // Unhandled instruction: nop
 block_2d69d8:
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 0x1;
         // Unhandled instruction: dsll32
         // Unhandled instruction: dsra32
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[2].SL[0] + ctx.cpuRegs.GPR.r[5].SL[0];
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 1;
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 0x1;
         if (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xffffffe4; } else { /* Branch likely, nullify delay slot */ }
 block_2d69f8:
         // Unhandled instruction: dsll32
@@ -254991,7 +254991,7 @@ block_2d6bf8:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_2d6c04:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -255112,7 +255112,7 @@ block_2d6d58:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d6d60:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -255332,7 +255332,7 @@ block_2d6fd0:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d6fe0:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -255668,7 +255668,7 @@ block_2d75c0:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_2d75cc:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -255789,7 +255789,7 @@ block_2d7720:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d7728:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -256009,7 +256009,7 @@ block_2d7998:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d79a8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -256294,7 +256294,7 @@ block_2d7cf0:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_2d7cfc:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -256415,7 +256415,7 @@ block_2d7e50:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d7e58:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -256635,7 +256635,7 @@ block_2d80c8:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d80d8:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -256874,7 +256874,7 @@ block_2d83a8:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x18;
 block_2d83b4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -256995,7 +256995,7 @@ block_2d8508:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d8510:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[10].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -257215,7 +257215,7 @@ block_2d8780:
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xff0000;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d8790:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 100) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[11].UL[0] < 0x100) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x8;
         // Unhandled instruction: movn
         // Unhandled instruction: b
@@ -257427,7 +257427,7 @@ block_2d8a08:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[8].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         // Unhandled instruction: ld
         // Unhandled instruction: beqz
 block_2d8a20:
@@ -257475,11 +257475,11 @@ block_2d8a94:
 block_2d8a9c:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x80;
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0xff;
-        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 7f;
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0x7f;
         if (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) { ctx.cpuRegs.pc += 0x10; } else { /* Branch likely, nullify delay slot */ }
 block_2d8aac:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] & 0x100;
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 80;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + 0x80;
         // Unhandled instruction: movn
 block_2d8ab8:
         ctx.cpuRegs.GPR.r[2].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
@@ -257577,14 +257577,14 @@ void FUN_002d8bd8(CpuContext& ctx) {
 block_2d8bd8:
         ctx.cpuRegs.GPR.r[9].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[9].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0);
         if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0xc; } else { /* Branch likely, nullify delay slot */ }
 block_2d8bec:
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[9].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];
 block_2d8bf4:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] ^ 0x4;
         // Unhandled instruction: beqz
 block_2d8c00:
@@ -257718,7 +257718,7 @@ block_2d8d68:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0xffff;
         // Unhandled instruction: dsll
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0xffe;
-        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[3].UL[0]) ? 1 : 0;
         // Unhandled instruction: ld
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x60; } else { /* Branch likely, nullify delay slot */ }
@@ -257737,7 +257737,7 @@ block_2d8db8:
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x10, ctx.cpuRegs.GPR.r[2].UD[0]);
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[3].SL[0] + 0xffffffff;
-        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ffff;
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < ctx.cpuRegs.GPR.r[2].UL[0]) ? 1 : 0;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x8, ctx.cpuRegs.GPR.r[3].UL[0]);
         // Unhandled instruction: beqz
@@ -257829,12 +257829,12 @@ block_2d8f48:
 void FUN_002d90a8(CpuContext& ctx) {
 block_2d90a8:
         ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x2) ? 1 : 0;
         // Unhandled instruction: nop
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x14;
 block_2d90b8:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] ^ 0x4;
         // Unhandled instruction: beqz
 block_2d90c8:
@@ -258068,12 +258068,12 @@ block_2d9488:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[30].UD[0]);
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48, ctx.cpuRegs.GPR.r[31].UD[0]);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[22].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[23].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x58;
 block_2d94cc:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[23].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[22].UL[0] + 0x4);
         if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) { ctx.cpuRegs.pc += 0x70; } else { /* Branch likely, nullify delay slot */ }
 block_2d94dc:
@@ -258155,7 +258155,7 @@ block_2d9728:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x0);
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[8].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 2) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[3].UL[0] < 0x2) ? 1 : 0;
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xc);
         // Unhandled instruction: beqz
 block_2d9740:
@@ -258317,7 +258317,7 @@ block_2d9928:
 // Function at 0x2d9968
 void FUN_002d9968(CpuContext& ctx) {
 block_2d9968:
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 10) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x10) ? 1 : 0;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] | ctx.cpuRegs.GPR.r[5].UL[0];
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x44;
 block_2d9974:
@@ -258326,7 +258326,7 @@ block_2d9974:
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.pc += 0x38;
 block_2d9980:
         // Unhandled instruction: INVALID
-        ctx.cpuRegs.GPR.r[7].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 20) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[7].UL[0] = (ctx.cpuRegs.GPR.r[6].UL[0] < 0x20) ? 1 : 0;
         // Unhandled instruction: INVALID
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[4].SL[0] + 0x10;
         // Unhandled instruction: INVALID

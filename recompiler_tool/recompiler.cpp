@@ -319,7 +319,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
 
         // Doubleword and Logical Instructions
         case RABBITIZER_INSTR_ID_cpu_daddiu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SD[0] + " << static_cast<int16_t>(instr.Get_immediate()) << ";\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SD[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_daddu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SD[0] + " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SD[0];\n";
@@ -342,7 +342,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
         // Load/Store and Move Instructions
         case RABBITIZER_INSTR_ID_r5900_lq:
             file << "    // lq instruction - 128-bit load\n";
-            file << "    memory::read_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << static_cast<int16_t>(instr.Get_immediate()) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            file << "    memory::read_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_lwl:
             file << "    // lwl instruction\n";
@@ -362,7 +362,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             break;
         case RABBITIZER_INSTR_ID_r5900_sq:
             file << "    // sq instruction - 128-bit store\n";
-            file << "    memory::write_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << static_cast<int16_t>(instr.Get_immediate()) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            file << "    memory::write_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
             break;
         
         // System and MMI Instructions
