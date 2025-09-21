@@ -332,7 +332,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             break;
 
         case RABBITIZER_INSTR_ID_cpu_sltiu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] < " << static_cast<uint16_t>(instr.Get_immediate()) << ") ? 1 : 0;\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] < " << format_imm(static_cast<uint16_t>(instr.Get_immediate())) << ") ? 1 : 0;\n";
             break;
 
         case RABBITIZER_INSTR_ID_cpu_sltu:
