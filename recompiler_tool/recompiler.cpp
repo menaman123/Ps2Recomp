@@ -192,13 +192,13 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
         // MIPS I - Shift instructions
         //
         case RABBITIZER_INSTR_ID_cpu_sll:
-             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] << " << instr.Get_sa() << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] << " << std::to_string(instr.Get_sa()) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_srl:
-             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] >> " << instr.Get_sa() << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] >> " << std::to_string(instr.Get_sa()) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_sra:
-             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0] >> " << instr.Get_sa() << ";\n";
+             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0] >> " << std::to_string(instr.Get_sa()) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_sllv:
              file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] << (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] & 0x1F);\n";
