@@ -1,6 +1,6 @@
 ^C:\USERS\OWNER\DESKTOP\PS2_RECOMP\PS2RECOMP\BUILD\CMAKEFILES\AE2971C62E6C289820C581D2CEDC14B2\RECOMPILED_FUNCTIONS.H.RULE
 setlocal
-Release\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled_functions.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled_functions.cpp
+Release\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled_functions.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled_functions.cpp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

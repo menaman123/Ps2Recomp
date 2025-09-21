@@ -40,13 +40,14 @@ target_link_libraries(recompiler_tool PRIVATE EEAnalyze)
 
 # --- Generated Code ---
 set(ELF_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09")
+set(GHIDRA_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt")
 set(GENERATED_HEADER "${CMAKE_BINARY_DIR}/recompiled_functions.h")
 set(GENERATED_CPP "${CMAKE_BINARY_DIR}/recompiled_functions.cpp")
 
 # This command runs the recompiler after it's built
 add_custom_command(
     OUTPUT ${GENERATED_HEADER} ${GENERATED_CPP}
-    COMMAND recompiler_tool --input ${ELF_FILE_PATH} --output-header ${GENERATED_HEADER} --output-cpp ${GENERATED_CPP}
+    COMMAND recompiler_tool --input ${ELF_FILE_PATH} --ghidra-input ${GHIDRA_FILE_PATH} --output-header ${GENERATED_HEADER} --output-cpp ${GENERATED_CPP}
     DEPENDS recompiler_tool
     COMMENT "Generating recompiled C++ code from ELF file..."
 )

@@ -1,34 +1,46 @@
-
+#include "Recompiler.h"
+#include "EEAnalyze/analyze.h"
+#include <elfio/elfio.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <elfio/elfio.hpp>
-
-#include "EEAnalyze/analyze.h"      // Your analysis engine
-#include "Recompiler.h"      // Your recompiler engine
+#include <map>
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        std::cerr << "Usage: recompiler_tool <path_to_elf_file> <path_to_ghidra_analysis.txt>" << std::endl;
+    std::string elf_path;
+    std::string ghidra_path;
+    std::string output_header_path = "recompiled_functions.h";
+    std::string output_cpp_path = "recompiled_functions.cpp";
+
+    // --- 1. Parse Command-Line Arguments ---
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg == "--input" && i + 1 < argc) {
+            elf_path = argv[++i];
+        } else if (arg == "--ghidra-input" && i + 1 < argc) {
+            ghidra_path = argv[++i];
+        } else if (arg == "--output-header" && i + 1 < argc) {
+            output_header_path = argv[++i];
+        } else if (arg == "--output-cpp" && i + 1 < argc) {
+            output_cpp_path = argv[++i];
+        }
+    }
+
+    if (elf_path.empty() || ghidra_path.empty()) {
+        std::cerr << "Usage: " << argv[0]
+                  << " --input <elf_file>"
+                  << " --ghidra-input <ghidra_txt_file>"
+                  << " [--output-header <header_file>]"
+                  << " [--output-cpp <cpp_file>]" << std::endl;
         return 1;
     }
 
-    std::string elf_path = argv[1];
-    std::cout << "[+] Loading ELF file: " << elf_path << std::endl;
-
-    // --- Step 1: Load the ELF file using ELFIO ---
+    // --- 2. Read ELF File ---
     ELFIO::elfio reader;
     if (!reader.load(elf_path)) {
-        std::cerr << "[-] Failed to load ELF file." << std::endl;
+        std::cerr << "[-] Failed to load ELF file: " << elf_path << std::endl;
         return 1;
     }
-
-    // --- Step 2: Load the Ghidra text file
-    std::string ghidra_path = argv[2];
-    std::cout << "[+] Loading Ghidra analysis file: " << ghidra_path << std::endl;
-    
-
-
 
     const ELFIO::section* text_section = reader.sections[".text"];
     if (text_section == nullptr) {
@@ -38,48 +50,27 @@ int main(int argc, char* argv[]) {
 
     const uint8_t* text_data = reinterpret_cast<const uint8_t*>(text_section->get_data());
     uint32_t text_size = text_section->get_size();
-    uint32_t text_vram = text_section->get_address();
-    uint32_t entry_point = reader.get_entry();
 
-    std::cout << "[+] .text section loaded. VRAM: 0x" << std::hex << text_vram 
-              << ", Size: " << std::dec << text_size << " bytes." << std::endl;
-
-    // --- Step 2: Analyze the executable to find all functions ---
-    std::cout << "[+] Starting analysis phase..." << std::endl;
-    /*
-    std::vector<Function> functions = analyze_executable(entry_point, text_data, text_size, text_vram);
-    
-    if (functions.empty()) {
-        std::cerr << "[-] Analysis failed or no functions were found." << std::endl;
-        return 1;
-    }
-    std::cout << "[+] Analysis complete. Found " << functions.size() << " functions." << std::endl;
-    */
+    // --- 3. Analyze Functions ---
+    // Corrected function call
     std::vector<Function> analyzed_functions = parse_ghidra_analysis_file(ghidra_path, text_data, text_size);
 
     if (analyzed_functions.empty()) {
-        std::cerr << "[-] Analysis failed or no functions were found." << std::endl;
+        std::cerr << "[-] Analysis failed or no functions were found from the Ghidra file." << std::endl;
         return 1;
     }
     std::cout << "[+] Analysis complete. Found " << analyzed_functions.size() << " functions." << std::endl;
 
-    // --- NEW: Convert the vector to a map ---
+    // --- 4. Convert Vector to Map for the Recompiler ---
     std::map<uint32_t, Function> functions_map;
     for (const auto& func : analyzed_functions) {
         functions_map[func.base_address] = func;
     }
 
-    // --- Step 3: Feed the function list into the recompiler ---
-    std::cout << "[+] Starting recompilation phase..." << std::endl;
+    // --- 5. Recompile ---
     Recompiler recompiler(functions_map);
-
-    // --- Step 4: Generate the final C++ files ---
-    bool success = recompiler.recompile_to_files("recompiled_functions.h", "recompiled_functions.cpp");
-
-    if (success) {
-        std::cout << "[+] Recompilation successful! Output files are recompiled_functions.h and recompiled_functions.cpp" << std::endl;
-    } else {
-        std::cerr << "[-] Recompilation failed." << std::endl;
+    if (!recompiler.recompile_to_files(output_header_path, output_cpp_path)) {
+        std::cerr << "Recompilation failed." << std::endl;
         return 1;
     }
 
