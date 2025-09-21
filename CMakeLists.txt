@@ -44,7 +44,6 @@ set(GHIDRA_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_
 set(GENERATED_HEADER "${CMAKE_BINARY_DIR}/recompiled_functions.h")
 set(GENERATED_CPP "${CMAKE_BINARY_DIR}/recompiled_functions.cpp")
 
-# This command runs the recompiler after it's built
 add_custom_command(
     OUTPUT ${GENERATED_HEADER} ${GENERATED_CPP}
     COMMAND recompiler_tool --input ${ELF_FILE_PATH} --ghidra-input ${GHIDRA_FILE_PATH} --output-header ${GENERATED_HEADER} --output-cpp ${GENERATED_CPP}
@@ -52,21 +51,19 @@ add_custom_command(
     COMMENT "Generating recompiled C++ code from ELF file..."
 )
 
-# This target ensures the generated files exist before dependents are built
 add_custom_target(generate_recompiled_code DEPENDS ${GENERATED_HEADER} ${GENERATED_CPP})
 
 # --- Host App ---
-add_executable(host_app
-    "${PROJECT_ROOT}/host_app/main.cpp"
-    "${PROJECT_ROOT}/host_app/memory.cpp"
-    "${PROJECT_ROOT}/host_app/syscalls.cpp"
-    ${GENERATED_CPP} 
-)
+add_subdirectory(host_app)
+
+# Crucially, tell host_app where to find the generated header
 target_include_directories(host_app PUBLIC
     "${PROJECT_ROOT}"
-    "${CMAKE_BINARY_DIR}"
+    "${CMAKE_BINARY_DIR}" # This is the key!
 )
 
-# This is the crucial link: host_app depends on the generated code
-add_dependencies(host_app generate_recompiled_code)
+# Link host_app with necessary libraries
 target_link_libraries(host_app PRIVATE EEAnalyze)
+
+# And finally, ensure the code is generated before host_app is built
+add_dependencies(host_app generate_recompiled_code)

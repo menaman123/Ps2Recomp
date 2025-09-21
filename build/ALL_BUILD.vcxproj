@@ -177,7 +177,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{86E424B8-BA49-38DC-A4EB-DBA67D51CB2D}</Project>
       <Name>EEAnalyze</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\host_app.vcxproj">
+    <ProjectReference Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\host_app\host_app.vcxproj">
       <Project>{A4EDC75F-71AB-3F9D-BD0B-BC1819F28D6D}</Project>
       <Name>host_app</Name>
     </ProjectReference>

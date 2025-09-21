@@ -3,6 +3,12 @@
 #include "syscalls.h"
 #include <iostream>
 
+void init_cpu_context(CpuContext& ctx) {
+    // A very basic initialization. You'll want to expand this.
+    ctx.cpuRegs.pc = 0x100000; // Example starting PC
+    ctx.cpuRegs.GPR.r[29].UD[0] = 0x7FFFFFF0; // Initialize stack pointer
+}
+
 // A simple execution loop
 void execute_recompiled_code(CpuContext& ctx) {
     // This is a basic loop. A more advanced implementation would handle interrupts

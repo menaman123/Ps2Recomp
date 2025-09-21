@@ -15,12 +15,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="CMake Rules">
-      <UniqueIdentifier>{AD0CFB52-674F-3418-9A96-B12728B4D27A}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{C50D93DF-DB7D-3F55-9488-A04270402730}</UniqueIdentifier>
     </Filter>

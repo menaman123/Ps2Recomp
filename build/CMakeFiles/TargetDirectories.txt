@@ -2,6 +2,6 @@ C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/rabbitizer.dir
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/EEAnalyze.dir
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/recompiler_tool.dir
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/generate_recompiled_code.dir
-C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/host_app.dir
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/ALL_BUILD.dir
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/host_app/CMakeFiles/host_app.dir

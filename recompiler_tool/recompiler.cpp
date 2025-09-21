@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
+#include <filesystem>
 
 // Helper to get a string representation of a GPR register for code generation.
 static std::string get_gpr_name(uint8_t reg_num) {
@@ -21,7 +22,7 @@ static std::string get_vr_name(uint8_t reg_num) {
     return "ctx.vr[" + std::to_string(reg_num) + "]";
 }
 
-static std::string format_imm(uint32_t imm) {
+static std::string format_imm(int32_t imm) {
     std::stringstream ss;
     ss << "0x" << std::hex << imm;
     return ss.str();
@@ -63,20 +64,33 @@ void Recompiler::write_header_file(std::ofstream& file) {
         const Function& func = pair.second; // Get the Function object from the pair
         file << "void "<< func.name << "(CpuContext& ctx);\n";
     }
+
+    file << "\nextern std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;\n";
+    file << "void initialize_recompiled_functions();\n";
 }
 
 void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_header_filename) {
     file << "#include \"" << output_header_filename << "\"\n";
     file << "#include \"../host_app/cpu_state.h\"\n";
-    file << "#include \"../host_app/memory.h\"\n\n";
+    file << "#include \"../host_app/memory.h\"\n";
     file << "#include \"../host_app/syscalls.h\"\n\n";
     file << "#include <iostream>\n";
     file << "#include <iomanip>\n";
+    file << "#include <cmath>\n\n";
+
+    file << "std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;\n\n";
 
     for (const auto& pair : m_functions) {
         const Function& func = pair.second; // Get the Function object from the pair
         recompile_function(func, file);
     }
+
+    file << "void initialize_recompiled_functions() {\n";
+    for (const auto& pair : m_functions) {
+        const Function& func = pair.second;
+        file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = &" << func.name << ";\n";
+    }
+    file << "}\n";
 }
 
 bool Recompiler::has_delay_slot(const rabbitizer::InstructionCpu& instr) const {
@@ -94,13 +108,11 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         
         for (size_t i = 0; i < block.instructions.size(); ++i) {
             const auto& instr_struct = block.instructions[i];
-            // FIX: The C++ wrapper is constructed from the raw instruction word and its vram.
             rabbitizer::InstructionCpu instr(instr_struct.word, instr_struct.vram);
 
             if (has_delay_slot(instr)) {
                 if (i + 1 < block.instructions.size()) {
                     const auto& delay_slot_struct = block.instructions[i + 1];
-                    // FIX: Construct the delay slot wrapper the same way.
                     rabbitizer::InstructionCpu delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
                     file << "    ";
                     translate_instruction(delay_slot_instr, file);
@@ -201,22 +213,22 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
         // MIPS I - Branch instructions
         //
         case RABBITIZER_INSTR_ID_cpu_beq:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bne:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_blez:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bgtz:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bltz:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bgez:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         //
         // MIPS I - Jump instructions
@@ -287,22 +299,22 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] = " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".UL;\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bnez:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << ";\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bnel:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) { ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << "; } else { /* Branch likely, nullify delay slot */ }\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_beql:
-             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) { ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << "; } else { /* Branch likely, nullify delay slot */ }\n";
+             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_blezl:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << "; } else { /* Branch likely, nullify delay slot */ }\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bltzl:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << "; } else { /* Branch likely, nullify delay slot */ }\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_bgezl:
-            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int16_t>(instr.Get_immediate()) << 2) << "; } else { /* Branch likely, nullify delay slot */ }\n";
+            file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
 
         // Doubleword and Logical Instructions

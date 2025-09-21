@@ -6774,3 +6774,6 @@ void FUN_002d9838(CpuContext& ctx);
 void FUN_002d98f8(CpuContext& ctx);
 void FUN_002d9928(CpuContext& ctx);
 void FUN_002d9968(CpuContext& ctx);
+
+extern std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;
+void initialize_recompiled_functions();
