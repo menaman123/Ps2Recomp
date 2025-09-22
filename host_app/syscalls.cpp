@@ -10,6 +10,8 @@
 #include <unistd.h> // For write syscall
 #endif
 
+extern std::ofstream g_logFile;
+
 // A helper function to read a string from guest memory
 std::string read_string_from_guest(uint32_t address) {
     return std::string(reinterpret_cast<char*>(memory::get_pointer(address)));
@@ -75,6 +77,8 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
         // Add cases for other syscalls here
         default:
             std::cerr << "Unhandled syscall: 0x" << std::hex << syscall_num << std::endl;
+            std::cout << "Unhandled syscall: 0x" << std::hex << syscall_num << std::endl;
+            g_logFile << "Unhandled syscall: 0x" << std::hex << syscall_num << std::endl;
             // It's a good idea to have a default case to catch unimplemented syscalls.
             // You can choose to either terminate emulation or simply log the unhandled syscall and continue.
             // For now, we will just log it.

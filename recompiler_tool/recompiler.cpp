@@ -78,6 +78,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "#include <iostream>\n";
     file << "#include <iomanip>\n";
     file << "#include <cmath>\n\n";
+    file << "#include <fstream>\n\n";
 
     file << "std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;\n\n";
 
