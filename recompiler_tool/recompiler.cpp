@@ -2,6 +2,7 @@
 #include "host_app/cpu_state.h"
 #include "host_app/memory.h"
 #include "rabbitizer.hpp"
+#include "instructions/InstructionR5900.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -19,7 +20,7 @@ static std::string get_fpr_name(uint8_t reg_num) {
     return "ctx.fpuRegs.fpr[" + std::to_string(reg_num) + "]";
 }
 static std::string get_vr_name(uint8_t reg_num) {
-    return "ctx.vr[" + std::to_string(reg_num) + "]";
+    return "ctx.vuRegs.regs[" + std::to_string(reg_num) + "]";
 }
 
 static std::string format_imm(int32_t imm) {
@@ -93,7 +94,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "}\n";
 }
 
-bool Recompiler::has_delay_slot(const rabbitizer::InstructionCpu& instr) const {
+bool Recompiler::has_delay_slot(const rabbitizer::InstructionR5900& instr) const {
     return instr.isBranch() || instr.isJump();
 }
 
@@ -108,12 +109,12 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         
         for (size_t i = 0; i < block.instructions.size(); ++i) {
             const auto& instr_struct = block.instructions[i];
-            rabbitizer::InstructionCpu instr(instr_struct.word, instr_struct.vram);
+            rabbitizer::InstructionR5900 instr(instr_struct.word, instr_struct.vram);
 
             if (has_delay_slot(instr)) {
                 if (i + 1 < block.instructions.size()) {
                     const auto& delay_slot_struct = block.instructions[i + 1];
-                    rabbitizer::InstructionCpu delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
+                    rabbitizer::InstructionR5900 delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
                     file << "    ";
                     translate_instruction(delay_slot_instr, file);
                 } else {
@@ -133,7 +134,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     file << "}\n\n";
 }
 
-void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, std::ofstream& file) {
+void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr, std::ofstream& file) {
     switch (instr.getUniqueId()) {
         //
         // MIPS I - Arithmetic instructions
@@ -277,6 +278,14 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
         case RABBITIZER_INSTR_ID_cpu_lui:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] = " << format_imm(instr.Get_immediate() << 16) << ";\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_ld:
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = memory::read<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ");\n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_sq:
+            file << "    // sq instruction - 128-bit store\n";
+            // Cast the GPR_reg to a const QuadWord pointer, then dereference it
+            file << "    memory::write_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", *reinterpret_cast<const QuadWord*>(&" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
+            break;
         //
         // FPU Instructions
         //
@@ -342,7 +351,8 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
         // Load/Store and Move Instructions
         case RABBITIZER_INSTR_ID_r5900_lq:
             file << "    // lq instruction - 128-bit load\n";
-            file << "    memory::read_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
+            // Cast the GPR_reg to a QuadWord pointer, then dereference it
+            file << "    memory::read_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", *reinterpret_cast<QuadWord*>(&" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_lwl:
             file << "    // lwl instruction\n";
@@ -360,11 +370,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             file << "        ctx.cpuRegs.HI.UL[0] = static_cast<uint32_t>(result >> 32);\n";
             file << "    }\n";
             break;
-        case RABBITIZER_INSTR_ID_r5900_sq:
-            file << "    // sq instruction - 128-bit store\n";
-            file << "    memory::write_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ");\n";
-            break;
-        
         // System and MMI Instructions
         case RABBITIZER_INSTR_ID_r5900_pextlw:
             file << "    // pextlw instruction\n";
@@ -427,7 +432,12 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionCpu& instr, 
             break;
 
         default:
-            file << "    // Unhandled instruction: " << instr.getOpcodeName() << "\n";
-            break;
+            file << "    // ----------------------------------------------------------------\n";
+            file << "    // UNHANDLED INSTRUCTION: " << instr.getOpcodeName() << "\n";
+            file << "    // Opcode: 0x" << std::hex << static_cast<int>(instr.Get_opcode()) << "\n";
+            file << "    // Function: 0x" << std::hex << static_cast<int>(instr.Get_function()) << "\n";
+            file << "    // Immediate: 0x" << std::hex << instr.Get_immediate() << "\n";
+            file << "    // Address: 0x" << std::hex << instr.getVram() << "\n";
+            file << "    // ----------------------------------------------------------------\n";
     }
 }

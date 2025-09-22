@@ -6,11 +6,12 @@
 #include <filesystem>
 #include "EEAnalyze/Function.h" // Include your Function analysis class
 #include "map"
+#include "instructions/InstructionR5900.hpp"
 
 // Forward-declare the rabbitizer C++ instruction class to avoid including the full header.
 // This is a best practice for header files to improve compilation times.
 namespace rabbitizer {
-    class InstructionCpu;
+    class InstructionR5900;
 }
 
 class Recompiler {
@@ -24,8 +25,8 @@ private:
     void write_header_file(std::ofstream& file);
     void write_cpp_file(std::ofstream& file, const std::string& output_header_filename);
     void recompile_function(const Function& func, std::ofstream& file);
-    void translate_instruction(const rabbitizer::InstructionCpu& instr, std::ofstream& file);
+    void translate_instruction(const rabbitizer::InstructionR5900& instr, std::ofstream& file);
 
     // Helper function to identify instructions that have a delay slot.
-    bool has_delay_slot(const rabbitizer::InstructionCpu& instr) const;
+    bool has_delay_slot(const rabbitizer::InstructionR5900& instr) const;
 };

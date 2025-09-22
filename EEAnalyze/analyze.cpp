@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <set>
 #include <fstream> // Required for file operations
 #include <set>     // Required for std::set
 #include "analyze.h"
@@ -45,6 +46,7 @@ static std::set<uint32_t> load_addresses_from_file(const std::string& path) {
 // New function to parse the Ghidra analysis file
 std::vector<Function> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size) {
     std::vector<Function> functions;
+    std::set<std::string> seen_names;
     std::ifstream infile(file_path);
     if (!infile.is_open()) {
         std::cerr << "[-] Could not open Ghidra analysis file: " << file_path << std::endl;
@@ -59,11 +61,12 @@ std::vector<Function> parse_ghidra_analysis_file(const std::string& file_path, c
             continue; // Skip empty lines and comments
         }
         if (line.find("Function:") != std::string::npos) {
-            if (in_function_block) {
+            if (in_function_block && seen_names.find(current_function.name) == seen_names.end()) {
                 // Analyze the fully parsed function before adding it
                 std::cout << "[+] Analyzing parsed function: " << current_function.name << std::endl;
                 current_function.analyze(text_section_data, text_section_size);
                 functions.push_back(current_function);
+                seen_names.insert(current_function.name);
             }
             current_function = Function();
             in_function_block = true;
@@ -99,10 +102,11 @@ std::vector<Function> parse_ghidra_analysis_file(const std::string& file_path, c
         }
     }
     // Add the very last function in the file
-    if (in_function_block) {
+    if (in_function_block && seen_names.find(current_function.name) == seen_names.end()) {
         std::cout << "[+] Analyzing parsed function: " << current_function.name << std::endl;
         current_function.analyze(text_section_data, text_section_size);
         functions.push_back(current_function);
+        seen_names.insert(current_function.name);
     }
     std::cout << "[+] Parsed and analyzed " << functions.size() << " functions from Ghidra analysis file." << std::endl;
     return functions;

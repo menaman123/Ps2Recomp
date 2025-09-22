@@ -53,6 +53,14 @@ void sceOpen(CpuContext& ctx) {
     ctx.cpuRegs.GPR.r[2].SL[0] = 0; // Return a dummy file descriptor for now
 }
 
+void _Exit(CpuContext& ctx)
+{
+    // The exit code is typically passed in register $a0, which is GPR 4.
+    int exit_code = ctx.cpuRegs.GPR.r[4].SL[0];
+    std::cout << "Syscall: _Exit called with code " << exit_code << std::endl;
+    exit(exit_code);
+}
+
 void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
     switch (syscall_num) {
         case 1: // Exit
