@@ -102,6 +102,7 @@ struct EmotionEngineState {
     CPURegs cpuRegs;
     FPUregs fpuRegs;
     VUregs vuRegs;
+    CP0regs cop0;
 };
 
 typedef EmotionEngineState CpuContext;

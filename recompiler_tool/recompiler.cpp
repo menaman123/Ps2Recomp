@@ -80,6 +80,8 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "#include <cmath>\n\n";
     file << "#include <fstream>\n\n";
 
+    file << "extern std::ofstream g_logFile;\n\n";
+
     file << "std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;\n\n";
 
     for (const auto& pair : m_functions) {
@@ -373,25 +375,32 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             break;
         // System and MMI Instructions
         case RABBITIZER_INSTR_ID_r5900_pextlw:
-            file << "    // pextlw instruction\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// pextlw instruction\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_pextuw:
-            file << "    // pextuw instruction\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// pextuw instruction\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_ppach:
-            file << "    // ppach instruction\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// ppach instruction\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_ppacw:
-            file << "    // ppacw instruction\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// ppacw instruction\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_psraw:
-            file << "    // psraw instruction\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// psraw instruction\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_psrlw:
-            file << "    // psrlw instruction\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// psrlw instruction\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_sync:
-            file << "    // sync instruction - memory barrier\n";
+            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// sync instruction - memory barrier\n";
+            file << "    exit(1);\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_syscall:
             file << "    runtime_syscall_dispatcher(" << get_gpr_name(3) << ".UL[0], ctx);\n";
@@ -431,6 +440,13 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_sd:
             file << "    memory::write<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0]);\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_nop:
+            file << "   //nop \n";
+            break;
+        case RABBITIZER_INSTR_ID_r5900_ei:
+            // Enable Interrupts by setting bit 0 of the COP0 Status Register.
+            file << "    ctx.cop0.n.Status |= 0x1;\n";
+            break;
 
         default:
             file << "    // ----------------------------------------------------------------\n";
@@ -440,5 +456,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "    // Immediate: 0x" << std::hex << instr.Get_immediate() << "\n";
             file << "    // Address: 0x" << std::hex << instr.getVram() << "\n";
             file << "    // ----------------------------------------------------------------\n";
+            file << "      g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";\n";
+            file << "    exit(1);\n";
     }
 }

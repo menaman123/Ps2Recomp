@@ -4,6 +4,7 @@
 
 // Syscall handler functions
 void sceOpen(CpuContext& ctx);
+void sifRpcBind(CpuContext& ctx);
 // Add declarations for other syscall handlers here...
 void _Exit(CpuContext& ctx);
 

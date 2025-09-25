@@ -1,6 +1,7 @@
 #include "syscalls.h"
 #include "memory.h" // For memory access functions
 #include <iostream>
+#include <fstream>
 
 #ifdef _WIN32
 #include <io.h>
@@ -15,6 +16,43 @@ extern std::ofstream g_logFile;
 // A helper function to read a string from guest memory
 std::string read_string_from_guest(uint32_t address) {
     return std::string(reinterpret_cast<char*>(memory::get_pointer(address)));
+}
+
+void sifRpcBind(CpuContext& ctx) {
+    uint32_t bd_addr = ctx.cpuRegs.GPR.r[4].UL[0];      // $a0: pointer to sceSifRpcData
+    uint32_t rpc_number = ctx.cpuRegs.GPR.r[5].UL[0]; // $a1: RPC number
+    uint32_t mode = ctx.cpuRegs.GPR.r[6].UL[0];         // $a2: mode
+
+    g_logFile << "Syscall: sifRpcBind(bd: 0x" << std::hex << bd_addr
+              << ", rpc_number: 0x" << rpc_number
+              << ", mode: 0x" << mode << ") called!" << std::endl;
+
+    // Return a success code (0) in $v0
+    ctx.cpuRegs.GPR.r[2].UD[0] = 0;
+}
+
+void sifRpcCall(CpuContext& ctx) {
+    uint32_t bd_addr = ctx.cpuRegs.GPR.r[4].UL[0];      // $a0
+    uint32_t rpc_number = ctx.cpuRegs.GPR.r[5].UL[0]; // $a1
+    uint32_t mode = ctx.cpuRegs.GPR.r[6].UL[0];         // $a2
+    uint32_t send_addr = ctx.cpuRegs.GPR.r[7].UL[0];    // $a3
+
+    g_logFile << "Syscall: sifRpcCall(bd: 0x" << std::hex << bd_addr
+              << ", rpc_number: 0x" << rpc_number
+              << ", mode: 0x" << mode
+              << ", send: 0x" << send_addr << ") called!" << std::endl;
+
+    // A real implementation would handle the RPC logic here.
+    // For now, we just return a success code (0) in $v0.
+    ctx.cpuRegs.GPR.r[2].UD[0] = 0;
+}
+
+void sifSetRpcQueue(CpuContext& ctx) {
+    uint32_t qd_addr = ctx.cpuRegs.GPR.r[4].UL[0];
+    uint32_t thread_id = ctx.cpuRegs.GPR.r[5].UL[0];
+
+    g_logFile << "Syscall: sifSetRpcQueue(qd: 0x" << std::hex << qd_addr
+              << ", thread_id: " << std::dec << thread_id << ") called!" << std::endl;
 }
 
 // Exit syscall
@@ -74,6 +112,15 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
         case 5: // Open
             sceOpen(ctx);
             break;
+        case 0x3c: // sifRpcBind
+            sifRpcBind(ctx);
+            break;
+        case 0x3d: // sifRpcCall
+            sifRpcCall(ctx);
+            break;
+        case 0x40:
+            sifSetRpcQueue(ctx);
+            break;
         // Add cases for other syscalls here
         default:
             std::cerr << "Unhandled syscall: 0x" << std::hex << syscall_num << std::endl;
@@ -82,6 +129,7 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
             // It's a good idea to have a default case to catch unimplemented syscalls.
             // You can choose to either terminate emulation or simply log the unhandled syscall and continue.
             // For now, we will just log it.
+            exit(1); // Terminate emulation
             break;
     }
 }

@@ -482,8 +482,11 @@ void Function::create_blocks_from_leaders(const uint8_t* code, const std::set<ui
     this->blocks.clear();
     std::vector<uint32_t> sorted_leaders(leaders.begin(), leaders.end());
     std::sort(sorted_leaders.begin(), sorted_leaders.end());
+    std::cout << "-----------------Begin basic blocks from leaders------------------" << std::endl;
 
     for (size_t i = 0; i < sorted_leaders.size(); ++i) {
+        
+        
         uint32_t block_start_addr = sorted_leaders[i];
         uint32_t block_end_addr_exclusive = (i + 1 < sorted_leaders.size()) ? sorted_leaders[i+1] : (this->base_address + this->size);
 
@@ -492,10 +495,47 @@ void Function::create_blocks_from_leaders(const uint8_t* code, const std::set<ui
         if (block_end_addr_exclusive > this->base_address + this->size) {
             block_end_addr_exclusive = this->base_address + this->size;
         }
+        bool is_last_block = false;
+        if (i + 1 < sorted_leaders.size()){
+            uint32_t next_leader_addr = sorted_leaders[i + 1];
+            if (block_start_addr + 4 == next_leader_addr){
+                is_last_block = true;
+
+            }
+        }
+        bool is_single_instruction_block = (block_end_addr_exclusive - block_start_addr) == 4;
+
+        if (is_last_block && is_single_instruction_block) {
+            std::cout << "CHECKING... trailing NOP block at: 0x" << std::hex << block_start_addr << std::dec << std::endl; 
+            // Read the single instruction word
+            uint32_t instruction_offset = block_start_addr - this->base_address;
+            uint32_t instruction_word = *(reinterpret_cast<const uint32_t*>(code + instruction_offset));
+
+            // Use Rabbitizer to check if it's a NOP
+            RabbitizerInstruction nop_check_instr;
+            RabbitizerInstructionR5900_init(&nop_check_instr, instruction_word, block_start_addr);
+            RabbitizerInstructionR5900_processUniqueId(&nop_check_instr);
+
+            char instr_buffer[256]; // 256 chars is plenty for one instruction
+
+            // 2. Call the disassemble function to fill the buffer.
+            //    The arguments are: instruction, destination buffer, immediate override, override length, extra justification.
+            //    We can pass NULL and 0 for the simple case.
+            RabbitizerInstruction_disassemble(&nop_check_instr, instr_buffer, NULL, 0, 0);
+            std::cout << "CHECKING FOR NOP @ Address: 0x"<< std::hex << block_start_addr << " | Decoded instruction: " << instr_buffer << std::endl;
+
+            if (RabbitizerInstruction_isNop(&nop_check_instr)) {
+                std::cout << "Skipping trailing NOP block at 0x" << std::hex << block_start_addr << std::dec << std::endl;
+                continue; // Skip creating this block and move to the next leader
+            }
+        }
 
         Block current_block;
         current_block.start_address = block_start_addr;
         current_block.end_address = block_end_addr_exclusive;
+        std::cout << "Leader Address: 0x" << std::hex << block_start_addr << std::dec << std::endl;
+        std::cout << "End Address: 0x" << std::hex << block_end_addr_exclusive << std::dec << std::endl;
+        // If block is the last block end_addr-4 -> end_addr, contains only one instruction and the one instruction is a NOP instruction then we continue
 
         for (uint32_t addr = block_start_addr; addr < block_end_addr_exclusive; addr += 4) {
             uint32_t instruction_offset = addr - this->base_address;
@@ -504,6 +544,13 @@ void Function::create_blocks_from_leaders(const uint8_t* code, const std::set<ui
             RabbitizerInstruction decoded_instr;
             RabbitizerInstructionR5900_init(&decoded_instr, instruction_word, addr);
             RabbitizerInstructionR5900_processUniqueId(&decoded_instr);
+            char instr_buffer[256]; // 256 chars is plenty for one instruction
+
+            // 2. Call the disassemble function to fill the buffer.
+            //    The arguments are: instruction, destination buffer, immediate override, override length, extra justification.
+            //    We can pass NULL and 0 for the simple case.
+            RabbitizerInstruction_disassemble(&decoded_instr, instr_buffer, NULL, 0, 0);
+            std::cout << "Address: 0x"<< std::hex << addr << " | Decoded instruction: " << instr_buffer << std::endl;
             current_block.instructions.push_back(decoded_instr);
         }
 
@@ -821,8 +868,8 @@ void Function::analyze(const uint8_t* elf_data, uint32_t elf_size) {
     std::cout << "    [4/7] Building Control Flow Graph..." << std::endl;
     build_control_flow_graph();
 
-    std::cout << "    [5/7] Culling unreachable blocks..." << std::endl;
-    cull_unreachable_blocks();
+    //std::cout << "    [5/7] Culling unreachable blocks..." << std::endl;
+    //cull_unreachable_blocks();
 
     std::cout << "    [6/7] Analyzing prologue..." << std::endl;
     analyze_prologue();
