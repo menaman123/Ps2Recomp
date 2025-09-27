@@ -7,6 +7,7 @@ C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCXXInformation.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCompilerIdDetection.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeDependentOption.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeDetermineCCompiler.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeDetermineCXXCompiler.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeDetermineCompiler.cmake
@@ -89,6 +90,7 @@ C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/XLClang-CXX-DetermineCo
 C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/zOS-C-DetermineCompiler.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CompilerId/VS-10.vcxproj.in
+C:/Program Files/CMake/share/cmake-3.30/Modules/FeatureSummary.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Internal/CMakeDetermineLinkerId.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Internal/FeatureTesting.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-Determine-CXX.cmake
@@ -103,3 +105,13 @@ C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/3.30.0/CMakeCCompil
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/3.30.0/CMakeCXXCompiler.cmake
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/3.30.0/CMakeRCCompiler.cmake
 C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/3.30.0/CMakeSystem.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2Config.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2ConfigVersion.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2Targets-debug.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2Targets-release.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2Targets.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2mainTargets-debug.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2mainTargets-release.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/SDL2mainTargets.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/share/sdl2/sdlfind.cmake
+C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/scripts/buildsystems/vcpkg.cmake

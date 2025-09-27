@@ -24,6 +24,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A4EDC75F-71AB-3F9D-BD0B-BC1819F28D6D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <VcpkgEnabled>false</VcpkgEnabled>
     <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
     <ProjectName>host_app</ProjectName>
@@ -54,7 +55,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="do_not_import_user.props" Condition="exists('do_not_import_user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -87,10 +88,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
@@ -106,18 +109,30 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;RABBITIZER_STATIC;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message></Message>
+      <Command>setlocal
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/host_app/Debug/host_app.exe -installedDir C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>..\Debug\EEAnalyze.lib;..\Debug\rabbitizer.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\Debug\EEAnalyze.lib;..\Debug\rabbitizer.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\debug\lib\manual-link\SDL2maind.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\debug\lib\SDL2d.lib;..\Debug\EEAnalyze.lib;..\Debug\rabbitizer.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,9 +148,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
@@ -153,18 +170,30 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RABBITIZER_STATIC;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message></Message>
+      <Command>setlocal
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/host_app/Release/host_app.exe -installedDir C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>..\Release\EEAnalyze.lib;..\Release\rabbitizer.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\Release\EEAnalyze.lib;..\Release\rabbitizer.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\lib\manual-link\SDL2main.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\lib\SDL2.lib;..\Release\EEAnalyze.lib;..\Release\rabbitizer.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -180,9 +209,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
@@ -200,18 +231,30 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RABBITIZER_STATIC;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message></Message>
+      <Command>setlocal
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/host_app/MinSizeRel/host_app.exe -installedDir C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>..\MinSizeRel\EEAnalyze.lib;..\MinSizeRel\rabbitizer.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\MinSizeRel\EEAnalyze.lib;..\MinSizeRel\rabbitizer.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\lib\manual-link\SDL2main.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\lib\SDL2.lib;..\MinSizeRel\EEAnalyze.lib;..\MinSizeRel\rabbitizer.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -227,10 +270,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
@@ -246,18 +291,30 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RABBITIZER_STATIC;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
+    <PostBuildEvent>
+      <Message></Message>
+      <Command>setlocal
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/host_app/RelWithDebInfo/host_app.exe -installedDir C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/bin -OutVariable out
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>..\RelWithDebInfo\EEAnalyze.lib;..\RelWithDebInfo\rabbitizer.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\RelWithDebInfo\EEAnalyze.lib;..\RelWithDebInfo\rabbitizer.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\lib\manual-link\SDL2main.lib;C:\Users\Owner\Desktop\PS2_Recomp\vcpkg\installed\x64-windows\lib\SDL2.lib;..\RelWithDebInfo\EEAnalyze.lib;..\RelWithDebInfo\rabbitizer.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -4,6 +4,8 @@ project(Ps2RecompProject CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
+find_package(SDL2 CONFIG REQUIRED)
+
 # --- Dependencies (elfio and rabbitizer) ---
 add_library(elfio INTERFACE)
 target_include_directories(elfio INTERFACE "${PROJECT_ROOT}/include/ELFIO")
@@ -55,6 +57,8 @@ add_custom_target(generate_recompiled_code DEPENDS ${GENERATED_HEADER} ${GENERAT
 
 # --- Host App ---
 add_subdirectory(host_app)
+
+target_compile_options(host_app PRIVATE /bigobj)
 
 # Crucially, tell host_app where to find the generated header
 target_include_directories(host_app PUBLIC

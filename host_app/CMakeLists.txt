@@ -16,3 +16,10 @@ set_source_files_properties(
 target_sources(host_app PRIVATE
     "${CMAKE_BINARY_DIR}/recompiled_functions.cpp"
 )
+
+target_link_libraries(host_app PRIVATE
+    EEAnalyze
+    rabbitizer
+    SDL2::SDL2main
+    SDL2::SDL2
+)

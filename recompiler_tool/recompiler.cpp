@@ -59,17 +59,21 @@ void Recompiler::write_header_file(std::ofstream& file) {
     file << "#pragma once\n\n";
     file << "#include \"../host_app/cpu_state.h\"\n\n";
     file << "#include <map>\n";
+    file << "#include <vector>\n";
     file << "#include <functional>\n\n";
 
     for (const auto& pair : m_functions) {
-        const Function& func = pair.second; // Get the Function object from the pair
-        file << "void "<< func.name << "(CpuContext& ctx);\n";
+        const Function& func = pair.second;
+        // Functions now accept starting PC parameter
+        file << "void "<< func.name << "(CpuContext& ctx, uint32_t start_pc = 0x" << std::hex << func.base_address << ");\n";
     }
 
-    file << "\nextern std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;\n";
+    file << "\nextern std::map<uint32_t, std::function<void(CpuContext&, uint32_t)>> recompiled_functions;\n";
+    file << "std::function<void(CpuContext&, uint32_t)> find_containing_function(uint32_t pc);\n";
     file << "void initialize_recompiled_functions();\n";
 }
 
+// Modified recompiler cpp generation
 void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_header_filename) {
     file << "#include \"" << output_header_filename << "\"\n";
     file << "#include \"../host_app/cpu_state.h\"\n";
@@ -77,22 +81,46 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "#include \"../host_app/syscalls.h\"\n\n";
     file << "#include <iostream>\n";
     file << "#include <iomanip>\n";
-    file << "#include <cmath>\n\n";
+    file << "#include <cmath>\n";
+    file << "#include <vector>\n";
     file << "#include <fstream>\n\n";
 
     file << "extern std::ofstream g_logFile;\n\n";
 
-    file << "std::map<uint32_t, std::function<void(CpuContext&)>> recompiled_functions;\n\n";
+    file << "std::map<uint32_t, std::function<void(CpuContext&, uint32_t)>> recompiled_functions;\n";
+    
+    // Add function ranges for smart lookup
+    file << "struct FunctionRange {\n";
+    file << "    uint32_t start;\n";
+    file << "    uint32_t end;\n";
+    file << "    std::function<void(CpuContext&, uint32_t)> func;\n";
+    file << "};\n";
+    file << "std::vector<FunctionRange> function_ranges;\n\n";
 
     for (const auto& pair : m_functions) {
-        const Function& func = pair.second; // Get the Function object from the pair
+        const Function& func = pair.second;
         recompile_function(func, file);
     }
+
+    // Add the smart lookup function
+    file << "std::function<void(CpuContext&, uint32_t)> find_containing_function(uint32_t pc) {\n";
+    file << "    for (const auto& range : function_ranges) {\n";
+    file << "        if (pc >= range.start && pc < range.end) {\n";
+    file << "            return range.func;\n";
+    file << "        }\n";
+    file << "    }\n";
+    file << "    return nullptr;\n";
+    file << "}\n\n";
 
     file << "void initialize_recompiled_functions() {\n";
     for (const auto& pair : m_functions) {
         const Function& func = pair.second;
-        file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = &" << func.name << ";\n";
+        // Wrap function with lambda to match old signature for exact matches
+        file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t start_pc) { " << func.name << "(ctx, start_pc); };\n";
+        
+        uint32_t end_address = func.base_address + func.size;
+        file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+             << ", 0x" << std::hex << end_address << ", [](CpuContext& ctx, uint32_t start_pc) { " << func.name << "(ctx, start_pc); }});\n";
     }
     file << "}\n";
 }
@@ -103,13 +131,42 @@ bool Recompiler::has_delay_slot(const rabbitizer::InstructionR5900& instr) const
 
 void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     file << "// Function at 0x" << std::hex << func.base_address << "\n";
-    file << "void "<<func.name << "(CpuContext& ctx) {\n";
+    file << "void " << func.name << "(CpuContext& ctx, uint32_t start_pc) {\n";
+    
+    // Create address-to-block-index mapping
+    file << "    // Address to block index mapping\n";
+    file << "    auto get_block_index = [](uint32_t address) -> int {\n";
+    file << "        switch (address) {\n";
+    for (size_t i = 0; i < func.blocks.size(); ++i) {
+        file << "            case 0x" << std::hex << func.blocks[i].start_address 
+             << ": return " << std::dec << i << ";\n";
+    }
+    file << "            default: return -1;\n";
+    file << "        }\n";
+    file << "    };\n\n";
+    
+    // Start from the specified PC instead of function base
+    file << "    uint32_t next_pc = start_pc;\n";
+    file << "    int block_index = get_block_index(start_pc);\n";
+    file << "    if (block_index == -1) {\n";
+    file << "        // Invalid start PC for this function\n";
+    file << "        ctx.cpuRegs.pc = start_pc;\n";
+    file << "        return;\n";
+    file << "    }\n\n";
+    
+    file << "    while (true) {\n";
+    file << "        switch (block_index) {\n";
 
-    for (const auto& block : func.blocks) {
-
-        std::cout << "block_" << std::hex << block.start_address << ":\n";
-        file << "block_" << std::hex << block.start_address << ":\n";
+    // Generate each block as a case with numeric index
+    for (size_t block_idx = 0; block_idx < func.blocks.size(); ++block_idx) {
+        const auto& block = func.blocks[block_idx];
         
+        file << "        case " << std::dec << block_idx << ": // block_0x" << std::hex << block.start_address << "\n";
+        file << "            next_pc = 0x" << std::hex << block.start_address << " + " 
+             << std::dec << (block.instructions.size() * 4) << "; // Default next PC\n";
+        
+        // Process instructions (same as before)
+        bool block_ends_with_branch = false;
         for (size_t i = 0; i < block.instructions.size(); ++i) {
             const auto& instr_struct = block.instructions[i];
             rabbitizer::InstructionR5900 instr(instr_struct.word, instr_struct.vram);
@@ -118,23 +175,213 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 if (i + 1 < block.instructions.size()) {
                     const auto& delay_slot_struct = block.instructions[i + 1];
                     rabbitizer::InstructionR5900 delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
-                    file << "    ";
+                    file << "            ";
                     translate_instruction(delay_slot_instr, file);
                 } else {
-                    file << "    // WARNING: Branch at end of block has no delay slot instruction.\n";
+                    file << "            // WARNING: Branch at end of block has no delay slot instruction.\n";
                 }
 
-                file << "    ";
-                translate_instruction(instr, file);
-                i++;
+                file << "            ";
+                translate_branch_or_jump(instr, file);
+                
+                file << "            block_index = get_block_index(next_pc);\n";
+                file << "            if (block_index == -1) {\n";
+                file << "                ctx.cpuRegs.pc = next_pc;\n";
+                file << "                return; // Jump outside this function\n";
+                file << "            }\n";
+                file << "            break; // Continue to next block\n";
+                
+                block_ends_with_branch = true;
+                i++; // Skip delay slot instruction
+                break;
             } else {
-                file << "    ";
+                file << "            ";
                 translate_instruction(instr, file);
             }
         }
+        
+        if (!block_ends_with_branch) {
+            file << "            // Fall through to next block\n";
+            file << "            block_index = get_block_index(next_pc);\n";
+            file << "            if (block_index == -1) {\n";
+            file << "                ctx.cpuRegs.pc = next_pc;\n";
+            file << "                return; // Jump outside this function\n";
+            file << "            }\n";
+            file << "            break;\n";
+        }
+        file << "\n";
     }
     
+    file << "        default:\n";
+    file << "            ctx.cpuRegs.pc = next_pc;\n";
+    file << "            return; // Invalid block index\n";
+    file << "        }\n"; // End switch
+    file << "    }\n";     // End while loop
     file << "}\n\n";
+}
+
+
+// New method to handle branches and jumps with proper control flow
+void Recompiler::translate_branch_or_jump(const rabbitizer::InstructionR5900& instr, std::ofstream& file) {
+    uint32_t current_pc = instr.getVram();
+    
+    switch (instr.getUniqueId()) {
+        case RABBITIZER_INSTR_ID_cpu_beqz:
+            file << "//beqz \n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+        case RABBITIZER_INSTR_ID_cpu_b:
+            file << "next_pc = 0x" << std::hex << current_pc << " + " 
+                << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            break;
+        // Conditional branches
+        case RABBITIZER_INSTR_ID_cpu_beq:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bne:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_blez:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bgtz:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bltz:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bgez:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_bnez:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        // Unconditional jumps
+        case RABBITIZER_INSTR_ID_cpu_j:
+            file << "next_pc = (0x" << std::hex << current_pc 
+                 << " & 0xF0000000) | 0x" << std::hex << (instr.Get_instr_index() << 2) << ";\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_jal:
+            file << get_gpr_name(31) << ".UL[0] = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            next_pc = (0x" << std::hex << current_pc 
+                 << " & 0xF0000000) | 0x" << std::hex << (instr.Get_instr_index() << 2) << ";\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_jr:
+            file << "next_pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_jalr:
+            file << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = 0x" 
+                 << std::hex << current_pc << " + 8;\n";
+            file << "            next_pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
+            break;
+
+        // Branch likely instructions
+        case RABBITIZER_INSTR_ID_cpu_beql:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_bnel:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_blezl:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_bltzl:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_bgezl:
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
+                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
+            file << "            } else {\n";
+            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            }\n";
+            break;
+
+        default:
+            // For any unhandled branch/jump instructions, just set next_pc normally
+            file << "// Unhandled branch/jump: " << instr.getOpcodeName() << "\n";
+            file << "            next_pc = 0x" << std::hex << current_pc << " + 8;\n";
+            file << "            exit(1);\n";
+            break;
+    }
 }
 
 void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr, std::ofstream& file) {
@@ -142,6 +389,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         //
         // MIPS I - Arithmetic instructions
         //
+
         case RABBITIZER_INSTR_ID_cpu_add:
         case RABBITIZER_INSTR_ID_cpu_addu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] + " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0];\n";
@@ -458,5 +706,15 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "    // ----------------------------------------------------------------\n";
             file << "      g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";\n";
             file << "    exit(1);\n";
+
+            std::cout << "    // ----------------------------------------------------------------\n";
+            std::cout << "    // UNHANDLED INSTRUCTION: " << instr.getOpcodeName() << "\n";
+            std::cout << "    // Opcode: 0x" << std::hex << static_cast<int>(instr.Get_opcode()) << "\n";
+            std::cout << "    // Function: 0x" << std::hex << static_cast<int>(instr.Get_function()) << "\n";
+            std::cout << "    // Immediate: 0x" << std::hex << instr.Get_immediate() << "\n";
+            std::cout << "    // Address: 0x" << std::hex << instr.getVram() << "\n";
+            std::cout << "    // ----------------------------------------------------------------\n";
+            std::cout << "      g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";\n";
+            std::cout << "    exit(1);\n";
     }
 }
