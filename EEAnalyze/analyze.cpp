@@ -44,13 +44,14 @@ static std::set<uint32_t> load_addresses_from_file(const std::string& path) {
 }
 
 // New function to parse the Ghidra analysis file
-std::vector<Function> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size) {
+std::set<uint32_t> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size) {
     std::vector<Function> functions;
     std::set<std::string> seen_names;
+    std::set<uint32_t> leaders;
     std::ifstream infile(file_path);
     if (!infile.is_open()) {
         std::cerr << "[-] Could not open Ghidra analysis file: " << file_path << std::endl;
-        return functions;
+        return leaders;
     }
     std::string line;
     Function current_function;
@@ -104,12 +105,12 @@ std::vector<Function> parse_ghidra_analysis_file(const std::string& file_path, c
     // Add the very last function in the file
     if (in_function_block && seen_names.find(current_function.name) == seen_names.end()) {
         std::cout << "[+] Analyzing parsed function: " << current_function.name << std::endl;
-        current_function.analyze(text_section_data, text_section_size);
+        leaders = current_function.analyze(text_section_data, text_section_size);
         functions.push_back(current_function);
         seen_names.insert(current_function.name);
     }
     std::cout << "[+] Parsed and analyzed " << functions.size() << " functions from Ghidra analysis file." << std::endl;
-    return functions;
+    return leaders;
 }
 
 // The main entry point for the analysis phase.

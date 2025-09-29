@@ -1,8 +1,10 @@
 # --- Project Setup ---
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 project(Ps2RecompProject CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+
+list(APPEND CMAKE_MODULE_PATH /path/to/your/SDL2/modules)
 
 find_package(SDL2 CONFIG REQUIRED)
 
@@ -36,15 +38,20 @@ target_link_libraries(EEAnalyze PUBLIC rabbitizer elfio)
 # --- Recompiler Tool ---
 add_executable(recompiler_tool
     "${PROJECT_ROOT}/recompiler_tool/main.cpp"
-    "${PROJECT_ROOT}/recompiler_tool/Recompiler.cpp"
+    "${PROJECT_ROOT}/recompiler_tool/recompiler_v2.cpp"
+    
 )
-target_link_libraries(recompiler_tool PRIVATE EEAnalyze)
+
+target_link_libraries(recompiler_tool PRIVATE
+    EEAnalyze
+    SDL2::SDL2
+)
 
 # --- Generated Code ---
 set(ELF_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09")
 set(GHIDRA_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt")
-set(GENERATED_HEADER "${CMAKE_BINARY_DIR}/recompiled_functions.h")
-set(GENERATED_CPP "${CMAKE_BINARY_DIR}/recompiled_functions.cpp")
+set(GENERATED_HEADER "${CMAKE_BINARY_DIR}/recompiled.h")
+set(GENERATED_CPP "${CMAKE_BINARY_DIR}/recompiled.cpp")
 
 add_custom_command(
     OUTPUT ${GENERATED_HEADER} ${GENERATED_CPP}

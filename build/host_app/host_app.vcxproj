@@ -100,7 +100,6 @@
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;RABBITIZER_STATIC;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
@@ -159,7 +158,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RABBITIZER_STATIC;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
@@ -220,7 +218,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Optimization>MinSpace</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RABBITIZER_STATIC;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
@@ -282,7 +279,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RABBITIZER_STATIC;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
@@ -388,7 +384,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\main.cpp" />
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\memory.cpp" />
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\syscalls.cpp" />
-    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\recompiled_functions.cpp" />
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\recompiled.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\ZERO_CHECK.vcxproj">

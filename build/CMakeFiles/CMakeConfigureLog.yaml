@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-      Build started 9/27/2025 6:53:57 PM.
+      Build started 9/29/2025 12:44:24 AM.
       
       Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\3.30.0\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -62,7 +62,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.80
+      Time Elapsed 00:00:00.75
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -88,7 +88,7 @@ events:
       The output was:
       0
       MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-      Build started 9/27/2025 6:53:58 PM.
+      Build started 9/29/2025 12:44:25 AM.
       
       Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\3.30.0\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -126,7 +126,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.82
+      Time Elapsed 00:00:00.72
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -145,10 +145,10 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-7m94vu"
-      binary: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-7m94vu"
+      source: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-1ny2dy"
+      binary: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-1ny2dy"
     cmakeVariables:
-      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
       CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
@@ -160,40 +160,40 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-7m94vu'
+        Change Dir: 'C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-1ny2dy'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_28284.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d1771.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-        Build started 9/27/2025 6:53:59 PM.
+        Build started 9/29/2025 12:44:26 AM.
         
-        Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7m94vu\\cmTC_28284.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1ny2dy\\cmTC_d1771.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_28284.dir\\Debug\\".
+          Creating directory "cmTC_d1771.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7m94vu\\Debug\\".
-          Creating directory "cmTC_28284.dir\\Debug\\cmTC_28284.tlog\\".
+          Creating directory "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1ny2dy\\Debug\\".
+          Creating directory "cmTC_d1771.dir\\Debug\\cmTC_d1771.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_28284.dir\\Debug\\cmTC_28284.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_28284.dir\\Debug\\cmTC_28284.tlog\\unsuccessfulbuild".
+          Creating "cmTC_d1771.dir\\Debug\\cmTC_d1771.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_d1771.dir\\Debug\\cmTC_d1771.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_28284.dir\\Debug\\\\" /Fd"cmTC_28284.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d1771.dir\\Debug\\\\" /Fd"cmTC_d1771.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_28284.dir\\Debug\\\\" /Fd"cmTC_28284.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d1771.dir\\Debug\\\\" /Fd"cmTC_d1771.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7m94vu\\Debug\\cmTC_28284.exe" /INCREMENTAL /ILK:"cmTC_28284.dir\\Debug\\cmTC_28284.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-7m94vu/Debug/cmTC_28284.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-7m94vu/Debug/cmTC_28284.lib" /MACHINE:X64  /machine:x64 cmTC_28284.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_28284.vcxproj -> C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7m94vu\\Debug\\cmTC_28284.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1ny2dy\\Debug\\cmTC_d1771.exe" /INCREMENTAL /ILK:"cmTC_d1771.dir\\Debug\\cmTC_d1771.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-1ny2dy/Debug/cmTC_d1771.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-1ny2dy/Debug/cmTC_d1771.lib" /MACHINE:X64  /machine:x64 cmTC_d1771.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_d1771.vcxproj -> C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1ny2dy\\Debug\\cmTC_d1771.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_28284.dir\\Debug\\cmTC_28284.tlog\\unsuccessfulbuild".
-          Touching "cmTC_28284.dir\\Debug\\cmTC_28284.tlog\\cmTC_28284.lastbuildstate".
-        Done Building Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7m94vu\\cmTC_28284.vcxproj" (default targets).
+          Deleting file "cmTC_d1771.dir\\Debug\\cmTC_d1771.tlog\\unsuccessfulbuild".
+          Touching "cmTC_d1771.dir\\Debug\\cmTC_d1771.tlog\\cmTC_d1771.lastbuildstate".
+        Done Building Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1ny2dy\\cmTC_d1771.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.40
+        Time Elapsed 00:00:00.37
         
       exitCode: 0
   -
@@ -233,8 +233,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-kavfs7"
-      binary: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-kavfs7"
+      source: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-9mcaya"
+      binary: "C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-9mcaya"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -247,40 +247,40 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-kavfs7'
+        Change Dir: 'C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-9mcaya'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_591d5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_08765.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-        Build started 9/27/2025 6:54:00 PM.
+        Build started 9/29/2025 12:44:26 AM.
         
-        Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kavfs7\\cmTC_591d5.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9mcaya\\cmTC_08765.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_591d5.dir\\Debug\\".
+          Creating directory "cmTC_08765.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kavfs7\\Debug\\".
-          Creating directory "cmTC_591d5.dir\\Debug\\cmTC_591d5.tlog\\".
+          Creating directory "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9mcaya\\Debug\\".
+          Creating directory "cmTC_08765.dir\\Debug\\cmTC_08765.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_591d5.dir\\Debug\\cmTC_591d5.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_591d5.dir\\Debug\\cmTC_591d5.tlog\\unsuccessfulbuild".
+          Creating "cmTC_08765.dir\\Debug\\cmTC_08765.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_08765.dir\\Debug\\cmTC_08765.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_591d5.dir\\Debug\\\\" /Fd"cmTC_591d5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_08765.dir\\Debug\\\\" /Fd"cmTC_08765.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_591d5.dir\\Debug\\\\" /Fd"cmTC_591d5.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_08765.dir\\Debug\\\\" /Fd"cmTC_08765.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.30\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kavfs7\\Debug\\cmTC_591d5.exe" /INCREMENTAL /ILK:"cmTC_591d5.dir\\Debug\\cmTC_591d5.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-kavfs7/Debug/cmTC_591d5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-kavfs7/Debug/cmTC_591d5.lib" /MACHINE:X64  /machine:x64 cmTC_591d5.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_591d5.vcxproj -> C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kavfs7\\Debug\\cmTC_591d5.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9mcaya\\Debug\\cmTC_08765.exe" /INCREMENTAL /ILK:"cmTC_08765.dir\\Debug\\cmTC_08765.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-9mcaya/Debug/cmTC_08765.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/CMakeFiles/CMakeScratch/TryCompile-9mcaya/Debug/cmTC_08765.lib" /MACHINE:X64  /machine:x64 cmTC_08765.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_08765.vcxproj -> C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9mcaya\\Debug\\cmTC_08765.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_591d5.dir\\Debug\\cmTC_591d5.tlog\\unsuccessfulbuild".
-          Touching "cmTC_591d5.dir\\Debug\\cmTC_591d5.tlog\\cmTC_591d5.lastbuildstate".
-        Done Building Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kavfs7\\cmTC_591d5.vcxproj" (default targets).
+          Deleting file "cmTC_08765.dir\\Debug\\cmTC_08765.tlog\\unsuccessfulbuild".
+          Touching "cmTC_08765.dir\\Debug\\cmTC_08765.tlog\\cmTC_08765.lastbuildstate".
+        Done Building Project "C:\\Users\\Owner\\Desktop\\PS2_Recomp\\Ps2Recomp\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9mcaya\\cmTC_08765.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.39
+        Time Elapsed 00:00:00.36
         
       exitCode: 0
   -

@@ -4,6 +4,7 @@
 #include "rabbitizer.hpp"
 #include "instructions/InstructionR5900.hpp"
 
+
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -133,6 +134,240 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     file << "// Function at 0x" << std::hex << func.base_address << "\n";
     file << "void " << func.name << "(CpuContext& ctx, uint32_t start_pc) {\n";
     
+    // Generate labels for each block
+    file << "    // Block labels\n";
+    for (size_t i = 0; i < func.blocks.size(); ++i) {
+        file << "    // block_" << i << " = 0x" << std::hex << func.blocks[i].start_address << "\n";
+    }
+    file << "\n";
+    
+    // Find starting block
+    file << "    // Jump to the appropriate starting point\n";
+    file << "    switch(start_pc) {\n";
+    for (size_t i = 0; i < func.blocks.size(); ++i) {
+        file << "        case 0x" << std::hex << func.blocks[i].start_address << ": goto block_" << i << ";\n";
+    }
+    file << "        default: return; // Invalid start address\n";
+    file << "    }\n\n";
+    
+    // Generate each block with labels
+    for (size_t block_idx = 0; block_idx < func.blocks.size(); ++block_idx) {
+        const auto& block = func.blocks[block_idx];
+        
+        file << "block_" << block_idx << ": // 0x" << std::hex << block.start_address << "\n";
+        file << "    {\n";
+        
+        // Process instructions
+        bool has_branch = false;
+        for (size_t i = 0; i < block.instructions.size(); ++i) {
+            const auto& instr_struct = block.instructions[i];
+            rabbitizer::InstructionR5900 instr(instr_struct.word, instr_struct.vram);
+            
+            if (has_delay_slot(instr)) {
+                // Execute delay slot first
+                if (i + 1 < block.instructions.size()) {
+                    const auto& delay_slot_struct = block.instructions[i + 1];
+                    rabbitizer::InstructionR5900 delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
+                    file << "        ";
+                    translate_instruction(delay_slot_instr, file);
+                }
+                
+                // Now handle the branch/jump
+                file << "        ";
+                translate_branch_with_goto(instr, func, block_idx, file);
+                
+                has_branch = true;
+                break; // Don't process more instructions after branch
+            } else {
+                file << "        ";
+                translate_instruction(instr, file);
+            }
+        }
+        
+        // If no branch, fall through to next block
+        if (!has_branch) {
+            if (block.fall_through_successor_index != 0xffffffff ) {
+                file << "        // Fall through to next block\n";
+                file << "/*" << "\n";
+                file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+                file << "*/" << "\n";
+                file << "        goto block_" << block.fall_through_successor_index << ";\n";
+            } else {
+                file << "        return; // End of function\n";
+            }
+        }
+        
+        file << "    }\n\n";
+    }
+    
+    file << "}\n\n";
+}
+
+void Recompiler::translate_branch_with_goto(const rabbitizer::InstructionR5900& instr, 
+                                           const Function& func,
+                                           size_t current_block_idx,
+                                           std::ofstream& file) {
+    const auto& block = func.blocks[current_block_idx];
+    
+    switch (instr.getUniqueId()) {
+        // Conditional branches
+        case RABBITIZER_INSTR_ID_cpu_beq:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bne:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_beqz:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == 0) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bnez:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bgtz:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_blez:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bltz:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";  
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_bgez:
+            file << "/*" << "\n";
+            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
+            file << "*/" << "\n";
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) {\n";
+            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
+            file << "        } else {\n";
+            file << "            goto block_" << block.fall_through_successor_index << ";\n";
+            file << "        }\n";
+            break;
+            
+        // Unconditional branches/jumps
+        case RABBITIZER_INSTR_ID_cpu_b:
+        case RABBITIZER_INSTR_ID_cpu_j:
+            if (block.fall_through_successor_index != 0xffffffff) {
+                file << "/*" << "\n";
+                file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+                file << "*/" << "\n";
+                file << "goto block_" << block.fall_through_successor_index << ";\n";
+            } else {
+                // Jump outside function
+                file << "ctx.cpuRegs.pc = 0x" << std::hex 
+                     << ((instr.getVram() & 0xF0000000) | (instr.Get_instr_index() << 2)) << ";\n";
+                file << "        return; // Jump outside function\n";
+            }
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_jal:
+            file << get_gpr_name(31) << ".UL[0] = 0x" << std::hex << (instr.getVram() + 8) << ";\n";
+            if (block.fall_through_successor_index != 0xffffffff) {
+                file << "/*" << "\n";
+                file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
+                file << "*/" << "\n";
+                file << "        goto block_" << block.fall_through_successor_index << ";\n";
+            } else {
+                file << "        ctx.cpuRegs.pc = 0x" << std::hex 
+                     << ((instr.getVram() & 0xF0000000) | (instr.Get_instr_index() << 2)) << ";\n";
+                file << "        return; // Call outside function\n";
+            }
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_jr:
+            if (static_cast<uint8_t>(instr.GetO32_rs()) == 31) {
+                file << "return; // Return from function\n";
+            } else {
+                // Indirect jump - need runtime dispatch
+                file << "// Indirect jump - would need jump table analysis\n";
+                file << "        ctx.cpuRegs.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
+                file << "        return; // Indirect jump\n";
+            }
+            break;
+            
+        case RABBITIZER_INSTR_ID_cpu_jalr:
+            file << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = 0x" 
+                 << std::hex << (instr.getVram() + 8) << ";\n";
+            file << "        ctx.cpuRegs.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
+            file << "        return; // Indirect call\n";
+            break;
+            
+        default:
+            file << "// Unhandled branch type: " << instr.getOpcodeName() << "\n";
+            file << "        return;\n";
+            break;
+    }
+}
+/*
+void Recompiler::recompile_function_v1(const Function& func, std::ofstream& file) {
+    file << "// Function at 0x" << std::hex << func.base_address << "\n";
+    file << "void " << func.name << "(CpuContext& ctx, uint32_t start_pc) {\n";
+    
     // Create address-to-block-index mapping
     file << "    // Address to block index mapping\n";
     file << "    auto get_block_index = [](uint32_t address) -> int {\n";
@@ -219,6 +454,9 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     file << "    }\n";     // End while loop
     file << "}\n\n";
 }
+
+*/
+
 
 
 // New method to handle branches and jumps with proper control flow

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\CMakeFiles\ae2971c62e6c289820c581d2cedc14b2\recompiled_functions.h.rule">
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\CMakeFiles\ae2971c62e6c289820c581d2cedc14b2\recompiled.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\CMakeFiles\3343d4bc9312bb411f782c61d079fe5b\generate_recompiled_code.rule">

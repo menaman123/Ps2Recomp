@@ -43,7 +43,7 @@ public:
     Function(uint32_t address);
 
     // The primary analysis entry point. Uses the object's size member.
-    void analyze(const uint8_t* elf_data, uint32_t elf_size);
+    std::set<uint32_t> analyze(const uint8_t* elf_data, uint32_t elf_size);
     
     void dump_to_console() const;
 

@@ -27,6 +27,10 @@ private:
     void recompile_function(const Function& func, std::ofstream& file);
     void translate_instruction(const rabbitizer::InstructionR5900& instr, std::ofstream& file);
     void translate_branch_or_jump(const rabbitizer::InstructionR5900& instr, std::ofstream& file);
+    void Recompiler::translate_branch_with_goto(const rabbitizer::InstructionR5900& instr, 
+                                           const Function& func,
+                                           size_t current_block_idx,
+                                           std::ofstream& file);
 
     // Helper function to identify instructions that have a delay slot.
     bool has_delay_slot(const rabbitizer::InstructionR5900& instr) const;

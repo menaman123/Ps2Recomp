@@ -9,7 +9,7 @@
 
 // Loads a set of addresses from a text file (one hex address per line).
 std::set<uint32_t> load_addresses_from_file(const std::string& path);
-std::vector<Function> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size);
+std::set<uint32_t> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size);
 
 /**
  * Scans the entire .text section to find the starting address of every function

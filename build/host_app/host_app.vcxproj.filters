@@ -10,7 +10,7 @@
     <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\syscalls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\recompiled_functions.cpp">
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\recompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -483,6 +483,14 @@ void Function::create_blocks_from_leaders(const uint8_t* code, const std::set<ui
     std::vector<uint32_t> sorted_leaders(leaders.begin(), leaders.end());
     std::sort(sorted_leaders.begin(), sorted_leaders.end());
     std::cout << "-----------------Begin basic blocks from leaders------------------" << std::endl;
+    std::cout << "Function size: " << this->size << std::endl;
+    std::cout << "Number of Instructions" << this->size / 4 << std::endl;
+
+
+    for (uint32_t leader : sorted_leaders) {
+        std::cout << "Leader Address: 0x" << std::hex << leader << std::dec << std::endl;
+    }
+    std::cout << "-----------------End basic blocks from leaders------------------" << std::endl;
 
     for (size_t i = 0; i < sorted_leaders.size(); ++i) {
         
@@ -491,10 +499,14 @@ void Function::create_blocks_from_leaders(const uint8_t* code, const std::set<ui
         uint32_t block_end_addr_exclusive = (i + 1 < sorted_leaders.size()) ? sorted_leaders[i+1] : (this->base_address + this->size);
 
         // Ensure the block is within the function's boundaries
-        if (block_start_addr < this->base_address || block_start_addr >= this->base_address + this->size) continue;
+        /*
+                if (block_start_addr < this->base_address || block_start_addr >= this->base_address + this->size) continue;
         if (block_end_addr_exclusive > this->base_address + this->size) {
             block_end_addr_exclusive = this->base_address + this->size;
         }
+        
+        */
+
         bool is_last_block = false;
         if (i + 1 < sorted_leaders.size()){
             uint32_t next_leader_addr = sorted_leaders[i + 1];
@@ -550,6 +562,7 @@ void Function::create_blocks_from_leaders(const uint8_t* code, const std::set<ui
             //    The arguments are: instruction, destination buffer, immediate override, override length, extra justification.
             //    We can pass NULL and 0 for the simple case.
             RabbitizerInstruction_disassemble(&decoded_instr, instr_buffer, NULL, 0, 0);
+            std::cout << "Address:" << std::endl;
             std::cout << "Address: 0x"<< std::hex << addr << " | Decoded instruction: " << instr_buffer << std::endl;
             current_block.instructions.push_back(decoded_instr);
         }
@@ -845,10 +858,10 @@ void Function::run_data_flow_analysis() {
     std::cout << "      [DFA] Analysis for " << name << " finished after " << iterations << " iterations." << std::endl;
 }
 
-void Function::analyze(const uint8_t* elf_data, uint32_t elf_size) {
+std::set<uint32_t> Function::analyze(const uint8_t* elf_data, uint32_t elf_size) {
     if (this->size == 0) {
         std::cout << "    [!] Skipping analysis for " << name << " because size is 0." << std::endl;
-        return;
+        return std::set<uint32_t>();
     }
 
     // NOTE: This calculation assumes the ELF is loaded at address 0 in memory.
@@ -876,6 +889,8 @@ void Function::analyze(const uint8_t* elf_data, uint32_t elf_size) {
 
     std::cout << "    [7/7] Running data flow analysis..." << std::endl;
     run_data_flow_analysis();
+
+    return leaders;
 }
 
 void Function::dump_to_console() const {

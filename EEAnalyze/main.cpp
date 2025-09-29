@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <set>
 #include <iomanip>
 #include <elfio/elfio.hpp>
 #include <sys/stat.h> // Required for stat
@@ -153,7 +154,7 @@ int main(int argc, char** argv) {
     uint32_t text_section_size = text_section->get_size();
 
       // Now call the parser with the new arguments
-    std::vector<Function> analyzed_functions = parse_ghidra_analysis_file(ghidra_path, text_section_data, text_section_size);
+    std::set<uint32_t> analyzed_functions = parse_ghidra_analysis_file(ghidra_path, text_section_data, text_section_size);
     std::cout << "--- PARSING COMPLETE ---" << std::endl;
     std::cout << "\n======================================================================" << std::endl;
     std::cout << "---                       FUNCTION SUMMARY                       ---" << std::endl;
