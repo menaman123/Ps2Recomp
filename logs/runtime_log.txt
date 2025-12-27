@@ -1,0 +1,237 @@
+Starting the host application...
+Executing recompiled code...
+Syscall: InitMainThread() called!
+Syscall: InitHeap() called!
+Syscall: CreateSema() called!
+Syscall: CreateSema() called!
+Syscall: SetSysCall() called!
+SetSyscall: Index 131 redirected to Guest Address 0x2d4ec8 (Table Entry at 0x800004ec)
+Syscall: SetSysCall() called!
+SetSyscall: Index 90 redirected to Guest Address 0x2d4e90 (Table Entry at 0x80000448)
+Executing CUSTOM guest syscall at 0x2d4ec8
+Executing CUSTOM guest syscall at 0x2d4ec8
+Syscall: SetSysCall() called!
+SetSyscall: Index 90 redirected to Guest Address 0x2d5290 (Table Entry at 0x80000448)
+Executing CUSTOM guest syscall at 0x2d5290
+Executing CUSTOM guest syscall at 0x2d5290
+Syscall: FlushCache(mode: 0) at PC: 0x2d5290
+Syscall: FlushCache(mode: 2) at PC: 0x2d5290
+  [!] Instruction Cache Invalidation: Possible Dynamic Code Execution.
+Syscall: SetSysCall() called!
+SetSyscall: Index 91 redirected to Guest Address 0x80076000 (Table Entry at 0x8000044c)
+Executing CUSTOM guest syscall at 0x80076000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80076000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80076000: lui         $v0, 0x8007
+  [     2] 0x80076004: daddu       $a1, $zero, $zero
+  [     3] 0x80076008: addiu       $v1, $v0, 0x6710
+  [     4] 0x8007600c: nop
+  [     5] 0x80076010: lw          $v0, 0x0($v1)
+  [     6] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [     7] 0x8007601c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d5378
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:      7 instructions               ║
+║  Final PC: 0x002d5378                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 252 redirected to Guest Address 0x80076440 (Table Entry at 0x800006d0)
+Executing CUSTOM guest syscall at 0x80076000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80076000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80076000: lui         $v0, 0x8007
+  [     2] 0x80076004: daddu       $a1, $zero, $zero
+  [     3] 0x80076008: addiu       $v1, $v0, 0x6710
+  [     4] 0x8007600c: nop
+  [     5] 0x80076010: lw          $v0, 0x0($v1)
+  [     6] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [     7] 0x80076024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [     9] 0x80076010: lw          $v0, 0x0($v1)
+  [    10] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    11] 0x8007601c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d5378
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     11 instructions               ║
+║  Final PC: 0x002d5378                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 254 redirected to Guest Address 0x80076440 (Table Entry at 0x800006d8)
+Executing CUSTOM guest syscall at 0x80076000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80076000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80076000: lui         $v0, 0x8007
+  [     2] 0x80076004: daddu       $a1, $zero, $zero
+  [     3] 0x80076008: addiu       $v1, $v0, 0x6710
+  [     4] 0x8007600c: nop
+  [     5] 0x80076010: lw          $v0, 0x0($v1)
+  [     6] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [     7] 0x80076024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [     9] 0x80076010: lw          $v0, 0x0($v1)
+  [    10] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    11] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    13] 0x80076010: lw          $v0, 0x0($v1)
+  [    14] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    15] 0x8007601c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d5378
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     15 instructions               ║
+║  Final PC: 0x002d5378                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 253 redirected to Guest Address 0x800762a0 (Table Entry at 0x800006d4)
+Executing CUSTOM guest syscall at 0x80076000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80076000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80076000: lui         $v0, 0x8007
+  [     2] 0x80076004: daddu       $a1, $zero, $zero
+  [     3] 0x80076008: addiu       $v1, $v0, 0x6710
+  [     4] 0x8007600c: nop
+  [     5] 0x80076010: lw          $v0, 0x0($v1)
+  [     6] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [     7] 0x80076024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [     9] 0x80076010: lw          $v0, 0x0($v1)
+  [    10] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    11] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    13] 0x80076010: lw          $v0, 0x0($v1)
+  [    14] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    15] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    16] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    17] 0x80076010: lw          $v0, 0x0($v1)
+  [    18] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    19] 0x8007601c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d5378
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     19 instructions               ║
+║  Final PC: 0x002d5378                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 255 redirected to Guest Address 0x800762a0 (Table Entry at 0x800006dc)
+Executing CUSTOM guest syscall at 0x80076000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80076000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80076000: lui         $v0, 0x8007
+  [     2] 0x80076004: daddu       $a1, $zero, $zero
+  [     3] 0x80076008: addiu       $v1, $v0, 0x6710
+  [     4] 0x8007600c: nop
+  [     5] 0x80076010: lw          $v0, 0x0($v1)
+  [     6] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [     7] 0x80076024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [     9] 0x80076010: lw          $v0, 0x0($v1)
+  [    10] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    11] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    13] 0x80076010: lw          $v0, 0x0($v1)
+  [    14] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    15] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    16] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    17] 0x80076010: lw          $v0, 0x0($v1)
+  [    18] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    19] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    20] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    21] 0x80076010: lw          $v0, 0x0($v1)
+  [    22] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    23] 0x8007601c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d5378
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     23 instructions               ║
+║  Final PC: 0x002d5378                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+Executing CUSTOM guest syscall at 0x80076000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80076000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80076000: lui         $v0, 0x8007
+  [     2] 0x80076004: daddu       $a1, $zero, $zero
+  [     3] 0x80076008: addiu       $v1, $v0, 0x6710
+  [     4] 0x8007600c: nop
+  [     5] 0x80076010: lw          $v0, 0x0($v1)
+  [     6] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [     7] 0x80076024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [     9] 0x80076010: lw          $v0, 0x0($v1)
+  [    10] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    11] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    13] 0x80076010: lw          $v0, 0x0($v1)
+  [    14] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    15] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    16] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    17] 0x80076010: lw          $v0, 0x0($v1)
+  [    18] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    19] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    20] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    21] 0x80076010: lw          $v0, 0x0($v1)
+  [    22] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80076024
+  [    23] 0x80076024: sltiu       $v0, $a1, 0x6
+  [    24] 0x80076028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80076010
+  [    25] 0x80076010: lw          $v0, 0x0($v1)
+  [    26] 0x80076014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    27] 0x8007601c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d5378
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     27 instructions               ║
+║  Final PC: 0x002d5378                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 8 redirected to Guest Address 0x800766c0 (Table Entry at 0x80000300)
+Unhandled OP Code: 0x2c6eac Instruction: dsll

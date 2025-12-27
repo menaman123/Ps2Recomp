@@ -1,12 +1,96 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+        // ============================================
+        // Primary: Debug host_app
+        // ============================================
         {
+            "name": "Debug host_app",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/host_app/Debug/host_app.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal",
+            "externalConsole": false
+        },
 
+        // ============================================
+        // With Auto-Build (rebuilds before debugging)
+        // ============================================
+        {
+            "name": "Debug host_app (Auto-Build)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/host_app/Debug/host_app.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal",
+            "preLaunchTask": "CMake: Build host_app"  // Auto-builds first!
+        },
+
+        // ============================================
+        // Stop at main() (for debugging initialization)
+        // ============================================
+        {
+            "name": "Debug host_app (Stop at Entry)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/host_app/Debug/host_app.exe",
+            "args": [],
+            "stopAtEntry": true,  // Breaks at main()
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+
+        // ============================================
+        // Verbose Logging (for tracking crashes)
+        // ============================================
+        {
+            "name": "Debug host_app (Verbose)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/host_app/Debug/host_app.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal",
+            "logging": {
+                "moduleLoad": true,
+                "trace": true,
+                "programOutput": true,
+                "exceptions": true
+            }
+        },
+
+        // ============================================
+        // BONUS: Debug recompiler_tool (code generator)
+        // ============================================
+        {
+            "name": "Debug recompiler_tool",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/recompiler_tool/Debug/recompiler_tool.exe",
+            "args": [
+                "--input",
+                "C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09",
+                "--ghidra-input",
+                "C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt",
+                "--output-header",
+                "${workspaceFolder}/build/recompiled.h",
+                "--output-cpp",
+                "${workspaceFolder}/build/recompiled.cpp"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal"
         }
     ]
 }

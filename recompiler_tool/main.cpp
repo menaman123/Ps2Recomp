@@ -1,10 +1,12 @@
-#include "recompiler_v2.h"
+#include "recompiler.h"
 #include "EEAnalyze/analyze.h"
 #include <elfio/elfio.hpp>
+#include <EEAnalyze/Function.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
+#include <filesystem> 
 
 int main(int argc, char* argv[]) {
     std::string elf_path;
@@ -35,6 +37,31 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    const std::string log_file_path = "logs/recompiler_tool/runtime_log.txt";
+
+    try {
+        // 2. Get the directory part of the path
+        std::filesystem::path dir_path = std::filesystem::path(log_file_path).parent_path();
+
+        // 3. Create all directories in the path if they don't exist
+        if (!dir_path.empty() && !std::filesystem::exists(dir_path)) {
+            std::filesystem::create_directories(dir_path);
+        }
+
+        // Now, safely open the log file
+        log_file.open(log_file_path);
+        if (!log_file.is_open()) {
+            // If it still fails, it's a different problem (e.g., permissions)
+            std::cerr << "Error: Could not open log file after creating directories!" << std::endl;
+            return 1;
+        }
+
+    } catch (const std::filesystem::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+        return 1;
+    }
+
+
     // --- 2. Read ELF File ---
     ELFIO::elfio reader;
     if (!reader.load(elf_path)) {
@@ -54,7 +81,8 @@ int main(int argc, char* argv[]) {
 
     // --- 3. Analyze Functions ---
     // Corrected function call
-    std::set<uint32_t> analyzed_functions = parse_ghidra_analysis_file(ghidra_path, text_data, text_size);
+
+    const std::map<uint32_t, Function>& analyzed_functions = parse_ghidra_function_file(ghidra_path, text_data, text_size, text_base, log_file);
 
     if (analyzed_functions.empty()) {
         std::cerr << "[-] Analysis failed or no functions were found from the Ghidra file." << std::endl;
@@ -63,10 +91,9 @@ int main(int argc, char* argv[]) {
     std::cout << "[+] Analysis complete. Found " << analyzed_functions.size() << " functions." << std::endl;
 
     // --- 5. Recompile ---
-    RecompilerV2 recompiler(text_data, text_size, text_base, text_size, analyzed_functions);
-    recompiler.analyze();
-    recompiler.generate_code("recompiled.cpp");
-    recompiler.generate_header("recompiled.h");
+    Recompiler recompiler(analyzed_functions);
+    recompiler.recompile_to_files("recompiled.h", "recompiled.cpp");
+    
 
     return 0;
 }

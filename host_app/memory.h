@@ -14,6 +14,8 @@ struct alignas(16) QuadWord {
 
 
 namespace memory {
+    uint8_t* translate_address(uint32_t address, size_t size);
+    void initialize();
     // Templated read and write functions
     template <typename T>
     T read(uint32_t address);

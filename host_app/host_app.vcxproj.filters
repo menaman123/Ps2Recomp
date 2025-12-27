@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\syscalls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\recompiled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\host_app\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9E523174-88D1-3613-8699-15DF51002B9E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -88,7 +88,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj /Zm500</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -147,7 +147,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj /Zm500</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -155,7 +155,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SupportJustMyCode></SupportJustMyCode>
@@ -207,7 +207,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj /Zm500</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -215,7 +215,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SupportJustMyCode></SupportJustMyCode>
@@ -267,7 +267,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\cplusplus\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\include\generated;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\rabbitizer\tables;C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\include\ELFIO;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include" /external:I "C:/Users/Owner/Desktop/PS2_Recomp/vcpkg/installed/x64-windows/include/SDL2" /bigobj /Zm500</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -276,7 +276,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MinimalRebuild></MinimalRebuild>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SupportJustMyCode></SupportJustMyCode>

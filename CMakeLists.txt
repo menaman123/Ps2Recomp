@@ -4,8 +4,6 @@ project(Ps2RecompProject CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
-list(APPEND CMAKE_MODULE_PATH /path/to/your/SDL2/modules)
-
 find_package(SDL2 CONFIG REQUIRED)
 
 # --- Dependencies (elfio and rabbitizer) ---
@@ -28,9 +26,7 @@ target_compile_definitions(rabbitizer PUBLIC RABBITIZER_STATIC)
 
 # --- EEAnalyze Library ---
 add_library(EEAnalyze STATIC
-    "${PROJECT_ROOT}/EEAnalyze/Function.cpp"
     "${PROJECT_ROOT}/EEAnalyze/analyze.cpp"
-    "${PROJECT_ROOT}/EEAnalyze/DataFlowEngine.cpp"
 )
 target_include_directories(EEAnalyze PUBLIC "${PROJECT_ROOT}")
 target_link_libraries(EEAnalyze PUBLIC rabbitizer elfio)
@@ -38,7 +34,8 @@ target_link_libraries(EEAnalyze PUBLIC rabbitizer elfio)
 # --- Recompiler Tool ---
 add_executable(recompiler_tool
     "${PROJECT_ROOT}/recompiler_tool/main.cpp"
-    "${PROJECT_ROOT}/recompiler_tool/recompiler_v2.cpp"
+    "${PROJECT_ROOT}/recompiler_tool/recompiler.cpp"
+    "${PROJECT_ROOT}/EEAnalyze/analyze.cpp"
     
 )
 
@@ -49,7 +46,7 @@ target_link_libraries(recompiler_tool PRIVATE
 
 # --- Generated Code ---
 set(ELF_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09")
-set(GHIDRA_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt")
+set(GHIDRA_FILE_PATH "C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/extracted_functions.json")
 set(GENERATED_HEADER "${CMAKE_BINARY_DIR}/recompiled.h")
 set(GENERATED_CPP "${CMAKE_BINARY_DIR}/recompiled.cpp")
 
@@ -65,7 +62,17 @@ add_custom_target(generate_recompiled_code DEPENDS ${GENERATED_HEADER} ${GENERAT
 # --- Host App ---
 add_subdirectory(host_app)
 
-target_compile_options(host_app PRIVATE /bigobj)
+target_compile_options(host_app PRIVATE 
+    /bigobj
+    /Od          # No optimization
+    /Zm500       # More memory
+)
+
+# Single-threaded build
+set_property(GLOBAL PROPERTY JOB_POOLS one_job=1)
+set(CMAKE_JOB_POOL_COMPILE one_job)
+
+set(CMAKE_BUILD_PARALLEL_LEVEL 1)
 
 # Crucially, tell host_app where to find the generated header
 target_include_directories(host_app PUBLIC

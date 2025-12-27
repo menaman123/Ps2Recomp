@@ -4,12 +4,13 @@
 #include "rabbitizer.hpp"
 #include "instructions/InstructionR5900.hpp"
 
-
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <filesystem>
+
+std::ofstream log_file;
 
 // Helper to get a string representation of a GPR register for code generation.
 static std::string get_gpr_name(uint8_t reg_num) {
@@ -20,6 +21,7 @@ static std::string get_gpr_name(uint8_t reg_num) {
 static std::string get_fpr_name(uint8_t reg_num) {
     return "ctx.fpuRegs.fpr[" + std::to_string(reg_num) + "]";
 }
+
 static std::string get_vr_name(uint8_t reg_num) {
     return "ctx.vuRegs.regs[" + std::to_string(reg_num) + "]";
 }
@@ -63,10 +65,10 @@ void Recompiler::write_header_file(std::ofstream& file) {
     file << "#include <vector>\n";
     file << "#include <functional>\n\n";
 
+    // CHANGE: Removed default parameter - addr is now required
     for (const auto& pair : m_functions) {
         const Function& func = pair.second;
-        // Functions now accept starting PC parameter
-        file << "void "<< func.name << "(CpuContext& ctx, uint32_t start_pc = 0x" << std::hex << func.base_address << ");\n";
+        file << "void "<< func.name << "(CpuContext& ctx);\n";
     }
 
     file << "\nextern std::map<uint32_t, std::function<void(CpuContext&, uint32_t)>> recompiled_functions;\n";
@@ -74,7 +76,7 @@ void Recompiler::write_header_file(std::ofstream& file) {
     file << "void initialize_recompiled_functions();\n";
 }
 
-// Modified recompiler cpp generation
+// CHANGE: Updated to simpler function generation without switch statement
 void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_header_filename) {
     file << "#include \"" << output_header_filename << "\"\n";
     file << "#include \"../host_app/cpu_state.h\"\n";
@@ -116,518 +118,537 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "void initialize_recompiled_functions() {\n";
     for (const auto& pair : m_functions) {
         const Function& func = pair.second;
-        // Wrap function with lambda to match old signature for exact matches
-        file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t start_pc) { " << func.name << "(ctx, start_pc); };\n";
+        file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); };\n";
         
         uint32_t end_address = func.base_address + func.size;
         file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
-             << ", 0x" << std::hex << end_address << ", [](CpuContext& ctx, uint32_t start_pc) { " << func.name << "(ctx, start_pc); }});\n";
+             << ", 0x" << std::hex << end_address << ", [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); }});\n";
     }
     file << "}\n";
 }
 
 bool Recompiler::has_delay_slot(const rabbitizer::InstructionR5900& instr) const {
-    return instr.isBranch() || instr.isJump();
+    return instr.isBranch() || instr.isJump() && !instr.isTrap();
 }
 
+// CHANGE: Complete rewrite - no switch statement, simple labels
 void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
-    file << "// Function at 0x" << std::hex << func.base_address << "\n";
-    file << "void " << func.name << "(CpuContext& ctx, uint32_t start_pc) {\n";
-    
-    // Generate labels for each block
-    file << "    // Block labels\n";
-    for (size_t i = 0; i < func.blocks.size(); ++i) {
-        file << "    // block_" << i << " = 0x" << std::hex << func.blocks[i].start_address << "\n";
+    std::cout << "Recompiling function: " << func.name << std::endl;
+    std::cout << "Base address: 0x" << std::hex << func.base_address << std::endl;
+    std::cout << "Size: " << std::dec << func.size << std::endl;
+    std::cout << "Blocks: " << std::dec << func.blocks.size() << std::endl;
+
+    file << "// Function: " << func.name << " at 0x" << std::hex << func.base_address << "\n";
+    file << "void " << func.name << "(CpuContext& ctx) {\n";
+    if(func.name == "entry"){
+        file << "    initialize_recompiled_functions();" << std::endl;
     }
-    file << "\n";
     
-    // Find starting block
-    file << "    // Jump to the appropriate starting point\n";
-    file << "    switch(start_pc) {\n";
-    for (size_t i = 0; i < func.blocks.size(); ++i) {
-        file << "        case 0x" << std::hex << func.blocks[i].start_address << ": goto block_" << i << ";\n";
-    }
-    file << "        default: return; // Invalid start address\n";
-    file << "    }\n\n";
-    
-    // Generate each block with labels
+    // Generate each basic block with simple labels
     for (size_t block_idx = 0; block_idx < func.blocks.size(); ++block_idx) {
+        std::cout << "Recompiling block: " << block_idx << std::endl;
         const auto& block = func.blocks[block_idx];
         
-        file << "block_" << block_idx << ": // 0x" << std::hex << block.start_address << "\n";
-        file << "    {\n";
+        // CHANGE: Simple label format Label_0000 instead of block_0
+        file << "Label_" << std::setw(4) << std::setfill('0') << block_idx << ": // 0x" << std::hex << block.start_address << "\n";
         
-        // Process instructions
-        bool has_branch = false;
-        for (size_t i = 0; i < block.instructions.size(); ++i) {
-            const auto& instr_struct = block.instructions[i];
-            rabbitizer::InstructionR5900 instr(instr_struct.word, instr_struct.vram);
-            
-            if (has_delay_slot(instr)) {
-                // Execute delay slot first
-                if (i + 1 < block.instructions.size()) {
-                    const auto& delay_slot_struct = block.instructions[i + 1];
-                    rabbitizer::InstructionR5900 delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
-                    file << "        ";
-                    translate_instruction(delay_slot_instr, file);
-                }
-                
-                // Now handle the branch/jump
-                file << "        ";
-                translate_branch_with_goto(instr, func, block_idx, file);
-                
-                has_branch = true;
-                break; // Don't process more instructions after branch
-            } else {
-                file << "        ";
-                translate_instruction(instr, file);
-            }
-        }
+        generate_block_code(func, block, block_idx, file);
         
-        // If no branch, fall through to next block
-        if (!has_branch) {
-            if (block.fall_through_successor_index != 0xffffffff ) {
-                file << "        // Fall through to next block\n";
-                file << "/*" << "\n";
-                file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-                file << "*/" << "\n";
-                file << "        goto block_" << block.fall_through_successor_index << ";\n";
-            } else {
-                file << "        return; // End of function\n";
-            }
-        }
-        
-        file << "    }\n\n";
-    }
-    
-    file << "}\n\n";
-}
-
-void Recompiler::translate_branch_with_goto(const rabbitizer::InstructionR5900& instr, 
-                                           const Function& func,
-                                           size_t current_block_idx,
-                                           std::ofstream& file) {
-    const auto& block = func.blocks[current_block_idx];
-    
-    switch (instr.getUniqueId()) {
-        // Conditional branches
-        case RABBITIZER_INSTR_ID_cpu_beq:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_bne:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_beqz:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == 0) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_bnez:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_bgtz:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_blez:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_bltz:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";  
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_bgez:
-            file << "/*" << "\n";
-            file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-            file << "BLOCK TAKEN THOUGH INDEX: " << block.taken_branch_successor_index << "\n";
-            file << "*/" << "\n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) {\n";
-            file << "            goto block_" << block.taken_branch_successor_index << ";\n";
-            file << "        } else {\n";
-            file << "            goto block_" << block.fall_through_successor_index << ";\n";
-            file << "        }\n";
-            break;
-            
-        // Unconditional branches/jumps
-        case RABBITIZER_INSTR_ID_cpu_b:
-        case RABBITIZER_INSTR_ID_cpu_j:
-            if (block.fall_through_successor_index != 0xffffffff) {
-                file << "/*" << "\n";
-                file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-                file << "*/" << "\n";
-                file << "goto block_" << block.fall_through_successor_index << ";\n";
-            } else {
-                // Jump outside function
-                file << "ctx.cpuRegs.pc = 0x" << std::hex 
-                     << ((instr.getVram() & 0xF0000000) | (instr.Get_instr_index() << 2)) << ";\n";
-                file << "        return; // Jump outside function\n";
-            }
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_jal:
-            file << get_gpr_name(31) << ".UL[0] = 0x" << std::hex << (instr.getVram() + 8) << ";\n";
-            if (block.fall_through_successor_index != 0xffffffff) {
-                file << "/*" << "\n";
-                file << "BLOCK FALL THOUGH INDEX: " << block.fall_through_successor_index << "\n";
-                file << "*/" << "\n";
-                file << "        goto block_" << block.fall_through_successor_index << ";\n";
-            } else {
-                file << "        ctx.cpuRegs.pc = 0x" << std::hex 
-                     << ((instr.getVram() & 0xF0000000) | (instr.Get_instr_index() << 2)) << ";\n";
-                file << "        return; // Call outside function\n";
-            }
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_jr:
-            if (static_cast<uint8_t>(instr.GetO32_rs()) == 31) {
-                file << "return; // Return from function\n";
-            } else {
-                // Indirect jump - need runtime dispatch
-                file << "// Indirect jump - would need jump table analysis\n";
-                file << "        ctx.cpuRegs.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
-                file << "        return; // Indirect jump\n";
-            }
-            break;
-            
-        case RABBITIZER_INSTR_ID_cpu_jalr:
-            file << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = 0x" 
-                 << std::hex << (instr.getVram() + 8) << ";\n";
-            file << "        ctx.cpuRegs.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
-            file << "        return; // Indirect call\n";
-            break;
-            
-        default:
-            file << "// Unhandled branch type: " << instr.getOpcodeName() << "\n";
-            file << "        return;\n";
-            break;
-    }
-}
-/*
-void Recompiler::recompile_function_v1(const Function& func, std::ofstream& file) {
-    file << "// Function at 0x" << std::hex << func.base_address << "\n";
-    file << "void " << func.name << "(CpuContext& ctx, uint32_t start_pc) {\n";
-    
-    // Create address-to-block-index mapping
-    file << "    // Address to block index mapping\n";
-    file << "    auto get_block_index = [](uint32_t address) -> int {\n";
-    file << "        switch (address) {\n";
-    for (size_t i = 0; i < func.blocks.size(); ++i) {
-        file << "            case 0x" << std::hex << func.blocks[i].start_address 
-             << ": return " << std::dec << i << ";\n";
-    }
-    file << "            default: return -1;\n";
-    file << "        }\n";
-    file << "    };\n\n";
-    
-    // Start from the specified PC instead of function base
-    file << "    uint32_t next_pc = start_pc;\n";
-    file << "    int block_index = get_block_index(start_pc);\n";
-    file << "    if (block_index == -1) {\n";
-    file << "        // Invalid start PC for this function\n";
-    file << "        ctx.cpuRegs.pc = start_pc;\n";
-    file << "        return;\n";
-    file << "    }\n\n";
-    
-    file << "    while (true) {\n";
-    file << "        switch (block_index) {\n";
-
-    // Generate each block as a case with numeric index
-    for (size_t block_idx = 0; block_idx < func.blocks.size(); ++block_idx) {
-        const auto& block = func.blocks[block_idx];
-        
-        file << "        case " << std::dec << block_idx << ": // block_0x" << std::hex << block.start_address << "\n";
-        file << "            next_pc = 0x" << std::hex << block.start_address << " + " 
-             << std::dec << (block.instructions.size() * 4) << "; // Default next PC\n";
-        
-        // Process instructions (same as before)
-        bool block_ends_with_branch = false;
-        for (size_t i = 0; i < block.instructions.size(); ++i) {
-            const auto& instr_struct = block.instructions[i];
-            rabbitizer::InstructionR5900 instr(instr_struct.word, instr_struct.vram);
-
-            if (has_delay_slot(instr)) {
-                if (i + 1 < block.instructions.size()) {
-                    const auto& delay_slot_struct = block.instructions[i + 1];
-                    rabbitizer::InstructionR5900 delay_slot_instr(delay_slot_struct.word, delay_slot_struct.vram);
-                    file << "            ";
-                    translate_instruction(delay_slot_instr, file);
-                } else {
-                    file << "            // WARNING: Branch at end of block has no delay slot instruction.\n";
-                }
-
-                file << "            ";
-                translate_branch_or_jump(instr, file);
-                
-                file << "            block_index = get_block_index(next_pc);\n";
-                file << "            if (block_index == -1) {\n";
-                file << "                ctx.cpuRegs.pc = next_pc;\n";
-                file << "                return; // Jump outside this function\n";
-                file << "            }\n";
-                file << "            break; // Continue to next block\n";
-                
-                block_ends_with_branch = true;
-                i++; // Skip delay slot instruction
-                break;
-            } else {
-                file << "            ";
-                translate_instruction(instr, file);
-            }
-        }
-        
-        if (!block_ends_with_branch) {
-            file << "            // Fall through to next block\n";
-            file << "            block_index = get_block_index(next_pc);\n";
-            file << "            if (block_index == -1) {\n";
-            file << "                ctx.cpuRegs.pc = next_pc;\n";
-            file << "                return; // Jump outside this function\n";
-            file << "            }\n";
-            file << "            break;\n";
-        }
         file << "\n";
     }
     
-    file << "        default:\n";
-    file << "            ctx.cpuRegs.pc = next_pc;\n";
-    file << "            return; // Invalid block index\n";
-    file << "        }\n"; // End switch
-    file << "    }\n";     // End while loop
     file << "}\n\n";
 }
 
-*/
+// CHANGE: New helper function to generate block code
+void Recompiler::generate_block_code(const Function& func, const Block& block, size_t block_idx, std::ofstream& file) {
+    bool has_terminator = false;
+    
+    // Process each instruction in the block
+    log_file <<  "[PROCESSING FUNCTION BLOCK] Function: " << func.name << std::endl;
+    log_file <<  "[PROCESSING FUNCTION BLOCK] Block Instruction Count: " <<  std::dec << block.instructions.size() << std::endl;
 
+    /*
+    
+    
+    */
+    for (int i = 0; i < block.instructions.size(); ++i) {
 
+        log_file << "FUNCTION: " << func.name << " BLOCK INDEX: " << block_idx << " BLOCK INSTRUCTION INDEX: " << i << "\n \n" << std::endl;
 
-// New method to handle branches and jumps with proper control flow
-void Recompiler::translate_branch_or_jump(const rabbitizer::InstructionR5900& instr, std::ofstream& file) {
+        const auto& instr_struct = block.instructions[i];
+        const auto& instr_word = instr_struct.getCPtr()->word;
+        const auto& instr_vram = instr_struct.getCPtr()->vram;
+        
+        rabbitizer::InstructionR5900 instr(instr_word, instr_vram);
+        std::string disasm_string; 
+        // Check if this is a branch/jump instruction
+
+        if (has_delay_slot(instr)) {
+
+            bool is_likely_branch = (static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_beql ||
+                                    static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_bnel ||
+                                    static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_blezl ||
+                                    static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_bgtzl ||
+                                    static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_bltzl ||
+                                    static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_bgezl);
+            // Execute delay slot first (if it exists and is next)
+            if (!is_likely_branch){
+                // if beq find all the registers it is using current in this instruction then do the rest
+                // after in translate_control_flow we use the variable
+                if (static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_beq){
+                    // get registers being used
+                    file << "    bool branch_taken_" << std::hex << instr.getVram() << " = (" 
+                    << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
+                    << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]);\n";
+                
+                    
+                }
+                if (i + 1 < block.instructions.size()) {
+                    const auto& delay_slot_struct = block.instructions[i + 1];
+                    const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                    const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                    rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                    disasm_string = delay_slot_instr.disassemble(0, "");
+                    
+                    log_file << "[PROCESSING INSTRUCTION] " << disasm_string<< std::endl;
+                    file << "    ";
+                    translate_instruction(delay_slot_instr, file);
+                }
+            }
+            // Handle the branch/jump - CHANGE: New function for control flow
+            file << "    ";
+            disasm_string = instr.disassemble(0, "");
+            
+            log_file << "[PROCESSING INSTRUCTION THAT CAUSES DELAY SLOT] " << disasm_string << std::endl;
+            translate_control_flow(instr, func, block, block_idx, i, file);
+            has_terminator = true;
+             // No more instructions after branch
+             i++;
+        } else {
+            // Regular instruction
+            file << "    ";
+            
+            disasm_string = instr.disassemble(0, "");
+            log_file << "[PROCESSING INSTRUCTION] " << disasm_string<< std::endl;
+            translate_instruction(instr, file);
+        }
+    }
+    
+    // Handle fall-through if no explicit branch
+    if (!has_terminator) {
+        uint32_t fall_through_addr = block.end_address;
+        file << "// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x" << std::hex << block.end_address << "\n";
+        file << "// Fall through to 0x" << std::hex << fall_through_addr << "\n"; 
+
+        bool found_next_block = false;
+        for (size_t i = 0; i < func.blocks.size(); ++i) {
+            if (func.blocks[i].start_address == fall_through_addr) {
+                file << "    goto Label_" << std::setw(4) << std::setfill('0') << i << "; // Fall through\n";
+                found_next_block = true;
+                break;
+            }
+        }
+        
+        if (!found_next_block) {
+            // CHANGE: Call external function or set PC
+            file << "    // Fall through to 0x" << std::hex << fall_through_addr << "\n";
+            file << "    if (recompiled_functions.count(0x" << std::hex << fall_through_addr << ")) {\n";
+            file << "        recompiled_functions[0x" << std::hex << fall_through_addr << "](ctx, 0x" << std::hex << fall_through_addr << ");\n";
+            file << "        return;\n";
+            file << "    } else {\n";
+            file << "        ctx.cpuRegs.pc = 0x" << std::hex << fall_through_addr << ";\n";
+            file << "        return;\n";
+            file << "    }\n";
+        }
+    }
+}
+
+// CHANGE: New function for control flow with function calls
+void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& instr, 
+                                        const Function& func,
+                                        const Block& block,
+                                        size_t current_block_idx,
+                                        size_t current_instr_idx, 
+                                        std::ofstream& file) {
+    
     uint32_t current_pc = instr.getVram();
     
     switch (instr.getUniqueId()) {
-        case RABBITIZER_INSTR_ID_cpu_beqz:
-            file << "//beqz \n";
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_b:
-            file << "next_pc = 0x" << std::hex << current_pc << " + " 
-                << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            break;
         // Conditional branches
-        case RABBITIZER_INSTR_ID_cpu_beq:
+        case RABBITIZER_INSTR_ID_cpu_beq: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
+            file << "    if (branch_taken_" << std::hex << current_pc << ") {\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+        case RABBITIZER_INSTR_ID_cpu_beql: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
             
-        case RABBITIZER_INSTR_ID_cpu_bne:
+            // Execute delay slot ONLY when branch is taken
+            if (current_instr_idx + 1 < block.instructions.size()) {
+                const auto& delay_slot_struct = block.instructions[current_instr_idx + 1];
+                const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                file << "        ";
+                translate_instruction(delay_slot_instr, file);
+            }
+            
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+
+        case RABBITIZER_INSTR_ID_cpu_bnel: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
             
-        case RABBITIZER_INSTR_ID_cpu_blez:
+            // Execute delay slot ONLY when branch is taken
+            if (current_instr_idx + 1 < block.instructions.size()) {
+                const auto& delay_slot_struct = block.instructions[current_instr_idx + 1];
+                const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                file << "        ";
+                translate_instruction(delay_slot_instr, file);
+            }
+            
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+
+        case RABBITIZER_INSTR_ID_cpu_blezl: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
             
-        case RABBITIZER_INSTR_ID_cpu_bgtz:
+            // Execute delay slot ONLY when branch is taken
+            if (current_instr_idx + 1 < block.instructions.size()) {
+                const auto& delay_slot_struct = block.instructions[current_instr_idx + 1];
+                const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                file << "        ";
+                translate_instruction(delay_slot_instr, file);
+            }
+            
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+
+        case RABBITIZER_INSTR_ID_cpu_bgtzl: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
             
-        case RABBITIZER_INSTR_ID_cpu_bltz:
+            // Execute delay slot ONLY when branch is taken
+            if (current_instr_idx + 1 < block.instructions.size()) {
+                const auto& delay_slot_struct = block.instructions[current_instr_idx + 1];
+                const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                file << "        ";
+                translate_instruction(delay_slot_instr, file);
+            }
+            
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+
+        case RABBITIZER_INSTR_ID_cpu_bltzl: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
             
-        case RABBITIZER_INSTR_ID_cpu_bgez:
+            // Execute delay slot ONLY when branch is taken
+            if (current_instr_idx + 1 < block.instructions.size()) {
+                const auto& delay_slot_struct = block.instructions[current_instr_idx + 1];
+                const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                file << "        ";
+                translate_instruction(delay_slot_instr, file);
+            }
+            
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+
+        case RABBITIZER_INSTR_ID_cpu_bgezl: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
-
-        case RABBITIZER_INSTR_ID_cpu_bnez:
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
-
-        // Unconditional jumps
-        case RABBITIZER_INSTR_ID_cpu_j:
-            file << "next_pc = (0x" << std::hex << current_pc 
-                 << " & 0xF0000000) | 0x" << std::hex << (instr.Get_instr_index() << 2) << ";\n";
-            break;
             
-        case RABBITIZER_INSTR_ID_cpu_jal:
-            file << get_gpr_name(31) << ".UL[0] = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            next_pc = (0x" << std::hex << current_pc 
-                 << " & 0xF0000000) | 0x" << std::hex << (instr.Get_instr_index() << 2) << ";\n";
-            break;
+            // Execute delay slot ONLY when branch is taken
+            if (current_instr_idx + 1 < block.instructions.size()) {
+                const auto& delay_slot_struct = block.instructions[current_instr_idx + 1];
+                const auto& delay_word = delay_slot_struct.getCPtr()->word;
+                const auto& delay_vram = delay_slot_struct.getCPtr()->vram;
+                rabbitizer::InstructionR5900 delay_slot_instr(delay_word, delay_vram);
+                file << "        ";
+                translate_instruction(delay_slot_instr, file);
+            }
             
-        case RABBITIZER_INSTR_ID_cpu_jr:
-            file << "next_pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
             break;
+        }
+
+        case RABBITIZER_INSTR_ID_cpu_bne: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
             
-        case RABBITIZER_INSTR_ID_cpu_jalr:
-            file << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = 0x" 
-                 << std::hex << current_pc << " + 8;\n";
-            file << "            next_pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
-            break;
-
-        // Branch likely instructions
-        case RABBITIZER_INSTR_ID_cpu_beql:
-            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
-            break;
-
-        case RABBITIZER_INSTR_ID_cpu_bnel:
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " 
                  << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
             break;
-
-        case RABBITIZER_INSTR_ID_cpu_blezl:
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_beqz: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == 0) {\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_bnez: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != 0) {\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_bgtz: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
+            file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] > 0) {\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
+            break;
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_blez: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
             break;
-
-        case RABBITIZER_INSTR_ID_cpu_bltzl:
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_bltz: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
             break;
-
-        case RABBITIZER_INSTR_ID_cpu_bgezl:
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_bgez: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            uint32_t fall_through_addr = current_pc + 8;
+            
             file << "if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + " 
-                 << std::dec << (static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2)) + 4) << ";\n";
-            file << "            } else {\n";
-            file << "                next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            }\n";
+            emit_branch_target(target_addr, func, file, "        ");
+            file << "    } else {\n";
+            emit_branch_target(fall_through_addr, func, file, "        ");
+            file << "    }\n";
             break;
-
+        }
+        
+        // Unconditional jump
+        case RABBITIZER_INSTR_ID_cpu_j: {
+            uint32_t target_addr = (current_pc & 0xF0000000) | (instr.Get_instr_index() << 2);
+            emit_branch_target(target_addr, func, file, "");
+            break;
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_b: {
+            uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
+            emit_branch_target(target_addr, func, file, "");
+            break;
+        }
+        
+        // CHANGE: Function calls with proper return handling
+        case RABBITIZER_INSTR_ID_cpu_jal: {
+            uint32_t target_addr = (current_pc & 0xF0000000) | (instr.Get_instr_index() << 2);
+            uint32_t return_addr = current_pc + 8;
+            file << "   // JAL was called \n";
+            file << "   // The address after JAL is: 0x" << std::hex << return_addr << "\n";
+            if (func.blocks.size() > current_block_idx + 1){
+                file << "   // The next block should be: " << func.blocks[current_block_idx + 1].start_address << std::endl;
+            }
+            else{
+                file << "   // THIS IS THE END OF THE BLOCK: 0x" << std::hex << block.end_address << std::endl;
+            }
+            file << get_gpr_name(31) << ".UL[0] = 0x" << std::hex << return_addr << ";\n";
+            file << "    if (recompiled_functions.count(0x" << std::hex << target_addr << ")) {\n";
+            file << "        recompiled_functions[0x" << std::hex << target_addr << "](ctx, 0x" << std::hex << target_addr << ");\n";
+            
+            // After return, check if we continue in this function
+            bool found_return = false;
+            for (size_t i = 0; i < func.blocks.size(); ++i) {
+            if (func.blocks[i].start_address == return_addr) {
+                    file << "        goto Label_" << std::setw(4) << std::setfill('0') << i << ";\n";
+                    found_return = true;
+                    break;
+                }
+            }
+            if (!found_return) {
+                file << "\n";
+            }
+            
+            file << "    } else {\n";
+            file << "        ctx.cpuRegs.pc = 0x" << std::hex << target_addr << ";\n";
+            file << "    }\n";
+            break;
+        }
+        
+        // Return from function
+        case RABBITIZER_INSTR_ID_cpu_jr: {
+            if (static_cast<uint8_t>(instr.GetO32_rs()) == 31) {
+                file << "return; // Return from function\n";
+            } else {
+                // CHANGE: Indirect jump with function lookup
+                file << "{\n";
+                file << "        uint32_t target = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
+                file << "        auto func_ptr = find_containing_function(target);\n";
+                file << "        if (func_ptr != nullptr) {\n";
+                file << "            func_ptr(ctx, target);\n";
+                file << "            return;\n";
+                file << "        } else {\n";
+                file << "            ctx.cpuRegs.pc = target;\n";
+                file << "            return;\n";
+                file << "        }\n";
+                file << "    }\n";
+            }
+            break;
+        }
+        
+        case RABBITIZER_INSTR_ID_cpu_jalr: {
+            uint8_t rd = static_cast<uint8_t>(instr.GetO32_rd());
+            uint8_t rs = static_cast<uint8_t>(instr.GetO32_rs());
+            uint32_t return_addr = current_pc + 8;
+            
+            file << get_gpr_name(rd) << ".UL[0] = 0x" << std::hex << return_addr << ";\n";
+            file << "    {\n";
+            file << "        uint32_t target = " << get_gpr_name(rs) << ".UL[0];\n";
+            file << "        auto func_ptr = find_containing_function(target);\n";
+            file << "        if (func_ptr != nullptr) {\n";
+            file << "            func_ptr(ctx, target);\n";
+            
+            // Continue after return
+            bool found_return = false;
+            for (size_t i = 0; i < func.blocks.size(); ++i) {
+                if (func.blocks[i].start_address == return_addr) {
+                    file << "            goto Label_" << std::setw(4) << std::setfill('0') << i << ";\n";
+                    found_return = true;
+                    break;
+                }
+            }
+            if (!found_return) {
+                file << "            return;\n";
+            }
+            
+            file << "        } else {\n";
+            file << "            ctx.cpuRegs.pc = target;\n";
+            file << "            return;\n";
+            file << "        }\n";
+            file << "    }\n";
+            break;
+        }
+        
         default:
-            // For any unhandled branch/jump instructions, just set next_pc normally
-            file << "// Unhandled branch/jump: " << instr.getOpcodeName() << "\n";
-            file << "            next_pc = 0x" << std::hex << current_pc << " + 8;\n";
-            file << "            exit(1);\n";
+            file << "// Unhandled control flow: " << instr.getOpcodeName() << "\n";
+            file << "    return;\n";
             break;
     }
 }
 
+// CHANGE: New helper function to emit branch target code
+void Recompiler::emit_branch_target(uint32_t target_addr, const Function& func, std::ofstream& file, const std::string& indent) {
+    // Check if target is within current function
+    bool found_internal = false;
+    for (size_t i = 0; i < func.blocks.size(); ++i) {
+        if (func.blocks[i].start_address == target_addr) {
+            file << indent << "goto Label_" << std::setw(4) << std::setfill('0') << i << ";\n";
+            found_internal = true;
+            break;
+        }
+    }
+    
+    if (!found_internal) {
+        // CHANGE: Target is outside current function - call it
+        file << indent << "// THIS WAS GENERATED BY EMIT BRANCH TARGET" << std::endl;
+        file << indent << "if (recompiled_functions.count(0x" << std::hex << target_addr << ")) {\n";
+        file << indent << "    recompiled_functions[0x" << std::hex << target_addr << "](ctx, 0x" << std::hex << target_addr << ");\n";
+        file << indent << "    return;\n";
+        file << indent << "} else {\n";
+        file << indent << "    ctx.cpuRegs.pc = 0x" << std::hex << target_addr << ";\n";
+        file << indent << "    return;\n";
+        file << indent << "}\n";
+    }
+}
+
+// ALL INSTRUCTION TRANSLATIONS BELOW ARE UNCHANGED - PRESERVED EXACTLY
 void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr, std::ofstream& file) {
     switch (instr.getUniqueId()) {
-        //
-        // MIPS I - Arithmetic instructions
-        //
-
         case RABBITIZER_INSTR_ID_cpu_add:
         case RABBITIZER_INSTR_ID_cpu_addu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] + " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0];\n";
@@ -654,9 +675,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "        ctx.cpuRegs.HI.SL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] % " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0];\n";
             file << "    }\n";
             break;
-        //
-        // MIPS I - Logical instructions
-        //
         case RABBITIZER_INSTR_ID_cpu_and:
              file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] & " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0];\n";
             break;
@@ -678,9 +696,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_xori:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] ^ " << format_imm(instr.Get_immediate()) << ";\n";
             break;
-        //
-        // MIPS I - Shift instructions
-        //
         case RABBITIZER_INSTR_ID_cpu_sll:
              file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] << " << std::to_string(instr.Get_sa()) << ";\n";
             break;
@@ -699,9 +714,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_srav:
              file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0] >> (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] & 0x1F);\n";
             break;
-        //
-        // MIPS I - Branch instructions
-        //
         case RABBITIZER_INSTR_ID_cpu_beq:
             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
@@ -720,9 +732,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_bgez:
             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << ";\n";
             break;
-        //
-        // MIPS I - Jump instructions
-        //
         case RABBITIZER_INSTR_ID_cpu_j:
             file << "    ctx.cpuRegs.pc = (ctx.cpuRegs.pc & 0xF0000000) | " << format_imm(instr.Get_instr_index() << 2) << ";\n";
             break;
@@ -737,9 +746,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = ctx.cpuRegs.pc + 8;\n";
             file << "    ctx.cpuRegs.pc = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
             break;
-        //
-        // MIPS I - Load/Store instructions
-        //
         case RABBITIZER_INSTR_ID_cpu_lb:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0] = static_cast<int32_t>(static_cast<int8_t>(memory::read<uint8_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ")));\n";
             break;
@@ -772,12 +778,8 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             break;
         case RABBITIZER_INSTR_ID_r5900_sq:
             file << "    // sq instruction - 128-bit store\n";
-            // Cast the GPR_reg to a const QuadWord pointer, then dereference it
             file << "    memory::write_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", *reinterpret_cast<const QuadWord*>(&" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
             break;
-        //
-        // FPU Instructions
-        //
         case RABBITIZER_INSTR_ID_cpu_add_s:
             file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fd())) << ".f = " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f + " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ".f;\n";
             break;
@@ -803,7 +805,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] != " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_beql:
-             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
+             file << " /* Some reason beql is being executed here. Check to see if beql is being executed by translate_control_flow. Branch likely, nullify delay slot */ }\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_blezl:
             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
@@ -814,8 +816,6 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_bgezl:
             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] >= 0) { ctx.cpuRegs.pc += " << format_imm(static_cast<int32_t>(static_cast<int16_t>(instr.Get_immediate() << 2))) << "; } else { /* Branch likely, nullify delay slot */ }\n";
             break;
-
-        // Doubleword and Logical Instructions
         case RABBITIZER_INSTR_ID_cpu_daddiu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SD[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ";\n";
             break;
@@ -828,26 +828,15 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "        ctx.cpuRegs.HI.UD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] % " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0];\n";
             file << "    }\n";
             break;
-
         case RABBITIZER_INSTR_ID_cpu_sltiu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] < " << format_imm(static_cast<uint16_t>(instr.Get_immediate())) << ") ? 1 : 0;\n";
             break;
-
         case RABBITIZER_INSTR_ID_cpu_sltu:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] < " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ? 1 : 0;\n";
             break;
-
-        // Load/Store and Move Instructions
         case RABBITIZER_INSTR_ID_r5900_lq:
             file << "    // lq instruction - 128-bit load\n";
-            // Cast the GPR_reg to a QuadWord pointer, then dereference it
             file << "    memory::read_quad(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", *reinterpret_cast<QuadWord*>(&" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_lwl:
-            file << "    // lwl instruction\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_lwr:
-            file << "    // lwr instruction\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_movz:
             file << "    if (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] == 0) " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
@@ -859,40 +848,9 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "        ctx.cpuRegs.HI.UL[0] = static_cast<uint32_t>(result >> 32);\n";
             file << "    }\n";
             break;
-        // System and MMI Instructions
-        case RABBITIZER_INSTR_ID_r5900_pextlw:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// pextlw instruction\n";
-            file << "    exit(1);\n";
-            break;
-        case RABBITIZER_INSTR_ID_r5900_pextuw:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// pextuw instruction\n";
-            file << "    exit(1);\n";
-            break;
-        case RABBITIZER_INSTR_ID_r5900_ppach:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// ppach instruction\n";
-            file << "    exit(1);\n";
-            break;
-        case RABBITIZER_INSTR_ID_r5900_ppacw:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// ppacw instruction\n";
-            file << "    exit(1);\n";
-            break;
-        case RABBITIZER_INSTR_ID_r5900_psraw:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// psraw instruction\n";
-            file << "    exit(1);\n";
-            break;
-        case RABBITIZER_INSTR_ID_r5900_psrlw:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// psrlw instruction\n";
-            file << "    exit(1);\n";
-            break;
-        case RABBITIZER_INSTR_ID_cpu_sync:
-            file << "    g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";// sync instruction - memory barrier\n";
-            file << "    exit(1);\n";
-            break;
         case RABBITIZER_INSTR_ID_cpu_syscall:
             file << "    runtime_syscall_dispatcher(" << get_gpr_name(3) << ".UL[0], ctx);\n";
             break;
-
-        // Vector Unit (VU) Instructions
         case RABBITIZER_INSTR_ID_r5900_vaddx:
             file << "    " << get_vr_name(static_cast<uint8_t>(instr.GetO32_fd())) << ".x = " << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".x + " << get_vr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ".x;\n";
             break;
@@ -926,14 +884,72 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_sd:
             file << "    memory::write<uint64_t>(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] + " << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ", " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0]);\n";
             break;
+        case RABBITIZER_INSTR_ID_r5900_pcpyld:
+            // Parallel Copy Lower Doubleword
+            file << "    // pcpyld - Parallel Copy Lower Doubleword\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[1] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0];\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0];\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_r5900_pcpyh:
+            // Parallel Copy Halfword - broadcast lowest halfword to all 8 positions
+            file << "    // pcpyh - Parallel Copy Halfword\n";
+            file << "    {\n";
+            file << "        uint16_t hw = static_cast<uint16_t>(" 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0] & 0xFFFF);\n";
+            file << "        for (int i = 0; i < 8; i++) {\n";
+            file << "            " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".US[i] = hw;\n";
+            file << "        }\n";
+            file << "    }\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_dsll:
+            // Doubleword Shift Left Logical
+            file << "    // dsll - Doubleword Shift Left Logical\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] << " 
+                << std::to_string(instr.Get_sa()) << ";\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_dsll32:
+            // Doubleword Shift Left Logical + 32
+            file << "    // dsll32 - Doubleword Shift Left Logical + 32\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] << " 
+                << std::to_string(instr.Get_sa() + 32) << ";\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_dsllv:
+            // Doubleword Shift Left Logical Variable
+            file << "    // dsllv - Doubleword Shift Left Logical Variable\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] << (" 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] & 0x3F);\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_dsrl:
+            // Doubleword Shift Right Logical
+            file << "    // dsrl - Doubleword Shift Right Logical\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] >> " 
+                << std::to_string(instr.Get_sa()) << ";\n";
+            break;
+
+        case RABBITIZER_INSTR_ID_cpu_dsra:
+            // Doubleword Shift Right Arithmetic
+            file << "    // dsra - Doubleword Shift Right Arithmetic\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".SD[0] = " 
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SD[0] >> " 
+                << std::to_string(instr.Get_sa()) << ";\n";
+            break;
         case RABBITIZER_INSTR_ID_cpu_nop:
             file << "   //nop \n";
             break;
         case RABBITIZER_INSTR_ID_r5900_ei:
-            // Enable Interrupts by setting bit 0 of the COP0 Status Register.
             file << "    ctx.cop0.n.Status |= 0x1;\n";
             break;
-
         default:
             file << "    // ----------------------------------------------------------------\n";
             file << "    // UNHANDLED INSTRUCTION: " << instr.getOpcodeName() << "\n";

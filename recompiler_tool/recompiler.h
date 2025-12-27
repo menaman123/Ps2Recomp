@@ -7,9 +7,11 @@
 #include "EEAnalyze/Function.h" // Include your Function analysis class
 #include "map"
 #include "instructions/InstructionR5900.hpp"
-
+#include <fstream>
 // Forward-declare the rabbitizer C++ instruction class to avoid including the full header.
 // This is a best practice for header files to improve compilation times.
+
+extern std::ofstream log_file;
 namespace rabbitizer {
     class InstructionR5900;
 }
@@ -34,4 +36,7 @@ private:
 
     // Helper function to identify instructions that have a delay slot.
     bool has_delay_slot(const rabbitizer::InstructionR5900& instr) const;
+    void generate_block_code(const Function& func, const Block& block, size_t block_idx, std::ofstream& file);
+    void translate_control_flow(const rabbitizer::InstructionR5900& instr, const Function& func, const Block& block, size_t current_block_idx, size_t current_instr_idx, std::ofstream& file);
+    void emit_branch_target(uint32_t target_addr, const Function& func, std::ofstream& file, const std::string& indent);
 };

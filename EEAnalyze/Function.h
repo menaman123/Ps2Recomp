@@ -9,12 +9,14 @@
 #include "instructions/RabbitizerInstruction.h"
 #include "register_state.h"
 #include "DataFlowEngine.h"
+#include "rabbitizer.hpp"
+#include "instructions/InstructionR5900.hpp"
 
 // Represents a single Basic Block of MIPS instructions.
 struct Block {
     uint32_t start_address = 0;
     uint32_t end_address = 0;
-    std::vector<RabbitizerInstruction> instructions;
+    std::vector<rabbitizer::InstructionR5900> instructions;
     std::vector<int> predecessors; 
     int taken_branch_successor_index = -1;
     int fall_through_successor_index = -1;
@@ -43,16 +45,4 @@ public:
     Function(uint32_t address);
 
     // The primary analysis entry point. Uses the object's size member.
-    std::set<uint32_t> analyze(const uint8_t* elf_data, uint32_t elf_size);
-    
-    void dump_to_console() const;
-
-private:
-    void find_basic_blocks(const uint8_t* function_code, std::set<uint32_t>& leaders);
-    //void analyze_and_resolve_jump_tables(const uint8_t* elf_data, uint32_t elf_size, const uint8_t* function_code, std::set<uint32_t>& leaders);
-    void create_blocks_from_leaders(const uint8_t* function_code, const std::set<uint32_t>& leaders);
-    void build_control_flow_graph();
-    void analyze_prologue();
-    void cull_unreachable_blocks();
-    void run_data_flow_analysis();
 };

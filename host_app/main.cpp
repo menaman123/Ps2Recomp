@@ -8,9 +8,14 @@
 #include <filesystem>
 #include <cstring>
 #include "recompiled.h"
+#include "sema.h"
+
 
 // Global log file stream to be used by the host and recompiled functions
 std::ofstream g_logFile;
+
+// Initialize Semaphore
+std::vector<HostSemaphore> g_semaphores(256);
 
 void init_cpu_context(CpuContext& ctx) {
     memset(&ctx, 0, sizeof(CpuContext));
@@ -34,7 +39,7 @@ void init_cpu_context(CpuContext& ctx) {
 void execute_recompiled_code(CpuContext& ctx) {
     while (true) {
         // First try exact function start match
-        execute_ps2_code(ctx);
+        entry(ctx);
         if (ctx.cpuRegs.pc == 0) {
             break;
         }
@@ -61,6 +66,10 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Starting the host application... Logging to logs/runtime_log.txt" << std::endl;
     g_logFile << "Starting the host application..." << std::endl;
+    // Initialize memory
+    memory::initialize();
+
+
 
     // Initialize the CPU state.
     CpuContext ctx;

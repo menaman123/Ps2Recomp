@@ -6,10 +6,13 @@
 #include <string> 
 #include "Function.h" 
 #include <elfio/elfio.hpp>
+#include <map>
+#include <fstream>
+#include <iostream>
 
 // Loads a set of addresses from a text file (one hex address per line).
 std::set<uint32_t> load_addresses_from_file(const std::string& path);
-std::set<uint32_t> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size);
+std::map<uint32_t, Function> parse_ghidra_function_file(const std::string& file_path, const uint8_t* text_data, uint32_t text_size, uint32_t text_base, std::ofstream& log_file);
 
 /**
  * Scans the entire .text section to find the starting address of every function

@@ -108,7 +108,7 @@
     <CustomBuild Include="C:\Users\Owner\Desktop\PS2_Recomp\Ps2Recomp\build\CMakeFiles\ae2971c62e6c289820c581d2cedc14b2\recompiled.h.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating recompiled C++ code from ELF file...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-Debug\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
+Debug\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/extracted_functions.json --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -121,7 +121,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating recompiled C++ code from ELF file...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-Release\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
+Release\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/extracted_functions.json --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -134,7 +134,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Generating recompiled C++ code from ELF file...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-MinSizeRel\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
+MinSizeRel\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/extracted_functions.json --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -147,7 +147,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Generating recompiled C++ code from ELF file...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-RelWithDebInfo\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/ghidra_function_data.txt --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
+RelWithDebInfo\recompiler_tool.exe --input C:/Users/Owner/Desktop/PS2_Recomp/Crash_TwinSanity.rep/SLUS_209.09 --ghidra-input C:/Users/Owner/Desktop/PS2_Recomp/ghidra_functions/extracted_functions.json --output-header C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.h --output-cpp C:/Users/Owner/Desktop/PS2_Recomp/Ps2Recomp/build/recompiled.cpp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone

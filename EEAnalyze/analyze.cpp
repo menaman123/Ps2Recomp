@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -9,6 +10,12 @@
 #include <sstream> 
 #include "instructions/RabbitizerInstructionR5900.h"
 #include "instructions/RabbitizerInstrDescriptor.h"
+#include "rabbitizer.hpp"
+#include <include/json.hpp>
+#include <fstream>
+#include <iostream>
+#include <cassert>
+
 
 static std::string trim(const std::string& str) {
     const std::string whitespace = " \t";
@@ -44,75 +51,159 @@ static std::set<uint32_t> load_addresses_from_file(const std::string& path) {
 }
 
 // New function to parse the Ghidra analysis file
-std::set<uint32_t> parse_ghidra_analysis_file(const std::string& file_path, const uint8_t* text_section_data, uint32_t text_section_size) {
-    std::vector<Function> functions;
+std::map<uint32_t, Function> parse_ghidra_function_file(const std::string& file_path, const uint8_t* text_data, uint32_t text_size, uint32_t text_base, std::ofstream& log_file) {
+    std::map<uint32_t, Function> functions;
     std::set<std::string> seen_names;
-    std::set<uint32_t> leaders;
+    
+    // Open JSON file
     std::ifstream infile(file_path);
     if (!infile.is_open()) {
-        std::cerr << "[-] Could not open Ghidra analysis file: " << file_path << std::endl;
-        return leaders;
+        std::cerr << "[-] Could not open Ghidra function file: " << file_path << std::endl;
+        return functions;
     }
-    std::string line;
-    Function current_function;
-    bool in_function_block = false;
-    bool in_references_block = false;
-    while (std::getline(infile, line)) {
-        if (line.empty() || line.find("##") == 0) {
-            continue; // Skip empty lines and comments
-        }
-        if (line.find("Function:") != std::string::npos) {
-            if (in_function_block && seen_names.find(current_function.name) == seen_names.end()) {
-                // Analyze the fully parsed function before adding it
-                std::cout << "[+] Analyzing parsed function: " << current_function.name << std::endl;
-                current_function.analyze(text_section_data, text_section_size);
-                functions.push_back(current_function);
-                seen_names.insert(current_function.name);
-            }
-            current_function = Function();
-            in_function_block = true;
-            in_references_block = false;
-            current_function.name = trim(line.substr(line.find(":") + 1));
-        } else if (in_function_block) {
-            if (line.find("Address:") != std::string::npos && !in_references_block) {
-                std::string addr_str = trim(line.substr(line.find(":") + 1));
-                current_function.base_address = std::stoul(addr_str, nullptr, 16);
-            } else if (line.find("Size:") != std::string::npos) {
-                std::string size_str = trim(line.substr(line.find(":") + 1));
-                size_str = size_str.substr(0, size_str.find(" bytes"));
-                current_function.size = std::stoul(size_str);
-            } else if (line.find("External References:") != std::string::npos) {
-                in_references_block = true;
-            } else if (in_references_block && line.find("- Address:") != std::string::npos) {
-                ExternalReference ref;
-                std::stringstream ss(line);
-                std::string token;
-                ss >> token >> token; // Skip "- Address:"
-                std::string addr_str = trim(token);
-                addr_str.erase(std::remove(addr_str.begin(), addr_str.end(), ','), addr_str.end());
-                if (addr_str.find_first_not_of("0123456789abcdefABCDEF") == std::string::npos) {
-                    ref.address = std::stoul(addr_str, nullptr, 16);
-                } else {
-                    ref.name = addr_str;
-                    ref.address = 0;
-                }
-                ss >> token >> token; // Skip "Section:"
-                ref.section = trim(token);
-                current_function.external_references.push_back(ref);
-            }
-        }
+    
+    // Parse JSON
+    nlohmann::json j;
+    try {
+        infile >> j;
+    } catch (nlohmann::json::parse_error& e) {
+        std::cerr << "[-] JSON parse error: " << e.what() << std::endl;
+        return functions;
     }
-    // Add the very last function in the file
-    if (in_function_block && seen_names.find(current_function.name) == seen_names.end()) {
-        std::cout << "[+] Analyzing parsed function: " << current_function.name << std::endl;
-        leaders = current_function.analyze(text_section_data, text_section_size);
-        functions.push_back(current_function);
-        seen_names.insert(current_function.name);
+    
+    // Check if "functions" key exists
+    if (!j.contains("functions")) {
+        std::cerr << "[-] JSON does not contain 'functions' key" << std::endl;
+        return functions;
     }
-    std::cout << "[+] Parsed and analyzed " << functions.size() << " functions from Ghidra analysis file." << std::endl;
-    return leaders;
-}
+    
+    // Parse each function
+    for (const auto& func_json : j["functions"]) {
+        Function current_function;
+        
+        // Parse function name
+        log_file << "Parsing function: " << func_json["name"].get<std::string>() << std::endl;
 
+        if (func_json["name"].get<std::string>() == "entry") {
+            current_function.name = func_json["name"].get<std::string>();
+        } else {
+            std::string addr = func_json["address"].get<std::string>();
+            // Use substr(2) to get the substring starting from index 2 (the third character)
+            current_function.name = "FUN_" + addr.substr(2);
+        }
+        
+        // Skip duplicates
+        if (seen_names.find(current_function.name) != seen_names.end()) {
+            continue;
+        }
+        
+        // Parse function address
+        if (func_json.contains("address")) {
+            std::string addr_str = func_json["address"].get<std::string>();
+            log_file << "Address: " << addr_str << std::endl;
+            // Remove "0x" prefix if present
+            if (addr_str.substr(0, 2) == "0x") {
+                addr_str = addr_str.substr(2);
+            }
+            current_function.base_address = std::stoul(addr_str, nullptr, 16);
+        } else {
+            std::cerr << "[-] Function '" << current_function.name << "' missing 'address' field, skipping" << std::endl;
+            continue;
+        }
+        
+        // Parse function size
+        if (func_json.contains("size")) {
+            log_file << "Size: " << func_json["size"].get<uint32_t>() << std::endl;
+            current_function.size = func_json["size"].get<uint32_t>();
+        } else {
+            current_function.size = 0;
+        }
+        
+        // Parse blocks
+        if (func_json.contains("blocks") && func_json["blocks"].is_array()) {
+            for (const auto& block_json : func_json["blocks"]) {
+                Block block;
+                
+                // Parse block address
+                if (block_json.contains("address")) {
+                    std::string block_addr_str = block_json["address"].get<std::string>();
+                    log_file << "Block address: " << block_addr_str << std::endl;
+                    if (block_addr_str.substr(0, 2) == "0x") {
+                        block_addr_str = block_addr_str.substr(2);
+                    }
+                    block.start_address = std::stoul(block_addr_str, nullptr, 16);
+                } else {
+                    continue; // Skip blocks without addresses
+                }
+                
+                // Parse block size and calculate end address
+                if (block_json.contains("size")) {
+                    uint32_t block_size = block_json["size"].get<uint32_t>();
+                    // End address is inclusive (last byte of block)
+                    block.end_address = block.start_address + block_size;
+                    log_file << "Block start address: " << block.start_address << std::endl;
+                    log_file << "Block size: " << block_size << std::endl;
+                    log_file << "Block end address: " << block.end_address << std::endl;
+                } else {
+                    block.end_address = block.start_address;
+                }
+
+                // Now add instructions 
+                // Parse instructions in this block
+                for (uint32_t vram = block.start_address; vram < block.end_address; vram += 4) {
+                    // Calculate offset into text_data
+                    uint32_t offset = vram - text_base;
+                    log_file << "Current VRAM: 0x" << std::hex << vram << std::endl;
+                    
+
+                    // Bounds check
+                    if (offset + 4 > text_size) {
+                        std::cerr << "[-] Warning: Address 0x" << std::hex << vram 
+                                  << " is outside text section bounds" << std::endl;
+                        break;
+                    }
+
+                    // Read 32-bit instruction (little-endian for PS2)
+                    uint32_t word = text_data[offset] |
+                                   (text_data[offset + 1] << 8) |
+                                   (text_data[offset + 2] << 16) |
+                                   (text_data[offset + 3] << 24);
+
+                    // Create rabbitizer instruction
+                    rabbitizer::InstructionR5900 instr(word, vram);
+                    std::string disasm_str = instr.disassemble(0, "");
+                    log_file << "Instruction at 0x" << std::hex << vram << ": " << disasm_str << std::endl;
+
+
+                    // Add to block's instruction vector
+                    block.instructions.push_back(instr);
+                    log_file << "IN FOR LOOP Instruction count: " << block.instructions.size() << std::endl;
+                }
+                log_file << "Block Instruction Count: " << block.instructions.size() << std::endl;
+                // Add block to function
+                uint32_t block_size = block_json["size"].get<uint32_t>();
+                assert(block_size > 0 && "Block size must be greater than 0");
+                assert(block.instructions.size() == block_size / 4 && 
+                       "Instruction count doesn't match expected count based on block size");
+                
+                // Add block to function
+                current_function.blocks.push_back(block);
+            }
+        }
+        
+        // Add function to map
+        functions[current_function.base_address] = current_function;
+        seen_names.insert(current_function.name);
+        
+        std::cout << "[+] Parsed function: " << current_function.name 
+                  << " at 0x" << std::hex << current_function.base_address 
+                  << " with " << std::dec << current_function.blocks.size() << " blocks" << std::endl;
+    }
+    
+    std::cout << "[+] Parsed " << functions.size() << " functions with blocks from JSON file." << std::endl;
+    
+    return functions;
+}
 // The main entry point for the analysis phase.
 /*
 std::vector<Function> analyze_executable(
