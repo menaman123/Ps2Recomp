@@ -315,6 +315,7 @@ namespace memory {
     template uint16_t read<uint16_t>(uint32_t address);
     template uint32_t read<uint32_t>(uint32_t address);
     template uint64_t read<uint64_t>(uint32_t address);
+    template int32_t  memory::read<int32_t>(uint32_t address);
     template void write<uint8_t>(uint32_t address, uint8_t value);
     template void write<uint16_t>(uint32_t address, uint16_t value);
     template void write<uint32_t>(uint32_t address, uint32_t value);

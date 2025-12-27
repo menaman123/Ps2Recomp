@@ -950,6 +950,11 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_r5900_ei:
             file << "    ctx.cop0.n.Status |= 0x1;\n";
             break;
+        case RABBITIZER_INSTR_ID_cpu_mfc0:
+            file << "    // mfc0 - Move From Coprocessor 0\n";
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0] = "
+                << "static_cast<int32_t>(ctx.cop0.r[" << std::to_string(static_cast<uint8_t>(instr.GetO32_rd())) << "]);\n";
+            break;
         default:
             file << "    // ----------------------------------------------------------------\n";
             file << "    // UNHANDLED INSTRUCTION: " << instr.getOpcodeName() << "\n";

@@ -7,6 +7,7 @@
 #include "recompiled.h"
 #include "rabbitizer.hpp"
 #include <iomanip>
+#include "intc.h"
 #include "instructions/InstructionR5900.hpp"
 
 #ifdef _WIN32
@@ -1001,6 +1002,92 @@ void execute_single_instruction(const rabbitizer::InstructionR5900& instr, CpuCo
     }
 }
 
+void AddIntcHandler(CpuContext& ctx) {
+    // Extract parameters from registers
+    int int_cause = ctx.cpuRegs.GPR.r[4].SL[0];      // $a0: interrupt cause
+    uint32_t handler_pc = ctx.cpuRegs.GPR.r[5].UL[0]; // $a1: handler function address
+    int next = ctx.cpuRegs.GPR.r[6].SL[0];            // $a2: position reference
+    uint32_t arg = ctx.cpuRegs.GPR.r[7].UL[0];        // $a3: argument
+    
+    // The 5th parameter (flag) is passed on the stack
+    // Stack layout: [arg4/flag] [arg5] ... at $sp + 16 (after 4 saved regs)
+    uint32_t stack_ptr = ctx.cpuRegs.GPR.r[29].UL[0];
+    int flag = static_cast<int>(memory::read<int32_t>(stack_ptr + 16));
+    
+    g_logFile << "Syscall: AddIntcHandler(cause: " << std::dec << int_cause 
+              << ", handler: 0x" << std::hex << handler_pc 
+              << ", next: " << std::dec << next
+              << ", arg: 0x" << std::hex << arg
+              << ", flag: " << std::dec << flag << ")" << std::endl;
+    
+    // Validate interrupt cause (PS2 has 16 interrupt sources: 0-15)
+    if (int_cause < 0 || int_cause > 15) {
+        g_logFile << "  ERROR: Invalid interrupt cause: " << int_cause << std::endl;
+        ctx.cpuRegs.GPR.r[2].SL[0] = -1; // Return -1 for error
+        return;
+    }
+    
+    // Validate handler address (should be in valid memory range)
+    if (handler_pc == 0) {
+        g_logFile << "  ERROR: NULL handler address" << std::endl;
+        ctx.cpuRegs.GPR.r[2].SL[0] = -1;
+        return;
+    }
+    
+    // Create new handler
+    IntcHandler new_handler;
+    new_handler.id = g_nextIntcId++;
+    new_handler.cause = int_cause;
+    new_handler.handler_pc = handler_pc;
+    new_handler.gp = ctx.cpuRegs.GPR.r[28].UL[0]; // Capture current $gp
+    new_handler.arg = arg;
+    new_handler.flag = flag;
+    new_handler.active = true;
+    
+    // Get or create the handler queue for this cause
+    std::vector<IntcHandler>& queue = g_intc_queues[int_cause];
+    
+    // Determine insertion position
+    if (next == 0) {
+        // Insert at front of queue
+        queue.insert(queue.begin(), new_handler);
+        g_logFile << "  Inserted handler " << new_handler.id 
+                  << " at FRONT of queue for cause " << int_cause << std::endl;
+    }
+    else if (next == -1) {
+        // Insert at back of queue
+        queue.push_back(new_handler);
+        g_logFile << "  Inserted handler " << new_handler.id 
+                  << " at BACK of queue for cause " << int_cause << std::endl;
+    }
+    else {
+        // Insert before handler with ID 'next'
+        bool found = false;
+        for (auto it = queue.begin(); it != queue.end(); ++it) {
+            if (it->id == next) {
+                queue.insert(it, new_handler);
+                found = true;
+                g_logFile << "  Inserted handler " << new_handler.id 
+                          << " BEFORE handler " << next 
+                          << " in queue for cause " << int_cause << std::endl;
+                break;
+            }
+        }
+        
+        if (!found) {
+            g_logFile << "  WARNING: Handler " << next 
+                      << " not found, inserting at back" << std::endl;
+            queue.push_back(new_handler);
+        }
+    }
+    
+    g_logFile << "  Queue for cause " << int_cause << " now has " 
+              << queue.size() << " handlers" << std::endl;
+    
+    // Return handler ID in $v0
+    ctx.cpuRegs.GPR.r[2].SL[0] = new_handler.id;
+}
+
 
 void dynamic_decode_and_execute(uint32_t start_address, CpuContext& ctx) {
     ctx.cpuRegs.pc = start_address;
@@ -1084,7 +1171,7 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
         case 13: NotImplemented_Syscall("SetVTLBRefillHandler", ctx); break;
         case 14: NotImplemented_Syscall("SetVCommonHandler", ctx); break;
         case 15: NotImplemented_Syscall("SetVInterruptHandler", ctx); break;
-        case 16: NotImplemented_Syscall("AddIntcHandler", ctx); break;
+        case 16: AddIntcHandler(ctx); break;
         case 17: NotImplemented_Syscall("RemoveIntcHandler", ctx); break;
         case 18: NotImplemented_Syscall("AddDmacHandler", ctx); break;
         case 19: NotImplemented_Syscall("RemoveDmacHandler", ctx); break;
