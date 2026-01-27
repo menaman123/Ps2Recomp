@@ -3,3 +3,4 @@ build/
 .vscode/launch.json
 .vscode/settings.json
 build/CMakeCache.txt
+build
