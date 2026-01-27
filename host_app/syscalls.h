@@ -7,12 +7,15 @@
 #include <SDL.h> // Include the main SDL header
 #include "rabbitizer.hpp"
 #include "instructions/InstructionR5900.hpp"
+#include "ps2_scheduler.h"
+#include "sema.h"
+#include "intc.h"
 
 
 
 struct SifDmaTransfer_t {
-    void* src;
-    void* dest;
+    uint32_t src;   
+    uint32_t dest;
     int32_t size;
     int32_t attr;
 };
@@ -37,6 +40,7 @@ void sifRpcCall(CpuContext& ctx);
 void sifSetRpcQueue(CpuContext& ctx);
 void sceSifSetDma(CpuContext& ctx);
 void iSetEventFlag(CpuContext& ctx);
+void sceSifDmaStat(CpuContext& ctx);
 void SetOsdConfigParam(CpuContext& ctx);
 void CreateSema(CpuContext& ctx);
 void DeleteSema(CpuContext& ctx);
@@ -59,5 +63,23 @@ void dynamic_decode_and_execute(uint32_t address, CpuContext& ctx);
 void handle_branch_logic(const rabbitizer::InstructionR5900& instr, CpuContext& ctx, bool& exit_interpreter);
 void execute_single_instruction(const rabbitizer::InstructionR5900& instr, CpuContext& ctx);
 void AddIntcHandler(CpuContext& ctx);
+void handle_mtc0_write(CpuContext& ctx, uint8_t rd, uint32_t value);
+void syscall_EnableIntc(CpuContext& ctx);
+void syscall_DisableIntc(CpuContext& ctx);
+void _DisableDmac(CpuContext& ctx);
+void CreateThread(CpuContext& ctx);
+void Syscall_GetOsdConfigParam(CpuContext& ctx);
+void sceSifSetDChain(CpuContext& ctx);
+void AddDmacHandler(CpuContext& ctx);
+void SysRemoveDmacHandler(CpuContext& ctx);
+void _EnableDmac(CpuContext& ctx);
+void sceSifSetReg(CpuContext& ctx);
+void sceSifGetReg(CpuContext& ctx);
+void sceSifStopDma(CpuContext& ctx);
+void GsPutIMR(CpuContext& ctx);
+void GsGetIMR(CpuContext& ctx);
+void SetGsCrt(CpuContext& ctx);
+void GetMemorySize(CpuContext& ctx);
+void HLE_Deci2Call(CpuContext& ctx);
 // The main dispatcher function
 void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx);

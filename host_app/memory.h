@@ -6,12 +6,24 @@
 
 // Declare a global variable for the PS2's main memory.
 extern std::vector<uint8_t> main_memory;
+extern std::vector<uint8_t> vu1_code_memory;
+extern std::vector<uint8_t> vu1_data_memory;
 
 // Define a 128-bit data type for quadword operations.
 struct alignas(16) QuadWord {
-    uint8_t m2[16];
+    union {
+        uint8_t  u8[16];
+        uint16_t u16[8];
+        uint32_t u32[4];
+        uint64_t u64[2];
+        int8_t   s8[16];
+        int16_t  s16[8];
+        int32_t  s32[4];
+        int64_t  s64[2];
+        float    f32[4];
+        uint8_t  m2[16];  // Keep for backward compatibility
+    };
 };
-
 
 namespace memory {
     uint8_t* translate_address(uint32_t address, size_t size);
