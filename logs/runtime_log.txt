@@ -1,9 +1,14 @@
-Starting the host application...
-Executing recompiled code...
-Syscall: InitMainThread() called!
-Syscall: InitHeap() called!
-Syscall: CreateSema() called!
-Syscall: CreateSema() called!
+Starting Host Application...
+ISO Loaded Successfully: C:\Users\Owner\Desktop\PS2_Recomp\Crash_TwinSanity.rep\Crash Twinsanity.iso
+[IO WRITE] Address: 1000f230, Value: 20000
+[CPU] Thread Started.
+[GFX] Graphics Thread Started.
+Scheduler: InitMainThread gp=0x3114f0 stack=0xffffffff size=0
+Scheduler: Main thread 1 initialized, SP=0x2000000
+Syscall: InitHeap()
+InitHeap: Start=0x3dae80 End=0x2000000 Size=0x1c25180
+Scheduler: CreateSema id=1 init=1 max=1
+Scheduler: CreateSema id=2 init=1 max=1
 Syscall: SetSysCall() called!
 SetSyscall: Index 131 redirected to Guest Address 0x2d4ec8 (Table Entry at 0x800004ec)
 Syscall: SetSysCall() called!
@@ -14,9 +19,12 @@ Syscall: SetSysCall() called!
 SetSyscall: Index 90 redirected to Guest Address 0x2d5290 (Table Entry at 0x80000448)
 Executing CUSTOM guest syscall at 0x2d5290
 Executing CUSTOM guest syscall at 0x2d5290
-Syscall: FlushCache(mode: 0) at PC: 0x2d5290
-Syscall: FlushCache(mode: 2) at PC: 0x2d5290
-  [!] Instruction Cache Invalidation: Possible Dynamic Code Execution.
+Syscall: FlushCache(mode: 0)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+Syscall: FlushCache(mode: 2)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
 Syscall: SetSysCall() called!
 SetSyscall: Index 91 redirected to Guest Address 0x80076000 (Table Entry at 0x8000044c)
 Executing CUSTOM guest syscall at 0x80076000
@@ -234,4 +242,3149 @@ Dynamic interpreter: Branch taken to 0x2d5378
 ╚════════════════════════════════════════════════╝
 Syscall: SetSysCall() called!
 SetSyscall: Index 8 redirected to Guest Address 0x800766c0 (Table Entry at 0x80000300)
-Unhandled OP Code: 0x2c6eac Instruction: dsll
+Syscall: AddIntcHandler
+Syscall: AddIntcHandler(cause: 11, handler: 0x2d5898, next: 0, arg: 0x0, flag: 0)
+  Inserted handler 1 at FRONT of queue for cause 11
+  Queue for cause 11 now has 1 handlers
+Scheduler: CreateSema id=3 init=0 max=255
+Scheduler: CreateThread id=2 func=0x2cfe08 prio=0
+Scheduler: iChangeThreadPriority id=1 0 -> 1
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d561c
+Syscall: Syscall_GetOsdConfigParam() called!
+Syscall: GetOsdConfigParam(out_ptr: 0x70003f80)
+Syscall: SetOsdConfigParam() called!
+Syscall: SetOsdConfigParam(param: 0x70003f84)
+Syscall: Syscall_GetOsdConfigParam() called!
+Syscall: GetOsdConfigParam(out_ptr: 0x70003f84)
+Syscall: SetOsdConfigParam() called!
+Syscall: SetOsdConfigParam(param: 0x70003f80)
+Syscall: SetSysCall() called!
+SetSyscall: Index 90 redirected to Guest Address 0x2d50a8 (Table Entry at 0x80000448)
+Executing CUSTOM guest syscall at 0x2d50a8
+Syscall: FlushCache(mode: 0)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+Syscall: FlushCache(mode: 2)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+Syscall: SetSysCall() called!
+SetSyscall: Index 91 redirected to Guest Address 0x80074000 (Table Entry at 0x8000044c)
+Executing CUSTOM guest syscall at 0x80074000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80074000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80074000: addiu       $sp, $sp, -0x20
+  [     2] 0x80074004: addiu       $a1, $zero, 0x26
+  [     3] 0x80074008: sd          $s0, 0x0($sp)
+  [     4] 0x8007400c: daddu       $s0, $a0, $zero
+  [     5] 0x80074010: sd          $ra, 0x10($sp)
+  [     6] 0x80074014: lui         $a0, 0x8007
+  [     7] 0x80074018: jal         func_800741E8
+Dynamic interpreter: Branch taken to 0x800741e8
+  [     8] 0x800741e8: lui         $a2, 0xBC00
+  [     9] 0x800741ec: lw          $a2, 0x3C0($a2)
+  [    10] 0x800741f0: beqz        $a2, . + 4 + (0x11 << 2)
+Dynamic interpreter: Branch taken to 0x80074238
+  [    11] 0x80074238: ld          $v1, 0x4700($t0)
+  [    12] 0x8007423c: dsll        $v0, $v1, 26
+  [    13] 0x80074240: dsra32      $v0, $v0, 0
+  [    14] 0x80074244: andi        $v0, $v0, 0x7
+  [    15] 0x80074248: bnez        $v0, . + 4 + (0x15 << 2)
+Dynamic interpreter: Branch taken to 0x800742a0
+  [    16] 0x800742a0: jr          $ra
+Dynamic interpreter: Branch taken to 0x80074020
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     16 instructions               ║
+║  Final PC: 0x80074020                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+Syscall: SetSysCall() called!
+SetSyscall: Index 90 redirected to Guest Address 0x2d64a8 (Table Entry at 0x80000448)
+Executing CUSTOM guest syscall at 0x2d64a8
+Syscall: FlushCache(mode: 0)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+Syscall: FlushCache(mode: 2)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+Syscall: SetSysCall() called!
+SetSyscall: Index 91 redirected to Guest Address 0x80075000 (Table Entry at 0x8000044c)
+Syscall: SetSysCall() called!
+SetSyscall: Index 84 redirected to Guest Address 0x2d6880 (Table Entry at 0x80000430)
+Executing CUSTOM guest syscall at 0x80075000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80075000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80075000: lui         $v0, 0x8007
+  [     2] 0x80075004: daddu       $a1, $zero, $zero
+  [     3] 0x80075008: addiu       $v1, $v0, 0x5300
+  [     4] 0x8007500c: nop
+  [     5] 0x80075010: lw          $v0, 0x0($v1)
+  [     6] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [     7] 0x8007501c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d6580
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:      7 instructions               ║
+║  Final PC: 0x002d6580                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 85 redirected to Guest Address 0x80075038 (Table Entry at 0x80000434)
+Executing CUSTOM guest syscall at 0x80075000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80075000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80075000: lui         $v0, 0x8007
+  [     2] 0x80075004: daddu       $a1, $zero, $zero
+  [     3] 0x80075008: addiu       $v1, $v0, 0x5300
+  [     4] 0x8007500c: nop
+  [     5] 0x80075010: lw          $v0, 0x0($v1)
+  [     6] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [     7] 0x80075024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [     9] 0x80075010: lw          $v0, 0x0($v1)
+  [    10] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    11] 0x8007501c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d6580
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     11 instructions               ║
+║  Final PC: 0x002d6580                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 86 redirected to Guest Address 0x800750c8 (Table Entry at 0x80000438)
+Executing CUSTOM guest syscall at 0x80075000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80075000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80075000: lui         $v0, 0x8007
+  [     2] 0x80075004: daddu       $a1, $zero, $zero
+  [     3] 0x80075008: addiu       $v1, $v0, 0x5300
+  [     4] 0x8007500c: nop
+  [     5] 0x80075010: lw          $v0, 0x0($v1)
+  [     6] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [     7] 0x80075024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [     9] 0x80075010: lw          $v0, 0x0($v1)
+  [    10] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    11] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    13] 0x80075010: lw          $v0, 0x0($v1)
+  [    14] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    15] 0x8007501c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d6580
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     15 instructions               ║
+║  Final PC: 0x002d6580                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 87 redirected to Guest Address 0x80075108 (Table Entry at 0x8000043c)
+Executing CUSTOM guest syscall at 0x80075000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80075000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80075000: lui         $v0, 0x8007
+  [     2] 0x80075004: daddu       $a1, $zero, $zero
+  [     3] 0x80075008: addiu       $v1, $v0, 0x5300
+  [     4] 0x8007500c: nop
+  [     5] 0x80075010: lw          $v0, 0x0($v1)
+  [     6] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [     7] 0x80075024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [     9] 0x80075010: lw          $v0, 0x0($v1)
+  [    10] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    11] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    13] 0x80075010: lw          $v0, 0x0($v1)
+  [    14] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    15] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    16] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    17] 0x80075010: lw          $v0, 0x0($v1)
+  [    18] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    19] 0x8007501c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d6580
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     19 instructions               ║
+║  Final PC: 0x002d6580                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 88 redirected to Guest Address 0x80075158 (Table Entry at 0x80000440)
+Executing CUSTOM guest syscall at 0x80075000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80075000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80075000: lui         $v0, 0x8007
+  [     2] 0x80075004: daddu       $a1, $zero, $zero
+  [     3] 0x80075008: addiu       $v1, $v0, 0x5300
+  [     4] 0x8007500c: nop
+  [     5] 0x80075010: lw          $v0, 0x0($v1)
+  [     6] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [     7] 0x80075024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [     9] 0x80075010: lw          $v0, 0x0($v1)
+  [    10] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    11] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    13] 0x80075010: lw          $v0, 0x0($v1)
+  [    14] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    15] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    16] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    17] 0x80075010: lw          $v0, 0x0($v1)
+  [    18] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    19] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    20] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    21] 0x80075010: lw          $v0, 0x0($v1)
+  [    22] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    23] 0x8007501c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d6580
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     23 instructions               ║
+║  Final PC: 0x002d6580                  ║
+╚════════════════════════════════════════════════╝
+Syscall: SetSysCall() called!
+SetSyscall: Index 89 redirected to Guest Address 0x800751a8 (Table Entry at 0x80000444)
+Executing CUSTOM guest syscall at 0x80075000
+  Executing via dynamic interpreter
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER START                    ║
+║  Entry Point: 0x80075000                  ║
+╚════════════════════════════════════════════════╝
+  [     1] 0x80075000: lui         $v0, 0x8007
+  [     2] 0x80075004: daddu       $a1, $zero, $zero
+  [     3] 0x80075008: addiu       $v1, $v0, 0x5300
+  [     4] 0x8007500c: nop
+  [     5] 0x80075010: lw          $v0, 0x0($v1)
+  [     6] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [     7] 0x80075024: sltiu       $v0, $a1, 0x6
+  [     8] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [     9] 0x80075010: lw          $v0, 0x0($v1)
+  [    10] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    11] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    12] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    13] 0x80075010: lw          $v0, 0x0($v1)
+  [    14] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    15] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    16] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    17] 0x80075010: lw          $v0, 0x0($v1)
+  [    18] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    19] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    20] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    21] 0x80075010: lw          $v0, 0x0($v1)
+  [    22] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+Dynamic interpreter: Branch taken to 0x80075024
+  [    23] 0x80075024: sltiu       $v0, $a1, 0x6
+  [    24] 0x80075028: bnez        $v0, . + 4 + (-0x7 << 2)
+Dynamic interpreter: Branch taken to 0x80075010
+  [    25] 0x80075010: lw          $v0, 0x0($v1)
+  [    26] 0x80075014: bne         $a0, $v0, . + 4 + (0x3 << 2)
+  [    27] 0x8007501c: jr          $ra
+Dynamic interpreter: Branch taken to 0x2d65a4
+╔════════════════════════════════════════════════╗
+║  DYNAMIC INTERPRETER EXIT                     ║
+║  Executed:     27 instructions               ║
+║  Final PC: 0x002d65a4                  ║
+╚════════════════════════════════════════════════╝
+Syscall: FlushCache(mode: 0)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+HLE: Executing Global Constructors (Address 0x002d69a0)
+  HLE: Found 25 constructors.
+  HLE: Calling Constructor at 0x2b6fb8
+  HLE: Calling Constructor at 0x2b3bc8
+  HLE: Calling Constructor at 0x2b19b0
+[IO WRITE] Address: 10008020, Value: 0
+DMAC Write Address: 10008020, Value: 0
+DMAC Channel: 0 Address: 0x10008020 Value: 0x0
+[IO WRITE] Address: 10008030, Value: 2e5d90
+DMAC Write Address: 10008030, Value: 2e5d90
+DMAC Channel: 0 Address: 0x10008030 Value: 0x2e5d90
+[IO WRITE] Address: 10008000, Value: 145
+DMAC Write Address: 10008000, Value: 145
+DMAC Channel: 0 Address: 0x10008000 Value: 0x145
+DMAC DIRECTION: 1
+DMAC: Starting channel 0
+  CHCR: 0x145
+  MADR: 0x0
+  QWC:  0
+  TADR: 0x2e5d90
+DMAC: VIF0 DMA started (Mode: 1)
+========================================
+[VIF0 DMA] Chain Processing Started
+========================================
+  Initial Registers:
+    CHCR: 0x145
+    MADR: 0x0
+    TADR: 0x2e5d90
+    QWC:  0
+    ASR0: 0x0
+    ASR1: 0x0
+  CHCR Flags:
+    Mode: 1 (should be 1 for chain)
+    TTE:  YES - Tag data transferred to VIF
+    TIE:  NO
+    ASP:  0 (call stack depth)
+  Chain Start:
+    TADR (physical): 0x2e5d90
+    Starting from:   MAIN RAM
+[DEBUG] Pre-scan of DMA chain at 0x2e5d90:
+  Reading lo_tag at 0x2e5d90
+  Value at lo: 0x100000da
+  Reading hi_tag at 0x2e5d98
+  Value at hi_tag: 0x0
+  [0] @ 0x2e5d90: ID=1 QWC=218 ADDR=0x0 LO: 0x100000da HI: 0x0
+  Reading lo_tag at 0x2e5da0
+  Value at lo: 0x200002ff5a000fff
+  Reading hi_tag at 0x2e5da8
+  Value at hi_tag: 0x8000033c
+  [1] @ 0x2e5da0: ID=5 QWC=4095 ADDR=0x200002f0 LO: 0x200002ff5a000fff HI: 0x8000033c
+  Reading lo_tag at 0x2e5db0
+  Value at lo: 0x2ff1001080a
+  Reading hi_tag at 0x2e5db8
+  Value at hi_tag: 0x81e20b7d
+  [2] @ 0x2e5db0: ID=1 QWC=2058 ADDR=0x2f0 LO: 0x2ff1001080a HI: 0x81e20b7d
+  Reading lo_tag at 0x2e5dc0
+  Value at lo: 0x2ff81e2137d
+  Reading hi_tag at 0x2e5dc8
+  Value at hi_tag: 0x81e21b7d
+  [3] @ 0x2e5dc0: ID=0 QWC=4989 ADDR=0x2f0 LO: 0x2ff81e2137d HI: 0x81e21b7d
+
+Raw bytes @ 0x628990: 00 00 00 00 00 00 00 00 
+
+  ┌─────────────────────────────────────────────────
+  │ TAG #0
+  └─────────────────────────────────────────────────
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+    Reading tag from RAM @ 0x2e5d90
+    Raw tag_hi bytes:
+      00 00 00 00 00 00 00 4a 
+    Raw Tag Data:
+      tag_lo: 0x00000000100000da
+      tag_hi: 0x4a00000000000000
+    Parsed Tag Fields:
+      ID:   1 (CNT)
+      QWC:  218 quadwords (3488 bytes)
+      ADDR: 0x0
+      UNALIGNED ADDR: 0x0
+      IRQ:  NO
+      SPR:  NO (RAM)
+      PCE:  0
+    CHCR.TAG updated: 0x145 -> 0x10000145
+    TTE Data (VIF commands in tag_hi):
+      Word 0: 0x00000000 (CMD=0x00)
+      Word 1: 0x4a000000 (CMD=0x4a)
+    Processing Tag ID 1 (CNT):
+      CNT: Transfer data after tag, continue
+        Data source: 0x2e5da0 (RAM)
+        Next TADR:   0x2e6b40
+    Register Updates:
+      MADR -> 0x2e5da0
+      TADR -> 0x2e6b40
+      QWC  -> 218
+    TTE Transfer:
+      Sending tag_hi (8 bytes) to VIF0 before payload
+      TTE bytes: 00 00 00 00 00 00 00 4a 
+[VIF0] ProcessData: 8 bytes
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x4a000000
+    [VIF STATE CHECK] After TTE processing:
+      VIF0 state: 0
+      Pending bytes: 0
+      About to send: 3488 bytes
+      [WARNING] VIF is in IDLE but has data pending!
+      [WARNING] Data will be interpreted as commands - likely wrong!
+    Data Transfer (RAM):
+      Source:     0x2e5da0
+      Translated: 0x2e5da0
+      Size:       3488 bytes (218 QW)
+      First 64 bytes:
+        ff 0f 00 5a ff 02 00 20 3c 03 00 80 ff 02 00 00 
+        0a 08 01 10 ff 02 00 00 7d 0b e2 81 ff 02 00 00 
+        7d 13 e2 81 ff 02 00 00 7d 1b e2 81 ff 02 00 00 
+        7d 23 e2 81 ff 02 00 00 7d 2b e2 81 ff 02 00 00 
+      Sending to VIF0...
+[VIF0] ProcessData: 3488 bytes
+[VIF0] WriteToLatch: Data=0x5a000fff
+[VIF0] WriteToLatch: Data=0x200002ff
+[VIF0] ProcessFifo: State=0
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] Code=0x4a000000 CMD=0x4a IMM=0x0
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x1001080a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 4
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 4 words
+[VIF0] WriteToLatch: Data=0x81e20b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2137d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 8
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 8 words
+[VIF0] WriteToLatch: Data=0x81e21b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2237d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 12
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 12 words
+[VIF0] WriteToLatch: Data=0x81e22b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2337d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 16
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 16 words
+[VIF0] WriteToLatch: Data=0x81e23b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a001ff5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 20
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 20 words
+[VIF0] WriteToLatch: Data=0x81e2437d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 24
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 24 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e1137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 28
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 28 words
+[VIF0] WriteToLatch: Data=0x81e2137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e3137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 32
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 32 words
+[VIF0] WriteToLatch: Data=0x81e4137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e5137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 36
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 36 words
+[VIF0] WriteToLatch: Data=0x81e6137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e7137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 40
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 40 words
+[VIF0] WriteToLatch: Data=0x81e8137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a000fff
+[VIF0] WriteToLatch: Data=0x200002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 44
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 44 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 48
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 48 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a001ff3
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 52
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 52 words
+[VIF0] WriteToLatch: Data=0x1001080a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 56
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 56 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0154a7eb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 60
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 60 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x003f07da
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x809f07c0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 64
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 64 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8140ffe6
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fff9fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 68
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 68 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00053
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x81e0f9fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 72
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 72 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00a7f
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81e00a3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 76
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 76 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81e0fa7f
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81e00fe7
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 80
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 80 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fff9fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0ffe6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 84
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 84 words
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x81fff8ea
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x81e0f95e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 88
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 88 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x81e0f91e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0f85e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 92
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 92 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e318aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e3296a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 96
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 96 words
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x81e322be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0f8de
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 100
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 100 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e2112a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e22abd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 104
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 104 words
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x81e20abd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e0fa3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 108
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 108 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e41fe9
+[VIF0] WriteToLatch: Data=0x10010080
+[VIF0] WriteToLatch: Data=0x01e1fa6a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 112
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 112 words
+[VIF0] WriteToLatch: Data=0xbf800000
+[VIF0] WriteToLatch: Data=0x81094a41
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01094a42
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 116
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 116 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01094a43
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 120
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 120 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 124
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 124 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x01e10aab
+[VIF0] WriteToLatch: Data=0x50010003
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 128
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 128 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01004a5e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 132
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 132 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0529e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 136
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 136 words
+[VIF0] WriteToLatch: Data=0x3f7fbe77
+[VIF0] WriteToLatch: Data=0x800002ff
+[VIF0] WriteToLatch: Data=0x10010080
+[VIF0] WriteToLatch: Data=0x01004ae6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 140
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 140 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x010059fd
+[VIF0] WriteToLatch: Data=0x52010006
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 144
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 144 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x810beb3c
+[VIF0] WriteToLatch: Data=0x00400743
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 148
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 148 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 152
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 152 words
+[VIF0] WriteToLatch: Data=0x40000056
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x005deac4
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 156
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 156 words
+[VIF0] WriteToLatch: Data=0x3fc90fdb
+[VIF0] WriteToLatch: Data=0x80400243
+[VIF0] WriteToLatch: Data=0x3fc90fdb
+[VIF0] WriteToLatch: Data=0x81004ade
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 160
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 160 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81005ae6
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010c59fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 164
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 164 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010002d3
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x810061fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 168
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 168 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01005a7f
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81005a3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 172
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 172 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x8100627f
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81005ae7
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 176
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 176 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010b59fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01005ae6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 180
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 180 words
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x810b5bea
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x81005c1e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 184
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 184 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x81005c9e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01005b1e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 188
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 188 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010f7b6a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010f842a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 192
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 192 words
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x810f92be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01005bde
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 196
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 196 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010d6caa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010d82bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 200
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 200 words
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x810d62bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01005a3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 204
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 204 words
+[VIF0] WriteToLatch: Data=0xbfc90fdb
+[VIF0] WriteToLatch: Data=0x81127b29
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01004ade
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 208
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 208 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0100625e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01005ae6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 212
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 212 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01004a66
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010b5ae8
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 216
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 216 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01095a6c
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 220
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 220 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x805d4f44
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 224
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 224 words
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x81004ae6
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0149ea58
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 228
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 228 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011d59fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01000313
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 232
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 232 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81404ae6
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x8100e9fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 236
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 236 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0100627f
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8100623f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 240
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 240 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x8100ea7f
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01006767
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 244
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 244 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014b59fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01400253
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 248
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 248 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x811de9fd
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x814059fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 252
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 252 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01404a7f
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81404a3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 256
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 256 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8100ef66
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81405a7f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 260
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 260 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01404a67
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011deb2a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 264
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 264 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014949fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 268
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 268 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x810c636a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 272
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 272 words
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x81404a66
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x8100ec9e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 276
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 276 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x8100ec1e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0100ebde
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 280
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 280 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01494aea
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x810c94aa
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 284
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 284 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0100eb9e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010c82be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 288
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 288 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014b5b2a
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x810d92bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 292
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 292 words
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x81404c9e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01404c1e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 296
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 296 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010d6c6a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010d7abd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 300
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 300 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x814b94ea
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x81404c9e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 304
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 304 words
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x81404bde
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0100ea3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 308
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 308 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01117769
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 312
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 312 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014c636a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014b82be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 316
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 316 words
+[VIF0] WriteToLatch: Data=0x807d03bc
+[VIF0] WriteToLatch: Data=0x014c9abd
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x814c92bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 320
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 320 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01404a3f
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014d7a69
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 324
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 324 words
+[VIF0] WriteToLatch: Data=0x800003bf
+[VIF0] WriteToLatch: Data=0x01404adc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 328
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 328 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 332
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 332 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41ebf9be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01eb5048
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 336
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 336 words
+[VIF0] WriteToLatch: Data=0x3fb504f3
+[VIF0] WriteToLatch: Data=0x81dffabe
+[VIF0] WriteToLatch: Data=0x807d03bc
+[VIF0] WriteToLatch: Data=0x01e0fa5e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 340
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 340 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 344
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 344 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01dffae9
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c00343
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 348
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 348 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c94afe
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c94fcb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 352
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 352 words
+[VIF0] WriteToLatch: Data=0x80fd03bc
+[VIF0] WriteToLatch: Data=0x01c94a8f
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c0003f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 356
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 356 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x00cb68fc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010b68fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 360
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 360 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01000260
+[VIF0] WriteToLatch: Data=0x808c533d
+[VIF0] WriteToLatch: Data=0x010b6ace
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 364
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 364 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x00e0026c
+[VIF0] WriteToLatch: Data=0x817d03bc
+[VIF0] WriteToLatch: Data=0x008b6b8e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 368
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 368 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x00800760
+[VIF0] WriteToLatch: Data=0x810e633d
+[VIF0] WriteToLatch: Data=0x01a0036c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 372
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 372 words
+[VIF0] WriteToLatch: Data=0x802bfb3d
+[VIF0] WriteToLatch: Data=0x01e0032c
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0160076c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 376
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 376 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x004b6acd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ee49bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 380
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 380 words
+[VIF0] WriteToLatch: Data=0x804e5b3d
+[VIF0] WriteToLatch: Data=0x00400360
+[VIF0] WriteToLatch: Data=0x802b033d
+[VIF0] WriteToLatch: Data=0x004a0281
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 384
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 384 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01eee8bd
+[VIF0] WriteToLatch: Data=0x808afb3d
+[VIF0] WriteToLatch: Data=0x008a02c0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 388
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 388 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ee68be
+[VIF0] WriteToLatch: Data=0x802b033d
+[VIF0] WriteToLatch: Data=0x01eb608b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 392
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 392 words
+[VIF0] WriteToLatch: Data=0x810bfb3d
+[VIF0] WriteToLatch: Data=0x01eb49bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01eae8bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 396
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 396 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ea68be
+[VIF0] WriteToLatch: Data=0x802b033d
+[VIF0] WriteToLatch: Data=0x01eb604b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 400
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 400 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01eb49bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ebe8bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 404
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 404 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41eb68be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01eb60cb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 408
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 408 words
+[VIF0] WriteToLatch: Data=0x3fb504f3
+[VIF0] WriteToLatch: Data=0x81dffabe
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0fb1e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 412
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 412 words
+[VIF0] WriteToLatch: Data=0x807d03bc
+[VIF0] WriteToLatch: Data=0x01dffa69
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c00283
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 416
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 416 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x00e007ec
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01cc62fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 420
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 420 words
+[VIF0] WriteToLatch: Data=0x802a033d
+[VIF0] WriteToLatch: Data=0x01cc62cf
+[VIF0] WriteToLatch: Data=0x802b033d
+[VIF0] WriteToLatch: Data=0x01cc634b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 424
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 424 words
+[VIF0] WriteToLatch: Data=0x802c033d
+[VIF0] WriteToLatch: Data=0x01c0003f
+[VIF0] WriteToLatch: Data=0x80fd03bc
+[VIF0] WriteToLatch: Data=0x00c950fc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 428
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 428 words
+[VIF0] WriteToLatch: Data=0x809d5b3d
+[VIF0] WriteToLatch: Data=0x010950fd
+[VIF0] WriteToLatch: Data=0x803e6b3d
+[VIF0] WriteToLatch: Data=0x008b0300
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 432
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 432 words
+[VIF0] WriteToLatch: Data=0x810c6b3d
+[VIF0] WriteToLatch: Data=0x004b02c1
+[VIF0] WriteToLatch: Data=0x808b6b3d
+[VIF0] WriteToLatch: Data=0x0049530d
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 436
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 436 words
+[VIF0] WriteToLatch: Data=0x810aeb3d
+[VIF0] WriteToLatch: Data=0x010952ce
+[VIF0] WriteToLatch: Data=0x804af33d
+[VIF0] WriteToLatch: Data=0x010007e0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 440
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 440 words
+[VIF0] WriteToLatch: Data=0x817d03bc
+[VIF0] WriteToLatch: Data=0x0089528e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fe675a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 444
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 444 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fe5a58
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x016007ac
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 448
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 448 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fe5319
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x008007a0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 452
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 452 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01a002ac
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x004002a0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 456
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 456 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e002ec
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ecf9bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 460
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 460 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ecf0bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ec50be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 464
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 464 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ec588b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e9f9bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 468
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 468 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e9f0bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e950be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 472
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 472 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e9584b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fdf9bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 476
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 476 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fdf0bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41fd50be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 480
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 480 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fd58cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e329bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 484
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 484 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e330bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e338be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 488
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 488 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e340cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e229bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 492
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 492 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e230bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e238be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 496
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 496 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e2408b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e129bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 500
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 500 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e130bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e138be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 504
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 504 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1404b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c429bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 508
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 508 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c430bd
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x4ab30100
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 512
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 512 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=0 Payload=2048 bytes
+[VIF0] MPG: Writing 2048 bytes to VU0 micro memory at 0x0
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] Code=0x4ab30100 CMD=0x4a IMM=0x100
+[VIF0] WriteToLatch: Data=0x8024033c
+[VIF0] WriteToLatch: Data=0x41c438be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c0410b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 4
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 4 words
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81c0f83c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 8
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 8 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01def8ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01def08b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 12
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 12 words
+[VIF0] WriteToLatch: Data=0x8101133d
+[VIF0] WriteToLatch: Data=0x01c0e83c
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0140179e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 16
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 16 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01dee8ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01dee08b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 20
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 20 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01000f1e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x009e0780
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 24
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 24 words
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x803e079a
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x8140f7a6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 28
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 28 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fdf1fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00053
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 32
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 32 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8100e7a6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 36
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 36 words
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x81e0e9fe
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00a7f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 40
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 40 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81e00a3f
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81e0ea7f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 44
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 44 words
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81e00867
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x009c0780
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 48
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 48 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fc09fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0181f1fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 52
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 52 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01800793
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81e0e726
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 56
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 56 words
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x818009fe
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180f27f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 60
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 60 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8180f23f
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81800a7f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 64
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 64 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180f067
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 68
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 68 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fce7aa
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 72
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 72 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019d09fd
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81fef06a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 76
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 76 words
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x8180ef66
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x81e0e19e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 80
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 80 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x81e0e31e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0e15e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 84
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 84 words
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x819defea
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0e11e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 88
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 88 words
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x81fe632a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180e9de
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 92
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 92 words
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x819ff8ea
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180ea1e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 96
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 96 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e10b6a
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x819f3aea
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 100
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 100 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180ea9e
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x818319ea
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 104
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 104 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180ea5e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fe32be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 108
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 108 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e162bd
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x81e12abd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 112
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 112 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0e23f
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ed27a9
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 116
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 116 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019f42be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01835abd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 120
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 120 words
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x818352bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0180ea3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 124
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 124 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01874f29
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019ef11a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 128
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 128 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019ef75b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019c2059
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 132
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 132 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019ce958
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019c2798
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 136
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 136 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x019cef59
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x00e0072c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 140
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 140 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01050f01
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x00850904
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 144
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 144 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x009eef40
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011eef85
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 148
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 148 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x009ce040
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0044e041
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 152
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 152 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x403de041
+[VIF0] WriteToLatch: Data=0x8022033c
+[VIF0] WriteToLatch: Data=0x011ef06b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 156
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 156 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1f8aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c1fafe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 160
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 160 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c1f8bf
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01df08bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 164
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 164 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0022107e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x002200fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 168
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 168 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41df086e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0022004c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 172
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 172 words
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x10010080
+[VIF0] WriteToLatch: Data=0x01c111ac
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 176
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 176 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c119ec
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c732fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 180
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 180 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c63a2e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c841ea
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 184
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 184 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 188
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 188 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c218ac
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010739c1
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 192
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 192 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c242fe
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01073ac2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 196
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 196 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c810ae
+[VIF0] WriteToLatch: Data=0x806b03be
+[VIF0] WriteToLatch: Data=0x01c30fec
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 200
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 200 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c212aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010a5281
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 204
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 204 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 208
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 208 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c642fe
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010a5282
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 212
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 212 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c831ae
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01df42fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 216
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 216 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c8ffee
+[VIF0] WriteToLatch: Data=0x806a03be
+[VIF0] WriteToLatch: Data=0x01c0421c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 220
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 220 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c6326a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01dff9ea
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 224
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 224 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c142ea
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01094a41
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 228
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 228 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c822aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c82a2a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 232
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 232 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010b5b01
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01094ac2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 236
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 236 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010a5281
+[VIF0] WriteToLatch: Data=0x803f033d
+[VIF0] WriteToLatch: Data=0x010b6242
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 240
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 240 words
+[VIF0] WriteToLatch: Data=0x806b03be
+[VIF0] WriteToLatch: Data=0x01084201
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c0109c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 244
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 244 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010a5282
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0029ffc4
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 248
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 248 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010842c2
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01073a41
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 252
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 252 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c3122a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011f50c3
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 256
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 256 words
+[VIF0] WriteToLatch: Data=0x8000043e
+[VIF0] WriteToLatch: Data=0x011f59c3
+[VIF0] WriteToLatch: Data=0x810a043d
+[VIF0] WriteToLatch: Data=0x01074a42
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 260
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 260 words
+[VIF0] WriteToLatch: Data=0x803f033d
+[VIF0] WriteToLatch: Data=0x0108403d
+[VIF0] WriteToLatch: Data=0x34020800
+[VIF0] WriteToLatch: Data=0x010319fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 264
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 264 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x0020016b
+[VIF0] WriteToLatch: Data=0x806903be
+[VIF0] WriteToLatch: Data=0x0108520a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 268
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 268 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 272
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 272 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010a39fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 276
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 276 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010a1aa8
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 280
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 280 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 284
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 284 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c0319c
+[VIF0] WriteToLatch: Data=0x800a1bbc
+[VIF0] WriteToLatch: Data=0x01c0f8dc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 288
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 288 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8024033d
+[VIF0] WriteToLatch: Data=0x0028ffc4
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 292
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 292 words
+[VIF0] WriteToLatch: Data=0x8000043e
+[VIF0] WriteToLatch: Data=0x01c11aaa
+[VIF0] WriteToLatch: Data=0x8108043d
+[VIF0] WriteToLatch: Data=0x01c131ea
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 296
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 296 words
+[VIF0] WriteToLatch: Data=0x8000043e
+[VIF0] WriteToLatch: Data=0x01e0203c
+[VIF0] WriteToLatch: Data=0x8109043d
+[VIF0] WriteToLatch: Data=0x01e0227d
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 300
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 300 words
+[VIF0] WriteToLatch: Data=0x8041fb3d
+[VIF0] WriteToLatch: Data=0x01e02fe1
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0107383d
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 304
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 304 words
+[VIF0] WriteToLatch: Data=0x8022033d
+[VIF0] WriteToLatch: Data=0x0107420a
+[VIF0] WriteToLatch: Data=0x8021033d
+[VIF0] WriteToLatch: Data=0x010a503d
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 308
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 308 words
+[VIF0] WriteToLatch: Data=0x800208b0
+[VIF0] WriteToLatch: Data=0x010a49ca
+[VIF0] WriteToLatch: Data=0x8081333d
+[VIF0] WriteToLatch: Data=0x0026f82c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 312
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 312 words
+[VIF0] WriteToLatch: Data=0x8101333d
+[VIF0] WriteToLatch: Data=0x00281084
+[VIF0] WriteToLatch: Data=0x8086133d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 316
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 316 words
+[VIF0] WriteToLatch: Data=0x10010010
+[VIF0] WriteToLatch: Data=0x00270984
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x00430081
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 320
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 320 words
+[VIF0] WriteToLatch: Data=0x80461b3c
+[VIF0] WriteToLatch: Data=0x010201c3
+[VIF0] WriteToLatch: Data=0x80870b3d
+[VIF0] WriteToLatch: Data=0x004300c0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 324
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 324 words
+[VIF0] WriteToLatch: Data=0x8047333d
+[VIF0] WriteToLatch: Data=0x010630eb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x008200c0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 328
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 328 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010108ab
+[VIF0] WriteToLatch: Data=0x8000043e
+[VIF0] WriteToLatch: Data=0x01010181
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 332
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 332 words
+[VIF0] WriteToLatch: Data=0x81c1043d
+[VIF0] WriteToLatch: Data=0x01c039bf
+[VIF0] WriteToLatch: Data=0x3dcccccd
+[VIF0] WriteToLatch: Data=0x81df18bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 336
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 336 words
+[VIF0] WriteToLatch: Data=0x800110b0
+[VIF0] WriteToLatch: Data=0x01df10bd
+[VIF0] WriteToLatch: Data=0x800210b0
+[VIF0] WriteToLatch: Data=0x01df30be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 340
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 340 words
+[VIF0] WriteToLatch: Data=0x800210b0
+[VIF0] WriteToLatch: Data=0x01c00b63
+[VIF0] WriteToLatch: Data=0x800210b0
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 344
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 344 words
+[VIF0] WriteToLatch: Data=0x800210b0
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x100100e0
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 348
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 348 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x41c069fd
+[VIF0] WriteToLatch: Data=0x800208b5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 352
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 352 words
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 356
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 356 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+      Transfer complete.
+    Next iteration: TADR=0x2e6b40 fromSpr=NO
+
+  ┌─────────────────────────────────────────────────
+  │ TAG #1
+  └─────────────────────────────────────────────────
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+    Reading tag from RAM @ 0x2e6b40
+    Raw tag_hi bytes:
+      00 00 00 00 00 00 00 00 
+    Raw Tag Data:
+      tag_lo: 0x0000000070000000
+      tag_hi: 0x0000000000000000
+    Parsed Tag Fields:
+      ID:   7 (END)
+      QWC:  0 quadwords (0 bytes)
+      ADDR: 0x0
+      UNALIGNED ADDR: 0x0
+      IRQ:  NO
+      SPR:  NO (RAM)
+      PCE:  0
+    CHCR.TAG updated: 0x10000145 -> 0x70000145
+    TTE Data (VIF commands in tag_hi):
+      Word 0: 0x00000000 (CMD=0x00)
+      Word 1: 0x00000000 (CMD=0x00)
+    Processing Tag ID 7 (END):
+      END: Transfer data after tag, then terminate
+        Data source: 0x2e6b50 (RAM)
+        Chain ends after this transfer
+    Register Updates:
+      MADR -> 0x2e6b50
+      TADR -> 0x2e6b50
+      QWC  -> 0
+    TTE Transfer:
+      Sending tag_hi (8 bytes) to VIF0 before payload
+      TTE bytes: 00 00 00 00 00 00 00 00 
+[VIF0] ProcessData: 8 bytes
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 360
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 360 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x100 NUM=179 Payload=1432 bytes
+[VIF0] MPG: Writing 1432 bytes to VU0 micro memory at 0x800
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+    No data to transfer (QWC=0)
+    Next iteration: TADR=0x2e6b50 fromSpr=NO
+
+========================================
+[VIF0 DMA] Chain Processing Complete
+========================================
+  Tags processed: 2
+  End reason:     Normal termination
+  Final Registers:
+    CHCR: 0x70000145
+    MADR: 0x2e6b50
+    TADR: 0x2e6b50
+    QWC:  0
+DMAC: Channel 0 completed
+[VIF0 DMA] STR cleared, channel complete
+========================================
+
+  HLE: Calling Constructor at 0x29eda8
+  HLE: Calling Constructor at 0x292ac8
+  HLE: Calling Constructor at 0x2880d8
+  HLE: Calling Constructor at 0x282128
+  HLE: Calling Constructor at 0x27e1a8
+  HLE: Calling Constructor at 0x26e308
+  HLE: Calling Constructor at 0x263530
+  HLE: Calling Constructor at 0x25c820
+  HLE: Calling Constructor at 0x254bd8
+  HLE: Calling Constructor at 0x240438
+  HLE: Calling Constructor at 0x22bb38
+  HLE: Calling Constructor at 0x2250e8
+  HLE: Calling Constructor at 0x20f810
+  HLE: Calling Constructor at 0x209748
+  HLE: Calling Constructor at 0x2013e0
+  HLE: Calling Constructor at 0x1f6128
+  HLE: Calling Constructor at 0x1f3db0
+  HLE: Calling Constructor at 0x1e8758
+  HLE: Calling Constructor at 0x1dcd40
+  HLE: Calling Constructor at 0x1cc560
+  HLE: Calling Constructor at 0x1c6e10
+  HLE: Calling Constructor at 0x1b9ba0
+  HLE: Calling Constructor at 0x1acbd8
+  HLE: Calling Constructor at 0x1a5ee8
+  HLE: Calling Constructor at 0x19a9b8
+  HLE: Calling Constructor at 0x18f028
+  HLE: Calling Constructor at 0x181d00
+Scheduler: CreateSema id=4 init=1 max=1
+Scheduler: CreateSema id=5 init=1 max=1
+Scheduler: CreateSema id=6 init=1 max=1
+Scheduler: CreateSema id=7 init=0 max=1
+HLE: sceSifInitRpc called at PC 0x199b4c
+  HLE: Cleared SIF Client Queue at 0x3caa80
+[IO WRITE] Address: 1000f230, Value: 60000
+  HLE: Fake IOP Handshake complete (SMFLAG=0x60000)
+========================================
+Syscall: sceSifGetReg
+  Input index (raw): 0x80000002
+  Type: SYSTEM REGISTER (software-only)
+  Register: SIF_SYSREG_RPCINIT (0x80000002)
+  Description: RPC initialization status
+  Typical values: 0=not init, non-zero=initialized
+  ----------------------------------------
+  Result Value: 0x1
+  ----------------------------------------
+  Current g_sif state:
+    sys_subaddr:  0x0
+    sys_mainaddr: 0x0
+    sys_rpcinit:  0x1
+    mscom:        0x0
+    smcom:        0x0
+    msflag:       0x0
+    smflag:       0x60000
+    ctl_reg:      0x0
+========================================
+HLE: sceSifBindRpc called
+     client_addr = 0x2e9c40
+     server_id   = 0x80000593 (CDVD_SCMD)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 0
+     SUCCESS: Bind complete, server_ptr = 0xdead0593
+Scheduler: CreateSema id=8 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003d60, count: 1)
+  Transfer 0: src=0x203cac80 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead0593
+      Function ID:   0x1
+  Returning DMA ID: 1
+Scheduler: WaitSema id=8 count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=8 wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+Scheduler: iSignalSema id=5 count=0 waiters=0
+Scheduler: CreateSema id=8 init=1 max=1
+Scheduler: WaitSema id=8 count=1
+HLE: sceSifBindRpc called
+     client_addr = 0x3cdc00
+     server_id   = 0x80000001 (FILEIO)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 1
+     SUCCESS: Bind complete, server_ptr = 0xdead0001
+Scheduler: CreateSema id=9 init=1 max=1
+Scheduler: CreateSema id=10 init=1 max=1
+Scheduler: WaitSema id=9 count=1
+Scheduler: iSignalSema id=9 count=0 waiters=0
+Scheduler: CreateSema id=11 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003a60, count: 2)
+  Transfer 0: src=0x3cc4c0 dest=0x0 size=8 attr=0x0
+    [SIF Packet] CID: 0x0 Opt: 0
+  Transfer 1: src=0x203cacc0 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead0001
+      Function ID:   0xff
+    [HLE] FILEIO Call Detected (Func: 0xff)
+[RPC 0xFF] Empty payload detected. Likely fioInit/Reset.
+  Returning DMA ID: 2
+Scheduler: WaitSema id=b count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=b wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+Scheduler: iSignalSema id=8 count=0 waiters=0
+Syscall: Syscall_GetOsdConfigParam() called!
+Syscall: GetOsdConfigParam(out_ptr: 0x70003ea0)
+Scheduler: WaitSema id=8 count=1
+Scheduler: iSignalSema id=8 count=0 waiters=0
+Syscall: Syscall_GetOsdConfigParam() called!
+Syscall: GetOsdConfigParam(out_ptr: 0x70003ea0)
+  HLE: Calling Constructor at 0x17c880
+  HLE: Calling Constructor at 0x167460
+  HLE: Calling Constructor at 0x1623c8
+  HLE: Calling Constructor at 0x141d78
+  HLE: Calling Constructor at 0x12d590
+  HLE: Calling Constructor at 0x123158
+  HLE: Calling Constructor at 0x1017a8
+HLE: Global Constructors Finished. Returning.
+[IO WRITE] Address: 10003810, Value: 1
+VIF0_FBRST Write: 1
+[IO WRITE] Address: 10003820, Value: 6
+VIF0_ERR Write: 6
+[IO WRITE] Address: 10003c10, Value: 1
+VIF1_FBRST Write: 1
+[IO WRITE] Address: 10003c20, Value: 6
+VIF1_ERR Write: 6
+[IO WRITE] Address: 10003c10, Value: 1
+VIF1_FBRST Write: 1
+[IO WRITE] Address: 10003c20, Value: 2
+VIF1_ERR Write: 2
+VIF1 Write to FIFO/Latch: 1000404 at address 10005000
+VIF1 Write to FIFO/Latch: 20000000 at address 10005004
+VIF1 Write to FIFO/Latch: 0 at address 10005008
+VIF1 Write to FIFO/Latch: 5000000 at address 1000500c
+[VIF1] ProcessFifo: State=0
+[VIF1] Code=0x01000404 CMD=0x1 IMM=0x404
+[VIF1] ExecuteCommand: CMD=0x1 IMM=0x404 NUM=0 Payload=0 bytes
+[VIF1] STCYCL: CL=4 WL=4
+[VIF1] Code=0x20000000 CMD=0x20 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x20 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] Code=0x05000000 CMD=0x5 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x5 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] STMOD: 0
+VIF1 Write to FIFO/Latch: 6000000 at address 10005000
+VIF1 Write to FIFO/Latch: 3000000 at address 10005004
+VIF1 Write to FIFO/Latch: 2000000 at address 10005008
+VIF1 Write to FIFO/Latch: 4000000 at address 1000500c
+[VIF1] ProcessFifo: State=0
+[VIF1] Code=0x06000000 CMD=0x6 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x6 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] MSKPATH3: UNMASKED
+[VIF1] Code=0x03000000 CMD=0x3 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x3 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] Code=0x02000000 CMD=0x2 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x2 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] OFFSET: 0 BASE=0
+[VIF1] Code=0x04000000 CMD=0x4 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x4 IMM=0x0 NUM=0 Payload=0 bytes
+[IO WRITE] Address: 10003000, Value: 1
+[GIF] Reset complete
+[GIF] Software reset triggered
+[IO WRITE] Address: 10008080, Value: 0
+DMAC Write Address: 10008080, Value: 0
+DMAC Channel: 0 Address: 0x10008080 Value: 0x0
+[IO WRITE] Address: 10008000, Value: 0
+DMAC Write Address: 10008000, Value: 0
+DMAC Channel: 0 Address: 0x10008000 Value: 0x0
+DMAC DIRECTION: 0
+DMAC: Channel 0 STR cleared (paused/stopped)
+[IO WRITE] Address: 10008030, Value: 0
+DMAC Write Address: 10008030, Value: 0
+DMAC Channel: 0 Address: 0x10008030 Value: 0x0
+[IO WRITE] Address: 10008010, Value: 0
+DMAC Write Address: 10008010, Value: 0
+DMAC Channel: 0 Address: 0x10008010 Value: 0x0
+[IO WRITE] Address: 10008050, Value: 0
+DMAC Write Address: 10008050, Value: 0
+DMAC Channel: 0 Address: 0x10008050 Value: 0x0
+[IO WRITE] Address: 10008040, Value: 0
+DMAC Write Address: 10008040, Value: 0
+DMAC Channel: 0 Address: 0x10008040 Value: 0x0
+[IO WRITE] Address: 10009080, Value: 0
+DMAC Write Address: 10009080, Value: 0
+DMAC Channel: 1 Address: 0x10009080 Value: 0x0
+[IO WRITE] Address: 10009000, Value: 0
+DMAC Write Address: 10009000, Value: 0
+DMAC Channel: 1 Address: 0x10009000 Value: 0x0
+DMAC DIRECTION: 0
+DMAC: Channel 1 STR cleared (paused/stopped)
+[IO WRITE] Address: 10009030, Value: 0
+DMAC Write Address: 10009030, Value: 0
+DMAC Channel: 1 Address: 0x10009030 Value: 0x0
+[IO WRITE] Address: 10009010, Value: 0
+DMAC Write Address: 10009010, Value: 0
+DMAC Channel: 1 Address: 0x10009010 Value: 0x0
+[IO WRITE] Address: 10009050, Value: 0
+DMAC Write Address: 10009050, Value: 0
+DMAC Channel: 1 Address: 0x10009050 Value: 0x0
+[IO WRITE] Address: 10009040, Value: 0
+DMAC Write Address: 10009040, Value: 0
+DMAC Channel: 1 Address: 0x10009040 Value: 0x0
+[IO WRITE] Address: 1000a080, Value: 0
+DMAC Write Address: 1000a080, Value: 0
+DMAC Channel: 2 Address: 0x1000a080 Value: 0x0
+[IO WRITE] Address: 1000a000, Value: 0
+DMAC Write Address: 1000a000, Value: 0
+DMAC Channel: 2 Address: 0x1000a000 Value: 0x0
+DMAC DIRECTION: 0
+DMAC: Channel 2 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000a030, Value: 0
+DMAC Write Address: 1000a030, Value: 0
+DMAC Channel: 2 Address: 0x1000a030 Value: 0x0
+[IO WRITE] Address: 1000a010, Value: 0
+DMAC Write Address: 1000a010, Value: 0
+DMAC Channel: 2 Address: 0x1000a010 Value: 0x0
+[IO WRITE] Address: 1000a050, Value: 0
+DMAC Write Address: 1000a050, Value: 0
+DMAC Channel: 2 Address: 0x1000a050 Value: 0x0
+[IO WRITE] Address: 1000a040, Value: 0
+DMAC Write Address: 1000a040, Value: 0
+DMAC Channel: 2 Address: 0x1000a040 Value: 0x0
+[IO WRITE] Address: 1000b080, Value: 0
+DMAC Write Address: 1000b080, Value: 0
+DMAC Channel: 3 Address: 0x1000b080 Value: 0x0
+[IO WRITE] Address: 1000b000, Value: 0
+DMAC Write Address: 1000b000, Value: 0
+DMAC Channel: 3 Address: 0x1000b000 Value: 0x0
+DMAC DIRECTION: 0
+DMAC: Channel 3 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000b030, Value: 0
+DMAC Write Address: 1000b030, Value: 0
+DMAC Channel: 3 Address: 0x1000b030 Value: 0x0
+[IO WRITE] Address: 1000b010, Value: 0
+DMAC Write Address: 1000b010, Value: 0
+DMAC Channel: 3 Address: 0x1000b010 Value: 0x0
+[IO WRITE] Address: 1000b050, Value: 0
+DMAC Write Address: 1000b050, Value: 0
+DMAC Channel: 3 Address: 0x1000b050 Value: 0x0
+[IO WRITE] Address: 1000b040, Value: 0
+DMAC Write Address: 1000b040, Value: 0
+DMAC Channel: 3 Address: 0x1000b040 Value: 0x0
+[IO WRITE] Address: 1000b480, Value: 0
+DMAC Write Address: 1000b480, Value: 0
+[IO WRITE] Address: 1000b400, Value: 0
+DMAC Write Address: 1000b400, Value: 0
+[IO WRITE] Address: 1000b430, Value: 0
+DMAC Write Address: 1000b430, Value: 0
+[IO WRITE] Address: 1000b410, Value: 0
+DMAC Write Address: 1000b410, Value: 0
+[IO WRITE] Address: 1000b450, Value: 0
+DMAC Write Address: 1000b450, Value: 0
+[IO WRITE] Address: 1000b440, Value: 0
+DMAC Write Address: 1000b440, Value: 0
+[IO WRITE] Address: 1000d080, Value: 0
+DMAC Write Address: 1000d080, Value: 0
+DMAC Channel: 8 Address: 0x1000d080 Value: 0x0
+[IO WRITE] Address: 1000d000, Value: 0
+DMAC Write Address: 1000d000, Value: 0
+DMAC Channel: 8 Address: 0x1000d000 Value: 0x0
+DMAC DIRECTION: 0
+DMAC: Channel 8 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000d030, Value: 0
+DMAC Write Address: 1000d030, Value: 0
+DMAC Channel: 8 Address: 0x1000d030 Value: 0x0
+[IO WRITE] Address: 1000d010, Value: 0
+DMAC Write Address: 1000d010, Value: 0
+DMAC Channel: 8 Address: 0x1000d010 Value: 0x0
+[IO WRITE] Address: 1000d050, Value: 0
+DMAC Write Address: 1000d050, Value: 0
+DMAC Channel: 8 Address: 0x1000d050 Value: 0x0
+[IO WRITE] Address: 1000d040, Value: 0
+DMAC Write Address: 1000d040, Value: 0
+DMAC Channel: 8 Address: 0x1000d040 Value: 0x0
+[IO WRITE] Address: 1000d480, Value: 0
+DMAC Write Address: 1000d480, Value: 0
+[IO WRITE] Address: 1000d400, Value: 0
+DMAC Write Address: 1000d400, Value: 0
+[IO WRITE] Address: 1000d430, Value: 0
+DMAC Write Address: 1000d430, Value: 0
+[IO WRITE] Address: 1000d410, Value: 0
+DMAC Write Address: 1000d410, Value: 0
+[IO WRITE] Address: 1000d450, Value: 0
+DMAC Write Address: 1000d450, Value: 0
+[IO WRITE] Address: 1000d440, Value: 0
+DMAC Write Address: 1000d440, Value: 0
+[IO WRITE] Address: 1000e010, Value: ff1f
+DMAC Write Address: 1000e010, Value: ff1f
+[IO WRITE] Address: 1000e010, Value: 0
+DMAC Write Address: 1000e010, Value: 0
+[IO WRITE] Address: 1000e000, Value: 0
+DMAC Write Address: 1000e000, Value: 0
+[IO WRITE] Address: 1000e020, Value: 0
+DMAC Write Address: 1000e020, Value: 0
+[IO WRITE] Address: 1000e030, Value: 0
+DMAC Write Address: 1000e030, Value: 0
+[IO WRITE] Address: 1000e050, Value: 0
+DMAC Write Address: 1000e050, Value: 0
+[IO WRITE] Address: 1000e040, Value: 0
+DMAC Write Address: 1000e040, Value: 0
+[IO WRITE] Address: 1000e000, Value: 1
+DMAC Write Address: 1000e000, Value: 1
+Scheduler: iSignalSema id=5 count=0 waiters=0
+HLE: sceSifBindRpc called
+     client_addr = 0x3c7390
+     server_id   = 0x8000059c (UNKNOWN)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 2
+     SUCCESS: Bind complete, server_ptr = 0xdead059c
+Scheduler: CreateSema id=11 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003d90, count: 2)
+  Transfer 0: src=0x3c73d0 dest=0x0 size=4 attr=0x0
+    [SIF Packet] CID: 0x0 Opt: 0
+  Transfer 1: src=0x203cad00 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead059c
+      Function ID:   0x0
+  Returning DMA ID: 3
+Scheduler: WaitSema id=11 count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=11 wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+Scheduler: iSignalSema id=6 count=0 waiters=0
+Scheduler: iSignalSema id=5 count=0 waiters=0
+Scheduler: CreateSema id=11 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003d90, count: 2)
+  Transfer 0: src=0x3c73d0 dest=0x0 size=4 attr=0x0
+    [SIF Packet] CID: 0x0 Opt: 0
+  Transfer 1: src=0x203cad40 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead059c
+      Function ID:   0x0
+  Returning DMA ID: 4
+Scheduler: WaitSema id=11 count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=11 wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+Scheduler: iSignalSema id=6 count=0 waiters=0
+[MEMORY WATCH GIF TAG] Write called for address: 309780 with value: 
+Scheduler: WaitSema id=1 count=1
+EndOfHeap called, returning 0x02000000 as the end of heap.
+Syscall: EndOfHeap() returning 0x2000000
+EndOfHeap called, returning 0x02000000 as the end of heap.
+Syscall: EndOfHeap() returning 0x2000000
+Scheduler: iSignalSema id=1 count=0 waiters=0
+HLE: sceSifBindRpc called
+     client_addr = 0x3ce0c0
+     server_id   = 0x80000006 (LOADFILE)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 3
+     SUCCESS: Bind complete, server_ptr = 0xdead0006
+Scheduler: CreateSema id=11 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003d50, count: 1)
+  Transfer 0: src=0x203cad80 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead0006
+      Function ID:   0xff
+    [HLE] LOAD FILE Call Detected (Func: ff)
+  Returning DMA ID: 5
+Scheduler: WaitSema id=b count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=b wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+Scheduler: CreateSema id=11 init=1 max=1
+Scheduler: CreateSema id=12 init=0 max=1
+Scheduler: WaitSema id=11 count=1
+HLE: sceSifBindRpc called
+     client_addr = 0x3c8580
+     server_id   = 0x80000400 (MCSERV)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 4
+     SUCCESS: Bind complete, server_ptr = 0xdead0400
+Scheduler: CreateSema id=13 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003da0, count: 2)
+  Transfer 0: src=0x3c8600 dest=0x0 size=48 attr=0x0
+    [SIF Packet] CID: 0x0 Opt: 0
+  Transfer 1: src=0x203cadc0 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead0400
+      Function ID:   0xfe
+    [HLE] MCSERV Call Detected (Func: 0xfe)
+    [HLE] MCSERV: Returned Success (0) to Init/VersionCheck.
+  Returning DMA ID: 6
+Scheduler: WaitSema id=d count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=d wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+Scheduler: iSignalSema id=11 count=0 waiters=0
+[DECI2] Ptr: 0x70003ce0
+[DECI2] Hex Dump: 00 a9 3c 00 00 00 00 00 d4 c3 b2 a1 d4 c3 b2 a1 28 18 2d 00 00 00 00 00 d4 c3 b2 a1 d4 c3 b2 a1 
+[DECI2] Text View: 
+HLE: sceSifBindRpc called
+     client_addr = 0x3c6e40
+     server_id   = 0x80000100 (PADMAN)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 5
+     SUCCESS: Bind complete, server_ptr = 0xdead0100
+HLE: sceSifBindRpc called
+     client_addr = 0x3c6e68
+     server_id   = 0x80000101 (PADMAN_EXT)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 6
+     SUCCESS: Bind complete, server_ptr = 0xdead0101
+Scheduler: CreateSema id=13 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003dd0, count: 2)
+  Transfer 0: src=0x3c7080 dest=0x0 size=128 attr=0x0
+    [SIF Packet] CID: 0x0 Opt: 0
+  Transfer 1: src=0x203cae00 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead0100
+      Function ID:   0x1
+    [HLE] PADMAN Call Detected (Func: 0x1)
+    [HLE] PADMAN: Returned Success (1) to PadOpen.
+  Returning DMA ID: 7
+Scheduler: WaitSema id=d count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=d wait_threads=0
+Scheduler: Thread 1 added to priority 1 queue
+Scheduler: Switched to thread 1 priority 1 PC 0x2d2174
+HLE: sceSifBindRpc called
+     client_addr = 0x3cdd00
+     server_id   = 0x80000003 (IOPHEAP)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 7
+     SUCCESS: Bind complete, server_ptr = 0xdead0003
+HLE: sceSifBindRpc called
+     client_addr = 0x3c7480
+     server_id   = 0x80000701 (LIBSD Remote)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 8
+     SUCCESS: Bind complete, server_ptr = 0xdead0701
+Syscall: FlushCache(mode: 0)
+[DEBUG Probe] RAM content at VIF Packet Start (0x2dad60):
+  90e0003 2ff 8000033c 2ff
+HLE: sceSifBindRpc called
+     client_addr = 0x3b27c0
+     server_id   = 0x12345 (UNKNOWN)
+     mode        = 0x0 (blocking)
+     Registered binding in slot 9
+     SUCCESS: Bind complete, server_ptr = 0xdead2345
+Scheduler: iChangeThreadPriority id=1 1 -> 10
+Scheduler: Thread 1 added to priority 10 queue
+Scheduler: Switched to thread 1 priority 10 PC 0x1e1340
+Scheduler: CreateThread id=3 func=0x1e7f80 prio=9
+Scheduler: CreateSema id=13 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003dd0, count: 2)
+  Transfer 0: src=0x3b1fc0 dest=0x0 size=2048 attr=0x0
+    [SIF Packet] CID: 0x7fff0000 Opt: 157fff
+  Transfer 1: src=0x203cae40 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead2345
+      Function ID:   0x0
+    [Analysis] Custom Server 0x12345 Call Detected.
+    [HLE Loader] Request: LBA 589896 (196629 bytes) -> RAM 0x2a0000
+    [HLE Loader] Successfully loaded 196629 bytes.
+  Returning DMA ID: 8
+Scheduler: WaitSema id=13 count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=13 wait_threads=0
+Scheduler: Thread 1 added to priority 10 queue
+Scheduler: Switched to thread 1 priority 10 PC 0x2d2174
+[IO WRITE] Address: 10003c10, Value: 1
+VIF1_FBRST Write: 1
+[IO WRITE] Address: 10003c20, Value: 2
+VIF1_ERR Write: 2
+VIF1 Write to FIFO/Latch: 1000404 at address 10005000
+VIF1 Write to FIFO/Latch: 20000000 at address 10005004
+VIF1 Write to FIFO/Latch: 0 at address 10005008
+VIF1 Write to FIFO/Latch: 5000000 at address 1000500c
+[VIF1] ProcessFifo: State=0
+[VIF1] Code=0x01000404 CMD=0x1 IMM=0x404
+[VIF1] ExecuteCommand: CMD=0x1 IMM=0x404 NUM=0 Payload=0 bytes
+[VIF1] STCYCL: CL=4 WL=4
+[VIF1] Code=0x20000000 CMD=0x20 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x20 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] Code=0x05000000 CMD=0x5 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x5 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] STMOD: 0
+VIF1 Write to FIFO/Latch: 6000000 at address 10005000
+VIF1 Write to FIFO/Latch: 3000000 at address 10005004
+VIF1 Write to FIFO/Latch: 2000000 at address 10005008
+VIF1 Write to FIFO/Latch: 4000000 at address 1000500c
+[VIF1] ProcessFifo: State=0
+[VIF1] Code=0x06000000 CMD=0x6 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x6 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] MSKPATH3: UNMASKED
+[VIF1] Code=0x03000000 CMD=0x3 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x3 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] Code=0x02000000 CMD=0x2 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x2 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF1] OFFSET: 0 BASE=0
+[VIF1] Code=0x04000000 CMD=0x4 IMM=0x0
+[VIF1] ExecuteCommand: CMD=0x4 IMM=0x0 NUM=0 Payload=0 bytes
+[IO WRITE] Address: 10003000, Value: 1
+[GIF] Reset complete
+[GIF] Software reset triggered
+Writing to GS_CSR Register: 200
+Syscall: SetGsCrt() called!
+  [HLE] SetGsCrt: Mode=NTSC (280x1c0) Interlaced=1
+[MEMORY WATCH GIF TAG] Write called for address: 3d4400 with value: 10000054
+[IO WRITE] Address: 1000e020, Value: 83ff0000
+DMAC Write Address: 1000e020, Value: 83ff0000
+[IO WRITE] Address: 10008000, Value: 40
+DMAC Write Address: 10008000, Value: 40
+DMAC Channel: 0 Address: 0x10008000 Value: 0x40
+DMAC DIRECTION: 0
+DMAC: Channel 0 STR cleared (paused/stopped)
+[IO WRITE] Address: 10009000, Value: 40
+DMAC Write Address: 10009000, Value: 40
+DMAC Channel: 1 Address: 0x10009000 Value: 0x40
+DMAC DIRECTION: 0
+DMAC: Channel 1 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000a000, Value: 40
+DMAC Write Address: 1000a000, Value: 40
+DMAC Channel: 2 Address: 0x1000a000 Value: 0x40
+DMAC DIRECTION: 0
+DMAC: Channel 2 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000b000, Value: 40
+DMAC Write Address: 1000b000, Value: 40
+DMAC Channel: 3 Address: 0x1000b000 Value: 0x40
+DMAC DIRECTION: 0
+DMAC: Channel 3 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000b400, Value: 40
+DMAC Write Address: 1000b400, Value: 40
+[IO WRITE] Address: 1000d000, Value: 40
+DMAC Write Address: 1000d000, Value: 40
+DMAC Channel: 8 Address: 0x1000d000 Value: 0x40
+DMAC DIRECTION: 0
+DMAC: Channel 8 STR cleared (paused/stopped)
+[IO WRITE] Address: 1000d400, Value: 40
+DMAC Write Address: 1000d400, Value: 40
+[WRITING TO VIRTUAL ADDRESS IN MAIN RAM] Address: 31b190, Value: 0
+Scheduler: WaitSema id=1 count=1
+EndOfHeap called, returning 0x02000000 as the end of heap.
+Syscall: EndOfHeap() returning 0x2000000
+Scheduler: iSignalSema id=1 count=0 waiters=0
+[WRITING TO VIRTUAL ADDRESS IN MAIN RAM] Address: 31b190, Value: b99580
+[IO WRITE] Address: 10000010, Value: 0
+Timer Register Write (ignored): Address: 10000010, Value: 0
+[IO WRITE] Address: 10000000, Value: 0
+Timer Register Write (ignored): Address: 10000000, Value: 0
+[IO WRITE] Address: 10000010, Value: e82
+Timer Register Write (ignored): Address: 10000010, Value: e82
+Syscall: AddIntcHandler
+Syscall: AddIntcHandler(cause: 9, handler: 0x191980, next: 0, arg: 0x1d, flag: 3042864)
+  Inserted handler 2 at FRONT of queue for cause 9
+  Queue for cause 9 now has 1 handlers
+Scheduler: CreateSema id=13 init=0 max=1
+Syscall: sceSifSetDma(sdt_addr: 0x70003d10, count: 2)
+  Transfer 0: src=0x3c7080 dest=0x0 size=128 attr=0x0
+    [SIF Packet] CID: 0x0 Opt: 0
+  Transfer 1: src=0x203cae80 dest=0x0 size=64 attr=0x44
+    [SIF Packet] CID: 0x8000000a Opt: 0
+    [SIF Action] RPC Call Detected!
+      Server Handle: 0xdead0100
+      Function ID:   0x1
+    [HLE] PADMAN Call Detected (Func: 0x1)
+    [HLE] PADMAN: Returned Success (1) to PadOpen.
+  Returning DMA ID: 9
+Scheduler: WaitSema id=d count=0
+Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)
+Scheduler: DeleteSema id=d wait_threads=0
+Scheduler: Thread 1 added to priority a queue
+Scheduler: Switched to thread 1 priority a PC 0x2d2174
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[1bc920] After first JALR: target was 0x2b5850 param1+8 = 0x0

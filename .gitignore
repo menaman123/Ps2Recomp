@@ -1,5 +1,2 @@
 build/
 .vscode/
-.vscode/launch.json
-.vscode/settings.json
-build/CMakeCache.txt
