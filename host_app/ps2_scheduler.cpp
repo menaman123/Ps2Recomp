@@ -2,6 +2,8 @@
 #include <cstring>
 #include <iostream>
 #include "memory.h"
+#include "hle_heap.h"
+#include <fstream>
 
 // ============================================================================
 // GLOBAL INSTANCE
@@ -14,7 +16,8 @@ PS2Scheduler g_scheduler;
 PS2Scheduler::PS2Scheduler() {
     Reset();
 }
-
+extern std::ofstream g_logFile;
+extern HLEHeap g_heap;
 void PS2Scheduler::Reset() {
     for (int i = 0; i < MAX_THREADS; i++) {
         threads_[i] = PS2Thread{};
@@ -285,41 +288,67 @@ uint32_t PS2Scheduler::InitMainThread(uint32_t gp, uint32_t stack, int stack_siz
 
 uint32_t PS2Scheduler::InitHeap(uint32_t heap, int heap_size, CpuContext& ctx) {
     uint32_t heap_limit;
-    
     PS2Thread* t = GetCurrentThread();
     if (!t) return 0;
 
-    // If heap arg is valid (not -1), update the Base (Start)
+    // 1. Determine Heap START
     if (heap != 0xFFFFFFFF) {
         t->heap_base = heap;
+    } 
+    else if (t->heap_base == 0) {
+        t->heap_base = 0x00200000; // Default safe start
     }
 
-    // Calculate the Limit (End)
+    // 2. Determine Heap END (Limit)
     if (heap_size == -1) {
-        // If size is -1, the heap grows up to the Stack Pointer
-        heap_limit = ctx.cpuRegs.GPR.r[29].UL[0];
+        uint32_t stack_ptr = ctx.cpuRegs.GPR.r[29].UL[0];
+        
+        // --- FIX STARTS HERE ---
+        
+        // 1. Sanity Check: If SP is wild (Host Ptr), clamp to physical max
+        if (stack_ptr > 0x02000000) {
+            stack_ptr = 0x02000000; 
+        }
+
+        // 2. Alignment Check: The heap end usually needs to be 16-byte aligned.
+        // We do NOT subtract 0x1000 anymore. The game likely wants every byte.
+        // We just ensure it doesn't align *up* past 32MB.
+        heap_limit = stack_ptr & ~0xF; 
+        
+        // -----------------------
     } else {
-        // Otherwise, it's Base + Size
-        // Note: If heap was -1 (keep current), we use t->heap_base
         heap_limit = t->heap_base + heap_size;
     }
+
+    // 3. Final Hard Clamp
+    // Allow up to 0x02000000 (Exact 32MB). 
+    // Do NOT stop at 0x1FFFFF0.
+    if (heap_limit > 0x02000000) {
+        heap_limit = 0x02000000;
+    }
     
-    // Store the Limit
     t->heap_end = heap_limit;
     
-    g_logFile << "Scheduler: InitHeap Base=0x" << std::hex << t->heap_base 
-              << " End=0x" << t->heap_end << std::dec << std::endl;
+    // 4. Initialize Allocator
+    if (heap_limit > t->heap_base) {
+        uint32_t actual_size = heap_limit - t->heap_base;
+        g_logFile << "InitHeap: Start=0x" << std::hex << t->heap_base 
+                  << " End=0x" << heap_limit << " Size=0x" << actual_size << std::dec << std::endl;
+        
+        g_heap.initialize(t->heap_base, actual_size);
+    } else {
+        return 0;
+    }
               
     return heap_limit;
 }
 
-
 uint32_t PS2Scheduler::EndOfHeap() {
-    PS2Thread* t = GetCurrentThread();
-    if (t) {
-        return t->heap_base; // Returns the Start (Program Break)
-    }
-    return 0;
+    g_logFile << "EndOfHeap called, returning 0x02000000 as the end of heap." << std::endl;
+    printf("EndOfHeap called, returning 0x02000000 as the end of heap.\n");
+    // Correct: 32MB exactly (0x02000000)
+    // This allows the size calculation (End - Start) to result in the full 32MB.
+    return 0x02000000;
 }
 
 // ============================================================================
@@ -1091,6 +1120,8 @@ void Syscall_InitMainThread(CpuContext& ctx) {
 }
 
 void Syscall_InitHeap(CpuContext& ctx) {
+    g_logFile << "Syscall: InitHeap()" << std::endl;
+    printf("Syscall: InitHeap()\n");
     uint32_t heap = ctx.cpuRegs.GPR.r[4].UL[0];
     int32_t heap_size = ctx.cpuRegs.GPR.r[5].SL[0];
     
@@ -1100,6 +1131,7 @@ void Syscall_InitHeap(CpuContext& ctx) {
 void Syscall_EndOfHeap(CpuContext& ctx) {
     uint32_t current_heap = g_scheduler.EndOfHeap();
     g_logFile << "Syscall: EndOfHeap() returning 0x" << std::hex << current_heap << std::dec << std::endl;
+    printf("Syscall: EndOfHeap() returning 0x%X\n", current_heap);
     ctx.cpuRegs.GPR.r[2].UL[0] = current_heap;
 }
 

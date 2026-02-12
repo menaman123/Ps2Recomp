@@ -437,6 +437,9 @@ void VIF::ProcessFifo(int v) {
 
             // --- DIRECT Handling ---
             if (cmd == CMD_DIRECT || cmd == CMD_DIRECTHL) {
+                g_logFile << "╔═══════════════════════════════════════════╗" << std::endl;
+                g_logFile << "║ VIF" << v << " DIRECT: " << imm << " quadwords to GIF PATH2 ║" << std::endl;
+                g_logFile << "╚═══════════════════════════════════════════╝" << std::endl;
                 word_index[v] = 4; // Force alignment
                 uint32_t qwc = (imm == 0) ? 0x10000 : imm;
                 state[v] = VIF_STATE_DIRECT_STREAM;
@@ -552,7 +555,9 @@ void VIF::ProcessFifo(int v) {
 // ============================================================================
 void VIF::ExecuteCommand(int v, uint32_t cmd, uint32_t immediate, uint32_t num,
                          const std::vector<uint8_t>& payload, bool irq, bool use_mask) {
-    
+    g_logFile << "[VIF" << v << "] ExecuteCommand: CMD=0x" << std::hex << cmd 
+          << " IMM=0x" << immediate << " NUM=" << std::dec << (int)num
+          << " Payload=" << payload.size() << " bytes" << std::endl;
     // Handle IRQ bit (stall on NEXT command if not masked)
     if (irq && !(regs[v].err & VIF_ERR::MII)) {
         regs[v].stat |= VIF_STAT::INT;

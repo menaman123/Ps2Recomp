@@ -76,7 +76,7 @@ void GraphicsThreadFunc() {
                     windowW = newW;
                     windowH = newH;
                     SDL_Window* win = SDL_RenderGetWindow(g_renderer);
-                    SDL_SetWindowSize(win, 250, 250); // Temporary small size to avoid artifacts
+                    SDL_SetWindowSize(win, windowW, windowH); // Temporary small size to avoid artifacts
                     // Center the window again if size changed drastically
                     SDL_SetWindowPosition(win, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
                     std::cout << "[GFX] Resizing Window to " << windowW << "x" << windowH << std::endl;

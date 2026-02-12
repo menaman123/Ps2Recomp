@@ -8,6 +8,7 @@
 extern std::vector<uint8_t> main_memory;
 extern std::vector<uint8_t> vu1_code_memory;
 extern std::vector<uint8_t> vu1_data_memory;
+extern std::vector<uint8_t> gs_vram;
 
 // Define a 128-bit data type for quadword operations.
 struct alignas(16) QuadWord {

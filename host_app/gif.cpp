@@ -166,12 +166,31 @@ void GIF::Write(uint32_t addr, uint32_t value) {
 void GIF::ReceiveData(GIFPath path, const uint8_t* data, size_t size) {
     if (size == 0) return;
 
-    // 1. Append new data to our internal buffer
+    g_logFile << "[GIF] ReceiveData: PATH" << (int)path 
+              << " size=" << size << " bytes" << std::endl;
+
+    // Log first 32 bytes to see what's coming in
+    if (size >= 16) {
+        uint64_t tag_lo, tag_hi;
+        std::memcpy(&tag_lo, data, 8);
+        std::memcpy(&tag_hi, data + 8, 8);
+        
+        uint16_t nloop = tag_lo & 0x7FFF;
+        uint8_t flg = (tag_lo >> 58) & 0x3;
+        const char* flg_names[] = {"PACKED", "REGLIST", "IMAGE", "DISABLE"};
+        
+        g_logFile << "[GIF]   First tag: FLG=" << flg_names[flg] 
+                  << " NLOOP=" << nloop << std::endl;
+        
+        if (flg == 2) {
+            g_logFile << "[GIF] *** IMAGE MODE DETECTED! ***" << std::endl;
+        }
+    }
+
     size_t current_pos = dma_buffer.size();
     dma_buffer.resize(current_pos + size);
     std::memcpy(dma_buffer.data() + current_pos, data, size);
 
-    // 2. Process as much as possible
     ProcessBuffer();
 }
 /* void GIF::ProcessBuffer() {
@@ -343,24 +362,39 @@ void GIF::ReceiveData(GIFPath path, const uint8_t* data, size_t size) {
     }
 }
  */
-void GIF::FlushBatch() {
-    if (!g_gs_state.draw_buffer.empty()) {
-        g_logFile << "[GIF] State Change detected. Flushing Batch (" 
-                  << g_gs_state.draw_buffer.size() << " verts, Type " 
-                  << (int)g_gs_state.prim_type << ")" << std::endl;
 
-        RenderJob job;
-        job.type = RenderCommandType::DrawBatch;
-        job.batch.vertices = std::move(g_gs_state.draw_buffer); // Move ownership
-        job.batch.prim_type = g_gs_state.prim_type;
-        
-        // Push to queue
-        g_renderQueue.Push(job);
-        
-        // Clear local buffer (move usually clears, but be safe)
-        g_gs_state.draw_buffer.clear();
+void GIF::FlushBatch() {
+    if (g_gs_state.draw_buffer.empty()) return;
+    
+    // === DIAGNOSTIC OUTPUT ===
+    g_gs_state.DumpState(g_logFile);
+    g_gs_state.DiagnoseBatch(g_logFile);
+    if (g_gs_state.texture) {
+        int ctx = g_gs_state.context;
+        g_gs_state.DumpVRAMRegion(
+            g_gs_state.tex0[ctx].tbp,
+            1 << g_gs_state.tex0[ctx].tw,
+            1 << g_gs_state.tex0[ctx].th,
+            g_gs_state.tex0[ctx].psm
+        );
     }
+    
+    g_logFile << "[GIF] Flushing Batch: " 
+              << g_gs_state.draw_buffer.size() << " verts, Type " 
+              << (int)g_gs_state.prim_type << std::endl;
+
+    RenderJob job;
+    job.type = RenderCommandType::DrawBatch;
+    job.batch.vertices = std::move(g_gs_state.draw_buffer);
+    job.batch.prim_type = g_gs_state.prim_type;
+    
+    // Push to queue
+    g_renderQueue.Push(job);
+    
+    // Clear local buffer
+    g_gs_state.draw_buffer.clear();
 }
+
 /*
  void GIF::ProcessBuffer() {
     size_t processed_bytes = 0;
@@ -595,6 +629,8 @@ void GIF::ProcessBuffer() {
         
         if (fmt == GIFFormat::IMAGE) {
             // IMAGE mode: NLOOP is the total number of quadwords
+            g_logFile << "[GIF] IMAGE Mode: Processing QW " << current_loop + 1 
+                      << " of " << current_tag.nloop << std::endl;
             ProcessImage(data_ptr, 1);
             current_loop++;
         } 
@@ -827,6 +863,7 @@ void GIF::ProcessReglist(uint8_t reg, const uint8_t* data) {
     
     switch (reg) {
         case GS_PRIM:
+
             FlushBatch();
             g_gs_state.SetPrim(value & 0x7FF);
             g_logFile << "[GIF] REGLIST PRIM = 0x" << std::hex << (value & 0x7FF) << std::dec << std::endl;
@@ -885,58 +922,238 @@ void GIF::ProcessReglist(uint8_t reg, const uint8_t* data) {
             break;
         }
         
-        case GS_TEX0_1:
-        case GS_TEX0_2:
-            g_logFile << "[GIF] REGLIST TEX0_" << ((reg == GS_TEX0_2) ? 2 : 1) 
-                      << " = 0x" << std::hex << value << std::dec << std::endl;
+        case GS_XYZ2:
+        case GS_XYZ3: {
+            // REGLIST XYZ (no fog): X[0:15], Y[16:31], Z[32:63]
+            uint16_t x_raw = value & 0xFFFF;
+            uint16_t y_raw = (value >> 16) & 0xFFFF;
+            uint32_t z_raw = (value >> 32) & 0xFFFFFFFF;
+            
+            float x = x_raw / 16.0f;
+            float y = y_raw / 16.0f;
+            
+            bool draw = (reg == GS_XYZ2);
+            g_gs_state.KickVertex(x, y, (float)z_raw, 0, draw);
+            g_logFile << "[GIF] REGLIST " << (reg == GS_XYZ2 ? "XYZ2" : "XYZ3")
+                      << ": X=" << x << " Y=" << y << " Z=" << z_raw << std::endl;
+            break;
+        }
+        
+        // =====================================================================
+        // FRAME / ZBUF - Drawing target configuration
+        // =====================================================================
+        case GS_FRAME_1: 
+            g_logFile << "[GIF] REGLIST FRAME 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetFrame(0, value); 
+            break;
+        case GS_FRAME_2: 
+            g_logFile << "[GIF] REGLIST FRAME 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetFrame(1, value); 
             break;
             
-        case GS_FRAME_1:
-        case GS_FRAME_2:
-            g_logFile << "[GIF] REGLIST FRAME_" << ((reg == GS_FRAME_2) ? 2 : 1) 
-                      << " = 0x" << std::hex << value << std::dec << std::endl;
+        case GS_ZBUF_1:  
+            g_logFile << "[GIF] REGLIST ZBUF 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetZBuf(0, value); 
+            break;
+        case GS_ZBUF_2:  
+            g_logFile << "[GIF] REGLIST ZBUF 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetZBuf(1, value); 
+            break;
+        
+        // =====================================================================
+        // TEX0 / TEX1 - Texture configuration
+        // =====================================================================
+        case GS_TEX0_1:  
+            g_logFile << "[GIF] REGLIST TEX0_1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTex0(0, value); 
+            break;
+        case GS_TEX0_2:  
+            g_logFile << "[GIF] REGLIST TEX0_2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTex0(1, value); 
             break;
             
-        case GS_ZBUF_1:
-        case GS_ZBUF_2:
-            g_logFile << "[GIF] REGLIST ZBUF_" << ((reg == GS_ZBUF_2) ? 2 : 1) 
-                      << " = 0x" << std::hex << value << std::dec << std::endl;
+        case GS_TEX1_1:
+            g_logFile << "[GIF] REGLIST TEX1_1 = 0x" << std::hex << value << std::dec << std::endl; 
+            g_gs_state.SetTex1(0, value);
+            break;
+        case GS_TEX1_2:
+            g_logFile << "[GIF] REGLIST TEX1_2 = 0x" << std::hex << value << std::dec << std::endl; 
+            g_gs_state.SetTex1(1, value);
+            break;
+        
+        // =====================================================================
+        // SCISSOR / XYOFFSET - Clipping and coordinate offset
+        // =====================================================================
+        case GS_SCISSOR_1: 
+            g_logFile << "[GIF] REGLIST SCISSOR 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetScissor(0, value); 
+            break;
+        case GS_SCISSOR_2: 
+            g_logFile << "[GIF] REGLIST SCISSOR 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetScissor(1, value); 
+            break;
+
+        case GS_XYOFFSET_1: 
+            g_logFile << "[GIF] REGLIST XYOFFSET 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetXYOffset(0, value); 
+            break;
+        case GS_XYOFFSET_2: 
+            g_logFile << "[GIF] REGLIST XYOFFSET 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetXYOffset(1, value); 
+            break;
+        
+        // =====================================================================
+        // TEST / ALPHA - Pixel tests and blending
+        // =====================================================================
+        case GS_TEST_1:  
+            g_logFile << "[GIF] REGLIST TEST 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTest(0, value); 
+            break;
+        case GS_TEST_2:  
+            g_logFile << "[GIF] REGLIST TEST 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTest(1, value); 
             break;
             
-        case GS_SCISSOR_1: g_gs_state.SetScissor(0, value); break;
-        case GS_SCISSOR_2: g_gs_state.SetScissor(1, value); break;
-            
-        case GS_TEST_1:
-        case GS_TEST_2:
-            g_logFile << "[GIF] REGLIST TEST_" << ((reg == GS_TEST_2) ? 2 : 1) 
-                      << " = 0x" << std::hex << value << std::dec << std::endl;
+        case GS_ALPHA_1: 
+            g_logFile << "[GIF] REGLIST ALPHA 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetAlpha(0, value); 
+            break;
+        case GS_ALPHA_2: 
+            g_logFile << "[GIF] REGLIST ALPHA 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetAlpha(1, value); 
+            break;
+        
+        // =====================================================================
+        // CLAMP - Texture clamping/wrapping
+        // =====================================================================
+        case GS_CLAMP_1:
+            g_logFile << "[GIF] REGLIST CLAMP 1 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetClamp(0, value);
+            break;
+        case GS_CLAMP_2:
+            g_logFile << "[GIF] REGLIST CLAMP 2 = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetClamp(1, value);
             break;
             
-        case GS_TRXPOS:
-        case GS_TRXREG:
-        case GS_TRXDIR:
+        // =====================================================================
+        // Texture transfer registers (BITBLT)
+        // =====================================================================
         case GS_BITBLTBUF:
+            g_logFile << "[GIF] REGLIST BITBLTBUF = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetBitBltBuf(value);
+            break;
+        case GS_TRXPOS:
+            g_logFile << "[GIF] REGLIST TRXPOS = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTrxPos(value);
+            break;
+        case GS_TRXREG:
+            g_logFile << "[GIF] REGLIST TRXREG = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTrxReg(value);
+            break;
+        case GS_TRXDIR:
+            g_logFile << "[GIF] REGLIST TRXDIR = 0x" << std::hex << value << std::dec << std::endl;
+            g_gs_state.SetTrxDir(value);
+            break;
         case GS_HWREG:
-            g_logFile << "[GIF] REGLIST transfer reg 0x" << std::hex << (int)reg 
-                      << " = 0x" << value << std::dec << std::endl;
+            g_logFile << "[GIF] REGLIST HWREG = 0x" << std::hex << value << std::dec << std::endl;  
+            g_gs_state.WriteHWReg(value);
             break;
             
+        // =====================================================================
+        // Interrupt / sync registers
+        // =====================================================================
         case GS_SIGNAL:
+            g_logFile << "[GIF] REGLIST SIGNAL = 0x" << std::hex << value << std::dec << std::endl;
+            // TODO: Raise SIGNAL interrupt
+            break;
         case GS_FINISH:
+            g_logFile << "[GIF] REGLIST FINISH = 0x" << std::hex << value << std::dec << std::endl;
+            // TODO: Raise FINISH interrupt
+            break;
         case GS_LABEL:
-            g_logFile << "[GIF] REGLIST interrupt reg 0x" << std::hex << (int)reg 
-                      << " = 0x" << value << std::dec << std::endl;
+            g_logFile << "[GIF] REGLIST LABEL = 0x" << std::hex << value << std::dec << std::endl;
+            break;
+            
+        // =====================================================================
+        // Misc registers
+        // =====================================================================
+        case GS_TEXFLUSH: // 0x3F
+            g_logFile << "[GIF] REGLIST TEXFLUSH" << std::endl;
+            // Texture cache invalidation - important for texture uploads
+            break;
+            
+        case GS_PRMODECONT: // 0x1A
+            g_logFile << "[GIF] REGLIST PRMODECONT = " << (value & 1) << std::endl;
+            // 0 = Use PRMODE, 1 = Use PRIM
+            break;
+            
+        case GS_PRMODE: // 0x1B
+            g_logFile << "[GIF] REGLIST PRMODE = 0x" << std::hex << value << std::dec << std::endl;
+            // Alternative to PRIM bits 3-10
+            break;
+            
+        case GS_TEXA: // 0x3B
+            g_logFile << "[GIF] REGLIST TEXA = 0x" << std::hex << value << std::dec << std::endl;
+            // Texture alpha settings
+            break;
+            
+        case GS_FOGCOL: // 0x3D
+            g_logFile << "[GIF] REGLIST FOGCOL = 0x" << std::hex << value << std::dec << std::endl;
+            // Fog color
+            break;
+            
+        case GS_COLCLAMP: // 0x46
+            g_logFile << "[GIF] REGLIST COLCLAMP = " << (value & 1) << std::endl;
+            // 0 = Mask, 1 = Clamp
+            break;
+            
+        case GS_DTHE: // 0x45
+            g_logFile << "[GIF] REGLIST DTHE = " << (value & 1) << std::endl;
+            // Dithering enable
+            break;
+            
+        case GS_DIMX: // 0x44
+            g_logFile << "[GIF] REGLIST DIMX = 0x" << std::hex << value << std::dec << std::endl;
+            // Dither matrix
+            break;
+            
+        case GS_PABE: // 0x49
+            g_logFile << "[GIF] REGLIST PABE = " << (value & 1) << std::endl;
+            // Per-pixel alpha blending
+            break;
+            
+        case GS_FBA_1: // 0x4A
+        case GS_FBA_2: // 0x4B
+            g_logFile << "[GIF] REGLIST FBA_" << ((reg == GS_FBA_2) ? 2 : 1) 
+                      << " = " << (value & 1) << std::endl;
+            // Frame buffer alpha fix
+            break;
+            
+        case GS_MIPTBP1_1: // 0x34
+        case GS_MIPTBP1_2: // 0x35
+        case GS_MIPTBP2_1: // 0x36
+        case GS_MIPTBP2_2: // 0x37
+            g_logFile << "[GIF] REGLIST MIPTBP = 0x" << std::hex << value << std::dec << std::endl;
+            // Mipmap texture base pointers
+            break;
+            
+        case GS_TEX2_1: // 0x16
+        case GS_TEX2_2: // 0x17
+            g_logFile << "[GIF] REGLIST TEX2 = 0x" << std::hex << value << std::dec << std::endl;
+            // Additional texture params (PSM, CBP, etc)
+            break;
+            
+        case GS_SCANMSK: // 0x22
+            g_logFile << "[GIF] REGLIST SCANMSK = " << (value & 3) << std::endl;
+            // Scanline masking for interlacing
+            break;
+            
+        case GS_FOG: // 0x0A
+            g_gs_state.fog_coef = (value >> 56) & 0xFF;
+            g_logFile << "[GIF] REGLIST FOG = " << (int)g_gs_state.fog_coef << std::endl;
             break;
             
         case GS_NOP:
-            break;
-
-        case GS_XYOFFSET_1: g_gs_state.SetXYOffset(0, value); break;
-        case GS_XYOFFSET_2: g_gs_state.SetXYOffset(1, value); break;
-        case 0x3F: 
-            // Logic: Invalidate the GS Texture Cache.
-            // For now, logging it is sufficient.
-            if (g_logFile.is_open()) g_logFile << "[GIF] REGLIST TEXFLUSH" << std::endl;
             break;
             
         default:
@@ -948,17 +1165,19 @@ void GIF::ProcessReglist(uint8_t reg, const uint8_t* data) {
 
 
 void GIF::ProcessImage(const uint8_t* data, size_t qwords) {
-    // IMAGE format: raw HWREG writes for texture uploads
-    // Each quadword (16 bytes) is two 64-bit writes to HWREG
+    g_logFile << "[GIF] IMAGE: " << qwords << " QWs (" << (qwords * 16) << " bytes)" << std::endl;
     
-    g_logFile << "[GIF] IMAGE: Processing " << qwords << " quadwords for VRAM transfer" << std::endl;
+    if (!g_gs_state.transfer.active) {
+        g_logFile << "[GIF] WARNING: IMAGE data but no transfer active!" << std::endl;
+        return;
+    }
     
     for (size_t i = 0; i < qwords; i++) {
         uint64_t data_lo, data_hi;
         std::memcpy(&data_lo, data + (i * 16), 8);
         std::memcpy(&data_hi, data + (i * 16) + 8, 8);
         
-        // TODO: g_gs_state.WriteHWREG(data_lo);
-        // TODO: g_gs_state.WriteHWREG(data_hi);
+        g_gs_state.WriteHWReg(data_lo);
+        g_gs_state.WriteHWReg(data_hi);
     }
 }

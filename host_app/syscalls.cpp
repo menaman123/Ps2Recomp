@@ -80,6 +80,7 @@ int g_nextThreadId = 1;
 int g_currentThreadId = 1;
 
 const uint32_t KERNEL_SYSCALL_TABLE_BASE = 0x800002E0;
+static std::string g_activeMountPath = "";
 
 // A helper function to read a string from guest memory
 std::string read_string_from_guest(uint32_t address) {
@@ -855,7 +856,7 @@ void sceSifSetDma(CpuContext& ctx) {
                 }
             
             }
-else if (is_file_io) { // Server 0x80000001
+            else if (is_file_io) { // Server 0x80000001
                 g_logFile << "    [HLE] FILEIO Call Detected (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
 
                 int32_t result = 0;
@@ -886,6 +887,11 @@ else if (is_file_io) { // Server 0x80000001
                         g_logFile << "    [FILEIO] Failed to open '" << path << "'" << std::endl;
                         result = -1;
                     }
+                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
+                    g_logFile << "║ FILEIO OPEN: " << filename << std::endl;
+                    g_logFile << "║ Host Path: " << path << std::endl;
+                    g_logFile << "║ Result FD: " << result << std::endl;
+                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
                 }
                 // Function 5: fioClose
                 else if (rpc_func_num == 0x05) {
@@ -903,12 +909,13 @@ else if (is_file_io) { // Server 0x80000001
                     int fd       = memory::read<int32_t>(packet_addr + 0x40);
                     uint32_t dst = memory::read<uint32_t>(packet_addr + 0x44); // 0x30024000
                     int size     = memory::read<int32_t>(packet_addr + 0x48);
+                    uint32_t phys_addr = dst & 0x1FFFFFFF; 
                     
                     if (g_file_io_handles.count(fd)) {
                         FILE* f = g_file_io_handles[fd];
                         
                         // FIX: Ensure Physical Address
-                        uint32_t phys_addr = dst & 0x1FFFFFFF; 
+    
 
                         std::vector<uint8_t> temp_buf(size);
                         size_t bytes = fread(temp_buf.data(), 1, size, f);
@@ -924,17 +931,82 @@ else if (is_file_io) { // Server 0x80000001
                         result = -1;
                         
                         // Fail-Safe Stub
-                        uint32_t phys_addr = dst & 0x1FFFFFFF;
                         memory::write<uint32_t>(phys_addr, 0x03E00008); // jr ra
                         memory::write<uint32_t>(phys_addr + 4, 0);      // nop
                     }
+                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
+                    g_logFile << "║ FILEIO READ: " << size << " bytes" << std::endl;
+                    g_logFile << "║ FD: " << fd << " → RAM: 0x" << std::hex << phys_addr << std::endl;
+                    g_logFile << "║ Actual Read: " << result << " bytes" << std::endl;
+                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
                 }
 
+            else if (rpc_func_num == 0xFF) {
+                char mount_path[256] = {0}; // Initialize buffer with nulls
+                
+                // ---------------------------------------------------------
+                // STEP 1: Calculate Addresses & Fix KSEG Mapping
+                // ---------------------------------------------------------
+                // Offset 0x40 is standard for fioOpen, but for custom RPCs, 
+                // the string might be at 0x00, 0x10, or 0x20 relative to packet_addr.
+                // If 0x40 returns garbage, change this offset to 0x00 and retry.
+                uint32_t payload_offset = 0x40; 
+                
+                // The PS2 sends a Virtual Address (e.g., 0x203CAD00).
+                // We MUST mask it to get the Physical Address (e.g., 0x003CAD00).
+                uint32_t virtual_addr = packet_addr + payload_offset;
+                uint32_t physical_addr = virtual_addr & 0x1FFFFFFF; 
+
+                // ---------------------------------------------------------
+                // STEP 2: Read the String from Physical RAM
+                // ---------------------------------------------------------
+                bool found_terminator = false;
+                for(int k = 0; k < 255; k++) {
+                    // Read byte-by-byte from the physical RAM offset
+                    uint8_t val = memory::read<uint8_t>(physical_addr + k);
+                    
+                    mount_path[k] = (char)val;
+                    
+                    if (val == 0) {
+                        found_terminator = true;
+                        break;
+                    }
+                }
+                
+                // Safety: Ensure null-termination if string was max length
+                mount_path[255] = '\0'; 
+
+                // ---------------------------------------------------------
+                // STEP 3: Handle the Logic (Mount vs Reset)
+                // ---------------------------------------------------------
+                // Note: If mount_path is empty, this was likely a standard fioInit (Reset) command.
+                if (mount_path[0] != '\0') {
+                    g_activeMountPath = std::string(mount_path);
+                    
+                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
+                    g_logFile << "║ FILEIO FUNC:0xFF (Mount / Custom)                 ║" << std::endl;
+                    g_logFile << "║ VAddr: 0x" << std::hex << virtual_addr 
+                            << " -> PAddr: 0x" << physical_addr << std::dec << "          ║" << std::endl;
+                    g_logFile << "║ Path:  " << g_activeMountPath << std::string(32 - g_activeMountPath.length(), ' ') << "   ║" << std::endl;
+                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
+                } else {
+                    g_logFile << "[RPC 0xFF] Empty payload detected. Likely fioInit/Reset." << std::endl;
+                    g_activeMountPath = ""; // Clear path on reset
+                }
+
+                // ---------------------------------------------------------
+                // STEP 4: Return Success
+                // ---------------------------------------------------------
+                // 0 is the standard "Success" code for FileIO RPCs.
+                result = 0; 
+// TEMP: Exit after handling this RPC to prevent infinite loop during testing
+            }
                 if (recv_buffer != 0) {
                     // FIX: Mask address
                     memory::write<int32_t>(recv_buffer & 0x1FFFFFFF, result);
                 }
             }
+            
             else if (is_pad){
                 g_logFile << "    [HLE] PADMAN Call Detected (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
                     
@@ -1036,6 +1108,43 @@ else if (is_file_io) { // Server 0x80000001
                     }
                 }
             }
+            
+            
+            
+            else if (is_cdvd_n_commands) {
+                g_logFile << "    [HLE] CDVD N-Command (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
+                
+                if (rpc_func_num == 0x01) { // sceCdRead
+                    uint32_t lba = memory::read<uint32_t>(packet_addr + 0x40);
+                    uint32_t sectors = memory::read<uint32_t>(packet_addr + 0x44);
+                    uint32_t dest = memory::read<uint32_t>(packet_addr + 0x48);
+                    
+                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
+                    g_logFile << "║ CDVD READ: LBA=" << lba << " Sectors=" << sectors << std::endl;
+                    g_logFile << "║ Dest: 0x" << std::hex << dest << std::endl;
+                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
+                    
+                    // Read from ISO
+                    if (g_isoFile) {
+                        uint32_t phys_addr = dest & 0x1FFFFFFF;
+                        uint64_t iso_offset = (uint64_t)lba * 2048;
+                        uint32_t size = sectors * 2048;
+                        
+                        fseek(g_isoFile, iso_offset, SEEK_SET);
+                        
+                        std::vector<uint8_t> buffer(size);
+                        size_t bytes_read = fread(buffer.data(), 1, size, g_isoFile);
+                        
+                        for (size_t k = 0; k < bytes_read; k++) {
+                            memory::write<uint8_t>(phys_addr + k, buffer[k]);
+                        }
+                        
+                        g_logFile << "║ Read " << bytes_read << " bytes from ISO" << std::endl;
+                    }
+                    
+                    if (recv_buffer) memory::write<int32_t>(recv_buffer, 1); // Success
+                }
+            }
             }
 
             /*
@@ -1101,7 +1210,9 @@ else if (is_file_io) { // Server 0x80000001
 
 
         else if (command_id == 0x8000000C){ // Get other data
-
+            // Not implemented
+            g_logFile << "    [SIF Action] Unhandled Command ID 0x8000000C" << std::endl;
+        
         }
     }
     

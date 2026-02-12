@@ -135,6 +135,8 @@ void DMAC::ProcessSifDma(int ch) {
     }
 }
 
+/*
+
 void DMAC::ProcessGifDmaChain() {
     auto& ch = channels[DMA_GIF];
     
@@ -159,7 +161,7 @@ void DMAC::ProcessGifDmaChain() {
 
     // We'll collect ALL payload data from the chain into one buffer
     std::vector<uint8_t> full_payload;
-    uint32_t current_tadr = ch.tadr & 0x0FFFFFFF;  // Physical address only
+    uint32_t current_tadr = ch.tadr;  // Physical address only
     bool tag_end = false;
     int tag_count = 0;
     const int MAX_TAGS = 10000;  // Safety
@@ -168,8 +170,8 @@ void DMAC::ProcessGifDmaChain() {
 
     while (!tag_end && tag_count < MAX_TAGS) {
         // Read 128-bit DMA tag
-        uint64_t tag_lo = memory::read<uint64_t>(current_tadr);
-        uint64_t tag_hi = memory::read<uint64_t>(current_tadr + 8);
+        uint64_t tag_lo = memory::read<uint64_t>(current_tadr & 0x1FFFFFFF); 
+        uint64_t tag_hi = memory::read<uint64_t>((current_tadr + 8) & 0x1FFFFFFF);
 
         uint16_t qwc  = tag_lo & 0xFFFF;
         uint8_t  id   = (tag_lo >> 28) & 0x7;
@@ -271,6 +273,8 @@ void DMAC::ProcessGifDmaChain() {
                 break;
         }
 
+
+
         // ===== UPDATE REGISTERS FOR GAMES THAT POLL =====
         // Update MADR to point to current data source
         ch.madr = data_addr;
@@ -362,6 +366,240 @@ void DMAC::ProcessGifDmaChain() {
     CompleteChannel(DMA_GIF);
     g_logFile << "[DMAC] GIF chain transfer complete" << std::endl;
 }
+
+*/
+void DMAC::ProcessGifDmaChain() {
+    auto& ch = channels[DMA_GIF];
+    
+    if (!(ch.chcr & CHCR_STR)) return;
+    
+    int mode = (ch.chcr >> 2) & 0x3;
+    bool tte = (ch.chcr >> 6) & 1;  // Transfer tag enable
+    
+    g_logFile << "[DMAC] GIF DMA started (Chain Mode)" << std::endl;
+    g_logFile << "  Mode: " << mode 
+              << " MADR: 0x" << std::hex << ch.madr
+              << " TADR: 0x" << ch.tadr
+              << " QWC: " << std::dec << ch.qwc 
+              << " CHCR: 0x" << std::hex << ch.chcr << std::dec << std::endl;
+    
+    if (mode != 1) {  // We only handle chain mode here
+        g_logFile << "[DMAC] ERROR: ProcessGifDmaChain called with non-chain mode " << mode << std::endl;
+        ch.chcr &= ~CHCR_STR;
+        CompleteChannel(DMA_GIF);
+        return;
+    }
+
+    // We'll collect ALL payload data from the chain into one buffer
+    std::vector<uint8_t> full_payload;
+    
+    // FIX 1: Do NOT mask the address yet. Keep the 0x80000000/0x70000000 bits.
+    // The previous code had: uint32_t current_tadr = ch.tadr & 0x0FFFFFFF; 
+    uint32_t current_tadr = ch.tadr; 
+
+    bool tag_end = false;
+    int tag_count = 0;
+    const int MAX_TAGS = 10000;  // Safety
+
+    g_logFile << "[DMAC] GIF Processing Source Chain (TADR start = 0x" << std::hex << current_tadr << ")" << std::dec << std::endl;
+
+    while (!tag_end && tag_count < MAX_TAGS) {
+        // FIX 2: Mask ONLY when physically reading the tag from memory.
+        // We use 0x1FFFFFFF mask to map virtual addresses to physical RAM offsets for reading the tag itself.
+        // Note: For tags stored in Scratchpad (0x7000...), this basic mask works IF your memory::read handles unmapped 0x70... addresses 
+        // by falling back to main RAM, OR if you explicitly handle tag reading from SPR here. 
+        // Typically tags are in Main RAM, but if a tag IS in SPR, memory::read needs to handle the 0x70 mask.
+        // Assuming memory::read uses translate_address internally, passing the full address is safer:
+        uint64_t tag_lo = memory::read<uint64_t>(current_tadr); 
+        uint64_t tag_hi = memory::read<uint64_t>(current_tadr + 8);
+
+        uint16_t qwc  = tag_lo & 0xFFFF;
+        uint8_t  id   = (tag_lo >> 28) & 0x7;
+        bool     irq  = (tag_lo >> 31) & 1;
+        uint32_t addr = (tag_lo >> 32) & 0x7FFFFFF0;
+        addr &= ~0xF;
+        bool     spr  = (tag_lo >> 63) & 1;
+
+        // Log tag
+        g_logFile << "  [Tag " << tag_count << "] @ 0x" << std::hex << current_tadr 
+                  << " ID=" << (int)id 
+                  << " (" << (id==0?"REFE":id==1?"CNT":id==2?"NEXT":id==3?"REF":id==4?"REFS":id==5?"CALL":id==6?"RET":"END") << ")"
+                  << " QWC=" << std::dec << qwc 
+                  << " ADDR=0x" << std::hex << addr 
+                  << " IRQ=" << irq 
+                  << " SPR=" << spr << std::dec << std::endl;
+
+        // Update CHCR.TAG field (bits 16-31) with bits 16-31 of tag_lo
+        ch.chcr = (ch.chcr & 0x0000FFFF) | (tag_lo & 0xFFFF0000);
+
+        // Determine source address and advance TADR
+        uint32_t data_addr = 0;
+        uint32_t data_bytes = qwc * 16;
+        
+        switch (id) {
+            case 0: // REFE - Reference + End
+                data_addr = addr;
+                current_tadr += 16;
+                tag_end = true;
+                break;
+
+            case 1: // CNT - Continue (data follows tag)
+                // FIX 3: Preserve the high bits (0x70000000) from current_tadr
+                data_addr = current_tadr + 16;
+                current_tadr += 16 + data_bytes;
+                break;
+
+            case 2: // NEXT - Jump to ADDR after data
+                data_addr = current_tadr + 16;
+                current_tadr = addr;
+                break;
+
+            case 3: // REF - Reference, continue
+                data_addr = addr;
+                current_tadr += 16;
+                break;
+
+            case 4: // REFS - Reference + Stall control, continue
+                data_addr = addr;
+                current_tadr += 16;
+                break;
+
+            case 5: // CALL - Push return, jump to ADDR
+            {
+                data_addr = current_tadr + 16;
+                int asp = (ch.chcr >> 4) & 3;
+                
+                if (asp == 0) {
+                    ch.asr0 = current_tadr + 16 + data_bytes;
+                    ch.chcr = (ch.chcr & ~(3 << 4)) | (1 << 4);  // ASP = 1
+                } else if (asp == 1) {
+                    ch.asr1 = current_tadr + 16 + data_bytes;
+                    ch.chcr = (ch.chcr & ~(3 << 4)) | (2 << 4);  // ASP = 2
+                } else {
+                    g_logFile << "[DMAC] WARNING: CALL with ASP=2 (stack overflow)" << std::endl;
+                }
+                current_tadr = addr;
+                break;
+            }
+
+            case 6: // RET - Pop return address
+            {
+                data_addr = current_tadr + 16;
+                int asp = (ch.chcr >> 4) & 3;
+                if (asp == 2) {
+                    current_tadr = ch.asr1;
+                    ch.chcr = (ch.chcr & ~(3 << 4)) | (1 << 4);  // ASP = 1
+                } else if (asp == 1) {
+                    current_tadr = ch.asr0;
+                    ch.chcr = (ch.chcr & ~(3 << 4));  // ASP = 0
+                } else {
+                    tag_end = true;  // Stack empty -> end
+                }
+                break;
+            }
+
+            case 7: // END - End after data
+            {
+                data_addr = current_tadr + 16;
+                current_tadr += 16 + data_bytes;
+                tag_end = true;
+                break;
+            }
+
+            default:
+                g_logFile << "[DMAC] Unknown GIF tag ID " << (int)id << " - forcing end" << std::endl;
+                tag_end = true;
+                break;
+        }
+
+        // ===== UPDATE REGISTERS FOR GAMES THAT POLL =====
+        ch.madr = data_addr;
+        ch.tadr = current_tadr;
+        ch.qwc = qwc;
+
+        // ===== TRANSFER PAYLOAD DATA =====
+        if (data_bytes > 0) { 
+            uint8_t* src;
+            bool use_scratchpad = false;
+
+            // FIX 4: Correct Scratchpad Detection
+            // 1. If the 'spr' bit is set in the tag (for REF types), use it.
+            if (id == 0 || id == 3) {
+                use_scratchpad = spr;
+            }
+            // 2. For data following the tag (CNT, RET, END, CALL, NEXT), we check the address itself.
+            //    Since we preserved the high bits in 'data_addr', this check works correctly now.
+            else {
+                // Check if the source address explicitly resides in the Scratchpad range (0x70000000)
+                use_scratchpad = ((data_addr & 0x70000000) == 0x70000000);
+            }
+
+            // FIX 5: Pass the correct full address to memory::translate_address (via get_pointer wrapper)
+            if (use_scratchpad) {
+                // Ensure the 0x70000000 bit is present so memory.cpp routes it to scratchpad_memory
+                uint32_t spr_addr = 0x70000000 | (data_addr & 0x3FFF);
+                
+                g_logFile << "    Reading from Scratchpad @ 0x" << std::hex << spr_addr << std::dec << std::endl;
+                src = (uint8_t*)memory::get_pointer(spr_addr);
+            } else {
+                // For Main RAM, we can strip the high bits or just pass it through 
+                // (memory.cpp handles 0x00... and 0x20... and 0x30...)
+                // We'll pass the masked physical address to be safe for standard RAM mirrors.
+                src = (uint8_t*)memory::get_pointer(data_addr & 0x1FFFFFFF);
+            }
+
+            if (src) {
+                full_payload.insert(full_payload.end(), src, src + data_bytes);
+                g_logFile << "    Transferred " << data_bytes << " bytes from 0x" 
+                          << std::hex << data_addr << std::dec << " to GIF payload buffer." << std::endl;
+                
+                // Debug: dump first 64 bytes
+                g_logFile << "     Payload: " << std::hex;
+                for (size_t i = 0; i < std::min((size_t)64, (size_t)data_bytes); i++) {
+                    g_logFile << std::setw(2) << std::setfill('0') << (int)src[i];
+                    if ((i + 1) % 16 == 0) g_logFile << std::endl << "              ";
+                    else g_logFile << " ";
+                }
+                g_logFile << std::dec << std::endl;
+
+                ch.qwc = 0; 
+                ch.madr += data_bytes; 
+            }
+            else {
+                g_logFile << "[DMAC] ERROR: Invalid data address 0x" << std::hex << data_addr 
+                          << " for " << std::dec << data_bytes << " bytes" << std::endl;
+            }
+        }
+
+        // Handle tag IRQ
+        if (irq && (ch.chcr & CHCR_TIE)) {
+            g_logFile << "    Tag IRQ bit set (TIE enabled) - ending chain" << std::endl;
+            tag_end = true;
+        }
+
+        tag_count++;
+    }
+
+    if (tag_count >= MAX_TAGS) {
+        g_logFile << "[DMAC] ERROR: Chain exceeded " << MAX_TAGS << " tags - possible infinite loop" << std::endl;
+    }
+
+    if (!full_payload.empty()) {
+        g_logFile << "[DMAC] Sending full chain payload to GIF: " 
+                  << (full_payload.size() / 16) << " quadwords" << std::endl;
+        g_gif.ReceiveData(GIFPath::PATH3, full_payload.data(), full_payload.size());
+    } else {
+        g_logFile << "[DMAC] Chain had no payload data" << std::endl;
+    }
+
+    g_gif.FinishDMA();
+
+    ch.chcr &= ~CHCR_STR;
+    ch.qwc = 0; 
+    CompleteChannel(DMA_GIF);
+    g_logFile << "[DMAC] GIF chain transfer complete" << std::endl;
+}
+
 
 void DMAC::ProcessGifDmaNormal() {
     auto& ch = channels[DMA_GIF];
@@ -480,8 +718,10 @@ int GetDmaChannelID(uint32_t address) {
 
 void DMAC::Write(uint32_t address, uint32_t value) {
     int channel_id = GetDmaChannelID(address);
-    if (channel_id == -1) return; // Should catch this earlier, but safety first
 
+    if (channel_id == -1) return; // Should catch this earlier, but safety first
+    g_logFile << "DMAC Channel: " << channel_id << " Address: 0x" << std::hex << address 
+              << " Value: 0x" << value << std::dec << std::endl;
     // Register Offset: The lower 8 bits usually indicate the register type
     // Note: Use 0xFF to catch SADR at 0x80
     int reg_offset = address & 0xFF; 
@@ -736,9 +976,8 @@ void DMAC::ProcessVifDmaChain(int ch) {
     for (int i = 0; i < 10; i++) {
         g_logFile << "  Reading lo_tag at 0x" << std::hex << scan_addr<< std::endl;
         uint64_t scan_lo = memory::read<uint64_t>(scan_addr);
-        uint64_t scan_mid = memory::read<uint64_t>(scan_addr + 4);
         g_logFile << "  Value at lo: 0x" << std::hex << (scan_lo) << std::endl;
-        g_logFile << "  Value at mid: 0x" << std::hex << (scan_mid) << std::endl;
+        g_logFile << "  Reading hi_tag at 0x" << std::hex << (scan_addr + 8) << std::endl;
         uint32_t scan_hi = memory::read<uint32_t>(scan_addr + 8);
         g_logFile << "  Value at hi_tag: 0x" << std::hex << scan_hi << std::endl;
         uint8_t scan_id = (scan_lo >> 28) & 0x7;
@@ -765,11 +1004,16 @@ void DMAC::ProcessVifDmaChain(int ch) {
     
     // ===== MAIN CHAIN PROCESSING LOOP =====
     while (!tag_end && tag_count < MAX_TAGS) {
+    
         g_logFile << std::endl;
         g_logFile << "  ┌─────────────────────────────────────────────────" << std::endl;
         g_logFile << "  │ TAG #" << tag_count << std::endl;
         g_logFile << "  └─────────────────────────────────────────────────" << std::endl;
         
+
+        for (int i = 0; i < 8; i++) {
+            g_logFile << "Bytes at 0x628990:" << std::hex << (int)memory::read<uint8_t>(0x628990 + i) << std::endl;
+        }
         // ===== READ 128-BIT DMA TAG =====
         uint32_t tag_read_addr;
         if (fromSpr) {
@@ -782,6 +1026,15 @@ void DMAC::ProcessVifDmaChain(int ch) {
         
         uint64_t tag_lo = memory::read<uint64_t>(tag_read_addr);
         uint64_t tag_hi = memory::read<uint64_t>(tag_read_addr + 8);
+
+
+        g_logFile << "    Raw tag_hi bytes:" << std::endl;
+        g_logFile << "      ";
+        for (int i = 0; i < 8; i++) {
+            uint8_t byte = memory::read<uint8_t>(tag_read_addr + 8 + i);
+            g_logFile << std::hex << std::setw(2) << std::setfill('0') << (int)byte << " ";
+        }
+        g_logFile << std::dec << std::endl;
         
         g_logFile << "    Raw Tag Data:" << std::endl;
         g_logFile << "      tag_lo: 0x" << std::hex << std::setw(16) << std::setfill('0') << tag_lo << std::dec << std::endl;
@@ -793,6 +1046,7 @@ void DMAC::ProcessVifDmaChain(int ch) {
         uint8_t  id   = (tag_lo >> 28) & 0x7;
         bool     irq  = (tag_lo >> 31) & 1;
         uint32_t addr = (tag_lo >> 32) & 0x7FFFFFFF;
+        uint32_t unaligned_addr = addr;
         addr &= ~0xF;  // Align to 16 bytes
         bool     spr  = (tag_lo >> 63) & 1;
         
@@ -804,6 +1058,7 @@ void DMAC::ProcessVifDmaChain(int ch) {
         g_logFile << "      ID:   " << (int)id << " (" << tag_name << ")" << std::endl;
         g_logFile << "      QWC:  " << qwc << " quadwords (" << (qwc * 16) << " bytes)" << std::endl;
         g_logFile << "      ADDR: 0x" << std::hex << addr << std::dec << std::endl;
+        g_logFile << "      UNALIGNED ADDR: 0x" << std::hex << unaligned_addr << std::dec << std::endl;
         g_logFile << "      IRQ:  " << (irq ? "YES" : "NO") << std::endl;
         g_logFile << "      SPR:  " << (spr ? "YES (scratchpad)" : "NO (RAM)") << std::endl;
         g_logFile << "      PCE:  " << (int)pce << std::endl;
@@ -1009,7 +1264,20 @@ void DMAC::ProcessVifDmaChain(int ch) {
             int vif_idx = (ch == DMA_VIF1) ? 1 : 0;
             g_vif.ProcessData(vif_idx, tte_data, 8);
         }
-        
+
+        if (do_transfer && qwc > 0) {
+            int vif_idx = (ch == DMA_VIF1) ? 1 : 0;
+            
+            g_logFile << "    [VIF STATE CHECK] After TTE processing:" << std::endl;
+            g_logFile << "      VIF" << vif_idx << " state: " << g_vif.state[vif_idx] << std::endl;
+            g_logFile << "      Pending bytes: " << g_vif.pending_bytes[vif_idx] << std::endl;
+            g_logFile << "      About to send: " << (qwc * 16) << " bytes" << std::endl;
+            
+            if (g_vif.state[vif_idx] == VIF_STATE_IDLE && qwc > 0) {
+                g_logFile << "      [WARNING] VIF is in IDLE but has data pending!" << std::endl;
+                g_logFile << "      [WARNING] Data will be interpreted as commands - likely wrong!" << std::endl;
+            }
+        }
         // ===== TRANSFER PAYLOAD DATA =====
         if (do_transfer && qwc > 0) {
             uint32_t data_bytes = qwc * 16;
@@ -1047,6 +1315,7 @@ void DMAC::ProcessVifDmaChain(int ch) {
                 
                 // Send to VIF
                 int vif_idx = (ch == DMA_VIF1) ? 1 : 0;
+
                 g_logFile << "      Sending to VIF" << vif_idx << "..." << std::endl;
                 g_vif.ProcessData(vif_idx, data_ptr, data_bytes);
                 g_logFile << "      Transfer complete." << std::endl;

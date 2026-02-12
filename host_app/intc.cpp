@@ -38,7 +38,8 @@ void INTC::Write(uint32_t addr, uint32_t value) {
             mask ^= value;
             break;
         default:
-            printf("[INTC] Unknown write @ 0x%08X = 0x%08X\n", addr, value);
+            g_logFile << "[INTC] Unknown write @ 0x" << std::hex << addr 
+                      << " = 0x" << value << std::endl;
             break;
     }
 }

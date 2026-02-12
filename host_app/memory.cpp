@@ -39,6 +39,7 @@ std::vector<uint8_t> spu2_memory(2 * 1024);              // SPU2 Registers (1F90
 std::vector<uint8_t> sif_registers(512);                 // SIF Registers (1D000000h)
 std::vector<uint8_t> spu2_regs_memory(2 * 1024);  // 2KB for SPU2 Registers at 1F900000h
 std::vector<uint8_t> iop_sif_memory(512);         // IOP-side SIF registers at 1D000000h
+std::vector<uint8_t> gs_vram(4 * 1024 * 1024);              // 4MB GS VRAM
 
 extern std::ofstream g_logFile;
 
@@ -105,8 +106,7 @@ namespace memory {
             }
             uint32_t heap_start = 0x00480000;  // After game code/data
             uint32_t heap_size  = 0x00B7EC10;  // ~11.5 MB (same as game expects)
-            
-            g_heap.initialize(heap_start, heap_size);
+
         }
 
         std::cout << "Memory initialized: Loaded " << entries_loaded << " entries from text map." << std::endl;
@@ -127,211 +127,100 @@ namespace memory {
     // Translate PS2 virtual address to host memory
 // Translate PS2 virtual address to host memory
     uint8_t* translate_address(uint32_t address, size_t size) {
-        // Main RAM (0x00000000 - 0x01FFFFFF) - 32MB
-        if (address >= 0x00000000 && address < 0x02000000) {
-            if (address + size > main_memory.size()) {
-                std::cerr << "ERROR: Main RAM access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &main_memory[address];
-        }
-        // Main RAM uncached mirror (0x20000000-0x21FFFFFF) - 32MB
-        else if (address >= 0x20000000 && address < 0x22000000) {
-            uint32_t offset = address - 0x20000000;
-            if (offset + size > main_memory.size()) {
-                std::cerr << "ERROR: Main RAM mirror (0x20000000) access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &main_memory[offset];
-        }
-
-        // Main RAM uncached accelerated mirror (0x30100000-0x31FFFFFF) - 31MB
-        // NOTE: Starts at +1MB offset (0x00100000 in physical RAM)
-        else if (address >= 0x30100000 && address < 0x32000000) {
-            uint32_t offset = address - 0x30000000;
-            if (offset + size > main_memory.size()) {
-                std::cerr << "ERROR: Main RAM mirror (0x30100000) access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &main_memory[offset];
-        }
-        // I/O registers (0x10000000 - 0x1000FFFF) - 64KB
-        else if (address >= 0x10000000 && address < 0x10010000) {
-            uint32_t offset = address - 0x10000000;
-            if (offset + size > io_memory.size()) {
-                 std::cerr << "ERROR: I/O Register access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                 return nullptr;
-            }
-            return &io_memory[offset];
-        }
-        // VU0 code memory (0x11000000 - 0x11000FFF) - 4KB
-        else if (address >= 0x11000000 && address < 0x11001000) {
-            uint32_t offset = address - 0x11000000;
-            if (offset + size > vu0_code_memory.size()) {
-                std::cerr << "ERROR: VU0 code memory access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-
-            g_logFile << "Reading VU0 code memory: " << std::hex << address << std::endl;
-            return &vu0_code_memory[offset];
-        }
-        // VU0 data memory (0x11004000 - 0x11004FFF) - 4KB
-        else if (address >= 0x11004000 && address < 0x11005000) {
-            uint32_t offset = address - 0x11004000;
-            if (offset + size > vu0_data_memory.size()) {
-                std::cerr << "ERROR: VU0 data memory access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &vu0_data_memory[offset];
-        }
-        // VU1 code memory (0x11008000 - 0x1100BFFF) - 16KB
-        else if (address >= 0x11008000 && address < 0x1100C000) {
-            uint32_t offset = address - 0x11008000;
-            if (offset + size > vu1_code_memory.size()) {
-                std::cerr << "ERROR: VU1 code memory access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            g_logFile << "Reading VU1 code memory: " << std::hex << address << std::endl;
-            
-            return &vu1_code_memory[offset];
-        }
-        // VU1 data memory (0x1100C000 - 0x1100FFFF) - 16KB
-        else if (address >= 0x1100C000 && address < 0x11010000) {
-            uint32_t offset = address - 0x1100C000;
-            if (offset + size > vu1_data_memory.size()) {
-                std::cerr << "ERROR: VU1 data memory access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &vu1_data_memory[offset];
-        }
-        // GS privileged registers (0x12000000 - 0x12001FFF) - 8KB
-        else if (address >= 0x12000000 && address < 0x12002000) {
-            std::cerr << "WARNING: GS register access at 0x" 
-                    << std::hex << address << " - not yet implemented" << std::endl;
-            return nullptr;
-        }
-        // IOP RAM (0x1C000000 - 0x1C1FFFFF) - 2MB
-        else if (address >= 0x1C000000 && address < 0x1C200000) {
-            uint32_t offset = address - 0x1C000000;
-            if (offset + size > iop_memory.size()) {
-                std::cerr << "ERROR: IOP RAM access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &iop_memory[offset];
-
-        }
-
-        // --- NEW: IOP RAM (EE View) ---
-        // The EE sees IOP RAM at 0x1C000000
-        else if (address >= 0x1C000000 && address < 0x1C200000) {
-            uint32_t offset = address - 0x1C000000;
-            if (offset + size > iop_memory.size()) {
-                std::cerr << "ERROR: IOP RAM access out of bounds" << std::endl;
-                return nullptr;
-            }
-            return &iop_memory[offset];
-        }
-
-        // --- NEW: IOP Hardware Registers ---
+    // ----------------------------------------------------------------
+    // 1. Handle Scratchpad (Internal EE Memory) - 0x70000000
+    // ----------------------------------------------------------------
+    // This is distinct from Main RAM and must be checked first.
+    if ((address & 0x70000000) == 0x70000000) {
+         // Mask off the top to get offset 0x0000 - 0x3FFF
+        uint32_t offset = address & 0x00003FFF;
         
-        // 1. IOP I/O Registers (0x1F800000 - 0x1F80FFFF)
-        // Covers: Interrupts (1F801070), DMA (1F801080), Timers (1F801100), CDVD (1F40xxxx - wait, need separate check or larger buffer)
-        // Your map lists CDVD at 1F40xxxx. The 64KB buffer handles 1F80xxxx range.
-        else if (address >= 0x1F800000 && address < 0x1F810000) {
-            uint32_t offset = address - 0x1F800000;
-            if (offset + size > iop_io_memory.size()) return nullptr;
-            return &iop_io_memory[offset];
-        }
-
-        // 2. SPU2 (Sound) Registers (0x1F900000 - 0x1F9007FF)
-        // Covers Core0/Core1 voices, volume, etc.
-        else if (address >= 0x1F900000 && address < 0x1F900800) {
-            uint32_t offset = address - 0x1F900000;
-            if (offset + size > spu2_regs_memory.size()) return nullptr;
-            return &spu2_regs_memory[offset];
-        }
-
-        // 3. IOP-side SIF Registers (0x1D000000)
-        else if (address >= 0x1D000000 && address < 0x1D000200) {
-            uint32_t offset = address - 0x1D000000;
-            if (offset + size > iop_sif_memory.size()) return nullptr;
-            return &iop_sif_memory[offset];
-        }
-
-        // --- BIOS Ranges ---
-        // (Ensure you handle the BIOS mirrors like 0x1FC00000)
-        else if (address >= 0x1FC00000 && address < 0x20000000) {
-            uint32_t offset = address - 0x1FC00000;
-            if (offset + size > bios_memory.size()) return nullptr;
-            return &bios_memory[offset];
-        }
-
-        // Scratchpad RAM (0x70000000 - 0x70003FFF) - 16KB
-        else if (address >= 0x70000000 && address < 0x70004000) {
-            uint32_t offset = address - 0x70000000;
-            if (offset + size > scratchpad_memory.size()) {
-                g_logFile << "ERROR: Scratchpad access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &scratchpad_memory[offset];
-        }
-        // Main RAM mirror at 0x80000000-0x81FFFFFF (KSEG0 - cached)
-        else if (address >= 0x80000000 && address < 0x82000000) {
-            uint32_t offset = address - 0x80000000;
-            if (offset + size > main_memory.size()) {
-                std::cerr << "ERROR: Main RAM mirror (KSEG0) access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &main_memory[offset];
-        }
-        // BIOS mirror at 0x9FC00000-0x9FFFFFFF (KSEG0 - cached - rom09)
-        else if (address >= 0x9FC00000 && address < 0xA0000000) {
-            uint32_t offset = address - 0x9FC00000;
-            if (offset + size > bios_memory.size()) {
-                std::cerr << "ERROR: BIOS mirror (KSEG0) access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &bios_memory[offset];
-        }
-        // Main RAM mirror at 0xA0000000-0xA1FFFFFF (KSEG1 - uncached)
-        else if (address >= 0xA0000000 && address < 0xA2000000) {
-            uint32_t offset = address - 0xA0000000;
-            if (offset + size > main_memory.size()) {
-                std::cerr << "ERROR: Main RAM mirror (KSEG1) access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &main_memory[offset];
-        }
-        // BIOS mirror at 0xBFC00000-0xBFFFFFFF (KSEG1 - uncached - rom0b)
-        else if (address >= 0xBFC00000 && address < 0xC0000000) {
-            uint32_t offset = address - 0xBFC00000;
-            if (offset + size > bios_memory.size()) {
-                std::cerr << "ERROR: BIOS mirror (KSEG1) access out of bounds at 0x" 
-                        << std::hex << address << std::endl;
-                return nullptr;
-            }
-            return &bios_memory[offset];
-        }
-        else {
-            /*std::cerr << "WARNING: Unmapped memory access at 0x" 
-                    << std::hex << address << " (size: " << size << ")" << std::endl;*/
+        if (offset + size > scratchpad_memory.size()) {
+            std::cerr << "ERROR: Scratchpad access out of bounds at 0x" << std::hex << address << std::endl;
             return nullptr;
         }
+        return &scratchpad_memory[offset];
     }
-    bool is_io_register(uint32_t address) {
+
+    // ----------------------------------------------------------------
+    // 2. Handle Hardware Registers (0x10000000 - 0x1FFFFFFF)
+    // ----------------------------------------------------------------
+    // IO, VU, IOP, BIOS. These are not mirrors of Main RAM.
+    if (address >= 0x10000000 && address < 0x20000000) {
+        // VU0 Code
+        if (address >= 0x11000000 && address < 0x11001000) {
+            return &vu0_code_memory[address - 0x11000000];
+        }
+        // VU0 Data
+        if (address >= 0x11004000 && address < 0x11005000) {
+            return &vu0_data_memory[address - 0x11004000];
+        }
+        // VU1 Code
+        if (address >= 0x11008000 && address < 0x1100C000) {
+            return &vu1_code_memory[address - 0x11008000];
+        }
+        // VU1 Data
+        if (address >= 0x1100C000 && address < 0x11010000) {
+            return &vu1_data_memory[address - 0x1100C000];
+        }
+        // IOP RAM (0x1C000000)
+        if (address >= 0x1C000000 && address < 0x1C200000) {
+            return &iop_memory[address - 0x1C000000];
+        }
+        
+        // I/O Registers are usually handled by read_io_register/write_io_register,
+        // but if get_pointer needs them (e.g. for buffers), handle here:
+        if (address >= 0x10000000 && address < 0x10010000) {
+            return &io_memory[address - 0x10000000];
+        }
+
+        // BIOS (0x1FC00000)
+        if (address >= 0x1FC00000 && address < 0x20000000) {
+             return &bios_memory[address - 0x1FC00000];
+        }
+
+        // If it falls here, it's an unmapped IO region
+        return nullptr;
+    }
+    
+    // ----------------------------------------------------------------
+    // 3. Handle Main RAM and Mirrors (KUSEG, KSEG0, KSEG1)
+    // ----------------------------------------------------------------
+    // KUSEG: 0x00000000 - 0x01FFFFFF (User)
+    // KSEG0: 0x80000000 - 0x81FFFFFF (Kernel Cached)
+    // KSEG1: 0xA0000000 - 0xA1FFFFFF (Kernel Uncached)
+    //
+    // All of these map to physical RAM at (address & 0x1FFFFFFF).
+    
+    // Mask off the top 3 bits (0xE0000000) to strip 0x80/0xA0 prefixes
+    uint32_t physical_addr = address & 0x1FFFFFFF;
+
+    // Check bounds against your 32MB Main RAM
+    if (physical_addr < main_memory.size()) {
+        if (physical_addr + size > main_memory.size()) {
+            std::cerr << "ERROR: Main RAM access out of bounds at 0x" << std::hex << address << std::endl;
+            return nullptr;
+        }
+        return &main_memory[physical_addr];
+    }
+    
+    // ----------------------------------------------------------------
+    // 4. Handle Extended BIOS Mirrors
+    // ----------------------------------------------------------------
+    // KSEG0/KSEG1 BIOS mirrors (0x9FC00000, 0xBFC00000)
+    // These map to physical 0x1FC00000
+    if ((address & 0x1FFFFFFF) >= 0x1FC00000 && (address & 0x1FFFFFFF) < 0x20000000) {
+        uint32_t offset = (address & 0x1FFFFFFF) - 0x1FC00000;
+        if (offset + size > bios_memory.size()) return nullptr;
+        return &bios_memory[offset];
+    }
+
+    // Default failure
+    // std::cerr << "WARNING: Unmapped memory access at 0x" << std::hex << address << std::endl;
+    return nullptr;
+}
+    
+bool is_io_register(uint32_t address) {
         // EE I/O registers: 0x10000000 - 0x1000FFFF
         // GS privileged: 0x12000000 - 0x12001FFF
         return (address >= 0x10000000 && address <= 0x1000FFFF) ||
@@ -470,6 +359,13 @@ namespace memory {
 
     // Centralized I/O register write
 void write_io_register(uint32_t address, uint32_t value) {
+    if (address >= 0x10000000 && address < 0x10002000) {
+        // EE Timer registers - absorb silently
+        // TODO: implement timers if needed for game timing
+        g_logFile << "Timer Register Write (ignored): Address: " << std::hex << address 
+                  << ", Value: " << value << std::endl;
+        return;
+    }
     if(address >= 0x10005000 && address <= 0x1000500C) {
         g_logFile << "VIF1 Write to FIFO/Latch: " << std::hex << value 
                   << " at address " << address << std::endl;
@@ -524,6 +420,8 @@ void write_io_register(uint32_t address, uint32_t value) {
         // This function should handle the CHCR logic internally:
         // 1. Update the register state.
         // 2. If address == 0x1000A000 && (value & STR), trigger the Graphics Thread.
+        g_logFile << "DMAC Write Address: " << std::hex << address 
+                  << ", Value: " << value << std::endl;
         g_dmac.Write(address, value);
         return;
     }
@@ -573,6 +471,20 @@ void write_io_register(uint32_t address, uint32_t value) {
 }
      template <typename T>
     T read(uint32_t address) {
+
+        if (address >= 0x002f67e0 && address <= 0x002f6808) {
+            g_logFile << "[Memory Read] Address: " << std::hex << address << std::endl;
+        }
+
+        if (address >= 0x002f67e0 && address <= 0x002f6810) {
+            g_logFile << "[VTable Read] Address: 0x" << std::hex << address << std::endl;
+            
+            // Optional: Since you know the exact address of your function pointer:
+            if (address == 0x002f6804) {
+                g_logFile << "!!! HIT: Reading pointer for FUN_001aa900 !!!" << std::endl;
+            }
+        }
+        
         // Check I/O registers FIRST (before translate_address)
         if (is_io_register(address)) {
             // I/O registers are 32-bit aligned, handle smaller reads
@@ -606,26 +518,61 @@ void write_io_register(uint32_t address, uint32_t value) {
         T value;
         std::memcpy(&value, ptr, sizeof(T));
 
+        if (address == 0x4A16A0){
+            g_logFile << "[FILENAME ADDR READ] Address: " << std::hex << address 
+                    << ", Value: " << value << std::endl;
+        }
+
         //g_logFile << "[Read] Address: " << std::hex << address << ", Value: " << value << std::endl;
         return value;
     }
 
     template <typename T>
     void write(uint32_t address, T value) {
-        if (address >= 0x002e7ff0 && address <= 0x002e800f) {
-            g_logFile << "[VIDEO STATE] Write detected at address: " << std::hex << address 
-                << " with value: " << value << std::endl;
-            g_logFile << "[VIDEO STATE] Switch detected! Value: " << value 
-                << " (0=Hardware, 1=Buffered)" << std::endl;
+        if (address == 0x31B190){
+            g_logFile << "[WRITING TO VIRTUAL ADDRESS IN MAIN RAM] Address: " << std::hex << address 
+                    << ", Value: " << value <<std::endl;
         }
-        if (address >= 0x628990 && address < 0x6289A0) {
-            g_logFile << "[MEMORY WATCH] Write @ 0x" << std::hex << address 
-                  << " = 0x" << value << std::endl;
+        if (address >= 0x11000000 && address < 0x11001000){
+        g_logFile << "[VU0 Write called] Write called for address: " << std::hex << address << ""
+                    << " with value: " << value <<std::endl;
         }
+        if (address == 0x309780){
+            g_logFile << "[MEMORY WATCH GIF TAG] Write called for address: " << std::hex << address << ""
+                    << " with value: " << value <<std::endl;
+
+        }
+        if (address == 0x306b50){
+            g_logFile << "[MEMORY WATCH] Potential .BIN/ .DAT write called for address: " << std::hex << address 
+                    << " with value: " << value <<std::endl;
+
+        }
+        if (address >= 0x12000000 && address < 0x12000100) {
+            g_logFile << "[GS PRIVILEGED REGISTER WRITE] Address: " << std::hex << address 
+                    << ", Value: " << value << std::endl;
+        }
+        if (address == 0x3d4400){
+            g_logFile << "[MEMORY WATCH GIF TAG] Write called for address: " << std::hex << address 
+                    << " with value: " << value <<std::endl;
+        }
+
+        if (address == 0x4A16A0){
+            g_logFile << "[FILENAME ADDR WRITE] Address: " << std::hex << address 
+                    << ", Value: " << value << std::endl;
+        }
+
+        if (address == 0x4A18D0){
+            g_logFile << "[SUSPECTED TEXTURE BUFFER ADDRESS] Address: " << std::hex << address 
+                    << ", Value: " << value << std::endl;
+
+        }
+
         // Check I/O registers FIRST
         if (is_io_register(address)) {
             if constexpr (sizeof(T) <= 4) {
                 // Most I/O writes are 32-bit
+                g_logFile << "[IO WRITE] Address: " << std::hex << address 
+                          << ", Value: " << static_cast<uint32_t>(value) << std::endl;
                 write_io_register(address & ~0x3, static_cast<uint32_t>(value));
             } else {
                 // 64-bit I/O write

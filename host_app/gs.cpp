@@ -96,17 +96,39 @@ void WritePrivilegedRegister(uint32_t addr, uint64_t value) {
 
         case 0x0080: // DISPLAY1
         {
+            // Skip if value unchanged
+            if (g_gs_regs.DISPLAY1 == value) break;
             g_gs_regs.DISPLAY1 = value;
-            uint32_t dw = (value >> 32) & 0xFFF;
-            uint32_t dh = (value >> 44) & 0x7FF;
-
-            // QUEUE THE CHANGE
-            RenderJob job;
-            job.type = RenderCommandType::SetWindow;
-            job.args.arg1 = 1;       // Context ID (optional, if you support 2 contexts)
-            job.args.arg2 = dw + 1;  // Width
-            job.args.arg3 = dh + 1;  // Height
-            g_renderQueue.Push(job);
+            
+            // Parse DISPLAY register correctly
+            uint32_t magh = (value >> 23) & 0xF;   // Horizontal magnification - 1
+            uint32_t magv = (value >> 27) & 0x3;   // Vertical magnification - 1
+            uint32_t dw   = (value >> 32) & 0xFFF; // Display width - 1 (in VCKs)
+            uint32_t dh   = (value >> 44) & 0x7FF; // Display height - 1
+            
+            // Calculate actual pixel dimensions
+            int width  = (dw + 1) / (magh + 1);
+            int height = (dh + 1) / (magv + 1);
+            
+            // Only push if dimensions are valid and changed
+            static int last_w1 = 0, last_h1 = 0;
+            if (width > 0 && height > 0 && (width != last_w1 || height != last_h1)) {
+                last_w1 = width;
+                last_h1 = height;
+                
+                RenderJob job;
+                job.type = RenderCommandType::SetWindow;
+                job.args.arg1 = 1;
+                job.args.arg2 = width;
+                job.args.arg3 = height;
+                g_renderQueue.Push(job);
+                
+                if (g_logFile.is_open()) {
+                    g_logFile << "[GS] DISPLAY1: " << width << "x" << height 
+                            << " (DW=" << dw << " DH=" << dh 
+                            << " MAGH=" << magh << " MAGV=" << magv << ")" << std::endl;
+                }
+            }
             break;
         }
 
@@ -151,17 +173,33 @@ void WritePrivilegedRegister(uint32_t addr, uint64_t value) {
 
         case 0x00A0: // DISPLAY2
         {
+            if (g_gs_regs.DISPLAY2 == value) break;
             g_gs_regs.DISPLAY2 = value;
+            
+            uint32_t magh = (value >> 23) & 0xF;
+            uint32_t magv = (value >> 27) & 0x3;
             uint32_t dw   = (value >> 32) & 0xFFF;
             uint32_t dh   = (value >> 44) & 0x7FF;
-
-            // Update window size for Context 2
-            RenderJob job;
-            job.type = RenderCommandType::SetWindow;
-            job.args.arg1 = 2;       // Context ID (2)
-            job.args.arg2 = dw + 1;  // Width
-            job.args.arg3 = dh + 1;  // Height
-            g_renderQueue.Push(job);
+            
+            int width  = (dw + 1) / (magh + 1);
+            int height = (dh + 1) / (magv + 1);
+            
+            static int last_w2 = 0, last_h2 = 0;
+            if (width > 0 && height > 0 && (width != last_w2 || height != last_h2)) {
+                last_w2 = width;
+                last_h2 = height;
+                
+                RenderJob job;
+                job.type = RenderCommandType::SetWindow;
+                job.args.arg1 = 2;
+                job.args.arg2 = width;
+                job.args.arg3 = height;
+                g_renderQueue.Push(job);
+                
+                if (g_logFile.is_open()) {
+                    g_logFile << "[GS] DISPLAY2: " << width << "x" << height << std::endl;
+                }
+            }
             break;
         }
 

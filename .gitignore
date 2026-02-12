@@ -1,9 +1,2 @@
 build/
 .vscode/
-.vscode/launch.json
-.vscode/settings.json
-build/CMakeCache.txt
-build
-build/host_app/host_app.vcxproj
-build/host_app/host_app.vcxproj
-build/host_app/host_app.vcxproj.filters
