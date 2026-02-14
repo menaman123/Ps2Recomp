@@ -524,6 +524,10 @@ int PS2Scheduler::iTerminateThread(int tid) {
     
     t.status = THS_DORMANT;
     t.wait_type = WAIT_NONE;
+
+    if(t.fiber_created){
+        t.needs_fiber_cleanup = true;
+    }
     return tid;
 }
 
