@@ -1,10 +1,36 @@
-#include "ps2_scheduler.h"
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#endif
+
+// 2. STANDARD INCLUDES
 #include <cstring>
 #include <iostream>
+#include <fstream>
+
+// 3. Disarm Windows macros RIGHT BEFORE rabbitizer
+#ifdef _WIN32
+#undef CONST
+#undef PURE
+#undef TRUE
+#undef FALSE
+#undef NEAR
+#undef FAR
+#undef VOID
+#undef STRICT
+#endif
+
+// 4. THIRD-PARTY INCLUDES
+#include "rabbitizer.hpp"
+
+// 4. PROJECT HEADERS LAST
+#include "ps2_scheduler.h"
+#include "intc.h"
 #include "memory.h"
 #include "hle_heap.h"
 #include "recompiled.h"
-#include <fstream>
+#include "syscalls.h"
 
 // ============================================================================
 // GLOBAL INSTANCE
@@ -676,6 +702,11 @@ void PS2Scheduler::RunSchedulerLoop() {
             }
         }
 
+
+        CheckAndFireVBlank();
+
+
+
         int next_tid = FindHighestPriorityThread();
         if (next_tid < 0) {
             g_logFile << "Scheduler: No ready threads, idling..." << std::endl;
@@ -958,6 +989,71 @@ int PS2Scheduler::iSignalSema(int sid) {
     return sid;
 }
 
+void PS2Scheduler::DispatchIntHandler(int cause){
+    if(!g_intc.IsEnabled(cause)) return;
+
+    auto it = g_intc_queues.find(cause);
+    if(it == g_intc_queues.end() || it->second.empty()) return;
+
+    CpuContext irq_ctx;
+    memset(&irq_ctx, 0, sizeof(CpuContext));
+    
+
+
+    for (const auto& handler : it->second) {
+        if(!handler.active) continue;
+        g_logFile << "DispatchIntHandler: Dispatching handler for cause " << cause << std::endl;
+
+        irq_ctx.cpuRegs.GPR.r[4].SL[0] = handler.cause;
+        irq_ctx.cpuRegs.GPR.r[28].UL[0] = handler.gp;
+        
+
+        auto func_it = recompiled_functions.find(handler.handler_pc);
+        if(func_it == recompiled_functions.end()){
+            func_it->second(irq_ctx, handler.handler_pc);
+        }
+        else{
+            dynamic_decode_and_execute(handler.handler_pc, irq_ctx);
+        }
+
+        if (irq_ctx.cpuRegs.GPR.r[2].SL[0] == -1) break;
+        
+
+    }
+}
+
+void PS2Scheduler::CheckAndFireVBlank(){
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(now - last_vblank_time_).count();
+
+    if (elapsed_us < 1000) return;
+
+    last_vblank_time_ = now;
+    int64_t scanlines_elapsed = (elapsed_us * 147) / 9370;
+
+
+    for (int64_t s = 0; s < scanlines_elapsed; s++){
+        current_scanline_++;
+        if (current_scanline_ == 240 && !in_vblank_) {
+            in_vblank_ = true;
+            vblank_count_++;
+            g_logFile << "Entering VBlank at scanline " << current_scanline_ << std::endl;
+            DispatchIntHandler(2); // VBlank interrupt
+        }
+        else if (current_scanline_ >= 262) {
+            if (in_vblank_){
+                DispatchIntHandler(3); // VBlank end interrupt
+                in_vblank_ = false;
+            }
+            current_scanline_ = 0;
+            g_logFile << "Exiting VBlank, new frame starting" << std::endl;
+
+        }
+    }
+
+
+}
+
 int PS2Scheduler::WaitSema(int sid, CpuContext& ctx) {
     if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
     
@@ -970,18 +1066,22 @@ int PS2Scheduler::WaitSema(int sid, CpuContext& ctx) {
         return sid;
     }
     
-    // =========================================================
-    // HLE WORKAROUND: If this is the only thread and we'd block,
-    // check if this looks like a SIF RPC wait and auto-complete
-    // =========================================================
-    int next_thread = FindHighestPriorityThread();
-    if (next_thread < 0) {
-        // No other threads to run - we're waiting for IOP which doesn't exist
-        g_logFile << "Scheduler: WaitSema would deadlock - auto-signaling (SIF HLE)" << std::endl;
-        
-        // Just pretend the semaphore was signaled immediately
-        // This simulates instant IOP response
+
+    bool any_alive = false;
+    for (int i = 1; i < MAX_THREADS; i++) {
+        if (i == current_thread_id_) continue;
+        if (!threads_[i].active) continue;
+        if (threads_[i].status != THS_DORMANT) continue;
+
+        any_alive = true;
+        break;
+    }
+
+    if(!any_alive && FindHighestPriorityThread() < 0){
+        g_logFile << "Scheduler: WaitSema TRUE deadlock on sema: " << sid << 
+            " no other threads alive" << std::endl;
         return sid;
+
     }
     
     // Normal blocking path - there are other threads to run

@@ -46,6 +46,8 @@ public:
     // Register access (for memory-mapped I/O)
     uint32_t Read(uint32_t addr);
     void Write(uint32_t addr, uint32_t value);
+
+    bool IsEnabled(int cause_bit) const { return (mask & (1u << cause_bit)) != 0; }
     
     // Syscall helpers
     bool EnableIntc(int cause_bit);   // Returns old state
