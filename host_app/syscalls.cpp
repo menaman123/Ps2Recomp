@@ -1172,6 +1172,15 @@ void sceSifSetDma(CpuContext& ctx) {
 
                 }
             }
+
+            if (client_data_ptr != 0) {
+                int32_t completion_sema = memory::read<int32_t>(client_data_ptr + 0x08); // Offset 0x20 in client struct
+                if (completion_sema > 0){
+                    g_logFile << "    [SIF Action] Completion Semaphore: 0x" << std::hex << completion_sema << std::dec << std::endl;
+                    g_scheduler.iSignalSema(completion_sema);
+                }
+                
+            }
         }
 
         
