@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "dmac.h"
 #include "memory.h"
 #include "intc.h"

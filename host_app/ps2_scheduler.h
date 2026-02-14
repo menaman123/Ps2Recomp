@@ -1,7 +1,9 @@
 #pragma once
 
-// PS2 Thread Scheduler - Tailored for your static recompiler
-// Integrates with your existing CpuContext and memory system
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
 
 #include "cpu_state.h"
 #include "memory.h"
@@ -11,7 +13,7 @@
 extern std::ofstream g_logFile;
 
 // ============================================================================
-// PS2 THREAD STATES (exact values from BIOS documentation)
+// PS2 THREAD STATES
 // ============================================================================
 #define THS_RUN         0x01
 #define THS_READY       0x02
@@ -29,7 +31,6 @@ extern std::ofstream g_logFile;
 #define MAX_THREADS     256
 #define MAX_SEMAPHORES  256
 #define MAX_PRIORITIES  128
-
 // ============================================================================
 // THREAD CONTROL BLOCK
 // ============================================================================
@@ -64,6 +65,11 @@ struct PS2Thread {
     // Linked list for semaphore wait queue
     int sema_wait_prev = -1;
     int sema_wait_next = -1;
+
+
+    void* fiber = nullptr; // For Windows Fiber implementation
+    CpuContext* saved_ctx = nullptr; // For storing context during sleep/wait
+    bool fiber_created = false; // Track if fiber has been created for this thread
 };
 
 // ============================================================================
@@ -93,9 +99,14 @@ struct PriorityQueue {
 // PS2 SCHEDULER CLASS
 // ============================================================================
 class PS2Scheduler {
+
 public:
     PS2Scheduler();
     void Reset();
+    
+
+    void InitFibers();
+    void RunSchedulerLoop();
     
     // ===== Initialization =====
     uint32_t InitMainThread(uint32_t gp, uint32_t stack, int stack_size,
@@ -159,9 +170,15 @@ public:
     PS2Thread* GetThread(int tid);
     bool HasCurrentThread() const { return current_thread_id_ > 0; }
     int GetCurrentThreadId() const { return current_thread_id_; }
+
+    void* scheduler_fiber_ = nullptr;
+    std::array<PS2Thread, MAX_THREADS> threads_;
+    int next_thread_id_ = 1;
+
+    static void CALLBACK FiberEntry(void* param);
     
 private:
-    std::array<PS2Thread, MAX_THREADS> threads_;
+    
     std::array<PriorityQueue, MAX_PRIORITIES> ready_queues_;
     std::array<PS2Semaphore, MAX_SEMAPHORES> semaphores_;
     
@@ -177,6 +194,8 @@ private:
     int FindHighestPriorityThread();
     void SaveContext(int tid, const CpuContext& ctx);
     void LoadContext(int tid, CpuContext& ctx);
+
+
 };
 
 // ============================================================================

@@ -1,4 +1,6 @@
+#define NOMINMAX
 #include "syscalls.h"
+
 #include "gs.h"
 #include "dmac.h"
 #include "memory.h"
@@ -2128,27 +2130,38 @@ void SysRemoveDmacHandler(CpuContext &ctx){
     switch(dma_cause){
         case 0:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: Vector Interface 0" << std::endl;
+            break;
         case 1:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: Vector Interface 1" << std::endl;
+                break;
         case 2:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: Graphicsc Interface" << std::endl;
+                break;
         case 3:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: IPU output" << std::endl;
+            break;
         case 4:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: IPU input" << std::endl;
+            break;
         case 5:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: IOP→EE" << std::endl;
+            break;
         case 6:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: EE→IOP" << std::endl;
+            break;
         case 7:
             g_logFile << "  Syscall: RemoveDmacHandlerr CAUSE: Bidirectional" << std::endl;
+            break;
         case 8:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: Scratchpad read" << std::endl;
+            break;
         case 9:
             g_logFile << "  Syscall: RemoveDmacHandler CAUSE: Scratchpad write" << std::endl;
+            break;
         default:
             {
                 g_logFile << "  Syscall: RemoveDmacHandler CAUSE: IDK!!!"<< std::endl;
+                    break;
             }   
     }
 

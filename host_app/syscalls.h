@@ -4,9 +4,22 @@
 #include <cstdint>
 #include <map>
 #include <string>
-#include <SDL.h> // Include the main SDL header
+
+// Rabbitizer first (needs clean namespace)
 #include "rabbitizer.hpp"
 #include "instructions/InstructionR5900.hpp"
+
+// Rabbitizer defines CONST and PURE macros that corrupt Windows headers
+#undef CONST
+#undef PURE
+
+// Windows before SDL (SDL pulls in SSE intrinsics)
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+
+#include <SDL.h>
 #include "ps2_scheduler.h"
 #include "sema.h"
 #include "intc.h"
