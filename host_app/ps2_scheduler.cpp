@@ -655,7 +655,7 @@ int PS2Scheduler::ReferThreadStatus(int tid, uint32_t status_addr) {
 }
 
 
-void Ps2Scheduler::RunSchedulerLoop() {
+void PS2Scheduler::RunSchedulerLoop() {
     g_logFile << "Scheduler: Starting main loop" << std::endl;
 
     while (true) {
