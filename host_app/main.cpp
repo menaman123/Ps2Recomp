@@ -1,6 +1,10 @@
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+
 #include <SDL.h>
 #include "cpu_state.h"
-#include "syscalls.h"
 #include "memory.h"
 #include <iostream>
 #include <iomanip>
@@ -65,40 +69,24 @@ void CpuThreadFunc(CpuContext* ctx) {
     // In a static recompiler, you typically jump to the entry point 
     // and let the blocks chain themselves, but you need a dispatcher 
     // for indirect jumps (jalr) or interrupts.
-    
-    try {
-        while (g_emulator_running) {
-            // 1. Check for Interrupts
-            if (g_intc.CheckInterrupt()) {
-                g_intc.DispatchInterrupt(*ctx);
-            }
-            
-            // 2. Execute the code block at current PC
-            // You need to expose your Dispatcher/BlockFinder here.
-            // Assuming you have a function like: execute_recompiled_block(*ctx);
-            // For now, we simulate the fetch-execute cycle for the static blocks:
-            
-            auto it = recompiled_functions.find(ctx->cpuRegs.pc);
-            if (it != recompiled_functions.end()) {
-                // Execute recompiled function
-                it->second(*ctx, ctx->cpuRegs.pc);
-            } else {
-                // Fallback: If code isn't recompiled, this is a fatal error or 
-                // requires the interpreter fallback you implemented earlier.
-                g_logFile << "[CPU] Fatal: No recompiled code at 0x" 
-                          << std::hex << ctx->cpuRegs.pc << std::endl;
-                g_emulator_running = false;
-            }
-            
-            // 3. Handle VSync / Timing
-            // If the game called WaitForVblank, it might just loop or sleep.
-            // We can add a small yield here to prevent 100% core usage if idle.
-        }
-    } catch (const std::exception& e) {
-        g_logFile << "[CPU] Exception: " << e.what() << std::endl;
-    }
+    #ifdef _WIN32
+        g_scheduler.scheduler_fiber_ = ConvertThreadToFiber(nullptr);
+    #endif
 
-    g_logFile << "[CPU] Thread Finished." << std::endl;
+
+        g_scheduler.threads_[1].fiber = g_scheduler.scheduler_fiber_;
+        g_scheduler.threads_[1].fiber_created = true;
+
+
+        auto it = recompiled_functions.find(ctx->cpuRegs.pc);
+        if (it == recompiled_functions.end()) {
+            g_logFile << "CpuThreadFunc: No recompiled function for entry PC 0x" << std::hex << ctx->cpuRegs.pc << std::dec << std::endl;
+            exit(1);
+        }
+
+        it->second(*ctx, ctx->cpuRegs.pc);
+
+
 }
 
 // -----------------------------------------------------------------------

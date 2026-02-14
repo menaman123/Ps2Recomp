@@ -3,6 +3,7 @@
 #include <iostream>
 #include "memory.h"
 #include "hle_heap.h"
+#include "recompiled.h"
 #include <fstream>
 
 // ============================================================================
@@ -183,15 +184,19 @@ void PS2Scheduler::Reschedule(CpuContext& ctx) {
         g_logFile << "Scheduler: Dispatch disabled, skipping reschedule" << std::endl;
         return;
     }
+
+
+    int old_tid = current_thread_id_;
+
     
     // Save current thread
-    if (current_thread_id_ > 0 && threads_[current_thread_id_].active) {
-        PS2Thread& current = threads_[current_thread_id_];
-        SaveContext(current_thread_id_, ctx);
+    if (old_tid > 0 && threads_[old_tid].active) {
+        PS2Thread& current = threads_[old_tid];
+        SaveContext(old_tid, ctx);
         
         if (current.status == THS_RUN) {
             current.status = THS_READY;
-            AddToReadyQueue(current_thread_id_);
+            AddToReadyQueue(old_tid);
         }
     }
     
@@ -200,19 +205,57 @@ void PS2Scheduler::Reschedule(CpuContext& ctx) {
     
     if (next < 0) {
         g_logFile << "Scheduler: PANIC - No runnable threads!" << std::endl;
-        //return;
-        exit(1);
+
+        current_thread_id_ = 0;
+        SwitchToFiber(scheduler_fiber_);
+        ctx = threads_[current_thread_id_].ctx;
+        return;
     }
     
     RemoveFromReadyQueue(next);
     threads_[next].status = THS_RUN;
     current_thread_id_ = next;
     
-    LoadContext(next, ctx);
+    if (next == old_tid) {
+        g_logFile << "Scheduler: Continuing with same thread " << next << std::endl;
+        ctx = threads_[next].ctx;
+        return;
+    }
     
     g_logFile << "Scheduler: Switched to thread " << next 
               << " priority " << threads_[next].current_priority
               << " PC 0x" << std::hex << ctx.cpuRegs.pc << std::dec << std::endl;
+
+    SwitchToFiber(threads_[next].fiber);
+    ctx = threads_[current_thread_id_].ctx;
+}
+
+#ifdef _WIN32
+void CALLBACK PS2Scheduler::FiberEntry(void* param) {
+#else
+void PS2Scheduler::FiberEntry(void* param) {
+#endif
+    int tid = reinterpret_cast<intptr_t>(param);
+    PS2Thread& t = g_scheduler.threads_[tid];
+
+    g_logFile << "FiberEntry: Thread " << tid << " starting execution at 0x" 
+              << std::hex << t.ctx.cpuRegs.pc << std::dec << std::endl;
+
+    uint32_t entry_pc = t.ctx.cpuRegs.pc;
+
+
+    auto it = recompiled_functions.find(entry_pc);
+    if (it == recompiled_functions.end()) {
+        g_logFile << "FiberEntry: No recompiled function for entry PC 0x" << std::hex << entry_pc << std::dec << std::endl;
+        exit(1);
+    }
+
+    it->second(t.ctx, entry_pc);
+    g_logFile << "FiberEntry: Thread " << tid << " finished execution, exiting thread" << std::endl;
+    g_scheduler.ExitThread(t.ctx);
+    SwitchToFiber(g_scheduler.scheduler_fiber_);
+
+
 }
 
 CpuContext& PS2Scheduler::GetCurrentContext() {
@@ -421,12 +464,20 @@ int PS2Scheduler::StartThread(int tid, uint32_t arg, CpuContext& ctx) {
     t.ctx.cpuRegs.GPR.r[28].UL[0] = t.gp_reg;
     t.ctx.cpuRegs.GPR.r[29].UL[0] = (t.stack_base + t.stack_size) & ~0xF;
     
+
+    if (!t.fiber_created) {
+#ifdef _WIN32
+        t.fiber = CreateFiber(1024 * 1024, FiberEntry, reinterpret_cast<void*>(tid));
+#else
+        // LINUX STUFF
+#endif
+        t.fiber_created = true;
+    }
+
     t.status = THS_READY;
     AddToReadyQueue(tid);
     
-    g_logFile << "Scheduler: StartThread id=" << tid 
-              << " arg=0x" << std::hex << arg << std::dec << std::endl;
-    
+    g_logFile << "Scheduler: StartThread id=" << tid << std::endl;
     Reschedule(ctx);
     return tid;
 }
