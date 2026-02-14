@@ -943,7 +943,7 @@ void sceSifSetDma(CpuContext& ctx) {
                     g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
                 }
 
-            else if (rpc_func_num == 0xFF) {
+                else if (rpc_func_num == 0xFF) {
                 char mount_path[256] = {0}; // Initialize buffer with nulls
                 
                 // ---------------------------------------------------------
