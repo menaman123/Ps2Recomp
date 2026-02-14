@@ -176,6 +176,9 @@ void PS2Scheduler::LoadContext(int tid, CpuContext& ctx) {
     ctx = threads_[tid].ctx;
 }
 
+
+
+
 // ============================================================================
 // CORE SCHEDULING
 // ============================================================================
@@ -200,33 +203,9 @@ void PS2Scheduler::Reschedule(CpuContext& ctx) {
         }
     }
     
-    // Find next thread
-    int next = FindHighestPriorityThread();
-    
-    if (next < 0) {
-        g_logFile << "Scheduler: PANIC - No runnable threads!" << std::endl;
+    g_logFile << "Scheduler: Thread " << old_tid << " yielded, looking for next thread to run..." << std::endl;
 
-        current_thread_id_ = 0;
-        SwitchToFiber(scheduler_fiber_);
-        ctx = threads_[current_thread_id_].ctx;
-        return;
-    }
-    
-    RemoveFromReadyQueue(next);
-    threads_[next].status = THS_RUN;
-    current_thread_id_ = next;
-    
-    if (next == old_tid) {
-        g_logFile << "Scheduler: Continuing with same thread " << next << std::endl;
-        ctx = threads_[next].ctx;
-        return;
-    }
-    
-    g_logFile << "Scheduler: Switched to thread " << next 
-              << " priority " << threads_[next].current_priority
-              << " PC 0x" << std::hex << ctx.cpuRegs.pc << std::dec << std::endl;
-
-    SwitchToFiber(threads_[next].fiber);
+    SwitchToFiber(scheduler_fiber_);
     ctx = threads_[current_thread_id_].ctx;
 }
 
@@ -296,8 +275,15 @@ uint32_t PS2Scheduler::InitMainThread(uint32_t gp, uint32_t stack, int stack_siz
     }
     sp &= ~0xF;
     
-    int tid = AllocateThreadSlot();
-    if (tid < 0) return 0;
+    int tid = current_thread_id_;
+    if (tid <= 0 || !threads_[tid].active){
+        g_logFile << "Scheduler: Invalid thread ID or inactive thread. Allocating as fallback thread." << std::endl;
+        tid = AllocateThreadSlot();
+        if (tid < 0) {
+            g_logFile << "Scheduler: Failed to allocate thread slot for main thread initialization." << std::endl;
+            return 0;
+        }
+    }
     
     PS2Thread& t = threads_[tid];
     t.status = THS_RUN;
@@ -307,20 +293,15 @@ uint32_t PS2Scheduler::InitMainThread(uint32_t gp, uint32_t stack, int stack_siz
     t.gp_reg = gp;
     t.current_priority = 0;
     t.init_priority = 0;
-    t.heap_base = sp;
     
     t.ctx = caller_ctx;
     t.ctx.cpuRegs.GPR.r[28].UL[0] = gp;
     t.ctx.cpuRegs.GPR.r[29].UL[0] = sp;
     
-    current_thread_id_ = tid;
-    
     caller_ctx.cpuRegs.GPR.r[28].UL[0] = gp;
     caller_ctx.cpuRegs.GPR.r[29].UL[0] = sp;
 
     t.heap_base = 0x00400000; 
-    
-    // Default Heap End: The Stack Pointer
     t.heap_end = sp;
     
     g_logFile << "Scheduler: Main thread " << tid << " initialized, SP=0x" 
@@ -485,16 +466,16 @@ int PS2Scheduler::StartThread(int tid, uint32_t arg, CpuContext& ctx) {
 void PS2Scheduler::ExitThread(CpuContext& ctx) {
     if (current_thread_id_ <= 0) return;
     
-    g_logFile << "Scheduler: ExitThread id=" << current_thread_id_ << std::endl;
+    int tid = current_thread_id_;
+    g_logFile << "Scheduler: ExitThread id=" << tid << std::endl;
     
-    PS2Thread& t = threads_[current_thread_id_];
-    RemoveFromReadyQueue(current_thread_id_);
+    PS2Thread& t = threads_[tid];
+    RemoveFromReadyQueue(tid);
     t.status = THS_DORMANT;
     t.wait_type = WAIT_NONE;
-    
-    int old_tid = current_thread_id_;
-    current_thread_id_ = 0;
-    Reschedule(ctx);
+    t.needs_fiber_cleanup = true; // Mark fiber for cleanup after switching out
+
+    SwitchToFiber(scheduler_fiber_);
 }
 
 void PS2Scheduler::ExitDeleteThread(CpuContext& ctx) {
@@ -505,9 +486,11 @@ void PS2Scheduler::ExitDeleteThread(CpuContext& ctx) {
     
     RemoveFromReadyQueue(tid);
     threads_[tid].active = false;
-    current_thread_id_ = 0;
+    threads_[tid].status = THS_DORMANT;
+    threads_[tid].wait_type = WAIT_NONE;
+    threads_[tid].needs_fiber_cleanup = true;
     
-    Reschedule(ctx);
+    SwitchToFiber(scheduler_fiber_);
 }
 
 int PS2Scheduler::TerminateThread(int tid, CpuContext& ctx) {
@@ -671,6 +654,38 @@ int PS2Scheduler::ReferThreadStatus(int tid, uint32_t status_addr) {
     return tid;
 }
 
+
+void Ps2Scheduler::RunSchedulerLoop() {
+    g_logFile << "Scheduler: Starting main loop" << std::endl;
+
+    while (true) {
+
+        // Clean
+        for (int i = 1; i < MAX_THREADS; i++) {
+            if (threads_[i].active && threads_[i].needs_fiber_cleanup) {
+                g_logFile << "Cleaning up fiber for thread " << i << std::endl;
+                DeleteFiber(threads_[i].fiber);
+                threads_[i].fiber = nullptr;
+                threads_[i].fiber_created = false;
+                threads_[i].needs_fiber_cleanup = false;
+            }
+        }
+
+        int next_tid = FindHighestPriorityThread();
+        if (next_tid < 0) {
+            g_logFile << "Scheduler: No ready threads, idling..." << std::endl;
+            Sleep(1);
+            continue;
+        }
+
+        RemoveFromReadyQueue(next_tid);
+        threads_[next_tid].status = THS_RUN;
+        current_thread_id_ = next_tid;
+        g_logFile << "Scheduler: Switching to thread " << next_tid << std::endl;
+        SwitchToFiber(threads_[next_tid].fiber);
+    }
+}
+
 // ============================================================================
 // SLEEP / WAKEUP
 // ============================================================================
@@ -684,18 +699,14 @@ void PS2Scheduler::SleepThread(CpuContext& ctx) {
     
     if (t.wakeup_count > 0) {
         t.wakeup_count--;
-        return;  // Don't actually sleep
+        return; 
     }
-    
-    if (t.status == THS_RUN || t.status == THS_READY) {
-        RemoveFromReadyQueue(current_thread_id_);
-        t.status = THS_WAIT;
-        t.wait_type = WAIT_SLEEP;
-        
-        int old_tid = current_thread_id_;
-        current_thread_id_ = 0;
-        Reschedule(ctx);
-    }
+
+    RemoveFromReadyQueue(current_thread_id_);
+    t.status = THS_WAIT;
+    t.wait_type = WAIT_SLEEP;
+    Reschedule(ctx);
+
 }
 
 int PS2Scheduler::WakeupThread(int tid, CpuContext& ctx) {
@@ -976,8 +987,6 @@ int PS2Scheduler::WaitSema(int sid, CpuContext& ctx) {
     t.sema_id = sid;
     AddToSemaWaitQueue(sid, current_thread_id_);
     
-    int old_tid = current_thread_id_;
-    current_thread_id_ = 0;
     Reschedule(ctx);
     
     return sid;

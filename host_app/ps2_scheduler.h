@@ -68,8 +68,8 @@ struct PS2Thread {
 
 
     void* fiber = nullptr; // For Windows Fiber implementation
-    CpuContext* saved_ctx = nullptr; // For storing context during sleep/wait
     bool fiber_created = false; // Track if fiber has been created for this thread
+    bool needs_fiber_cleanup = false; // Track if fiber needs to be cleaned up on thread exit
 };
 
 // ============================================================================
@@ -174,6 +174,7 @@ public:
     void* scheduler_fiber_ = nullptr;
     std::array<PS2Thread, MAX_THREADS> threads_;
     int next_thread_id_ = 1;
+    int current_thread_id_ = 0;
 
     static void CALLBACK FiberEntry(void* param);
     
@@ -182,7 +183,7 @@ private:
     std::array<PriorityQueue, MAX_PRIORITIES> ready_queues_;
     std::array<PS2Semaphore, MAX_SEMAPHORES> semaphores_;
     
-    int current_thread_id_ = 0;
+    
     bool dispatch_enabled_ = true;
     
     int AllocateThreadSlot();

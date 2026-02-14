@@ -71,11 +71,27 @@ void CpuThreadFunc(CpuContext* ctx) {
     // for indirect jumps (jalr) or interrupts.
     #ifdef _WIN32
         g_scheduler.scheduler_fiber_ = ConvertThreadToFiber(nullptr);
+        if (g_scheduler.scheduler_fiber_ == nullptr) {
+            g_logFile << "Failed to convert thread to fiber: " << GetLastError() << std::endl;
+            exit(1);
+        }
     #endif
 
+        PS2Thread& mainThread = g_scheduler.threads_[1];
+        mainThread.active = true;
+        mainThread.id = 1;
+        mainThread.status = THS_RUN;
+        mainThread.ctx = *ctx;
+        mainThread.current_priority = 0;
+        mainThread.init_priority = 0;
 
-        g_scheduler.threads_[1].fiber = g_scheduler.scheduler_fiber_;
-        g_scheduler.threads_[1].fiber_created = true;
+    
+    #ifdef _WIN32
+        mainThread.fiber = CreateFiber(2 * 1024 * 1024, PS2Scheduler::FiberEntry, reinterpret_cast<void*>(1));
+    #endif
+        mainThread.fiber_created = true;
+        g_scheduler.current_thread_id_ = 1;
+        g_logFile << "[CPU] Main thread initialized and fiber created. Entering scheduler loop..." << std::endl;
 
 
         auto it = recompiled_functions.find(ctx->cpuRegs.pc);
