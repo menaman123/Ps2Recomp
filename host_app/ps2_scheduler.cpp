@@ -226,14 +226,15 @@ void PS2Scheduler::FiberEntry(void* param) {
     auto it = recompiled_functions.find(entry_pc);
     if (it == recompiled_functions.end()) {
         g_logFile << "FiberEntry: No recompiled function for entry PC 0x" << std::hex << entry_pc << std::dec << std::endl;
-        exit(1);
+        t.status = THS_DORMANT;
+        t.needs_fiber_cleanup = true;
+        SwitchToFiber(g_scheduler.scheduler_fiber_);
+        return;
     }
 
     it->second(t.ctx, entry_pc);
     g_logFile << "FiberEntry: Thread " << tid << " finished execution, exiting thread" << std::endl;
     g_scheduler.ExitThread(t.ctx);
-    SwitchToFiber(g_scheduler.scheduler_fiber_);
-
 
 }
 
@@ -662,7 +663,7 @@ void PS2Scheduler::RunSchedulerLoop() {
 
         // Clean
         for (int i = 1; i < MAX_THREADS; i++) {
-            if (threads_[i].active && threads_[i].needs_fiber_cleanup) {
+            if ( threads_[i].needs_fiber_cleanup && threads_[i].fiber_created) {
                 g_logFile << "Cleaning up fiber for thread " << i << std::endl;
                 DeleteFiber(threads_[i].fiber);
                 threads_[i].fiber = nullptr;

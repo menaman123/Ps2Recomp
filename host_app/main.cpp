@@ -84,24 +84,18 @@ void CpuThreadFunc(CpuContext* ctx) {
         mainThread.ctx = *ctx;
         mainThread.current_priority = 0;
         mainThread.init_priority = 0;
+        mainThread.entry_func = ctx->cpuRegs.pc;
+
 
     
     #ifdef _WIN32
         mainThread.fiber = CreateFiber(2 * 1024 * 1024, PS2Scheduler::FiberEntry, reinterpret_cast<void*>(1));
     #endif
         mainThread.fiber_created = true;
-        g_scheduler.current_thread_id_ = 1;
+        g_scheduler.current_thread_id_ = 0;
+        g_scheduler.AddToReadyQueue(1);
         g_logFile << "[CPU] Main thread initialized and fiber created. Entering scheduler loop..." << std::endl;
-
-
-        auto it = recompiled_functions.find(ctx->cpuRegs.pc);
-        if (it == recompiled_functions.end()) {
-            g_logFile << "CpuThreadFunc: No recompiled function for entry PC 0x" << std::hex << ctx->cpuRegs.pc << std::dec << std::endl;
-            exit(1);
-        }
-
-        it->second(*ctx, ctx->cpuRegs.pc);
-
+        g_scheduler.RunSchedulerLoop();
 
 }
 
