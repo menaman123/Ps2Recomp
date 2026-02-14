@@ -1,11 +1,13 @@
 #pragma once
 
+#include <chrono>
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
 #include <windows.h>
 
 #include "cpu_state.h"
+#include <chrono>
 #include "memory.h"
 #include <array>
 #include <fstream>
@@ -183,6 +185,14 @@ private:
     
     std::array<PriorityQueue, MAX_PRIORITIES> ready_queues_;
     std::array<PS2Semaphore, MAX_SEMAPHORES> semaphores_;
+
+    std::chrono::steady_clock::time_point last_vblank_time_;
+    uint64_t vblank_count_ = 0;
+    int64_t current_scanline_ = 0;
+    bool in_vblank_ = false;
+
+    void CheckAndFireVBlank();
+    void DispatchIntHandler(int cause);
     
     
     bool dispatch_enabled_ = true;
