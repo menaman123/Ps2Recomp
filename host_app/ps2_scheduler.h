@@ -175,6 +175,7 @@ public:
     std::array<PS2Thread, MAX_THREADS> threads_;
     int next_thread_id_ = 1;
     int current_thread_id_ = 0;
+    void AddToReadyQueue(int tid);
 
     static void CALLBACK FiberEntry(void* param);
     
@@ -188,7 +189,7 @@ private:
     
     int AllocateThreadSlot();
     int AllocateSemaSlot();
-    void AddToReadyQueue(int tid);
+
     void RemoveFromReadyQueue(int tid);
     void AddToSemaWaitQueue(int sid, int tid);
     void RemoveFromSemaWaitQueue(int sid, int tid);
