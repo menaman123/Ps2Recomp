@@ -15,6 +15,7 @@
 #include "intc.h"
 #include "instructions/InstructionR5900.hpp"
 #include "sif.h"
+#include "sif_hle.h"
 #include <queue>
 #include <cstdio>
 #include <atomic>
@@ -677,48 +678,62 @@ void sceSifSetDma(CpuContext& ctx) {
                       << " -> " << GetSifServerName(server_id) << std::dec << std::endl;
             g_logFile << "      Client Struct At: 0x" << std::hex << client_data_addr << std::dec << std::endl;
             
-            // FIX THE INFINITE LOOP:
-            // The game is waiting for 'client_data->server' to become non-zero.
-            // We write a dummy handle (0x1) to tell the game "Connection Successful".
+
             if (client_data_addr != 0) {
                 // Offset 0x24 in SifRpcClientData is the 'server' handle
-                memory::write<uint32_t>(client_data_addr + 0x24, 0x1);
-                g_logFile << "    [SIF Action] Wrote Success Handle (0x1) to client->server" << std::endl;
+
+                uint32_t fake_server_ptr = 0xDEAD0000 | (server_id & 0xFFFF); // Create a unique handle based on server ID
+                memory::write<uint32_t>(client_data_addr + 0x24, fake_server_ptr);
+                int slot = sif_bind_rpc::RegisterBinding(client_data_addr, server_id);
+                g_logFile << "    [SIF Action] Wrote Fake Server Handle (0x" << std::hex << fake_server_ptr << ") to client->server" << std::dec << std::endl;
             }
         }
         else if (command_id == 0x8000000A){  // SIF_RPC_CALL
             // 1. Read RPC details from the packet struct
             uint32_t rpc_func_num = memory::read<uint32_t>(packet_addr + 0x20); // Offset 32
-            uint32_t server_handle = memory::read<uint32_t>(packet_addr + 0x34); // Offset 52
             uint32_t recv_buffer  = memory::read<uint32_t>(packet_addr + 0x28); // Offset 40
+            uint32_t client_data_ptr = memory::read<uint32_t>(packet_addr + 0x1C);
 
-            g_logFile << "    [SIF Action] RPC Call Detected!" << std::endl;
-            g_logFile << "      Server Handle: 0x" << std::hex << server_handle << std::endl;
-            g_logFile << "      Function ID:   0x" << rpc_func_num << std::dec << std::endl;
+            uint32_t server_id = 0;
+            sif_bind_rpc::BoundClient* binding = sif_bind_rpc::FindBindingByClient(client_data_ptr);
+            if (binding) {
+                server_id = binding->server_id;
+            } 
+            else {
+
+                uint32_t server_handle = memory::read<uint32_t>(client_data_ptr + 0x24);
+                if ((server_handle & 0xFFFF0000) == 0xDEAD0000) {
+                    server_id = 0x80000000 | (server_handle & 0xFFFF); // Extract server ID from handle
+                    g_logFile << "    [SIF WARNING] No binding found for client 0x" << std::hex << client_data_ptr << ", Fallback Server handle 0x" << server_handle << " -> Server ID 0x" << server_id << std::dec << std::endl;
+                }
+            }
+
+
+
 
             // 2. Identify the Server (Based on your Bind implementation)
             //    If you used 0x1 for ALL servers, this logic is tricky. 
             //    Ideally, use unique handles in Bind (e.g., 0xDEAD0006 for LOADFILE).
             //    Assuming 0xDEAD0006 for LOADFILE based on previous advice:
-            bool is_file_io = (server_handle == 0xDEAD0001);
-            bool is_iop_heap_allocation = (server_handle == 0xDEAD0003);
-            bool is_loadfile = (server_handle == 0xDEAD0006);
+            bool is_file_io = (server_id == 0x80000001);
+            bool is_iop_heap_allocation = (server_id == 0x80000003);
+            bool is_loadfile = (server_id == 0x80000006);
 
-            bool is_pad = (server_handle == 0xDEAD0100);
-            bool is_pad_extension = (server_handle == 0xDEAD0101);
-            bool is_memory_card = (server_handle == 0xDEAD0400);
-            bool is_cdvd_init = (server_handle == 0xDEAD0592);
-            bool is_cdvd_s_commands = (server_handle == 0xDEAD0593);
-            bool is_cdvd_n_commands = (server_handle == 0xDEAD0595);
-            bool is_cdvd_search_file = (server_handle == 0xDEAD0597);
-            bool is_cdvd_disk_ready = (server_handle == 0xDEAD059A);
-            bool is_libsd_remote = (server_handle == 0xDEAD0701);
-            bool is_mtap_port_open = (server_handle == 0xDEAD0901);
-            bool is_mtap_port_close = (server_handle == 0xDEAD0902);
-            bool is_mtap_get_connections = (server_handle == 0xDEAD0903);
-            bool is_mtap_unknown_1 = (server_handle == 0xDEAD0904);
-            bool is_mtap_unknown_2 = (server_handle == 0xDEAD0905);
-            bool is_eye_toy = (server_handle == 0xDEAD1400);
+            bool is_pad = (server_id == 0x80000100);
+            bool is_pad_extension = (server_id == 0x80000101);
+            bool is_memory_card = (server_id == 0x80000400);
+            bool is_cdvd_init = (server_id == 0x80000592);
+            bool is_cdvd_s_commands = (server_id == 0x80000593);
+            bool is_cdvd_n_commands = (server_id == 0x80000595);
+            bool is_cdvd_search_file = (server_id == 0x80000597);
+            bool is_cdvd_disk_ready = (server_id == 0x8000059A);
+            bool is_libsd_remote = (server_id == 0x80000701);
+            bool is_mtap_port_open = (server_id == 0x80000901);
+            bool is_mtap_port_close = (server_id == 0x80000902);
+            bool is_mtap_get_connections = (server_id == 0x80000903);
+            bool is_mtap_unknown_1 = (server_id == 0x80000904);
+            bool is_mtap_unknown_2 = (server_id == 0x80000905);
+            bool is_eye_toy = (server_id == 0x80001400);
 
 
             // 3. Handle SifLoadElf (Func 0x01 on LOADFILE)
@@ -848,7 +863,7 @@ void sceSifSetDma(CpuContext& ctx) {
 
 
                 else {
-                    g_logFile << "    [HLE] Stubbing RPC Call (Server: 0x" << std::hex << server_handle 
+                    g_logFile << "    [HLE] Stubbing RPC Call (Server: 0x" << std::hex << server_id 
                             << ", Func: 0x" << rpc_func_num << ")" << std::endl;
 
                     // CRITICAL: We must reply "Success" so the game continues!
@@ -1052,7 +1067,7 @@ void sceSifSetDma(CpuContext& ctx) {
                     if (recv_buffer != 0) memory::write<int32_t>(recv_buffer, 0);
                 }
             }
-            else if (server_handle == 0xDEAD2345) { // Your Custom ID for 0x12345
+            else if (server_id== 0x12345) { // Your Custom ID for 0x12345
                 g_logFile << "    [Analysis] Custom Server 0x12345 Call Detected." << std::endl;
 
                 if (rpc_func_num == 0x0) {
@@ -1148,30 +1163,19 @@ void sceSifSetDma(CpuContext& ctx) {
                 }
             }
             
-            uint32_t client_data_ptr = memory::read<uint32_t>(packet_addr + 0x10);
-
-            if(client_data_ptr != 0){
+            else{
+                g_logFile << "    [SIF Action] Unhandled RPC Call (Server: 0x" << std::hex << server_id 
+                          << ", Func: 0x" << rpc_func_num << ")" << std::dec << std::endl;
                 
-                int found_sema = -1;
+                if(recv_buffer != 0){
+                    memory::write<int32_t>(recv_buffer & 0x1FFFFFFF, 0); 
 
-
-                for (uint32_t offset: {0x20u, 0x24u, 0x28u, 0x3Cu, 0x40u}) {
-                    uint32_t candidate = memory::read<uint32_t>(client_data_ptr + offset);
-                    if (candidate > 0 && candidate < MAX_SEMAPHORES) {
-                        PS2Semaphore* s = nullptr;
-                        if (candidate < MAX_SEMAPHORES){
-                            PS2Thread* t = g_scheduler.GetCurrentThread();
-                        }
-
-
-                        
-                    }
                 }
-
-                g_logFile << "    [SIF Action] Client Data Pointer: 0x" << std::hex << client_data_ptr << std::dec << std::endl;
             }
-        
         }
+
+        
+            
 
             /*
                         else if (is_file_io){
@@ -1230,16 +1234,6 @@ void sceSifSetDma(CpuContext& ctx) {
             
             */
 
-        
-
-
-
-
-        else if (command_id == 0x8000000C){ // Get other data
-            // Not implemented
-            g_logFile << "    [SIF Action] Unhandled Command ID 0x8000000C" << std::endl;
-        
-        }
     }
     
     // Generate unique DMA ID
@@ -2205,24 +2199,33 @@ void AddDmacHandler(CpuContext& ctx) {
     switch(dma_cause){
         case 0:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: Vector Interface 0" << std::endl;
+                break;
         case 1:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: Vector Interface 1" << std::endl;
+                break;
         case 2:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: Graphicsc Interface" << std::endl;
         case 3:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: IPU output" << std::endl;
+            break;
         case 4:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: IPU input" << std::endl;
+            break;
         case 5:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: IOP→EE" << std::endl;
+                break;
         case 6:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: EE→IOP" << std::endl;
+                break;
         case 7:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: Bidirectional" << std::endl;
+                break;
         case 8:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: Scratchpad read" << std::endl;
+                break;
         case 9:
             g_logFile << "  Syscall: AddDmacHandler CAUSE: Scratchpad write" << std::endl;
+                break;
     }
 
     // The 5th parameter (flag) is on the stack at $sp + 16
