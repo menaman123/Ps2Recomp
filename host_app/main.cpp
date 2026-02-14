@@ -80,7 +80,7 @@ void CpuThreadFunc(CpuContext* ctx) {
         PS2Thread& mainThread = g_scheduler.threads_[1];
         mainThread.active = true;
         mainThread.id = 1;
-        mainThread.status = THS_RUN;
+        mainThread.status = THS_READY;
         mainThread.ctx = *ctx;
         mainThread.current_priority = 0;
         mainThread.init_priority = 0;
