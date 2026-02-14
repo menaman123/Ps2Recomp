@@ -1147,7 +1147,31 @@ void sceSifSetDma(CpuContext& ctx) {
                     if (recv_buffer) memory::write<int32_t>(recv_buffer, 1); // Success
                 }
             }
+            
+            uint32_t client_data_ptr = memory::read<uint32_t>(packet_addr + 0x10);
+
+            if(client_data_ptr != 0){
+                
+                int found_sema = -1;
+
+
+                for (uint32_t offset: {0x20u, 0x24u, 0x28u, 0x3Cu, 0x40u}) {
+                    uint32_t candidate = memory::read<uint32_t>(client_data_ptr + offset);
+                    if (candidate > 0 && candidate < MAX_SEMAPHORES) {
+                        PS2Semaphore* s = nullptr;
+                        if (candidate < MAX_SEMAPHORES){
+                            PS2Thread* t = g_scheduler.GetCurrentThread();
+                        }
+
+
+                        
+                    }
+                }
+
+                g_logFile << "    [SIF Action] Client Data Pointer: 0x" << std::hex << client_data_ptr << std::dec << std::endl;
             }
+        
+        }
 
             /*
                         else if (is_file_io){

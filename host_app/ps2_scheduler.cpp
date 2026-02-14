@@ -1031,13 +1031,16 @@ void PS2Scheduler::CheckAndFireVBlank(){
     last_vblank_time_ = now;
     int64_t scanlines_elapsed = (elapsed_us * 147) / 9370;
 
+    if (scanlines_elapsed > 524){
+        scanlines_elapsed = 524;
+    }
+
 
     for (int64_t s = 0; s < scanlines_elapsed; s++){
         current_scanline_++;
         if (current_scanline_ == 240 && !in_vblank_) {
             in_vblank_ = true;
             vblank_count_++;
-            g_logFile << "Entering VBlank at scanline " << current_scanline_ << std::endl;
             DispatchIntHandler(2); // VBlank interrupt
         }
         else if (current_scanline_ >= 262) {
@@ -1046,7 +1049,6 @@ void PS2Scheduler::CheckAndFireVBlank(){
                 in_vblank_ = false;
             }
             current_scanline_ = 0;
-            g_logFile << "Exiting VBlank, new frame starting" << std::endl;
 
         }
     }
