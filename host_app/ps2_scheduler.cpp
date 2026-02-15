@@ -1009,7 +1009,7 @@ void PS2Scheduler::DispatchIntHandler(int cause){
         
 
         auto func_it = recompiled_functions.find(handler.handler_pc);
-        if(func_it == recompiled_functions.end()){
+        if(func_it != recompiled_functions.end()){
             func_it->second(irq_ctx, handler.handler_pc);
         }
         else{

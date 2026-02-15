@@ -16,6 +16,7 @@
 #include "instructions/InstructionR5900.hpp"
 #include "sif.h"
 #include "sif_hle.h"
+#include "sif_rpc_handlers.h"
 #include <queue>
 #include <cstdio>
 #include <atomic>
@@ -35,7 +36,7 @@ int g_nextEventFlagId = 1; // Start from ID 1
 SifState g_sif;
 GsRegs g_gs_regs;
 VideoState g_video_state;
-std::map<int, FILE*> g_file_io_handles;
+
 extern std::atomic<bool> g_window_resize_pending;
 extern std::atomic<int>  g_new_window_width;
 extern std::atomic<int>  g_new_window_height;
@@ -67,7 +68,7 @@ int g_nextThreadId = 1;
 int g_currentThreadId = 1;
 
 const uint32_t KERNEL_SYSCALL_TABLE_BASE = 0x800002E0;
-static std::string g_activeMountPath = "";
+std::map<int, FILE*> g_file_io_handles;
 
 // A helper function to read a string from guest memory
 std::string read_string_from_guest(uint32_t address) {
@@ -78,73 +79,6 @@ void NotImplemented_Syscall(const char* name, CpuContext& ctx) {
     g_logFile << "Syscall: " << name << " (Not Implemented)" << std::endl;
     return;
     exit(1);
-}
-
-enum SifRpcServerId : uint32_t {
-    // Basic I/O and System
-    SIF_IOP_FILEIO      = 0x80000001, // File I/O (FILEIO)
-    SIF_IOP_HEAP        = 0x80000003, // IOP Heap Allocation (FILEIO)
-    SIF_IOP_LOADFILE    = 0x80000006, // Module/ELF Loader (LOADFILE)
-
-    // Controller (PADMAN)
-    SIF_PAD_BIND        = 0x80000100, // Pad (PADMAN)
-    SIF_PAD_EXT         = 0x80000101, // Pad extension (PADMAN)
-
-    // Memory Card (MCSERV)
-    SIF_MC_SERV         = 0x80000400, // Memory cards (MCSERV)
-
-    // CD/DVD Drive (CDVDFSV)
-    SIF_CD_INIT         = 0x80000592, // CDVD Init
-    SIF_CD_SCMD         = 0x80000593, // CDVD S commands (Synchronous)
-    SIF_CD_NCMD         = 0x80000595, // CDVD N commands (Asynchronous)
-    SIF_CD_SEARCHFILE   = 0x80000597, // CDVD SearchFile
-    SIF_CD_DISKREADY    = 0x8000059A, // CDVD Disk Ready
-
-    // Sound (LIBSD/SDRDRV)
-    SIF_LIBSD_REMOTE    = 0x80000701, // LIBSD Remote (SDRDRV)
-
-    // Multitap (MTAPMAN)
-    SIF_MTAP_OPEN       = 0x80000901, // MTAP Port Open
-    SIF_MTAP_CLOSE      = 0x80000902, // MTAP Port Close
-    SIF_MTAP_GETCONN    = 0x80000903, // MTAP Get Connection
-    SIF_MTAP_UNK4       = 0x80000904, // MTAP Unknown 4
-    SIF_MTAP_UNK5       = 0x80000905, // MTAP Unknown 5
-
-    // Peripherals
-    SIF_EYETOY          = 0x80001400  // EyeToy (EYETOY)
-};
-
-std::string GetSifServerName(uint32_t server_id) {
-    switch (server_id) {
-        // Basic I/O
-        case SIF_IOP_FILEIO:      return "FILEIO (File I/O)";
-        case SIF_IOP_HEAP:        return "IOPHEAP (Heap Allocation)";
-        case SIF_IOP_LOADFILE:    return "LOADFILE (Module Loader)";
-        
-        // Controllers
-        case SIF_PAD_BIND:        return "PADMAN (Controller)";
-        case SIF_PAD_EXT:         return "PADMAN (Extension)";
-        
-        // Memory Card
-        case SIF_MC_SERV:         return "MCSERV (Memory Card)";
-        
-        // CDVD Drive
-        case SIF_CD_INIT:         return "CDVDFSV (CDVD Init)";
-        case SIF_CD_SCMD:         return "CDVDFSV (S-Command)";
-        case SIF_CD_NCMD:         return "CDVDFSV (N-Command)";
-        case SIF_CD_SEARCHFILE:   return "CDVDFSV (Search File)";
-        case SIF_CD_DISKREADY:    return "CDVDFSV (Disk Ready)";
-        
-        // Sound
-        case SIF_LIBSD_REMOTE:    return "LIBSD (Sound Driver)";
-        
-        // Multitap
-        case SIF_MTAP_OPEN:       return "MTAPMAN (Port Open)";
-        case SIF_MTAP_CLOSE:      return "MTAPMAN (Port Close)";
-        case SIF_MTAP_GETCONN:    return "MTAPMAN (Get Connection)";
-        
-        default: return "Unknown Server ID";
-    }
 }
 
 void handle_mtc0_write(CpuContext& ctx, uint8_t rd, uint32_t value) {
@@ -587,684 +521,225 @@ void sceSifSetDma(CpuContext& ctx) {
     g_logFile << "Syscall: sceSifSetDma(sdt_addr: 0x" << std::hex << sdt_addr 
               << ", count: " << std::dec << count << ")" << std::endl;
     
+    // ================================================================
+    // Step 1: Identify which transfer is the command and which is payload
+    // ================================================================
     int cmd_index = -1;
     int payload_index = -1;
 
-    for(int i = 0; i < count; i++){
+    for (int i = 0; i < count; i++) {
         uint32_t entry_addr = sdt_addr + (i * sizeof(SifDmaTransfer_t));
         int32_t attr = memory::read<int32_t>(entry_addr + 0x0C);
 
-        if(attr & 0x04){
+        if (attr & 0x04) {
             cmd_index = i;
         } else {
             payload_index = i;
         }
     }
 
-    if(cmd_index < 0){
+    if (cmd_index < 0) {
         g_logFile << "  Error: No command entry found in SIF DMA list!" << std::endl;
+        ctx.cpuRegs.GPR.r[2].UL[0] = 0;
+        return;
     }
-    else{
-        uint32_t cmd_entry = sdt_addr + (cmd_index * sizeof(SifDmaTransfer_t));
-        uint32_t packet_addr = memory::read<uint32_t>(cmd_entry + 0x00);
 
+    // ================================================================
+    // Step 2: Read command packet address and payload info
+    // ================================================================
+    uint32_t cmd_entry = sdt_addr + (cmd_index * sizeof(SifDmaTransfer_t));
+    uint32_t packet_addr = memory::read<uint32_t>(cmd_entry + 0x00);
 
-        uint32_t payload_addr = 0;
-        uint32_t payload_size = 0;
-        if(payload_index >= 0){
-            uint32_t payload_entry = sdt_addr + (payload_index * sizeof(SifDmaTransfer_t));
-            payload_addr = memory::read<uint32_t>(payload_entry + 0x00);
-            payload_size = memory::read<uint32_t>(payload_entry + 0x08);
+    uint32_t payload_addr = 0;
+    uint32_t payload_size = 0;
+    if (payload_index >= 0) {
+        uint32_t payload_entry = sdt_addr + (payload_index * sizeof(SifDmaTransfer_t));
+        payload_addr = memory::read<uint32_t>(payload_entry + 0x00);
+        payload_size = memory::read<uint32_t>(payload_entry + 0x08);
+    }
+
+    // ================================================================
+    // Step 3: Read SIF command header fields
+    // ================================================================
+    uint32_t command_id = memory::read<uint32_t>(packet_addr + 0x08); // SifCmdHeader.cid
+    uint32_t opt        = memory::read<uint32_t>(packet_addr + 0x0C); // SifCmdHeader.opt
+
+    g_logFile << "  [SIF PACKET] Command ID: 0x" << std::hex << command_id 
+              << ", Opt: 0x" << opt 
+              << ", Payload Addr: 0x" << payload_addr 
+              << ", Payload Size: " << std::dec << payload_size 
+              << std::endl;
+
+    // ================================================================
+    // Step 4: Dispatch based on command ID
+    // ================================================================
+    switch (command_id) {
+        // ------------------------------------------------------------
+        // 0x80000000 - Change SADDR
+        // ------------------------------------------------------------
+        case 0x80000000: {
+            g_logFile << "    [SIF] Change SADDR (stubbed)" << std::endl;
+            break;
         }
 
-        uint32_t command_id = memory::read<uint32_t>(packet_addr + 0x08);
-        uint32_t opt = memory::read<uint32_t>(packet_addr + 0x0C);
-
-        g_logFile << "  [SIF PACKET] Command ID: 0x" << std::hex << command_id 
-                  << ", Opt: 0x" << opt 
-                  << ", Payload Addr: 0x" << payload_addr 
-                  << ", Payload Size: " << std::dec << payload_size 
-                  << std::endl;
-
-
-        // Handle specific commands
-        if (command_id == 0x80000000) { // Change SADDR
+        // ------------------------------------------------------------
+        // 0x80000001 - Set SREG
+        // ------------------------------------------------------------
+        case 0x80000001: {
+            g_logFile << "    [SIF] Set SREG (stubbed)" << std::endl;
+            break;
         }
-        else if (command_id == 0x80000001) { // Set SREG
-        }
-        else if (command_id == 0x80000002) { // SIF_INIT
-            g_logFile << "    [SIF Action] Init request detected." << std::endl;
+
+        // ------------------------------------------------------------
+        // 0x80000002 - SIF CMD Init
+        // ------------------------------------------------------------
+        case 0x80000002: {
+            g_logFile << "    [SIF] Init request (opt=" << opt << ")" << std::endl;
             if (opt == 0) {
-                // IOP sets SMFLG to 0x20000 to acknowledge init
                 memory::write<uint32_t>(0x1000F230, 0x20000);
-                g_logFile << "    [SIF Action] Wrote 0x20000 to SMFLAG." << std::endl;
+                g_logFile << "    [SIF] Wrote 0x20000 to SMFLAG" << std::endl;
             }
+            break;
         }
-        else if (command_id == 0x80000003) { // SIF_CMD_RESET (IOP Reboot)
-            g_logFile << "    [SIF Action] Reset Request (IOP Reboot) detected." << std::endl;
-            
-            // 1. Reset SIF flags to simulate IOP shutting down
-            g_sif.smflag = 0; 
-            g_sif.msflag = 0;
-            memory::write<uint32_t>(0x1000F230, 0); // SMFLAG
-            memory::write<uint32_t>(0x1000F220, 0); // MSFLAG
 
-            // 2. Set the "Boot End" flag (0x40000)
-            // This signals to the EE that the "new" IOP kernel is ready.
-            g_sif.smflag = 0x40000; 
+        // ------------------------------------------------------------
+        // 0x80000003 - IOP Reboot
+        // ------------------------------------------------------------
+        case 0x80000003: {
+            g_logFile << "    [SIF] IOP Reboot request" << std::endl;
+            
+            g_sif.smflag = 0;
+            g_sif.msflag = 0;
+            memory::write<uint32_t>(0x1000F230, 0);
+            memory::write<uint32_t>(0x1000F220, 0);
+
+            g_sif.smflag = 0x40000;
             memory::write<uint32_t>(0x1000F230, g_sif.smflag);
             
-            g_logFile << "    [SIF Action] HLE Reboot: Wrote 0x40000 to SMFLAG." << std::endl;
+            g_logFile << "    [SIF] HLE Reboot: SMFLAG=0x40000" << std::endl;
+            break;
         }
-        else if(command_id == 0x80000008){ // Request End
 
+        // ------------------------------------------------------------
+        // 0x80000008 - Request End
+        // ------------------------------------------------------------
+        case 0x80000008: {
+            g_logFile << "    [SIF] Request End (acknowledged)" << std::endl;
+            break;
         }
-        else if (command_id == 0x80000009) { // SIF_BIND
-            // Packet structure for BIND:
-            // [0x00] Header
-            // [0x1C] client_data_pointer (The struct the game checks!)
-            // [0x20] server_id_requested
-            
+
+        // ------------------------------------------------------------
+        // 0x80000009 - Bind
+        // ------------------------------------------------------------
+        case 0x80000009: {
             uint32_t client_data_addr = memory::read<uint32_t>(packet_addr + 0x1C);
             uint32_t server_id        = memory::read<uint32_t>(packet_addr + 0x20);
             
-            g_logFile << "    [SIF Action] Bind Request:" << std::endl;
-            g_logFile << "      Server ID: 0x" << std::hex << server_id 
-                      << " -> " << GetSifServerName(server_id) << std::dec << std::endl;
-            g_logFile << "      Client Struct At: 0x" << std::hex << client_data_addr << std::dec << std::endl;
-            
+            g_logFile << "    [SIF] Bind Request: Server 0x" << std::hex << server_id 
+                      << " (" << sif_bind_rpc::GetServerName(server_id) << ")"
+                      << " Client: 0x" << client_data_addr << std::dec << std::endl;
 
             if (client_data_addr != 0) {
-                // Offset 0x24 in SifRpcClientData is the 'server' handle
-
-                uint32_t fake_server_ptr = 0xDEAD0000 | (server_id & 0xFFFF); // Create a unique handle based on server ID
+                uint32_t fake_server_ptr = 0xDEAD0000 | (server_id & 0xFFFF);
                 memory::write<uint32_t>(client_data_addr + 0x24, fake_server_ptr);
-                int slot = sif_bind_rpc::RegisterBinding(client_data_addr, server_id);
-                g_logFile << "    [SIF Action] Wrote Fake Server Handle (0x" << std::hex << fake_server_ptr << ") to client->server" << std::dec << std::endl;
+                sif_bind_rpc::RegisterBinding(client_data_addr, server_id);
             }
+            break;
         }
-        else if (command_id == 0x8000000A){  // SIF_RPC_CALL
-            // 1. Read RPC details from the packet struct
-            uint32_t rpc_func_num = memory::read<uint32_t>(packet_addr + 0x20); // Offset 32
-            uint32_t recv_buffer  = memory::read<uint32_t>(packet_addr + 0x28); // Offset 40
-            uint32_t client_data_ptr = memory::read<uint32_t>(packet_addr + 0x1C);
 
-            uint32_t server_id = 0;
-            sif_bind_rpc::BoundClient* binding = sif_bind_rpc::FindBindingByClient(client_data_ptr);
+        // ------------------------------------------------------------
+        // 0x8000000A - RPC Call
+        // ------------------------------------------------------------
+        case 0x8000000A: {
+            // Build the RPC context from the SifRpcCallPkt
+            SifRpcContext rpc;
+            rpc.packet_addr    = packet_addr;
+            rpc.func_num       = memory::read<uint32_t>(packet_addr + 0x20);
+            rpc.recv_buffer    = memory::read<uint32_t>(packet_addr + 0x28);
+            rpc.recv_size      = memory::read<uint32_t>(packet_addr + 0x2C);
+            rpc.client_data_addr = memory::read<uint32_t>(packet_addr + 0x1C);
+            rpc.payload_addr   = payload_addr;
+            rpc.payload_size   = payload_size;
+            rpc.sdt_addr       = sdt_addr;
+            
+            // Resolve server_id from binding tracker
+            rpc.server_id = 0;
+            sif_bind_rpc::BoundClient* binding = sif_bind_rpc::FindBindingByClient(rpc.client_data_addr);
             if (binding) {
-                server_id = binding->server_id;
-            } 
-            else {
-
-                uint32_t server_handle = memory::read<uint32_t>(client_data_ptr + 0x24);
+                rpc.server_id = binding->server_id;
+            } else {
+                // Fallback: reconstruct from fake handle
+                uint32_t server_handle = memory::read<uint32_t>(rpc.client_data_addr + 0x24);
                 if ((server_handle & 0xFFFF0000) == 0xDEAD0000) {
-                    server_id = 0x80000000 | (server_handle & 0xFFFF); // Extract server ID from handle
-                    g_logFile << "    [SIF WARNING] No binding found for client 0x" << std::hex << client_data_ptr << ", Fallback Server handle 0x" << server_handle << " -> Server ID 0x" << server_id << std::dec << std::endl;
-                }
-            }
-
-
-
-
-            // 2. Identify the Server (Based on your Bind implementation)
-            //    If you used 0x1 for ALL servers, this logic is tricky. 
-            //    Ideally, use unique handles in Bind (e.g., 0xDEAD0006 for LOADFILE).
-            //    Assuming 0xDEAD0006 for LOADFILE based on previous advice:
-            bool is_file_io = (server_id == 0x80000001);
-            bool is_iop_heap_allocation = (server_id == 0x80000003);
-            bool is_loadfile = (server_id == 0x80000006);
-
-            bool is_pad = (server_id == 0x80000100);
-            bool is_pad_extension = (server_id == 0x80000101);
-            bool is_memory_card = (server_id == 0x80000400);
-            bool is_cdvd_init = (server_id == 0x80000592);
-            bool is_cdvd_s_commands = (server_id == 0x80000593);
-            bool is_cdvd_n_commands = (server_id == 0x80000595);
-            bool is_cdvd_search_file = (server_id == 0x80000597);
-            bool is_cdvd_disk_ready = (server_id == 0x8000059A);
-            bool is_libsd_remote = (server_id == 0x80000701);
-            bool is_mtap_port_open = (server_id == 0x80000901);
-            bool is_mtap_port_close = (server_id == 0x80000902);
-            bool is_mtap_get_connections = (server_id == 0x80000903);
-            bool is_mtap_unknown_1 = (server_id == 0x80000904);
-            bool is_mtap_unknown_2 = (server_id == 0x80000905);
-            bool is_eye_toy = (server_id == 0x80001400);
-
-
-            // 3. Handle SifLoadElf (Func 0x01 on LOADFILE)
-            if (is_loadfile){
-                g_logFile << "    [HLE] LOAD FILE Call Detected (Func: " << std::hex << rpc_func_num << ")" << std::endl;
-                int32_t result = 0;
-                if (rpc_func_num == 0xFF) { 
-                        // Init/Handshake
-                        // Just return 0 (Success) to allow the game to proceed to 'open' calls.
-                        if (recv_buffer != 0) memory::write<int32_t>(recv_buffer, 0);
-                }
-                else if (rpc_func_num == 0x01) {
-                    // The filename is usually located immediately after the struct (Offset 0x38)
-                    // or pointed to by a second DMA transfer. 
-                    // In SifLoadElf packets, the path string is often embedded at +0x40.
-                    char filename[256];
-                    uint32_t payload_addr = packet_addr + 0x40; // Approx offset, verify with hexdump
-                    
-                    for(int j=0; j<256; j++) {
-                        filename[j] = memory::read<uint8_t>(payload_addr + j);
-                        if(filename[j] == 0) break;
-                    }
-
-                    g_logFile << "    [HLE] INTERCEPTED SifLoadElf: " << filename << std::endl;
-
-                    // 4. EXECUTE THE LOAD
-                    // This function must read the ELF from your ISO and write it to EE RAM.
-                    // It should inspect the ELF Program Header to find the destination (e.g. 0x2ec190).
-                    //bool success = LoadElfToRAM(filename, ctx); 
-
-                    // 5. Write Reply (Critical!)
-                    // If we don't write 0 to the reply buffer, the game thinks it failed.
-                    if (recv_buffer != 0) {
-                        memory::write<int32_t>(recv_buffer, false ? 0 : -1);
-                    }
-                    g_logFile << " Need to implement LoadElfToRAM()" << std::endl;
-
-                }
-                else if (rpc_func_num == 0x04) {
-                    char filename[256];
-                    uint32_t name_addr = packet_addr + 0x40; // Filename is payload
-                    
-                    for(int k=0; k<255; k++) {
-                        filename[k] = memory::read<uint8_t>(name_addr + k);
-                        if(filename[k] == 0) break;
-                    }
-                    
-                    g_logFile << "    [FILEIO] Open Request: " << filename << std::endl;
-
-                    // Strip "cdrom0:\" or "host:\" to look in local folder
-                    std::string path = filename;
-                    size_t pos = path.find(':');
-                    if (pos != std::string::npos) path = path.substr(pos + 1); 
-                    if (!path.empty() && (path[0] == '\\' || path[0] == '/')) path = path.substr(1);
-
-                    FILE* f = fopen(path.c_str(), "rb");
-                    if (f) {
-                        // We use a static counter for FDs to avoid conflicts
-                        static int g_next_fio_fd = 100; 
-                        int fd = g_next_fio_fd++;
-                        g_file_io_handles[fd] = f;
-                        result = fd; 
-                        g_logFile << "    [FILEIO] Opened '" << path << "' as FD " << fd << std::endl;
+                    uint16_t low = server_handle & 0xFFFF;
+                    // System servers have bit 31 set in the real ID
+                    // Our fake handles store only the low 16 bits
+                    // If the low bits are >= 0x0001, reconstruct as system server
+                    if (low >= 0x0001 && low != 0x2345) {
+                        rpc.server_id = 0x80000000 | low;
                     } else {
-                        g_logFile << "    [FILEIO] Failed to open '" << path << "'" << std::endl;
-                        result = -1;
+                        // Non-system server (e.g. 0x12345 stored as 0xDEAD2345)
+                        rpc.server_id = low | (low > 0xFFF ? 0x10000 : 0);
+                        // Special case for known game servers
+                        if (low == 0x2345) rpc.server_id = 0x00012345;
                     }
                 }
-                
-                // Function 5: fioClose(fd)
-                else if (rpc_func_num == 0x05) {
-                    int fd = memory::read<int32_t>(packet_addr + 0x40);
-                    if (g_file_io_handles.count(fd)) {
-                        fclose(g_file_io_handles[fd]);
-                        g_file_io_handles.erase(fd);
-                        result = 0;
-                    } else {
-                        result = -1;
-                    }
-                }
-
-                // Function 6: fioRead(fd, buffer, size) - THE FIX
-                else if (rpc_func_num == 0x06) {
-                    int fd       = memory::read<int32_t>(packet_addr + 0x40);
-                    uint32_t dst = memory::read<uint32_t>(packet_addr + 0x44); // This will be 0x30024000
-                    int size     = memory::read<int32_t>(packet_addr + 0x48);
-                    
-                    g_logFile << "    [FILEIO] Read FD " << fd << " -> 0x" << std::hex << dst 
-                              << " (" << std::dec << size << " bytes)" << std::endl;
-
-                    if (g_file_io_handles.count(fd)) {
-                        FILE* f = g_file_io_handles[fd];
-                        
-                        // 1. Handle Memory Mirror (0x30xxxxxx -> 0x00xxxxxx)
-                        // If we don't do this, we write to an empty map region
-                        uint32_t phys_addr = dst & 0x1FFFFFFF; 
-
-                        // 2. Read from Host File directly into Emulated RAM
-                        // We read in chunks to avoid large allocations
-                        uint8_t chunk[4096];
-                        int total_read = 0;
-                        while(total_read < size) {
-                            int to_read = std::min(4096, size - total_read);
-                            int r = fread(chunk, 1, to_read, f);
-                            if (r <= 0) break;
-                            
-                            for(int k=0; k<r; k++) {
-                                memory::write<uint8_t>(phys_addr + total_read + k, chunk[k]);
-                            }
-                            total_read += r;
-                        }
-                        
-                        result = total_read;
-                        g_logFile << "    [FILEIO] Wrote " << total_read << " bytes to RAM." << std::endl;
-                    } else {
-                        g_logFile << "    [FILEIO] ERROR: Invalid FD " << fd << std::endl;
-                        result = -1;
-                        
-                        // FAIL-SAFE: Write a "JR RA" stub so the game doesn't crash on bad address
-                        uint32_t phys_addr = dst & 0x1FFFFFFF;
-                        memory::write<uint32_t>(phys_addr, 0x03E00008); // jr ra
-                        memory::write<uint32_t>(phys_addr + 4, 0);      // nop
-                    }
-                }
-
-
-
-
-                else {
-                    g_logFile << "    [HLE] Stubbing RPC Call (Server: 0x" << std::hex << server_id 
-                            << ", Func: 0x" << rpc_func_num << ")" << std::endl;
-
-                    // CRITICAL: We must reply "Success" so the game continues!
-                    if (recv_buffer != 0) {
-                        memory::write<int32_t>(recv_buffer, 0); 
-                    }
-                }
-            
-            }
-            else if (is_file_io) { // Server 0x80000001
-                g_logFile << "    [HLE] FILEIO Call Detected (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
-
-                int32_t result = 0;
-
-                // Function 4: fioOpen
-                if (rpc_func_num == 0x04) {
-                    char filename[256];
-                    uint32_t name_addr = packet_addr + 0x40;
-                    for(int k=0; k<255; k++) {
-                        filename[k] = memory::read<uint8_t>(name_addr + k);
-                        if(filename[k] == 0) break;
-                    }
-                    g_logFile << "    [FILEIO] Open Request: " << filename << std::endl;
-
-                    std::string path = filename;
-                    size_t pos = path.find(':');
-                    if (pos != std::string::npos) path = path.substr(pos + 1); 
-                    if (!path.empty() && (path[0] == '\\' || path[0] == '/')) path = path.substr(1);
-
-                    FILE* f = fopen(path.c_str(), "rb");
-                    if (f) {
-                        static int g_next_fio_fd = 100; 
-                        int fd = g_next_fio_fd++;
-                        g_file_io_handles[fd] = f;
-                        result = fd; 
-                        g_logFile << "    [FILEIO] Opened '" << path << "' as FD " << fd << std::endl;
-                    } else {
-                        g_logFile << "    [FILEIO] Failed to open '" << path << "'" << std::endl;
-                        result = -1;
-                    }
-                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
-                    g_logFile << "║ FILEIO OPEN: " << filename << std::endl;
-                    g_logFile << "║ Host Path: " << path << std::endl;
-                    g_logFile << "║ Result FD: " << result << std::endl;
-                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
-                }
-                // Function 5: fioClose
-                else if (rpc_func_num == 0x05) {
-                    int fd = memory::read<int32_t>(packet_addr + 0x40);
-                    if (g_file_io_handles.count(fd)) {
-                        fclose(g_file_io_handles[fd]);
-                        g_file_io_handles.erase(fd);
-                        result = 0;
-                    } else {
-                        result = -1;
-                    }
-                }
-                // Function 6: fioRead - THE LOAD
-                else if (rpc_func_num == 0x06) {
-                    int fd       = memory::read<int32_t>(packet_addr + 0x40);
-                    uint32_t dst = memory::read<uint32_t>(packet_addr + 0x44); // 0x30024000
-                    int size     = memory::read<int32_t>(packet_addr + 0x48);
-                    uint32_t phys_addr = dst & 0x1FFFFFFF; 
-                    
-                    if (g_file_io_handles.count(fd)) {
-                        FILE* f = g_file_io_handles[fd];
-                        
-                        // FIX: Ensure Physical Address
-    
-
-                        std::vector<uint8_t> temp_buf(size);
-                        size_t bytes = fread(temp_buf.data(), 1, size, f);
-                        
-                        for (size_t k = 0; k < bytes; k++) {
-                            memory::write<uint8_t>(phys_addr + k, temp_buf[k]);
-                        }
-                        
-                        result = (int32_t)bytes;
-                        g_logFile << "    [FILEIO] Wrote " << bytes << " bytes to RAM 0x" << std::hex << phys_addr << std::endl;
-                    } else {
-                        g_logFile << "    [FILEIO] ERROR: Invalid FD " << fd << std::endl;
-                        result = -1;
-                        
-                        // Fail-Safe Stub
-                        memory::write<uint32_t>(phys_addr, 0x03E00008); // jr ra
-                        memory::write<uint32_t>(phys_addr + 4, 0);      // nop
-                    }
-                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
-                    g_logFile << "║ FILEIO READ: " << size << " bytes" << std::endl;
-                    g_logFile << "║ FD: " << fd << " → RAM: 0x" << std::hex << phys_addr << std::endl;
-                    g_logFile << "║ Actual Read: " << result << " bytes" << std::endl;
-                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
-                }
-
-                else if (rpc_func_num == 0xFF) {
-                char mount_path[256] = {0}; // Initialize buffer with nulls
-                
-                // ---------------------------------------------------------
-                // STEP 1: Calculate Addresses & Fix KSEG Mapping
-                // ---------------------------------------------------------
-                // Offset 0x40 is standard for fioOpen, but for custom RPCs, 
-                // the string might be at 0x00, 0x10, or 0x20 relative to packet_addr.
-                // If 0x40 returns garbage, change this offset to 0x00 and retry.
-                uint32_t payload_offset = 0x40; 
-                
-                // The PS2 sends a Virtual Address (e.g., 0x203CAD00).
-                // We MUST mask it to get the Physical Address (e.g., 0x003CAD00).
-                uint32_t virtual_addr = packet_addr + payload_offset;
-                uint32_t physical_addr = virtual_addr & 0x1FFFFFFF; 
-
-                // ---------------------------------------------------------
-                // STEP 2: Read the String from Physical RAM
-                // ---------------------------------------------------------
-                bool found_terminator = false;
-                for(int k = 0; k < 255; k++) {
-                    // Read byte-by-byte from the physical RAM offset
-                    uint8_t val = memory::read<uint8_t>(physical_addr + k);
-                    
-                    mount_path[k] = (char)val;
-                    
-                    if (val == 0) {
-                        found_terminator = true;
-                        break;
-                    }
-                }
-                
-                // Safety: Ensure null-termination if string was max length
-                mount_path[255] = '\0'; 
-
-                // ---------------------------------------------------------
-                // STEP 3: Handle the Logic (Mount vs Reset)
-                // ---------------------------------------------------------
-                // Note: If mount_path is empty, this was likely a standard fioInit (Reset) command.
-                if (mount_path[0] != '\0') {
-                    g_activeMountPath = std::string(mount_path);
-                    
-                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
-                    g_logFile << "║ FILEIO FUNC:0xFF (Mount / Custom)                 ║" << std::endl;
-                    g_logFile << "║ VAddr: 0x" << std::hex << virtual_addr 
-                            << " -> PAddr: 0x" << physical_addr << std::dec << "          ║" << std::endl;
-                    g_logFile << "║ Path:  " << g_activeMountPath << std::string(32 - g_activeMountPath.length(), ' ') << "   ║" << std::endl;
-                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
-                } else {
-                    g_logFile << "[RPC 0xFF] Empty payload detected. Likely fioInit/Reset." << std::endl;
-                    g_activeMountPath = ""; // Clear path on reset
-                }
-
-                // ---------------------------------------------------------
-                // STEP 4: Return Success
-                // ---------------------------------------------------------
-                // 0 is the standard "Success" code for FileIO RPCs.
-                result = 0; 
-// TEMP: Exit after handling this RPC to prevent infinite loop during testing
-            }
-                if (recv_buffer != 0) {
-                    // FIX: Mask address
-                    memory::write<int32_t>(recv_buffer & 0x1FFFFFFF, result);
-                }
+                g_logFile << "    [SIF WARNING] Fallback server resolve: handle=0x" 
+                          << std::hex << server_handle << " -> server=0x" 
+                          << rpc.server_id << std::dec << std::endl;
             }
             
-            else if (is_pad){
-                g_logFile << "    [HLE] PADMAN Call Detected (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
-                    
-                // Function 0x1 = PadOpen / PadInit
-                // The game calls this to initialize the controller port.
-                // We must return '1' (Success/Handle) or the game assumes no controller is connected.
-                if (rpc_func_num == 0x1) {
-                    if (recv_buffer != 0) {
-                        memory::write<int32_t>(recv_buffer, 1); // Return Success (1)
-                        g_logFile << "    [HLE] PADMAN: Returned Success (1) to PadOpen." << std::endl;
-                    }
-                }
-                // Handle other Pad functions if they appear (often 0x6 for PadRead)
-                else {
-                    if (recv_buffer != 0) memory::write<int32_t>(recv_buffer, 1);
-                }
-            }
-
-            else if (is_memory_card) { // Server 0xDEAD0400 (MCSERV)
-                g_logFile << "    [HLE] MCSERV Call Detected (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
-
-                // Function 0xFE = McGetVersion / Init
-                // The game checks if the MC library matches the kernel version.
-                // Return 0 (Success) to pass the check.
-                if (rpc_func_num == 0xFE) {
-                    if (recv_buffer != 0) {
-                        memory::write<int32_t>(recv_buffer, 0); // Return Success (0)
-                        g_logFile << "    [HLE] MCSERV: Returned Success (0) to Init/VersionCheck." << std::endl;
-                    }
-                }
-                // Function 0x5 = McDetectCard (Slot check)
-                // Return 0 (Success/Card Present) or a negative error code if you want to simulate empty slot.
-                else if (rpc_func_num == 0x5) {
-                    if (recv_buffer != 0) {
-                        memory::write<int32_t>(recv_buffer, 0); 
-                        g_logFile << "    [HLE] MCSERV: Returned Success (0) to DetectCard." << std::endl;
-                    }
-                }
-                else {
-                    // Default stub for other MC functions to prevent deadlock
-                    if (recv_buffer != 0) memory::write<int32_t>(recv_buffer, 0);
-                }
-            }
-            else if (server_id== 0x12345) { // Your Custom ID for 0x12345
-                g_logFile << "    [Analysis] Custom Server 0x12345 Call Detected." << std::endl;
-
-                if (rpc_func_num == 0x0) {
-                    // 1. Parse the Command Struct from EE RAM
-                    // We get the pointer to the command struct from Transfer 0
-                    uint32_t transfer0_base = sdt_addr + (0 * 16); 
-                    uint32_t cmd_ptr = memory::read<uint32_t>(transfer0_base + 0); // .src
-
-                    // 2. Read the LBA and Size from the guest struct
-                    // Note: These offsets (0x00 and 0x04) match the Hex Dump from your log
-                    uint32_t lba  = memory::read<uint32_t>(cmd_ptr + 0x00); 
-                    uint32_t size = memory::read<uint32_t>(cmd_ptr + 0x04); 
-                    
-                    // 3. Get Destination Address
-                    // Based on your previous log, Offset 0x1C contained 0x2a0002.
-                    // The '| 2' might be a flag (e.g., "Use DMA"), so we mask it out.
-                    uint32_t raw_dest = memory::read<uint32_t>(cmd_ptr + 0x1C);
-                    uint32_t dest_addr = raw_dest & 0xFFFFFFFC; // Align to 4 bytes
-
-                    g_logFile << "    [HLE Loader] Request: LBA " << lba << " (" << size << " bytes) -> RAM 0x" << std::hex << dest_addr << std::dec << std::endl;
-
-                    // 4. Perform the Read from ISO
-                    if (g_isoFile) {
-                        // PS2 Data Sectors are 2048 bytes
-                        uint64_t iso_offset = (uint64_t)lba * 2048;
-                        
-                        // Safety Check: Ensure we don't read past the ISO end
-                        fseek(g_isoFile, 0, SEEK_END);
-                        uint64_t iso_size = ftell(g_isoFile);
-                        
-                        if (iso_offset + size <= iso_size) {
-                            fseek(g_isoFile, iso_offset, SEEK_SET);
-
-                            // Create a temp buffer to hold the data
-                            std::vector<uint8_t> buffer(size);
-                            size_t bytes_read = fread(buffer.data(), 1, size, g_isoFile);
-
-                            // Copy data into EE RAM
-                            // (In a real implementation, you might optimize this to avoid the vector copy)
-                            for (size_t k = 0; k < bytes_read; k++) {
-                                memory::write<uint8_t>(dest_addr + k, buffer[k]);
-                            }
-                            g_logFile << "    [HLE Loader] Successfully loaded " << bytes_read << " bytes." << std::endl;
-                        } else {
-                            g_logFile << "    [HLE Loader] ERROR: Read request out of bounds!" << std::endl;
-                        }
-                    } else {
-                        g_logFile << "    [HLE Loader] ERROR: ISO file not open!" << std::endl;
-                    }
-
-                    // 5. Signal Success to the Game
-                    // Writing 1 to the recv_buffer tells the game the operation finished.
-                    if (recv_buffer != 0) {
-                        memory::write<int32_t>(recv_buffer, 1);
-                    }
-                }
-            }
+            // Dispatch to the appropriate handler
+            DispatchSifRpcCall(rpc);
             
-            
-            
-            else if (is_cdvd_n_commands) {
-                g_logFile << "    [HLE] CDVD N-Command (Func: 0x" << std::hex << rpc_func_num << ")" << std::endl;
-                
-                if (rpc_func_num == 0x01) { // sceCdRead
-                    uint32_t lba = memory::read<uint32_t>(packet_addr + 0x40);
-                    uint32_t sectors = memory::read<uint32_t>(packet_addr + 0x44);
-                    uint32_t dest = memory::read<uint32_t>(packet_addr + 0x48);
-                    
-                    g_logFile << "╔═══════════════════════════════════════════════════╗" << std::endl;
-                    g_logFile << "║ CDVD READ: LBA=" << lba << " Sectors=" << sectors << std::endl;
-                    g_logFile << "║ Dest: 0x" << std::hex << dest << std::endl;
-                    g_logFile << "╚═══════════════════════════════════════════════════╝" << std::endl;
-                    
-                    // Read from ISO
-                    if (g_isoFile) {
-                        uint32_t phys_addr = dest & 0x1FFFFFFF;
-                        uint64_t iso_offset = (uint64_t)lba * 2048;
-                        uint32_t size = sectors * 2048;
-                        
-                        fseek(g_isoFile, iso_offset, SEEK_SET);
-                        
-                        std::vector<uint8_t> buffer(size);
-                        size_t bytes_read = fread(buffer.data(), 1, size, g_isoFile);
-                        
-                        for (size_t k = 0; k < bytes_read; k++) {
-                            memory::write<uint8_t>(phys_addr + k, buffer[k]);
-                        }
-                        
-                        g_logFile << "║ Read " << bytes_read << " bytes from ISO" << std::endl;
-                    }
-                    
-                    if (recv_buffer) memory::write<int32_t>(recv_buffer, 1); // Success
-                }
-            }
-            
-            else{
-                g_logFile << "    [SIF Action] Unhandled RPC Call (Server: 0x" << std::hex << server_id 
-                          << ", Func: 0x" << rpc_func_num << ")" << std::dec << std::endl;
-                
-                if(recv_buffer != 0){
-                    memory::write<int32_t>(recv_buffer & 0x1FFFFFFF, 0); 
-
-                }
-            }
-
-            if (client_data_ptr != 0) {
-                int32_t completion_sema = memory::read<int32_t>(client_data_ptr + 0x08); // Offset 0x20 in client struct
-                if (completion_sema > 0){
-                    g_logFile << "    [SIF Action] Completion Semaphore: 0x" << std::hex << completion_sema << std::dec << std::endl;
+            // Signal completion semaphore
+            if (rpc.client_data_addr != 0) {
+                int32_t completion_sema = memory::read<int32_t>(rpc.client_data_addr + 0x08);
+                if (completion_sema > 0) {
+                    g_logFile << "    [SIF] Completion Semaphore: 0x" << std::hex 
+                              << completion_sema << std::dec << std::endl;
                     g_scheduler.iSignalSema(completion_sema);
                 }
-                
             }
+            break;
+        }
+
+        // ------------------------------------------------------------
+        // 0x8000000C - Get Other Data
+        // ------------------------------------------------------------
+        case 0x8000000C: {
+            g_logFile << "    [SIF] GetOtherData (stubbed)" << std::endl;
+            break;
+        }
+
+        // ------------------------------------------------------------
+        // Unknown command
+        // ------------------------------------------------------------
+        default: {
+            g_logFile << "    [SIF] Unknown command ID: 0x" << std::hex << command_id 
+                      << std::dec << std::endl;
+            break;
         }
     }
 
-
-
-        
-            
-
-            /*
-                        else if (is_file_io){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_iop_heap_allocation){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_pad){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_pad_extension){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_memory_card){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_cdvd_init){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_cdvd_s_commands){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_cdvd_n_commands){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_cdvd_search_file){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_cdvd_disk_ready){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_libsd_remote){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_mtap_port_open){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_mtap_port_close){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_mtap_get_connections){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_mtap_unknown_1){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_mtap_unknown_2){
-                g_logFile << "" << std::endl;
-            }
-            else if (is_eye_toy){
-                g_logFile << "" << std::endl;
-            }
-            
-            
-            
-            */
-
-    
-    
-    // Generate unique DMA ID
+    // ================================================================
+    // Step 5: Return DMA ID and trigger completion interrupt
+    // ================================================================
     static uint32_t dma_id = 0;
     dma_id++;
     g_sif.last_dma_id = dma_id;
     
     g_logFile << "  Returning DMA ID: " << dma_id << std::endl;
-    
-    // Return the DMA ID
     ctx.cpuRegs.GPR.r[2].UL[0] = dma_id;
     
-    // CRITICAL: For SIF DMA in HLE mode, we need to trigger completion
-    // This simulates the IOP receiving and responding
-    
-    // Set the SIF1 (channel 6) interrupt to indicate completion
+    // Trigger SIF1 DMA completion
     g_dmac.stat |= DSTAT_CIS(DMA_SIF1);
-    
-    // Check if this triggers an enabled interrupt
     if (g_dmac.CheckInterrupt()) {
-        g_logFile << "  DMA complete - dispatching interrupt" << std::endl;
         g_dmac.DispatchInterrupt(ctx);
     }
 }
+
+
 
 void sceSifDmaStat(CpuContext& ctx) {
     uint32_t dma_id = ctx.cpuRegs.GPR.r[4].UL[0];
