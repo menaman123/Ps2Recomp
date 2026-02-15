@@ -1042,10 +1042,12 @@ void PS2Scheduler::CheckAndFireVBlank(){
             in_vblank_ = true;
             vblank_count_++;
             DispatchIntHandler(2); // VBlank interrupt
+            g_intc.RaiseInterrupt(INTC_VBON);
         }
         else if (current_scanline_ >= 262) {
             if (in_vblank_){
                 DispatchIntHandler(3); // VBlank end interrupt
+                g_intc.RaiseInterrupt(INTC_VBOF);
                 in_vblank_ = false;
             }
             current_scanline_ = 0;
