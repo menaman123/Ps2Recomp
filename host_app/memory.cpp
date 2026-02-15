@@ -12,6 +12,7 @@
 #include <sstream>
 #include <iomanip>
 #include "intc.h"
+#include "ps2_scheduler.h"
 #include "sif.h"
 #include "hle_heap.h"
 #include "gs.h"
@@ -279,7 +280,9 @@ bool is_io_register(uint32_t address) {
             return g_gif.Read(address);
         }
         if (address == 0x1000F000 || address == 0x1000F010) {
+            g_scheduler.CheckAndFireVBlank();
             if (address == 0x1000F000 && (debug_read_count % 1000 == 0)) {
+
                 g_logFile << "[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)" << std::endl;
             }
             return g_intc.Read(address);

@@ -21,6 +21,7 @@ void HLE_001815c0(CpuContext& ctx) {
 
     if (ptr == 0) {
         printf("Malloc Failed! Size: %u\n", size);
+        g_logFile << "Malloc Failed! Size: " << size << std::endl;
     }
 
     ctx.cpuRegs.GPR.r[2].UL[0] = ptr;
@@ -31,6 +32,7 @@ void HLE_001815f0(CpuContext& ctx) { // free
     
     // Log the free
     printf("Free: freeing ptr 0x%X\n", ptr);
+    g_logFile << "Free: freeing ptr 0x" << std::hex << ptr << std::endl;
     
     g_heap.free(ptr);
 }
@@ -41,6 +43,7 @@ void HLE_002cf930(CpuContext& ctx) {
   
     uint32_t size_needed = ctx.cpuRegs.GPR.r[4].UL[0];
     printf("SysAlloc: size=%u (0x%X) caller=0x%X\n", size_needed, size_needed, caller);
+    g_logFile << "SysAlloc: size=" << size_needed << " (0x" << std::hex << size_needed << ") caller=0x" << caller << std::endl;
 
     
     // Use the actual heap manager instead of a static counter
@@ -52,9 +55,11 @@ void HLE_002cf930(CpuContext& ctx) {
 
     if (ptr == 0) { // Assuming g_heap.alloc returns 0 on failure
         printf("SysAlloc #%d: Out of Memory! Requested %d bytes\n", call_count, size_needed);
+        g_logFile << "SysAlloc #" << call_count << ": Out of Memory! Requested " << size_needed << " bytes" << std::endl;
         ctx.cpuRegs.GPR.r[2].UL[0] = 0xFFFFFFFF; // Return -1 (Failure)
     } else {
         printf("SysAlloc #%d: Allocated %d bytes at 0x%X\n", call_count, size_needed, ptr);
+        g_logFile << "SysAlloc #" << call_count << ": Allocated " << size_needed << " bytes at 0x" << std::hex << ptr << std::endl;
         ctx.cpuRegs.GPR.r[2].UL[0] = ptr;
     }
 }
@@ -85,7 +90,8 @@ void HLE_002c6ce0(CpuContext& ctx) {
         } else {
             // Fallback: byte-by-byte through memory system
             g_logFile << "[memcpy] Slow path: dest=0x" << std::hex << dest
-                      << " src=0x" << src << " size=0x" << size << std::endl;
+                      << " src=0x" << src << " size=0x" << size 
+                      << " ra=0x" << ctx.cpuRegs.GPR.r[31].UL[0] << std::endl;
             for (uint32_t i = 0; i < size; i++) {
                 uint8_t byte = memory::read<uint8_t>(src + i);
                 memory::write<uint8_t>(dest + i, byte);
