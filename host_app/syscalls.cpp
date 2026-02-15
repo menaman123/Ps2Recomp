@@ -587,34 +587,45 @@ void sceSifSetDma(CpuContext& ctx) {
     g_logFile << "Syscall: sceSifSetDma(sdt_addr: 0x" << std::hex << sdt_addr 
               << ", count: " << std::dec << count << ")" << std::endl;
     
-    for (int i = 0; i < count; i++) {
-        SifDmaTransfer_t transfer;
+    int cmd_index = -1;
+    int payload_index = -1;
+
+    for(int i = 0; i < count; i++){
         uint32_t entry_addr = sdt_addr + (i * sizeof(SifDmaTransfer_t));
-        
-        transfer.src = memory::read<uint32_t>(entry_addr + 0);
-        transfer.dest = memory::read<uint32_t>(entry_addr + 4);
-        transfer.size = memory::read<int32_t>(entry_addr + 8);
-        transfer.attr = memory::read<int32_t>(entry_addr + 12);
-        
-        g_logFile << "  Transfer " << i << ": src=0x" << std::hex << transfer.src
-                  << " dest=0x" << transfer.dest << " size=" << std::dec << transfer.size
-                  << " attr=0x" << std::hex << transfer.attr << std::dec << std::endl;
-        
-        // Perform the transfer (EE → IOP, so this is SIF1)
-        // In HLE mode, we just acknowledge the transfer immediately
-        // The actual data doesn't go anywhere meaningful for HLE'd IOP modules
-        uint32_t packet_addr = transfer.src;
-        
-        // Read SifCmdHeader (16 bytes)
-        // [0x0] psize/dsize
-        // [0x4] dest
-        // [0x8] cid (Command ID)
-        // [0xC] opt
-        uint32_t command_id = memory::read<uint32_t>(packet_addr + 8);
-        uint32_t opt        = memory::read<uint32_t>(packet_addr + 12);
-        
-        g_logFile << "    [SIF Packet] CID: 0x" << std::hex << command_id 
-                  << " Opt: " << opt << std::dec << std::endl;
+        int32_t attr = memory::read<int32_t>(entry_addr + 0x0C);
+
+        if(attr & 0x04){
+            cmd_index = i;
+        } else {
+            payload_index = i;
+        }
+    }
+
+    if(cmd_index < 0){
+        g_logFile << "  Error: No command entry found in SIF DMA list!" << std::endl;
+    }
+    else{
+        uint32_t cmd_entry = sdt_addr + (cmd_index * sizeof(SifDmaTransfer_t));
+        uint32_t packet_addr = memory::read<uint32_t>(cmd_entry + 0x00);
+
+
+        uint32_t payload_addr = 0;
+        uint32_t payload_size = 0;
+        if(payload_index >= 0){
+            uint32_t payload_entry = sdt_addr + (payload_index * sizeof(SifDmaTransfer_t));
+            payload_addr = memory::read<uint32_t>(payload_entry + 0x00);
+            payload_size = memory::read<uint32_t>(payload_entry + 0x08);
+        }
+
+        uint32_t command_id = memory::read<uint32_t>(packet_addr + 0x08);
+        uint32_t opt = memory::read<uint32_t>(packet_addr + 0x0C);
+
+        g_logFile << "  [SIF PACKET] Command ID: 0x" << std::hex << command_id 
+                  << ", Opt: 0x" << opt 
+                  << ", Payload Addr: 0x" << payload_addr 
+                  << ", Payload Size: " << std::dec << payload_size 
+                  << std::endl;
+
 
         // Handle specific commands
         if (command_id == 0x80000000) { // Change SADDR
@@ -1166,6 +1177,9 @@ void sceSifSetDma(CpuContext& ctx) {
                 
             }
         }
+    }
+
+
 
         
             
@@ -1227,7 +1241,7 @@ void sceSifSetDma(CpuContext& ctx) {
             
             */
 
-    }
+    
     
     // Generate unique DMA ID
     static uint32_t dma_id = 0;
