@@ -35,6 +35,8 @@ add_executable(host_app
     vu.cpp
     hle_heap.cpp
     hle_heap.h
+    sif_rpc_handlers.h
+    sif_rpc_handlers.cpp
 
 )
 # Set the GENERATED property on the source file.
