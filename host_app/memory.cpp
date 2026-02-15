@@ -282,7 +282,7 @@ bool is_io_register(uint32_t address) {
             if (address == 0x1000F000 && (debug_read_count % 1000 == 0)) {
                 g_logFile << "[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)" << std::endl;
             }
-            return g_intc.Read(address) | 0xC;
+            return g_intc.Read(address);
         }
         
         // DMAC channel registers (0x10008000 - 0x1000D4FF)
