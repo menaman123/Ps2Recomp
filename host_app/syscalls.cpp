@@ -62,23 +62,7 @@ struct OsdConfigParam {
     int32_t version;        // Structure version
 };
 
-struct Thread {
-    int id;
-    int status;
-    int initial_priority;
-    int current_priority;
-    
-    // Each thread needs its own CPU state (Registers, PC, etc.)
-    CpuContext ctx; 
-    
-    uint32_t stack_base;
-    uint32_t stack_size;
-    uint32_t gp_reg;
-    uint32_t func_pc;
-};
-
 // Global container for threads
-std::map<int, Thread> g_threads;
 int g_nextThreadId = 1;
 int g_currentThreadId = 1;
 
