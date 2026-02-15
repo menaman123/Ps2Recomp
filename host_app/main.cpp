@@ -33,9 +33,6 @@ RenderQueue g_renderQueue;
 
 FILE* g_isoFile = nullptr;
 
-// Initialize Semaphore
-std::vector<HostSemaphore> g_semaphores(256);
-
 // --- Synchronization Globals (Bridge between CPU and Main Thread) ---
 std::atomic<bool> g_emulator_running{true};
 std::atomic<bool> g_window_resize_pending{false};
