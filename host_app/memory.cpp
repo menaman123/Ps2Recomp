@@ -12,6 +12,7 @@
 #include <sstream>
 #include <iomanip>
 #include "intc.h"
+#include "ps2_scheduler.h"
 #include "sif.h"
 #include "hle_heap.h"
 #include "gs.h"
@@ -279,7 +280,9 @@ bool is_io_register(uint32_t address) {
             return g_gif.Read(address);
         }
         if (address == 0x1000F000 || address == 0x1000F010) {
+            g_scheduler.CheckAndFireVBlank();
             if (address == 0x1000F000 && (debug_read_count % 1000 == 0)) {
+
                 g_logFile << "[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)" << std::endl;
             }
             return g_intc.Read(address);
@@ -529,6 +532,40 @@ void write_io_register(uint32_t address, uint32_t value) {
 
     template <typename T>
     void write(uint32_t address, T value) {
+
+        /*
+        if (address == 0x31b008 && value != 0) {
+            g_logFile << "[POOL INIT] base=0x" << std::hex << value << std::endl;
+        }
+        // Also watch the pool size field
+        if (address == 0x31b00c) {
+            g_logFile << "[POOL INIT] total_size=0x" << std::hex << value << std::endl;
+        }
+        if (address == 0x31b010) {
+            g_logFile << "[POOL INIT] elem_size=0x" << std::hex << value << std::endl;
+        }
+
+
+        if (address == 0xb8cde0) {  // slot 42 of the array
+            g_logFile << "[WATCHPOINT SLOT42] write value=0x" << std::hex << value << std::endl;
+        }
+        if (address == 0xb8cef0) {
+            g_logFile << "[WATCHPOINT OBJ_VTABLE] write value=0x" << std::hex << value << std::endl;
+        }
+
+        if (address == 0xb8cb30 && value != 0) {
+            g_logFile << "[MANAGER INIT] write value=0x" << std::hex << value << std::endl;
+        }
+
+
+        if (address == 0x70003ABC) { // 0x70003AB0 + 0xC
+            g_logFile << "[WATCHPOINT] write to stream read_ptr: value=0x" 
+                    << std::hex << value << std::endl;
+        }
+        if (address == 0x70003AB4) { // 0x70003AB0 + 0xC
+            g_logFile << "[WATCHPOINT 70003AB4] write to stream read_ptr: value=0x" 
+                    << std::hex << value << std::endl;
+        }
         if (address == 0x31B190){
             g_logFile << "[WRITING TO VIRTUAL ADDRESS IN MAIN RAM] Address: " << std::hex << address 
                     << ", Value: " << value <<std::endl;
@@ -566,6 +603,9 @@ void write_io_register(uint32_t address, uint32_t value) {
                     << ", Value: " << value << std::endl;
 
         }
+        
+        */
+
 
         // Check I/O registers FIRST
         if (is_io_register(address)) {

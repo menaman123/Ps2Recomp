@@ -1,9 +1,12 @@
 #pragma once
 #include "cpu_state.h"
 #include <cstdint>
+#include <iostream>
+#include <fstream>
 #include <map>
 #include <iostream>
 
+extern std::ofstream g_logFile;
 class HLEHeap {
 private:
     uint32_t heap_start;
@@ -30,6 +33,7 @@ public:
         allocations.clear();
         free_blocks.clear();
         printf("Heap Initialized: Bottom=0x%X - Top=0x%X\n", heap_start, heap_end);
+        g_logFile << "Heap Initialized: Bottom=0x" << std::hex << heap_start << " - Top=0x" << heap_end << std::endl;
     }
 
     uint32_t alloc(uint32_t size) {
@@ -65,6 +69,8 @@ public:
         if (current_top + size > current_bottom) {
             printf("[HLE Heap] CRITICAL: Out of Memory! Requested %u, Gap=%u (top=0x%X, bottom=0x%X)\n", 
                 size, current_bottom - current_top, current_top, current_bottom);
+            g_logFile << "[HLE Heap] CRITICAL: Out of Memory! Requested " << size << ", Gap=" << current_bottom - current_top 
+                      << " (top=0x" << std::hex << current_top << ", bottom=0x" << current_bottom << ")" << std::endl;
             return 0;
         }
 
@@ -81,6 +87,7 @@ public:
         // 2. Check for collision with the Low Heap
         if (current_bottom - size < current_top) {
              printf("[HLE Heap] CRITICAL: Heap Collision! Bottom meeting Top.\n");
+                g_logFile << "[HLE Heap] CRITICAL: Heap Collision! Bottom meeting Top." << std::endl;
              return 0;
         }
 
@@ -92,6 +99,7 @@ public:
         allocations[ptr] = size;
         
         printf("[HLE Heap] High Alloc: %d bytes at 0x%X\n", size, ptr);
+            g_logFile << "[HLE Heap] High Alloc: " << size << " bytes at 0x" << std::hex << ptr << std::endl;
         return ptr;
     }
     void free(uint32_t ptr) {
@@ -177,4 +185,8 @@ void HLE_001815c0(CpuContext& ctx);
 void HLE_001815f0(CpuContext& ctx);
 void HLE_002cf930(CpuContext& ctx);
 void HLE_002c6ce0(CpuContext& ctx);
+void HLE_FUN_002ad8f0(CpuContext& ctx, uint32_t addr);
+void HLE_FUN_002adb18(CpuContext& ctx, uint32_t addr);
+void HLE_FUN_002aac80(CpuContext& ctx, uint32_t addr);
+void HLE_FUN_002adb40(CpuContext& ctx, uint32_t addr);
 extern HLEHeap g_heap;

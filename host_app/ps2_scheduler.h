@@ -178,6 +178,7 @@ public:
     int next_thread_id_ = 1;
     int current_thread_id_ = 0;
     void AddToReadyQueue(int tid);
+    void CheckAndFireVBlank();
 
     static void CALLBACK FiberEntry(void* param);
     
@@ -191,7 +192,7 @@ private:
     int64_t current_scanline_ = 0;
     bool in_vblank_ = false;
 
-    void CheckAndFireVBlank();
+
     void DispatchIntHandler(int cause);
     
     

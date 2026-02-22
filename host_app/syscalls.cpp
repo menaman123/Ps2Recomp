@@ -651,6 +651,13 @@ void sceSifSetDma(CpuContext& ctx) {
         // 0x8000000A - RPC Call
         // ------------------------------------------------------------
         case 0x8000000A: {
+
+            g_logFile << "[RPC CALL RAW] packet_addr=0x" << std::hex << packet_addr << std::endl;
+                for (int i = 0; i < 0x38; i += 4) {
+                    g_logFile << "  [+" << std::hex << i << "] = 0x" 
+                            << memory::read<uint32_t>(packet_addr + i) << std::endl;
+                }
+
             // Build the RPC context from the SifRpcCallPkt
             SifRpcContext rpc;
             rpc.packet_addr    = packet_addr;

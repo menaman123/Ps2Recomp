@@ -128,6 +128,28 @@ g_logFile << " [HLE] FILEIO Call (Func: 0x" << std::hex << rpc.func_num
 << ")" << std::dec << std::endl;
 int32_t result = 0;
 
+if (rpc.payload_addr != 0) {
+    g_logFile << "[FILEIO RAW] Payload at 0x" << std::hex << rpc.payload_addr 
+                << " size=" << rpc.payload_size << std::endl;
+    for (int i = 0; i < 64 && i < (int)rpc.payload_size + 32; i += 4) {
+        uint32_t val = memory::read<uint32_t>(rpc.payload_addr + i);
+        g_logFile << "  [+" << std::hex << i << "] = 0x" << val << std::dec << std::endl;
+    }
+    // Also try reading as string from various offsets
+    for (int off = 0; off < 48; off += 4) {
+        char buf[64] = {};
+        for (int j = 0; j < 63; j++) {
+            buf[j] = (char)memory::read<uint8_t>(rpc.payload_addr + off + j);
+            if (buf[j] == 0) break;
+            if (buf[j] < 0x20 || buf[j] > 0x7e) { buf[j] = '?'; break; }
+        }
+        if (buf[0] != 0 && buf[0] != '?') {
+            g_logFile << "  [+" << std::hex << off << " str] '" << buf << "'" << std::endl;
+        }
+    }
+}
+
+
 switch (rpc.func_num) {
     // =============================================================
     // fioInit / Reset
@@ -309,6 +331,8 @@ switch (rpc.func_num) {
         break;
     }
 }
+
+
 
 WriteResult32(rpc.recv_buffer, result);
 }

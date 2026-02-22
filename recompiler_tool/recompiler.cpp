@@ -275,6 +275,75 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2d6880]});\n";
         }
+        else if (func.base_address == 0x002adb18){
+            file << "    // HLE Hook for Intitialize Graphics\n";
+            file << "    recompiled_functions[0x2adb18] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        HLE_FUN_002adb18(ctx, addr);\n";
+            file << "        // Simulate 'jr $ra' return\n";
+            file << "        ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];\n";
+            file << "    };\n";
+        
+            // Register range so lookups don't fail
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2adb18]});\n";
+        }
+
+        else if (func.base_address == 0x002ad8f0){
+            file << "    // HLE Hook for Intitialize Graphics\n";
+            file << "    recompiled_functions[0x2ad8f0] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        HLE_FUN_002ad8f0(ctx, addr);\n";
+            file << "        // Simulate 'jr $ra' return\n";
+            file << "        ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];\n";
+            file << "    };\n";
+        
+            // Register range so lookups don't fail
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2ad8f0]});\n";
+        }
+
+        else if (func.base_address == 0x002aac80){
+            file << "    // HLE Hook for Intitialize Graphics\n";
+            file << "    recompiled_functions[0x2aac80] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        HLE_FUN_002aac80(ctx, addr);\n";
+            file << "        // Simulate 'jr $ra' return\n";
+            file << "        ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];\n";
+            file << "    };\n";
+        
+            // Register range so lookups don't fail
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2aac80]});\n";
+        }
+        else if (func.base_address == 0x002adb40){
+            file << "    // HLE Hook for Close Handle\n";
+            file << "    recompiled_functions[0x2adb40] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        HLE_FUN_002adb40(ctx, addr);\n";
+            file << "        // Simulate 'jr $ra' return\n";
+            file << "        ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];\n";
+            file << "    };\n";
+        
+            // Register range so lookups don't fail
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2adb40]});\n";
+        }
+
+        else if (func.base_address == 0x002adb18){
+            file << "    // HLE Hook for Intitialize Graphics\n";
+            file << "    recompiled_functions[0x2adb18] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        HLE_FUN_002adb18(ctx, addr);\n";
+            file << "        // Simulate 'jr $ra' return\n";
+            file << "        ctx.cpuRegs.pc = ctx.cpuRegs.GPR.r[31].UL[0];\n";
+            file << "    };\n";
+        
+            // Register range so lookups don't fail
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2adb18]});\n";
+        }
+
         else if (func.base_address == 0x002d69a0) { // Check this address matches your Ghidra export
             file << "    // HLE Hook for Global Constructors (__do_global_ctors)\n";
             file << "    recompiled_functions[0x2d69a0] = [](CpuContext& ctx, uint32_t addr) {\n";
@@ -932,1005 +1001,1124 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
         return;
     }
+    /*
+    )code" << std::endl;
 
+
+        file << R"code(
+    */
 
     if (func.base_address == 0x00177168) {
         // FUN_00177168 - Main Dispatcher
-        file << R"code(void FUN_00177168(CpuContext& ctx) {
-        // Prologue
-        ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] - 0x60;
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28, ctx.cpuRegs.GPR.r[17].UD[0]);
-        ctx.cpuRegs.GPR.r[17].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0]; // s1 = param_1
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48, ctx.cpuRegs.GPR.r[21].UD[0]);
-        ctx.cpuRegs.GPR.r[21].UL[0] = 0x323530;                   // s5 = 0x323530
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x50, ctx.cpuRegs.GPR.r[22].UD[0]);
-        ctx.cpuRegs.GPR.r[22].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0]; // s6 = param_2
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[16].UD[0]);
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[18].UD[0]);
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x38, ctx.cpuRegs.GPR.r[19].UD[0]);
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[20].UD[0]);
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x58, ctx.cpuRegs.GPR.r[31].UD[0]);
+        file << R"code(
 
-        // Call FUN_002b3548(s1, 0x16, 1)
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[5].UL[0] = 0x16;
-        ctx.cpuRegs.GPR.r[6].UL[0] = 1;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1771a8;
-        if (recompiled_functions.count(0x2b3548)) {
-            recompiled_functions[0x2b3548](ctx, 0x2b3548);
-        } else {
-            ctx.cpuRegs.pc = 0x2b3548;
-            return;
-        }
+        void FUN_00177168(CpuContext& ctx) {
+                // Prologue
+                ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] - 0x60;
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28, ctx.cpuRegs.GPR.r[17].UD[0]);
+                ctx.cpuRegs.GPR.r[17].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0]; // s1 = param_1
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48, ctx.cpuRegs.GPR.r[21].UD[0]);
+                ctx.cpuRegs.GPR.r[21].UL[0] = 0x323530;                   // s5 = 0x323530
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x50, ctx.cpuRegs.GPR.r[22].UD[0]);
+                ctx.cpuRegs.GPR.r[22].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0]; // s6 = param_2
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[16].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[18].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x38, ctx.cpuRegs.GPR.r[19].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[20].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x58, ctx.cpuRegs.GPR.r[31].UD[0]);
 
-        // Logic Block 1
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
-        ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1;
-        ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
-        
-        {
-            uint64_t mask = 0x17fffffffULL; 
-            ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask;
-            uint64_t v0_shifted = (uint64_t)ctx.cpuRegs.GPR.r[2].UL[0] << 31;
-            ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | v0_shifted;
-        }
-        
-        ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] + 1;
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UD[0]);
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10, ctx.cpuRegs.GPR.r[5].UL[0]);
+                // SP tracking
+                uint32_t expected_sp = ctx.cpuRegs.GPR.r[29].UL[0];
+                g_logFile << "[177168] working sp=0x" << std::hex << expected_sp << std::endl;
 
-        // Call FUN_00173238(s1, s5)
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0]; // Delay slot move
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1771e8;
-        if (recompiled_functions.count(0x173238)) {
-            recompiled_functions[0x173238](ctx, 0x173238);
-        } else {
-            ctx.cpuRegs.pc = 0x173238;
-            return;
-        }
+        // Macro to reduce repetition
+        #define CHECK_SP(call_addr) \
+                if (ctx.cpuRegs.GPR.r[29].UL[0] != expected_sp) { \
+                    g_logFile << "[177168] SP CORRUPTED after " #call_addr "! expected=0x" \
+                            << std::hex << expected_sp \
+                            << " got=0x" << ctx.cpuRegs.GPR.r[29].UL[0] << std::endl; \
+                }
 
-        // Logic Block 2
-        ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        {
-            uint64_t v0 = 0xfc00ULL << 40; // dsll32 8 (32+8)
-            uint64_t a2 = 0xc000ULL << 39; // dsll32 7 (32+7)
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v0;
-            
-            if (ctx.cpuRegs.GPR.r[2].UD[0] == a2) {
-                // Delay slot executed before jump
+                // Call FUN_002b3548(s1, 0x16, 1)
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[5].UL[0] = 0x16;
+                ctx.cpuRegs.GPR.r[6].UL[0] = 1;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1771a8;
+                if (recompiled_functions.count(0x2b3548)) {
+                    recompiled_functions[0x2b3548](ctx, 0x2b3548);
+                } else {
+                    ctx.cpuRegs.pc = 0x2b3548;
+                    return;
+                }
+                CHECK_SP(0x2b3548_prologue)
+
+                // Logic Block 1
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
+                ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x1;
+                ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
+                
+                {
+                    uint64_t mask = 0x17fffffffULL; 
+                    ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask;
+                    uint64_t v0_shifted = (uint64_t)ctx.cpuRegs.GPR.r[2].UL[0] << 31;
+                    ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | v0_shifted;
+                }
+                
+                ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] + 1;
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UD[0]);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10, ctx.cpuRegs.GPR.r[5].UL[0]);
+
+                // Call FUN_00173238(s1, s5)
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1771e8;
+                if (recompiled_functions.count(0x173238)) {
+                    recompiled_functions[0x173238](ctx, 0x173238);
+                } else {
+                    ctx.cpuRegs.pc = 0x173238;
+                    return;
+                }
+                CHECK_SP(0x173238)
+    )code" << std::endl;
+
+
+        file << R"code(
+                // Logic Block 2
+                ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                {
+                    uint64_t v0 = 0xfc00ULL << 40;
+                    uint64_t a2 = 0xc000ULL << 39;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v0;
+                    
+                    if (ctx.cpuRegs.GPR.r[2].UD[0] == a2) {
+                        ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                        goto Label_17729c;
+                    }
+                }
+
                 ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-                goto Label_17729c;
-            }
-        }
+                ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] >> 44;
+                
+                {
+                    uint64_t mask_upper = 0x103ffffffffULL;
+                    ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x3f;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask_upper;
+                    
+                    uint64_t v1_shifted = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << 38;
+                    
+                    uint64_t mask_accum = 0xfffc00000ULL; 
+                    mask_accum |= 0xffffULL; 
+                    mask_accum <<= 16;
+                    mask_accum |= 0xffffULL;
+                    mask_accum <<= 12;
+                    mask_accum |= 0xfffULL;
+                    
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shifted;
+                    
+                    uint64_t mask_p2 = 0xff03ULL << 48;
+                    mask_p2 |= 0xffffULL; mask_p2 <<= 16;
+                    mask_p2 |= 0xffffULL; mask_p2 <<= 16;
+                    mask_p2 |= 0xffffULL;
+                    
+                    uint64_t v1_extracted = ctx.cpuRegs.GPR.r[2].UD[0] >> 50;
+                    v1_extracted &= 0x3f;
+                    
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_accum;
+                    v1_extracted <<= 44;
+                    
+                    ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
+                    
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_extracted;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_p2;
+                    
+                    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18, ctx.cpuRegs.GPR.r[4].UL[0]);
+                    
+                    uint64_t c000_shift = 0xc000ULL << 39;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | c000_shift;
+                    
+                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+                }
+                
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x4);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c, ctx.cpuRegs.GPR.r[3].UL[0]);
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
 
-        ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] >> 44; // dsrl32 12
-        
-        {
-            uint64_t mask_upper = 0x103ffffffffULL;
-            ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x3f;
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask_upper;
-            
-            uint64_t v1_shifted = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << 38; // dsll32 6
-            
-            uint64_t param_mask = 0xfffcULL << 52; // dsll 20 + 32? No, chain of ors
-            // Manual reconstruction of large constant generation:
-            // 0xfffc << 20 = 0xfffc00000 
-            // | 0xffff << 16
-            // | 0xffff << 12
-            // | 0xfff
-            // Approximating based on disassembly intent (clearing bits): 
-            // 0xfffcffffffffffff is likely
-            uint64_t mask_accum = 0xfffc00000ULL; 
-            mask_accum |= 0xffffULL; 
-            mask_accum <<= 16;
-            mask_accum |= 0xffffULL;
-            mask_accum <<= 12;
-            mask_accum |= 0xfffULL;
-            
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shifted;
-            
-            // Param 2 mask generation
-            uint64_t mask_p2 = 0xff03ULL << 48; // chained shifts
-            mask_p2 |= 0xffffULL; mask_p2 <<= 16;
-            mask_p2 |= 0xffffULL; mask_p2 <<= 16;
-            mask_p2 |= 0xffffULL;
-            
-            uint64_t v1_extracted = ctx.cpuRegs.GPR.r[2].UD[0] >> 50; // dsrl32 18
-            v1_extracted &= 0x3f;
-            
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_accum;
-            v1_extracted <<= 44; // dsll32 12
-            
-            ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
-            
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_extracted;
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_p2;
-            
-            memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18, ctx.cpuRegs.GPR.r[4].UL[0]);
-            
-            uint64_t c000_shift = 0xc000ULL << 39; // approx from block 1
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | c000_shift;
-            
-            memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
-        }
-        
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x4);
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c, ctx.cpuRegs.GPR.r[3].UL[0]);
-        ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+            Label_17729c:
+                ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 44;
+                ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x3f;
+                
+                if (ctx.cpuRegs.GPR.r[4].UL[0] >= 0x17) {
+                    goto Label_caseD_17;
+                }
+    )code" << std::endl;
 
-    Label_17729c:
-        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 44; // dsrl32 12
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x3f;
-        
-        // Bounds check
-        if (ctx.cpuRegs.GPR.r[4].UL[0] >= 0x17) {
-            goto Label_caseD_17;
-        }
 
-        // Switch Dispatch
-        switch (ctx.cpuRegs.GPR.r[4].UL[0]) {
-            case 0: goto Label_caseD_0;
-            case 1: goto Label_caseD_1;
-            case 2: goto Label_caseD_2;
-            case 3: goto Label_caseD_3;
-            case 4: goto Label_caseD_4;
-            case 5: goto Label_caseD_5;
-            case 6: goto Label_caseD_6;
-            case 7: goto Label_caseD_7;
-            case 8: goto Label_caseD_8;
-            case 9: goto Label_caseD_9;
-            case 10: goto Label_caseD_a;
-            case 11: goto Label_caseD_b;
-            case 12: goto Label_caseD_c;
-            case 13: goto Label_caseD_d;
-            case 14: goto Label_caseD_e;
-            case 15: goto Label_caseD_f;
-            case 16: goto Label_caseD_10;
-            default: goto Label_caseD_17;
-        }
+        file << R"code(
+                switch (ctx.cpuRegs.GPR.r[4].UL[0]) {
+                    case 0: goto Label_caseD_0;
+                    case 1: goto Label_caseD_1;
+                    case 2: goto Label_caseD_2;
+                    case 3: goto Label_caseD_3;
+                    case 4: goto Label_caseD_4;
+                    case 5: goto Label_caseD_5;
+                    case 6: goto Label_caseD_6;
+                    case 7: goto Label_caseD_7;
+                    case 8: goto Label_caseD_8;
+                    case 9: goto Label_caseD_9;
+                    case 10: goto Label_caseD_a;
+                    case 11: goto Label_caseD_b;
+                    case 12: goto Label_caseD_c;
+                    case 13: goto Label_caseD_d;
+                    case 14: goto Label_caseD_e;
+                    case 15: goto Label_caseD_f;
+                    case 16: goto Label_caseD_10;
+                    default: goto Label_caseD_17;
+                }
 
-    Label_caseD_0:
-        // Load byte from 0x309738 + 3
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint8_t>(0x309738 + 3);
-        ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        
-        if (ctx.cpuRegs.GPR.r[3].UL[0] == 1) {
-            goto Label_177708;
-        }
-        
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0xb;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1772e8;
-        if (recompiled_functions.count(0x1f0e68)) {
-            recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
-        } else {
-            ctx.cpuRegs.pc = 0x1f0e68;
-            return;
-        }
-        
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1772f0;
-        if (recompiled_functions.count(0x1f0e68)) {
-            recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
-        } else {
-            ctx.cpuRegs.pc = 0x1f0e68;
-            return;
-        }
-        
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0); // v0 from prev call
-        
-        if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
-            goto Label_177324;
-        }
-        
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
+            Label_caseD_0:
+                {
+                uint32_t ptr = memory::read<uint8_t>(0x309738);
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint8_t>(ptr + 3);
+                ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
+                
+                if (ctx.cpuRegs.GPR.r[3].UL[0] == 1) {
+                    goto Label_177708;
+                }
+                
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0xb;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1772e8;
+                if (recompiled_functions.count(0x1f0e68)) {
+                    recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
+                } else {
+                    ctx.cpuRegs.pc = 0x1f0e68;
+                    return;
+                }
+                CHECK_SP(0x1f0e68_case0_first)
+                
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1772f0;
+                if (recompiled_functions.count(0x1f0e68)) {
+                    recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
+                } else {
+                    ctx.cpuRegs.pc = 0x1f0e68;
+                    return;
+                }
+                CHECK_SP(0x1f0e68_case0_second)
+                
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
+                
+                if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
+                    goto Label_177324;
+                }
+                
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
+                }
 
-    Label_177308:
-        if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
-            goto Label_17731c;
-        }
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177314;
-        if (recompiled_functions.count(0x1918a8)) {
-            recompiled_functions[0x1918a8](ctx, 0x1918a8);
-        } else {
-            ctx.cpuRegs.pc = 0x1918a8;
-            return;
-        }
-        
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
+            Label_177308:
+                if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
+                    goto Label_17731c;
+                }
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177314;
+                if (recompiled_functions.count(0x1918a8)) {
+                    recompiled_functions[0x1918a8](ctx, 0x1918a8);
+                } else {
+                    ctx.cpuRegs.pc = 0x1918a8;
+                    return;
+                }
+                CHECK_SP(0x1918a8_case0_loop)
+                
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
 
-    Label_17731c:
-        if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
-            ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
-            goto Label_177308;
-        }
+            Label_17731c:
+                if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
+                    ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
+                    goto Label_177308;
+                }
+    )code" << std::endl;
 
-    Label_177324:
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177328;
-        if (recompiled_functions.count(0x181400)) {
-            recompiled_functions[0x181400](ctx, 0x181400);
-        } else {
-            ctx.cpuRegs.pc = 0x181400;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[18].UL[0] = 1;
-        goto Label_177714;
 
-    Label_caseD_1:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17733c;
-        if (recompiled_functions.count(0x173ab0)) {
-            recompiled_functions[0x173ab0](ctx, 0x173ab0);
-        } else {
-            ctx.cpuRegs.pc = 0x173ab0;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0]; // Delay slot
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        ctx.cpuRegs.GPR.r[18].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0]; // s2 = v0
-        
-        if (ctx.cpuRegs.GPR.r[18].UL[0] == 0x18) {
-            goto Label_17774c;
-        }
-        
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177358;
-        if (recompiled_functions.count(0x16d368)) {
-            recompiled_functions[0x16d368](ctx, 0x16d368);
-        } else {
-            ctx.cpuRegs.pc = 0x16d368;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
-        goto Label_177714;
+        file << R"code(
+            Label_177324:
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177328;
+                if (recompiled_functions.count(0x181400)) {
+                    recompiled_functions[0x181400](ctx, 0x181400);
+                } else {
+                    ctx.cpuRegs.pc = 0x181400;
+                    return;
+                }
+                CHECK_SP(0x181400_case0)
+                ctx.cpuRegs.GPR.r[18].UL[0] = 1;
+                goto Label_177714;
 
-    Label_caseD_2:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17736c;
-        if (recompiled_functions.count(0x173ba0)) {
-            recompiled_functions[0x173ba0](ctx, 0x173ba0);
-        } else {
-            ctx.cpuRegs.pc = 0x173ba0;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
+            Label_caseD_1:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17733c;
+                if (recompiled_functions.count(0x173ab0)) {
+                    recompiled_functions[0x173ab0](ctx, 0x173ab0);
+                } else {
+                    ctx.cpuRegs.pc = 0x173ab0;
+                    return;
+                }
+                CHECK_SP(0x173ab0_case1)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                ctx.cpuRegs.GPR.r[18].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0];
+                
+                if (ctx.cpuRegs.GPR.r[18].UL[0] == 0x18) {
+                    goto Label_17774c;
+                }
+                
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177358;
+                if (recompiled_functions.count(0x16d368)) {
+                    recompiled_functions[0x16d368](ctx, 0x16d368);
+                } else {
+                    ctx.cpuRegs.pc = 0x16d368;
+                    return;
+                }
+                CHECK_SP(0x16d368_case1)
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
+                goto Label_177714;
 
-    Label_caseD_3:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177384;
-        if (recompiled_functions.count(0x173c58)) {
-            recompiled_functions[0x173c58](ctx, 0x173c58);
-        } else {
-            ctx.cpuRegs.pc = 0x173c58;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
+            Label_caseD_2:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17736c;
+                if (recompiled_functions.count(0x173ba0)) {
+                    recompiled_functions[0x173ba0](ctx, 0x173ba0);
+                } else {
+                    ctx.cpuRegs.pc = 0x173ba0;
+                    return;
+                }
+                CHECK_SP(0x173ba0_case2)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
 
-    Label_caseD_4:
-        ctx.fpuRegs.fpr[1].UL = 0x3f000000;
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[7].UL[0] = 0x14;
-        ctx.cpuRegs.GPR.r[8].UL[0] = 1;
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[9].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        
-        ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f; // cvt.w.s (simulated cast)
-        ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[6].SL[0] = ctx.fpuRegs.fpr[1].SL;
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1773d0;
-        if (recompiled_functions.count(0x172b60)) {
-            recompiled_functions[0x172b60](ctx, 0x172b60);
-        } else {
-            ctx.cpuRegs.pc = 0x172b60;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        {
-            uint64_t v1 = 5;
-            if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) {
-                ctx.cpuRegs.GPR.r[18].UD[0] = v1;
-            }
-        }
-        goto Label_177710;
+            Label_caseD_3:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177384;
+                if (recompiled_functions.count(0x173c58)) {
+                    recompiled_functions[0x173c58](ctx, 0x173c58);
+                } else {
+                    ctx.cpuRegs.pc = 0x173c58;
+                    return;
+                }
+                CHECK_SP(0x173c58_case3)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
 
-    Label_caseD_5:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[6].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[7].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[8].UL[0] = 1;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1773f8;
-        if (recompiled_functions.count(0x172b60)) {
-            recompiled_functions[0x172b60](ctx, 0x172b60);
-        } else {
-            ctx.cpuRegs.pc = 0x172b60;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[9].UL[0] = 0;
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-            goto Label_177708;
-        }
-        
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x504);
-        
-        if ((int32_t)ctx.cpuRegs.GPR.r[2].UL[0] <= 0) {
-            goto Label_17744c;
-        }
-        
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        
-        {
-            uint64_t mask = 0xf87f0000ULL;
-            mask |= 0xffffULL;
-            ctx.cpuRegs.GPR.r[5].UL[0] = 0x1000000; // 0x100 << 16
-            ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x28);
-            
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask;
-            ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x594;
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[5].UL[0];
-            ctx.cpuRegs.GPR.r[7].UL[0] = 0;
-            ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[19].UD[0]; // param_2 = s3
-            
-            ctx.cpuRegs.GPR.r[31].UL[0] = 0x17743c;
-            if (recompiled_functions.count(0x168810)) {
-                recompiled_functions[0x168810](ctx, 0x168810);
-            } else {
-                ctx.cpuRegs.pc = 0x168810;
+            Label_caseD_4:
+                ctx.fpuRegs.fpr[1].UL = 0x3f000000;
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[7].UL[0] = 0x14;
+                ctx.cpuRegs.GPR.r[8].UL[0] = 1;
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[9].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                
+                ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f;
+                ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[6].SL[0] = ctx.fpuRegs.fpr[1].SL;
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1773d0;
+                if (recompiled_functions.count(0x172b60)) {
+                    recompiled_functions[0x172b60](ctx, 0x172b60);
+                } else {
+                    ctx.cpuRegs.pc = 0x172b60;
+                    return;
+                }
+                CHECK_SP(0x172b60_case4)
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                {
+                    uint64_t v1 = 5;
+                    if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) {
+                        ctx.cpuRegs.GPR.r[18].UD[0] = v1;
+                    }
+                }
+                goto Label_177710;
+
+            Label_caseD_5:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[6].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[7].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[8].UL[0] = 1;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1773f8;
+                if (recompiled_functions.count(0x172b60)) {
+                    recompiled_functions[0x172b60](ctx, 0x172b60);
+                } else {
+                    ctx.cpuRegs.pc = 0x172b60;
+                    return;
+                }
+                CHECK_SP(0x172b60_case5)
+                ctx.cpuRegs.GPR.r[9].UL[0] = 0;
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                    goto Label_177708;
+                }
+                
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x504);
+                
+                if ((int32_t)ctx.cpuRegs.GPR.r[2].UL[0] <= 0) {
+                    goto Label_17744c;
+                }
+                
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                
+                {
+                    uint64_t mask = 0xf87f0000ULL;
+                    mask |= 0xffffULL;
+                    ctx.cpuRegs.GPR.r[5].UL[0] = 0x1000000;
+                    ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x28);
+                    
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask;
+                    ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x594;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[5].UL[0];
+                    ctx.cpuRegs.GPR.r[7].UL[0] = 0;
+                    ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[19].UD[0];
+                    
+                    ctx.cpuRegs.GPR.r[31].UL[0] = 0x17743c;
+                    if (recompiled_functions.count(0x168810)) {
+                        recompiled_functions[0x168810](ctx, 0x168810);
+                    } else {
+                        ctx.cpuRegs.pc = 0x168810;
+                        return;
+                    }
+                    CHECK_SP(0x168810_case5)
+                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+                    ctx.cpuRegs.GPR.r[18].UL[0] = 9;
+                    goto Label_177710;
+                }
+
+            Label_17744c:
+                ctx.cpuRegs.GPR.r[18].UL[0] = 6;
+                goto Label_177710;
+
+            Label_caseD_6:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177460;
+                if (recompiled_functions.count(0x173ce8)) {
+                    recompiled_functions[0x173ce8](ctx, 0x173ce8);
+                } else {
+                    ctx.cpuRegs.pc = 0x173ce8;
+                    return;
+                }
+                CHECK_SP(0x173ce8_case6)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+                )code" << std::endl;
+
+
+        file << R"code(
+            Label_caseD_7:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177478;
+                if (recompiled_functions.count(0x173f38)) {
+                    recompiled_functions[0x173f38](ctx, 0x173f38);
+                } else {
+                    ctx.cpuRegs.pc = 0x173f38;
+                    return;
+                }
+                CHECK_SP(0x173f38_case7)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_8:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177490;
+                if (recompiled_functions.count(0x174108)) {
+                    recompiled_functions[0x174108](ctx, 0x174108);
+                } else {
+                    ctx.cpuRegs.pc = 0x174108;
+                    return;
+                }
+                CHECK_SP(0x174108_case8)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_9:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774a8;
+                if (recompiled_functions.count(0x174240)) {
+                    recompiled_functions[0x174240](ctx, 0x174240);
+                } else {
+                    ctx.cpuRegs.pc = 0x174240;
+                    return;
+                }
+                CHECK_SP(0x174240_case9)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_a:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774c0;
+                if (recompiled_functions.count(0x174478)) {
+                    recompiled_functions[0x174478](ctx, 0x174478);
+                } else {
+                    ctx.cpuRegs.pc = 0x174478;
+                    return;
+                }
+                CHECK_SP(0x174478_caseA)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_b:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774d8;
+                if (recompiled_functions.count(0x1745d0)) {
+                    recompiled_functions[0x1745d0](ctx, 0x1745d0);
+                } else {
+                    ctx.cpuRegs.pc = 0x1745d0;
+                    return;
+                }
+                CHECK_SP(0x1745d0_caseB)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_c:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774f0;
+                if (recompiled_functions.count(0x174a70)) {
+                    recompiled_functions[0x174a70](ctx, 0x174a70);
+                } else {
+                    ctx.cpuRegs.pc = 0x174a70;
+                    return;
+                }
+                CHECK_SP(0x174a70_caseC)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_d:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177508;
+                if (recompiled_functions.count(0x174f38)) {
+                    recompiled_functions[0x174f38](ctx, 0x174f38);
+                } else {
+                    ctx.cpuRegs.pc = 0x174f38;
+                    return;
+                }
+                CHECK_SP(0x174f38_caseD)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+    )code" << std::endl;
+
+
+        file << R"code(
+            Label_caseD_e:
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18);
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
+                
+                if (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) {
+                    goto Label_177574;
+                }
+                
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177530;
+                if (recompiled_functions.count(0x1f0e68)) {
+                    recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
+                } else {
+                    ctx.cpuRegs.pc = 0x1f0e68;
+                    return;
+                }
+                CHECK_SP(0x1f0e68_caseE_first)
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177538;
+                if (recompiled_functions.count(0x1f0e68)) {
+                    recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
+                } else {
+                    ctx.cpuRegs.pc = 0x1f0e68;
+                    return;
+                }
+                CHECK_SP(0x1f0e68_caseE_second)
+                
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
+                
+                if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
+                    goto Label_17756c;
+                }
+                
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
+
+            Label_177550:
+                if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
+                    goto Label_177564;
+                }
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17755c;
+                if (recompiled_functions.count(0x1918a8)) {
+                    recompiled_functions[0x1918a8](ctx, 0x1918a8);
+                } else {
+                    ctx.cpuRegs.pc = 0x1918a8;
+                    return;
+                }
+                CHECK_SP(0x1918a8_caseE_loop)
+                
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
+
+            Label_177564:
+                if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
+                    ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
+                    goto Label_177550;
+                }
+
+            Label_17756c:
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177570;
+                if (recompiled_functions.count(0x181400)) {
+                    recompiled_functions[0x181400](ctx, 0x181400);
+                } else {
+                    ctx.cpuRegs.pc = 0x181400;
+                    return;
+                }
+                CHECK_SP(0x181400_caseE)
+
+            Label_177574:
+                ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x54);
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x58);
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[8].UL[0] = 1;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17758c;
+                if (recompiled_functions.count(0x172b60)) {
+                    recompiled_functions[0x172b60](ctx, 0x172b60);
+                } else {
+                    ctx.cpuRegs.pc = 0x172b60;
+                    return;
+                }
+                CHECK_SP(0x172b60_caseE)
+                ctx.cpuRegs.GPR.r[9].UD[0] = ctx.cpuRegs.GPR.r[29].UD[0];
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                    goto Label_1775b0;
+                }
+                
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x54);
+                ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint8_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775a4;
+                if (recompiled_functions.count(0x17b980)) {
+                    recompiled_functions[0x17b980](ctx, 0x17b980);
+                } else {
+                    ctx.cpuRegs.pc = 0x17b980;
+                    return;
+                }
+                CHECK_SP(0x17b980_caseE)
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
+                goto Label_177714;
+
+            Label_1775b0:
+                goto Label_177710;
+    )code" << std::endl;
+
+
+        file << R"code(
+            Label_caseD_f:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775c0;
+                if (recompiled_functions.count(0x174c70)) {
+                    recompiled_functions[0x174c70](ctx, 0x174c70);
+                } else {
+                    ctx.cpuRegs.pc = 0x174c70;
+                    return;
+                }
+                CHECK_SP(0x174c70_caseF)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_10:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775d8;
+                if (recompiled_functions.count(0x174d90)) {
+                    recompiled_functions[0x174d90](ctx, 0x174d90);
+                } else {
+                    ctx.cpuRegs.pc = 0x174d90;
+                    return;
+                }
+                CHECK_SP(0x174d90_case10)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_11:
+                ctx.fpuRegs.fpr[1].UL = 0x3e800000;
+                ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c);
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x4);
+                
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] - ctx.cpuRegs.GPR.r[3].UL[0];
+                ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f;
+                ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[4].SL[0] = ctx.fpuRegs.fpr[1].SL;
+                
+                ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[4].UL[0]) ? 1 : 0;
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 1;
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                    goto Label_caseD_17;
+                }
+                
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4);
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                goto Label_177710;
+
+            Label_caseD_12:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177640;
+                if (recompiled_functions.count(0x175008)) {
+                    recompiled_functions[0x175008](ctx, 0x175008);
+                } else {
+                    ctx.cpuRegs.pc = 0x175008;
+                    return;
+                }
+                CHECK_SP(0x175008_case12)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+    )code" << std::endl;
+
+
+        file << R"code(
+            Label_caseD_13:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177658;
+                if (recompiled_functions.count(0x175160)) {
+                    recompiled_functions[0x175160](ctx, 0x175160);
+                } else {
+                    ctx.cpuRegs.pc = 0x175160;
+                    return;
+                }
+                CHECK_SP(0x175160_case13)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_14:
+                ctx.fpuRegs.fpr[1].UL = 0x3e800000;
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0];
+                ctx.cpuRegs.GPR.r[20].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0];
+                ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x728);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[7].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[18].UL[0] = 6;
+                ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f;
+                ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[6].SL[0] = ctx.fpuRegs.fpr[1].SL;
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776a0;
+                if (recompiled_functions.count(0x259bc0)) {
+                    recompiled_functions[0x259bc0](ctx, 0x259bc0);
+                } else {
+                    ctx.cpuRegs.pc = 0x259bc0;
+                    return;
+                }
+                CHECK_SP(0x259bc0_case14)
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+                ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0] + 0x10;
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776ac;
+                if (recompiled_functions.count(0x11bf10)) {
+                    recompiled_functions[0x11bf10](ctx, 0x11bf10);
+                } else {
+                    ctx.cpuRegs.pc = 0x11bf10;
+                    return;
+                }
+                CHECK_SP(0x11bf10_case14_first)
+                ctx.cpuRegs.GPR.r[5].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10);
+                ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0] + 0x14;
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776bc;
+                if (recompiled_functions.count(0x11bf10)) {
+                    recompiled_functions[0x11bf10](ctx, 0x11bf10);
+                } else {
+                    ctx.cpuRegs.pc = 0x11bf10;
+                    return;
+                }
+                CHECK_SP(0x11bf10_case14_second)
+                ctx.cpuRegs.GPR.r[5].UL[0] = 8;
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x14);
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x19c0;
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x8, ctx.cpuRegs.GPR.r[16].UL[0]);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xc, ctx.cpuRegs.GPR.r[3].UL[0]);
+                goto Label_177710;
+    )code" << std::endl;
+
+
+        file << R"code(
+            Label_caseD_15:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776dc;
+                if (recompiled_functions.count(0x1754b8)) {
+                    recompiled_functions[0x1754b8](ctx, 0x1754b8);
+                } else {
+                    ctx.cpuRegs.pc = 0x1754b8;
+                    return;
+                }
+                CHECK_SP(0x1754b8_case15)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_16:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776f4;
+                if (recompiled_functions.count(0x175618)) {
+                    recompiled_functions[0x175618](ctx, 0x175618);
+                } else {
+                    ctx.cpuRegs.pc = 0x175618;
+                    return;
+                }
+                CHECK_SP(0x175618_case16)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+                goto Label_17770c;
+
+            Label_caseD_17:
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
+
+            Label_177708:
+                ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
+
+            Label_17770c:
+                ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+
+            Label_177710:
+                ctx.cpuRegs.GPR.r[2].UL[0] = 0x18;
+    )code" << std::endl;
+
+
+        file << R"code(
+            Label_177714:
+                if (ctx.cpuRegs.GPR.r[18].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) {
+                    goto Label_17774c;
+                }
+                
+                ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[18].UL[0] & 0x3f;
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                
+                {
+                    uint64_t mask = 0xff03ULL << 48;
+                    mask |= 0xffffULL; mask <<= 16;
+                    mask |= 0xffffULL; mask <<= 16;
+                    mask |= 0xffffULL;
+                    
+                    uint64_t v1_shift = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << 50;
+                    
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shift;
+                    
+                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+                }
+
+            Label_17774c:
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x4);
+                ctx.cpuRegs.GPR.r[3].UL[0] = 6;
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 8;
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[3].UL[0]) {
+                    goto Label_177780;
+                }
+                
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] + ctx.cpuRegs.GPR.r[19].UL[0];
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x80);
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                    goto Label_177778;
+                }
+                ctx.cpuRegs.GPR.r[4].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
+
+            Label_177778:
+                ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0];
+                goto Label_177784;
+
+            Label_177780:
+                ctx.cpuRegs.GPR.r[16].UL[0] = 0;
+
+            Label_177784:
+                if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
+                    goto Label_17779c;
+                }
+                ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + 0xd4;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177790;
+                if (recompiled_functions.count(0x192118)) {
+                    recompiled_functions[0x192118](ctx, 0x192118);
+                } else {
+                    ctx.cpuRegs.pc = 0x192118;
+                    return;
+                }
+                CHECK_SP(0x192118_post_switch)
+                ctx.cpuRegs.GPR.r[5].UL[0] = 0xc;
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0;
+                goto Label_1777a4;
+
+            Label_17779c:
+                ctx.cpuRegs.GPR.r[2].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[18].UL[0] = 0;
+
+            Label_1777a4:
+                if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) {
+                    ctx.cpuRegs.GPR.r[18].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x18);
+                }
+
+            Label_1777ac:
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                {
+                    uint64_t v1 = 0xfc00ULL << 34;
+                    uint64_t a0 = 0xc000ULL << 32;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & v1;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ a0;
+                    ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+                    
+                    if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                        goto Label_177850;
+                    }
+                }
+                    )code" << std::endl;
+
+
+        file << R"code(
+                ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x4);
+                ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
+                
+                if ((ctx.cpuRegs.GPR.r[5].UL[0] ^ 2) == 0) {
+                    goto Label_1777f8;
+                }
+                
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7dc4);
+                ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x1c);
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x56c);
+                ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] - ctx.cpuRegs.GPR.r[3].UL[0];
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x56c, ctx.cpuRegs.GPR.r[2].UL[0]);
+
+            Label_1777f8:
+                if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) {
+                    goto Label_177850;
+                }
+                
+                ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
+                ctx.cpuRegs.GPR.r[5].UL[0] = 4;
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17780c;
+                if (recompiled_functions.count(0x2b3548)) {
+                    recompiled_functions[0x2b3548](ctx, 0x2b3548);
+                } else {
+                    ctx.cpuRegs.pc = 0x2b3548;
+                    return;
+                }
+                CHECK_SP(0x2b3548_post_switch)
+                ctx.cpuRegs.GPR.r[6].UL[0] = 0;
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                    goto Label_17784c;
+                }
+                
+                ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7d14);
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
+                ctx.fpuRegs.fpr[1].UL = 0x3e800000;
+                ctx.fpuRegs.fpr[2].UL = 0x40400000;
+                
+                ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
+                
+                ctx.fpuRegs.fpr[2].f = ctx.fpuRegs.fpr[1].f;
+                ctx.fpuRegs.fpr[2].SL = (int32_t)ctx.fpuRegs.fpr[2].f;
+                ctx.cpuRegs.GPR.r[6].SL[0] = ctx.fpuRegs.fpr[2].SL;
+                
+                ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f;
+                ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
+                ctx.cpuRegs.GPR.r[7].SL[0] = ctx.fpuRegs.fpr[1].SL;
+                
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x177848;
+                if (recompiled_functions.count(0x259b20)) {
+                    recompiled_functions[0x259b20](ctx, 0x259b20);
+                } else {
+                    ctx.cpuRegs.pc = 0x259b20;
+                    return;
+                }
+                CHECK_SP(0x259b20_post_switch)
+                ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x6d0);
+
+            Label_17784c:
+                ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
+    )code" << std::endl;
+
+
+        file << R"code(
+            Label_177850:
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
+                ctx.cpuRegs.GPR.r[7].UD[0] = ctx.cpuRegs.GPR.r[18].UD[0];
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17785c;
+                if (recompiled_functions.count(0x1714a8)) {
+                    recompiled_functions[0x1714a8](ctx, 0x1714a8);
+                } else {
+                    ctx.cpuRegs.pc = 0x1714a8;
+                    return;
+                }
+                CHECK_SP(0x1714a8_epilogue)
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                
+                ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                {
+                    uint64_t v1 = 0xfc00ULL << 34;
+                    uint64_t a0 = 0xc000ULL << 32;
+                    ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v1;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] ^ a0;
+                    
+                    if (ctx.cpuRegs.GPR.r[2].UL[0] < 1) {
+                        goto Label_177898;
+                    }
+                    
+                    uint64_t d000 = 0xd000ULL << 32;
+                    if (ctx.cpuRegs.GPR.r[4].UD[0] != d000) {
+                        goto Label_1778dc;
+                    }
+                    ctx.cpuRegs.GPR.r[2].UL[0] = 0;
+                }
+
+            Label_177898:
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x17789c;
+                if (recompiled_functions.count(0x11e4b8)) {
+                    recompiled_functions[0x11e4b8](ctx, 0x11e4b8);
+                } else {
+                    ctx.cpuRegs.pc = 0x11e4b8;
+                    return;
+                }
+                CHECK_SP(0x11e4b8_epilogue)
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
+                
+                if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
+                    goto Label_1778c8;
+                }
+                
+                ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + 0xd4;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778ac;
+                if (recompiled_functions.count(0x192118)) {
+                    recompiled_functions[0x192118](ctx, 0x192118);
+                } else {
+                    ctx.cpuRegs.pc = 0x192118;
+                    return;
+                }
+                CHECK_SP(0x192118_epilogue)
+                ctx.cpuRegs.GPR.r[5].UL[0] = 0x16;
+                
+                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x20);
+                
+                if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
+                    goto Label_1778c0;
+                }
+                ctx.cpuRegs.GPR.r[4].UL[0] = 0;
+                ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
+
+            Label_1778c0:
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778c4;
+                if (recompiled_functions.count(0x1e5818)) {
+                    recompiled_functions[0x1e5818](ctx, 0x1e5818);
+                } else {
+                    ctx.cpuRegs.pc = 0x1e5818;
+                    return;
+                }
+                CHECK_SP(0x1e5818_epilogue)
+
+            Label_1778c8:
+                if (ctx.cpuRegs.GPR.r[22].UL[0] != 0) {
+                    goto Label_1778dc;
+                }
+                ctx.cpuRegs.GPR.r[2].UL[0] = 1;
+                ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778d4;
+                if (recompiled_functions.count(0x15bcc0)) {
+                    recompiled_functions[0x15bcc0](ctx, 0x15bcc0);
+                } else {
+                    ctx.cpuRegs.pc = 0x15bcc0;
+                    return;
+                }
+                CHECK_SP(0x15bcc0_epilogue)
+                ctx.cpuRegs.GPR.r[2].UL[0] = 1;
+
+            Label_1778dc:
+                // Final SP check before epilogue restore
+                if (ctx.cpuRegs.GPR.r[29].UL[0] != expected_sp) {
+                    g_logFile << "[177168] SP CORRUPTED at epilogue! expected=0x" 
+                            << std::hex << expected_sp 
+                            << " got=0x" << ctx.cpuRegs.GPR.r[29].UL[0] << std::endl;
+                }
+    )code" << std::endl;
+
+
+        file << R"code(
+                ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20);
+                ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28);
+                ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30);
+                ctx.cpuRegs.GPR.r[19].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x38);
+                ctx.cpuRegs.GPR.r[20].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40);
+                ctx.cpuRegs.GPR.r[21].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48);
+                ctx.cpuRegs.GPR.r[22].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x50);
+                ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x58);
+                ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x60;
                 return;
+
+        #undef CHECK_SP
             }
-            memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
-            ctx.cpuRegs.GPR.r[18].UL[0] = 9;
-            goto Label_177710;
-        }
 
-    Label_17744c:
-        ctx.cpuRegs.GPR.r[18].UL[0] = 6;
-        goto Label_177710;
-
-    Label_caseD_6:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177460;
-        if (recompiled_functions.count(0x173ce8)) {
-            recompiled_functions[0x173ce8](ctx, 0x173ce8);
-        } else {
-            ctx.cpuRegs.pc = 0x173ce8;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-    )code" << std::endl;
-    file << R"code(
-    Label_caseD_7:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177478;
-        if (recompiled_functions.count(0x173f38)) {
-            recompiled_functions[0x173f38](ctx, 0x173f38);
-        } else {
-            ctx.cpuRegs.pc = 0x173f38;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_8:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177490;
-        if (recompiled_functions.count(0x174108)) {
-            recompiled_functions[0x174108](ctx, 0x174108);
-        } else {
-            ctx.cpuRegs.pc = 0x174108;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_9:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774a8;
-        if (recompiled_functions.count(0x174240)) {
-            recompiled_functions[0x174240](ctx, 0x174240);
-        } else {
-            ctx.cpuRegs.pc = 0x174240;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_a:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774c0;
-        if (recompiled_functions.count(0x174478)) {
-            recompiled_functions[0x174478](ctx, 0x174478);
-        } else {
-            ctx.cpuRegs.pc = 0x174478;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_b:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774d8;
-        if (recompiled_functions.count(0x1745d0)) {
-            recompiled_functions[0x1745d0](ctx, 0x1745d0);
-        } else {
-            ctx.cpuRegs.pc = 0x1745d0;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_c:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774f0;
-        if (recompiled_functions.count(0x174a70)) {
-            recompiled_functions[0x174a70](ctx, 0x174a70);
-        } else {
-            ctx.cpuRegs.pc = 0x174a70;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_d:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177508;
-        if (recompiled_functions.count(0x174f38)) {
-            recompiled_functions[0x174f38](ctx, 0x174f38);
-        } else {
-            ctx.cpuRegs.pc = 0x174f38;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_e:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18);
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
-        
-        if (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) {
-            goto Label_177574;
-        }
-        
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177530;
-        if (recompiled_functions.count(0x1f0e68)) {
-            recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
-        } else {
-            ctx.cpuRegs.pc = 0x1f0e68;
-            return;
-        }
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177538;
-        if (recompiled_functions.count(0x1f0e68)) {
-            recompiled_functions[0x1f0e68](ctx, 0x1f0e68);
-        } else {
-            ctx.cpuRegs.pc = 0x1f0e68;
-            return;
-        }
-        
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
-        
-        if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
-            goto Label_17756c;
-        }
-        
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
-
-    Label_177550:
-        if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
-            goto Label_177564;
-        }
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17755c;
-        if (recompiled_functions.count(0x1918a8)) {
-            recompiled_functions[0x1918a8](ctx, 0x1918a8);
-        } else {
-            ctx.cpuRegs.pc = 0x1918a8;
-            return;
-        }
-        
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
-
-    Label_177564:
-        if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
-            ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
-            goto Label_177550;
-        }
-
-    Label_17756c:
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177570;
-        if (recompiled_functions.count(0x181400)) {
-            recompiled_functions[0x181400](ctx, 0x181400);
-        } else {
-            ctx.cpuRegs.pc = 0x181400;
-            return;
-        }
-
-    Label_177574:
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x54);
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[7].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x58);
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[8].UL[0] = 1;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17758c;
-        if (recompiled_functions.count(0x172b60)) {
-            recompiled_functions[0x172b60](ctx, 0x172b60);
-        } else {
-            ctx.cpuRegs.pc = 0x172b60;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[9].UD[0] = ctx.cpuRegs.GPR.r[29].UD[0];
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-            goto Label_1775b0;
-        }
-        
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x54);
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint8_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0); // local_60
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775a4;
-        if (recompiled_functions.count(0x17b980)) {
-            recompiled_functions[0x17b980](ctx, 0x17b980);
-        } else {
-            ctx.cpuRegs.pc = 0x17b980;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
-        goto Label_177714;
-
-    Label_1775b0:
-        goto Label_177710;
-
-    Label_caseD_f:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775c0;
-        if (recompiled_functions.count(0x174c70)) {
-            recompiled_functions[0x174c70](ctx, 0x174c70);
-        } else {
-            ctx.cpuRegs.pc = 0x174c70;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_10:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775d8;
-        if (recompiled_functions.count(0x174d90)) {
-            recompiled_functions[0x174d90](ctx, 0x174d90);
-        } else {
-            ctx.cpuRegs.pc = 0x174d90;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_11:
-        ctx.fpuRegs.fpr[1].UL = 0x3e800000;
-        ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x4);
-        
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] - ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f; // cvt.w.s
-        ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[4].SL[0] = ctx.fpuRegs.fpr[1].SL;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[4].UL[0]) ? 1 : 0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] ^ 1;
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-            goto Label_caseD_17;
-        }
-        
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        
-        // dsll32 0, dsra32 0 -> effectively 32-bit sign extension
-        // Assuming v0 was 32-bit, this is fine.
-        goto Label_177710;
-
-    Label_caseD_12:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177640;
-        if (recompiled_functions.count(0x175008)) {
-            recompiled_functions[0x175008](ctx, 0x175008);
-        } else {
-            ctx.cpuRegs.pc = 0x175008;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_13:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177658;
-        if (recompiled_functions.count(0x175160)) {
-            recompiled_functions[0x175160](ctx, 0x175160);
-        } else {
-            ctx.cpuRegs.pc = 0x175160;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_14:
-        ctx.fpuRegs.fpr[1].UL = 0x3e800000;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0];
-        ctx.cpuRegs.GPR.r[20].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0];
-        ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x728);
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[7].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[18].UL[0] = 6;
-        ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f; // cvt.w.s
-        ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[6].SL[0] = ctx.fpuRegs.fpr[1].SL;
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776a0;
-        if (recompiled_functions.count(0x259bc0)) {
-            recompiled_functions[0x259bc0](ctx, 0x259bc0);
-        } else {
-            ctx.cpuRegs.pc = 0x259bc0;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0] + 0x10;
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776ac;
-        if (recompiled_functions.count(0x11bf10)) {
-            recompiled_functions[0x11bf10](ctx, 0x11bf10);
-        } else {
-            ctx.cpuRegs.pc = 0x11bf10;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10); // local_50
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0] + 0x14;
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776bc;
-        if (recompiled_functions.count(0x11bf10)) {
-            recompiled_functions[0x11bf10](ctx, 0x11bf10);
-        } else {
-            ctx.cpuRegs.pc = 0x11bf10;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UL[0] = 8;
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x14); // local_4c
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x19c0;
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x8, ctx.cpuRegs.GPR.r[16].UL[0]);
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xc, ctx.cpuRegs.GPR.r[3].UL[0]); // Delay slot
-        goto Label_177710;
-
-    Label_caseD_15:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776dc;
-        if (recompiled_functions.count(0x1754b8)) {
-            recompiled_functions[0x1754b8](ctx, 0x1754b8);
-        } else {
-            ctx.cpuRegs.pc = 0x1754b8;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_16:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776f4;
-        if (recompiled_functions.count(0x175618)) {
-            recompiled_functions[0x175618](ctx, 0x175618);
-        } else {
-            ctx.cpuRegs.pc = 0x175618;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-        goto Label_17770c;
-
-    Label_caseD_17:
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
-
-    Label_177708:
-        ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-
-    Label_17770c:
-        ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
-
-    Label_177710:
-        ctx.cpuRegs.GPR.r[2].UL[0] = 0x18;
-
-    Label_177714:
-        if (ctx.cpuRegs.GPR.r[18].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) {
-            goto Label_17774c;
-        }
-        
-        ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[18].UL[0] & 0x3f;
-        ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        
-        {
-            uint64_t mask = 0xff03ULL << 48; // chained shifts
-            mask |= 0xffffULL; mask <<= 16;
-            mask |= 0xffffULL; mask <<= 16;
-            mask |= 0xffffULL;
-            
-            uint64_t v1_shift = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << 50; // dsll32 18
-            
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask;
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shift;
-            
-            memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
-        }
-    
-    )code" << std::endl;
-    file << R"code(
-    Label_17774c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[3].UL[0] = 6;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] >> 8;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xf;
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[3].UL[0]) {
-            goto Label_177780;
-        }
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] << 2;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] + ctx.cpuRegs.GPR.r[19].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x80);
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-            goto Label_177778;
-        }
-        ctx.cpuRegs.GPR.r[4].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
-
-    Label_177778:
-        goto Label_177784;
-        ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0];
-
-    Label_177780:
-        ctx.cpuRegs.GPR.r[16].UL[0] = 0;
-
-    Label_177784:
-        if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
-            goto Label_17779c;
-        }
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + 0xd4;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177790;
-        if (recompiled_functions.count(0x192118)) {
-            recompiled_functions[0x192118](ctx, 0x192118);
-        } else {
-            ctx.cpuRegs.pc = 0x192118;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UL[0] = 0xc;
-        goto Label_1777a4;
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0;
-
-    Label_17779c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[18].UL[0] = 0;
-
-    Label_1777a4:
-        if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) {
-            ctx.cpuRegs.GPR.r[18].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x18);
-        }
-
-    Label_1777ac:
-        ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        {
-            uint64_t v1 = 0xfc00ULL << 34; // dsll32 2
-            uint64_t a0 = 0xc000ULL << 32; // dsll32 0
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & v1;
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ a0;
-            ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
-            
-            if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-                goto Label_177850;
-            }
-        }
-        
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x4);
-        ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-        
-        if ((ctx.cpuRegs.GPR.r[5].UL[0] ^ 2) == 0) {
-            goto Label_1777f8;
-        }
-        
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7dc4);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x1c);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x56c);
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] - ctx.cpuRegs.GPR.r[3].UL[0];
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x56c, ctx.cpuRegs.GPR.r[2].UL[0]);
-
-            )code" << std::endl;
-    file << R"code(
-    Label_1777f8:
-        if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) {
-            goto Label_177850;
-        }
-        
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
-        ctx.cpuRegs.GPR.r[5].UL[0] = 4;
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17780c;
-        if (recompiled_functions.count(0x2b3548)) {
-            recompiled_functions[0x2b3548](ctx, 0x2b3548);
-        } else {
-            ctx.cpuRegs.pc = 0x2b3548;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[6].UL[0] = 0;
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-            goto Label_17784c;
-        }
-        
-        ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7d14);
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
-        ctx.fpuRegs.fpr[1].UL = 0x3e800000;
-        ctx.fpuRegs.fpr[2].UL = 0x40400000;
-        
-        ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
-        
-        ctx.fpuRegs.fpr[2].f = ctx.fpuRegs.fpr[1].f; // cvt.w.s
-        ctx.fpuRegs.fpr[2].SL = (int32_t)ctx.fpuRegs.fpr[2].f;
-        ctx.cpuRegs.GPR.r[6].SL[0] = ctx.fpuRegs.fpr[2].SL;
-        
-        ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[0].f; // cvt.w.s
-        ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[1].f;
-        ctx.cpuRegs.GPR.r[7].SL[0] = ctx.fpuRegs.fpr[1].SL;
-        
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x177848;
-        if (recompiled_functions.count(0x259b20)) {
-            recompiled_functions[0x259b20](ctx, 0x259b20);
-        } else {
-            ctx.cpuRegs.pc = 0x259b20;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x6d0);
-
-    Label_17784c:
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
-
-    Label_177850:
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
-        ctx.cpuRegs.GPR.r[7].UD[0] = ctx.cpuRegs.GPR.r[18].UD[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17785c;
-        if (recompiled_functions.count(0x1714a8)) {
-            recompiled_functions[0x1714a8](ctx, 0x1714a8);
-        } else {
-            ctx.cpuRegs.pc = 0x1714a8;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        
-        ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-        {
-            uint64_t v1 = 0xfc00ULL << 34; // dsll32 2
-            uint64_t a0 = 0xc000ULL << 32; // dsll32 0
-            ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v1;
-            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] ^ a0;
-            
-            if (ctx.cpuRegs.GPR.r[2].UL[0] < 1) {
-                goto Label_177898;
-            }
-            
-            uint64_t d000 = 0xd000ULL << 32;
-            if (ctx.cpuRegs.GPR.r[4].UD[0] != d000) {
-                goto Label_1778dc;
-            }
-            ctx.cpuRegs.GPR.r[2].UL[0] = 0;
-        }
-    )code" << std::endl;
-    file << R"code(
-    Label_177898:
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x17789c;
-        if (recompiled_functions.count(0x11e4b8)) {
-            recompiled_functions[0x11e4b8](ctx, 0x11e4b8);
-        } else {
-            ctx.cpuRegs.pc = 0x11e4b8;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
-        
-        if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
-            goto Label_1778c8;
-        }
-        
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + 0xd4;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778ac;
-        if (recompiled_functions.count(0x192118)) {
-            recompiled_functions[0x192118](ctx, 0x192118);
-        } else {
-            ctx.cpuRegs.pc = 0x192118;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[5].UL[0] = 0x16;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x20);
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
-            goto Label_1778c0;
-        }
-        ctx.cpuRegs.GPR.r[4].UL[0] = 0;
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
-
-    Label_1778c0:
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778c4;
-        if (recompiled_functions.count(0x1e5818)) {
-            recompiled_functions[0x1e5818](ctx, 0x1e5818);
-        } else {
-            ctx.cpuRegs.pc = 0x1e5818;
-            return;
-        }
-
-    Label_1778c8:
-        if (ctx.cpuRegs.GPR.r[22].UL[0] != 0) {
-            goto Label_1778dc;
-        }
-        ctx.cpuRegs.GPR.r[2].UL[0] = 1;
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778d4;
-        if (recompiled_functions.count(0x15bcc0)) {
-            recompiled_functions[0x15bcc0](ctx, 0x15bcc0);
-        } else {
-            ctx.cpuRegs.pc = 0x15bcc0;
-            return;
-        }
-        ctx.cpuRegs.GPR.r[2].UL[0] = 1;
-
-    Label_1778dc:
-        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20);
-        ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28);
-        ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30);
-        ctx.cpuRegs.GPR.r[19].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x38);
-        ctx.cpuRegs.GPR.r[20].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40);
-        ctx.cpuRegs.GPR.r[21].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x48);
-        ctx.cpuRegs.GPR.r[22].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x50);
-        ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x58);
-        ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x60;
+        )code" << std::endl;
         return;
     }
-    )code" << std::endl;
+    if (func.base_address == 0x00101590) {
+        file << R"code(
+        
+            void FUN_00101590(CpuContext& ctx) {
+                Label_0000:
+                    ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0] + 0xfffffff0);
+                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);
+                    
+                    // DELAY SLOT: lw a0, 0xf8(a0) — dereference pointer at obj+0xf8
+                    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+                        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0xf8));
+                    
+                    ctx.cpuRegs.GPR.r[31].UL[0] = 0x1015a0;
+                    if (recompiled_functions.count(0x17c060)) {
+                        recompiled_functions[0x17c060](ctx, 0x17c060);
+                        goto Label_0001;
+                    } else {
+                        ctx.cpuRegs.pc = 0x17c060;
+                    }
+
+                Label_0001:
+                    ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+                    ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0] + 0x10);
+                    return;
+                }
+
+        )code" << std::endl;
         return;
     }
     if (func.base_address == 0x00173238) {
@@ -2602,6 +2790,3873 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
         return;
     }
+
+
+    if (func.base_address == 0x002a0250) {
+        file << R"code(
+// Function: FUN_002a0250 at 0x2a0250
+void FUN_002a0250(CpuContext& ctx) {
+Label_0000: // 0x2a0250
+        ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0xffffffe0);
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[18].UD[0]);
+        ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
+        ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x20)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x24));
+        ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) >> 20);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0] & static_cast<uint64_t>(0x3f);
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a028c;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[5].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) >> 12);
+        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & static_cast<uint64_t>(0xf);
+        ctx.cpuRegs.GPR.r[3].UD[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0xe) ? 1 : 0;
+    bool branch_taken_2a029c = (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xfffff0ff);
+    if (branch_taken_2a029c) {
+        goto Label_0002;
+    } else {
+        goto Label_0001;
+    }
+
+Label_0001: // 0x2a02a4
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 8);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0] & ctx.cpuRegs.GPR.r[2].UD[0];
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0xffff0000);
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] | static_cast<uint64_t>(0xfff);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[4].UD[0];
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | static_cast<uint64_t>(0xe000);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x8, ctx.cpuRegs.GPR.r[3].UL[0]);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a02cc
+// Fall through to 0x2a02cc
+    goto Label_0002; // Fall through
+
+Label_0002: // 0x2a02cc
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0xfff00000);
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] | static_cast<uint64_t>(0xffff);
+        ctx.cpuRegs.GPR.r[4].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0x21) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+    bool branch_taken_2a02e0 = (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    if (branch_taken_2a02e0) {
+        goto Label_0044;
+    } else {
+        goto Label_0003;
+    }
+
+Label_0003: // 0x2a02e8
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x58e0);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a02fc
+// Fall through to 0x2a02fc
+    goto Label_0004; // Fall through
+
+Label_0004: // 0x2a02fc - SWITCH DISPATCH (jr to internal labels)
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+        switch (target) {
+            case 0x2a06f4: goto Label_0044;  // case 0
+            case 0x2a06d4: goto Label_0042;  // case 1,4,7,0xa,0x13,0x16,0x19,0x1c
+            case 0x2a0304: goto Label_0005;  // case 2
+            case 0x2a030c: goto Label_0006;  // case 3
+            case 0x2a035c: goto Label_0010;  // case 5
+            case 0x2a0374: goto Label_0011;  // case 6
+            case 0x2a0388: goto Label_0012;  // case 8
+            case 0x2a03a0: goto Label_0013;  // case 9
+            case 0x2a03b4: goto Label_0014;  // case 0xb
+            case 0x2a03d4: goto Label_0015;  // case 0xc
+            case 0x2a0410: goto Label_0017;  // case 0xd
+            case 0x2a0428: goto Label_0018;  // case 0xe
+            case 0x2a043c: goto Label_0019;  // case 0xf
+            case 0x2a0450: goto Label_0020;  // case 0x10
+            case 0x2a046c: goto Label_0021;  // case 0x11
+            case 0x2a04b4: goto Label_0022;  // case 0x12
+            case 0x2a04c8: goto Label_0023;  // case 0x14
+            case 0x2a04e0: goto Label_0024;  // case 0x15
+            case 0x2a04f4: goto Label_0025;  // case 0x17
+            case 0x2a05a0: goto Label_0028;  // case 0x18
+            case 0x2a05c0: goto Label_0030;  // case 0x1a
+            case 0x2a0630: goto Label_0033;  // case 0x1b
+            case 0x2a0650: goto Label_0035;  // case 0x1d
+            case 0x2a0674: goto Label_0037;  // case 0x1e
+            case 0x2a0698: goto Label_0039;  // case 0x1f
+            case 0x2a06dc: goto Label_0043;  // case 0x20
+            default:
+                g_logFile << "[FUN_002a0250] UNKNOWN switch target: 0x"
+                          << std::hex << target << " s0=" << ctx.cpuRegs.GPR.r[16].UL[0] << std::endl;
+                goto Label_0042;  // default → case 1 (s0=0)
+        }
+    }
+
+
+Label_0005: // 0x2a0304
+        ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
+    goto Label_0044;
+
+Label_0006: // 0x2a030c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0xc));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) - static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]));
+        // slt - Set on Less Than (Signed)
+    ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[4].SL[0]) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ static_cast<uint64_t>(0x1);
+        bool cond_2753316 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+    if (cond_2753316) {
+        // Delay Slot (Likely)
+            // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        goto Label_0009;
+    } else {
+        goto Label_0007;
+    }
+
+Label_0007: // 0x2a032c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x38)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x3c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0340;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0340 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x4);
+    if (branch_taken_2a0340) {
+        goto Label_0027;
+    } else {
+        goto Label_0008;
+    }
+
+Label_0008: // 0x2a0348
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+    goto Label_0045;
+
+Label_0009: // 0x2a0350
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) >> 20);
+        ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & static_cast<uint64_t>(0x3f);
+    goto Label_0044;
+
+Label_0010: // 0x2a035c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x2);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x6);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
+    goto Label_0032;
+
+Label_0011: // 0x2a0374
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x2);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x7);
+    goto Label_0016;
+
+Label_0012: // 0x2a0388
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x9);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
+    goto Label_0032;
+
+Label_0013: // 0x2a03a0
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xa);
+    goto Label_0016;
+
+Label_0014: // 0x2a03b4
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+       // JAL was called 
+   // The address after JAL is: 0x2a03bc
+   // The next block should be: 2a03d4
+ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a03bc;
+    if (recompiled_functions.count(0x2a7f60)) {
+        recompiled_functions[0x2a7f60](ctx, 0x2a7f60);
+
+    } else {
+        ctx.cpuRegs.pc = 0x2a7f60;
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x4);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xc);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
+    goto Label_0032;
+
+Label_0015: // 0x2a03d4
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x4);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xd);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a03e4
+// Fall through to 0x2a03e4
+    goto Label_0016; // Fall through
+        )code" << std::endl;
+
+        file << R"code(
+Label_0016: // 0x2a03e4
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0xc));
+        ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[7].SL[0]) - static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[8].UL[0]) + 0x10)));
+        // slt - Set on Less Than (Signed)
+    ctx.cpuRegs.GPR.r[7].UD[0] = (ctx.cpuRegs.GPR.r[7].SL[0] < ctx.cpuRegs.GPR.r[3].SL[0]) ? 1 : 0;
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[8].UL[0]) + 0x14));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        ctx.cpuRegs.GPR.r[7].UD[0] = ctx.cpuRegs.GPR.r[7].UD[0] ^ static_cast<uint64_t>(0x1);
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0408;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+
+Label_0017: // 0x2a0410
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x4000000);
+        ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xe);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[3].UD[0];
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    goto Label_0044;
+
+Label_0018: // 0x2a0428
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+       // JAL was called 
+   // The address after JAL is: 0x2a0434
+   // The next block should be: 2a043c
+ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0434;
+    if (recompiled_functions.count(0x29fef8)) {
+        recompiled_functions[0x29fef8](ctx, 0x29fef8);
+
+    } else {
+        ctx.cpuRegs.pc = 0x29fef8;
+    }
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+
+Label_0019: // 0x2a043c
+        ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x5);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x10);
+    goto Label_0029;
+
+Label_0020: // 0x2a0450
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0xfbff0000);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | static_cast<uint64_t>(0xffff);
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & ctx.cpuRegs.GPR.r[2].UD[0];
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
+    goto Label_0044;
+
+Label_0021: // 0x2a046c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+       // JAL was called 
+   // The address after JAL is: 0x2a0474
+   // The next block should be: 2a04b4
+ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0474;
+    if (recompiled_functions.count(0x2a7f60)) {
+        recompiled_functions[0x2a7f60](ctx, 0x2a7f60);
+
+    } else {
+        ctx.cpuRegs.pc = 0x2a7f60;
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x1c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(0x87ff0000);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | static_cast<uint64_t>(0xffff);
+        ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xfffffff0);
+        ctx.cpuRegs.GPR.r[9].SD[0] = static_cast<int32_t>(0x8000000);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x7);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x15);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[4].UD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[9].UD[0];
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & ctx.cpuRegs.GPR.r[8].UD[0];
+    goto Label_0031;
+
+Label_0022: // 0x2a04b4
+        ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x6);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x13);
+    goto Label_0034;
+
+Label_0023: // 0x2a04c8
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x7);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x15);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
+    goto Label_0032;
+
+Label_0024: // 0x2a04e0
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+       // JAL was called 
+   // The address after JAL is: 0x2a04ec
+   // The next block should be: 2a04f4
+ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a04ec;
+    if (recompiled_functions.count(0x29fde0)) {
+        recompiled_functions[0x29fde0](ctx, 0x29fde0);
+
+    } else {
+        ctx.cpuRegs.pc = 0x29fde0;
+    }
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+
+Label_0025: // 0x2a04f4
+        ctx.cpuRegs.GPR.r[2].UD[0] = static_cast<uint64_t>(memory::read<uint8_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(0x87ff0000);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0] | static_cast<uint64_t>(0xffff);
+        // dsrl - Doubleword Shift Right Logical
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 4;
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x1c));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[9].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xfffffff0);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]));
+        ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(0x10000000);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x0));
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[6].UL[0]);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x1c));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & ctx.cpuRegs.GPR.r[5].UD[0];
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[9].UD[0];
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] | ctx.cpuRegs.GPR.r[8].UD[0];
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0]) + 0x28));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x40)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x44));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[6].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0560;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0560 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x8);
+    if (branch_taken_2a0560) {
+        goto Label_0027;
+    } else {
+        goto Label_0026;
+    }
+
+Label_0026: // 0x2a0568
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x18);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
+    goto Label_0032;
+
+Label_0027: // 0x2a057c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0xfff00000);
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] | static_cast<uint64_t>(0xffff);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(0x10000);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+        ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[4].UD[0];
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    goto Label_0044;
+
+Label_0028: // 0x2a05a0
+        ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x8);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x19);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a05b0
+// Fall through to 0x2a05b0
+    goto Label_0029; // Fall through
+
+Label_0029: // 0x2a05b0
+       //nop 
+       // JAL was called 
+   // The address after JAL is: 0x2a05b8
+   // The next block should be: 2a05c0
+ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a05b8;
+    if (recompiled_functions.count(0x29fc98)) {
+        recompiled_functions[0x29fc98](ctx, 0x29fc98);
+
+    } else {
+        ctx.cpuRegs.pc = 0x29fc98;
+    }
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+        )code" << std::endl;
+
+        file << R"code(
+Label_0030: // 0x2a05c0
+        ctx.cpuRegs.GPR.r[2].UD[0] = static_cast<uint64_t>(memory::read<uint8_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(0x87ff0000);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | static_cast<uint64_t>(0xffff);
+        // dsrl - Doubleword Shift Right Logical
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 4;
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x1c));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[9].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xfffffff0);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]));
+        ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(0x8000000);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x7);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x15);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[4].UD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[8].UD[0];
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & ctx.cpuRegs.GPR.r[9].UD[0];
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0610
+// Fall through to 0x2a0610
+    goto Label_0031; // Fall through
+
+Label_0031: // 0x2a0610
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[3].UL[0]);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0]) + 0x1c));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0620
+// Fall through to 0x2a0620
+    goto Label_0032; // Fall through
+
+Label_0032: // 0x2a0620
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0628;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+
+Label_0033: // 0x2a0630
+        ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x9);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1c);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0640
+// Fall through to 0x2a0640
+    goto Label_0034; // Fall through
+
+Label_0034: // 0x2a0640
+       //nop 
+       // JAL was called 
+   // The address after JAL is: 0x2a0648
+   // The next block should be: 2a0650
+ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0648;
+    if (recompiled_functions.count(0x29fb50)) {
+        recompiled_functions[0x29fb50](ctx, 0x29fb50);
+
+    } else {
+        ctx.cpuRegs.pc = 0x29fb50;
+    }
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+
+Label_0035: // 0x2a0650
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x38)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x3c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0664;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0664 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1d);
+    if (branch_taken_2a0664) {
+        goto Label_0042;
+    } else {
+        goto Label_0036;
+    }
+
+Label_0036: // 0x2a066c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+    goto Label_0041;
+
+Label_0037: // 0x2a0674
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x38)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x3c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0688;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0688 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1e);
+    if (branch_taken_2a0688) {
+        goto Label_0042;
+    } else {
+        goto Label_0038;
+    }
+
+Label_0038: // 0x2a0690
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+    goto Label_0041;
+
+Label_0039: // 0x2a0698
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x38)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x3c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a06ac;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a06ac = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1f);
+    if (branch_taken_2a06ac) {
+        goto Label_0042;
+    } else {
+        goto Label_0040;
+    }
+
+Label_0040: // 0x2a06b4
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a06b8
+// Fall through to 0x2a06b8
+    goto Label_0041; // Fall through
+
+Label_0041: // 0x2a06b8
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0xc));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) - static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]));
+        // slt - Set on Less Than (Signed)
+    ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[4].SL[0]) ? 1 : 0;
+        // movn - Move Conditional on Not Zero
+    if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0];
+    goto Label_0044;
+
+Label_0042: // 0x2a06d4
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0044;
+
+Label_0043: // 0x2a06dc
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0xc));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) - static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]));
+        // slt - Set on Less Than (Signed)
+    ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[4].SL[0]) ? 1 : 0;
+        ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) << 5);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a06f4
+// Fall through to 0x2a06f4
+    goto Label_0044; // Fall through
+
+Label_0044: // 0x2a06f4
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a06f8
+// Fall through to 0x2a06f8
+    goto Label_0045; // Fall through
+
+Label_0045: // 0x2a06f8
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x28)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x2c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0708;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0xfc0f0000);
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0] & static_cast<uint64_t>(0x3f);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | static_cast<uint64_t>(0xffff);
+        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & ctx.cpuRegs.GPR.r[2].UD[0];
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) << 20);
+        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | ctx.cpuRegs.GPR.r[3].UD[0];
+    bool branch_taken_2a0724 = (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
+    if (branch_taken_2a0724) {
+        goto Label_0048;
+    } else {
+        goto Label_0046;
+    }
+
+Label_0046: // 0x2a072c
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+    bool branch_taken_2a0730 = (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]);
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+        if (branch_taken_2a0730) {
+        goto Label_0049;
+    } else {
+        goto Label_0047;
+    }
+
+Label_0047: // 0x2a0738
+        ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x8);
+    goto Label_0051;
+
+Label_0048: // 0x2a0740
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0xffff0000);
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] | static_cast<uint64_t>(0xfff);
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
+    goto Label_0050;
+        )code" << std::endl;
+
+        file << R"code(
+Label_0049: // 0x2a0758
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a075c
+// Fall through to 0x2a075c
+    goto Label_0050; // Fall through
+
+Label_0050: // 0x2a075c
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+        ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x8);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0764
+// Fall through to 0x2a0764
+    goto Label_0051; // Fall through
+
+Label_0051: // 0x2a0764
+        ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x10);
+        ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x18);
+        ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x20);
+    return; // Return from function
+
+}
+
+        
+        
+        )code" << std::endl;
+        return;
+
+    }
+
+    if (func.base_address == 0x002a0bb0) {
+
+        file << R"code(
+        // Function: FUN_002a0bb0 at 0x2a0bb0
+void FUN_002a0bb0(CpuContext& ctx) {
+Label_0000: // 0x2a0bb0
+        ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0xffffffe0);
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[17].UD[0]);
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[18].UD[0]);
+        ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & static_cast<uint64_t>(0xf);
+        ctx.cpuRegs.GPR.r[3].UD[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x7) ? 1 : 0;
+    bool branch_taken_2a0bd4 = (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    if (branch_taken_2a0bd4) {
+        goto Label_0058;
+    } else {
+        goto Label_0001;
+    }
+
+Label_0001: // 0x2a0bdc
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x5d00);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0bf0
+// Fall through to 0x2a0bf0
+    goto Label_0002; // Fall through
+
+Label_0002: // 0x2a0bf0 - SWITCH on (*param_1 & 0xf)
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+        switch (target) {
+            case 0x2a0bf8: goto Label_0003;  // case 1
+            case 0x2a0d34: goto Label_0017;  // case 2
+            case 0x2a0d60: goto Label_0018;  // case 3,4
+            case 0x2a0f4c: goto Label_0040;  // case 5
+            case 0x2a1040: goto Label_0054;  // case 6
+            case 0x2a1080: goto Label_0058;  // case 0 / default
+            default:
+                g_logFile << "[FUN_2a0bb0] SW1 unknown: 0x" << std::hex << target << std::endl;
+                goto Label_0058;
+        }
+    }
+
+
+Label_0003: // 0x2a0bf8
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x38)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x3c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0c10;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        bool cond_2755600 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+    if (cond_2755600) {
+        // Delay Slot (Likely)
+            // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        goto Label_0016;
+    } else {
+        goto Label_0004;
+    }
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0004: // 0x2a0c18
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x40)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x44));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0c30;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0c30 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
+    if (branch_taken_2a0c30) {
+        goto Label_0015;
+    } else {
+        goto Label_0005;
+    }
+
+Label_0005: // 0x2a0c38
+    if (ctx.cpuRegs.GPR.r[16].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) {
+            // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        goto Label_0014;
+    } else {
+        goto Label_0006;
+    }
+
+Label_0006: // 0x2a0c40
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x68)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x6c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0c58;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x60)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x64));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0c74;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x48)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x4c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0c90;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0c90 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < ctx.cpuRegs.GPR.r[16].UL[0]) ? 1 : 0;
+    if (branch_taken_2a0c90) {
+        goto Label_0010;
+    } else {
+        goto Label_0007;
+    }
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0007: // 0x2a0c98
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x50)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x54));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0cb0;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0cb0 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[16].UL[0]);
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        if (branch_taken_2a0cb0) {
+        goto Label_0009;
+    } else {
+        goto Label_0008;
+    }
+
+Label_0008: // 0x2a0cb8
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[18].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[16].UL[0]) ? 1 : 0;
+    bool branch_taken_2a0cc0 = (ctx.cpuRegs.GPR.r[2].UL[0] != 0);
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    if (branch_taken_2a0cc0) {
+        goto Label_0011;
+    } else {
+        goto Label_0009;
+    }
+
+Label_0009: // 0x2a0cc8
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0011;
+
+Label_0010: // 0x2a0cd4
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ static_cast<uint64_t>(0x1);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0cd8
+// Fall through to 0x2a0cd8
+    goto Label_0011; // Fall through
+
+Label_0011: // 0x2a0cd8
+    bool branch_taken_2a0cd8 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+    if (branch_taken_2a0cd8) {
+        goto Label_0013;
+    } else {
+        goto Label_0012;
+    }
+
+Label_0012: // 0x2a0ce0
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0053;
+
+Label_0013: // 0x2a0cec
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x2);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
+    goto Label_0048;
+
+Label_0014: // 0x2a0d00
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x8)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
+    goto Label_0051;
+
+Label_0015: // 0x2a0d14
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0053;
+
+Label_0016: // 0x2a0d24
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
+    goto Label_0048;
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0017: // 0x2a0d34
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x30)));
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[6].SL[0]) >> 28);
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x34));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        ctx.cpuRegs.GPR.r[6].UD[0] = ctx.cpuRegs.GPR.r[6].UD[0] & static_cast<uint64_t>(0x1);
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0d58;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+    goto Label_0059;
+
+Label_0018: // 0x2a0d60
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xe) ? 1 : 0;
+    bool branch_taken_2a0d64 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+    if (branch_taken_2a0d64) {
+        goto Label_0058;
+    } else {
+        goto Label_0019;
+    }
+
+Label_0019: // 0x2a0d6c
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x5d20);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0d7c
+// Fall through to 0x2a0d7c
+    goto Label_0020; // Fall through
+
+Label_0020: // 0x2a0d7c - SWITCH on param_2 (cases 3/4 sub-switch)
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+        switch (target) {
+            case 0x2a0d84: goto Label_0021;  // case 2
+            case 0x2a0d9c: goto Label_0022;  // case 0xa
+            case 0x2a0db4: goto Label_0023;  // case 4
+            case 0x2a0dc0: goto Label_0024;  // case 3
+            case 0x2a0ebc: goto Label_0034;  // case 5
+            case 0x2a0f18: goto Label_0037;  // case 6
+            case 0x2a0f24: goto Label_0038;  // case 8
+            case 0x2a0f3c: goto Label_0039;  // case 0xd
+            case 0x2a101c: goto Label_0052;  // case 0xb
+            case 0x2a1080: goto Label_0058;  // case 0,1,7,9,0xc / default
+            default:
+                g_logFile << "[FUN_2a0bb0] SW2 unknown: 0x" << std::hex << target << std::endl;
+                goto Label_0058;
+        }
+    }
+
+
+Label_0021: // 0x2a0d84
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xa);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x8)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
+    goto Label_0051;
+
+Label_0022: // 0x2a0d9c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x4);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x8)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
+    goto Label_0051;
+
+Label_0023: // 0x2a0db4
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
+    goto Label_0047;
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0024: // 0x2a0dc0
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x68)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x6c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0dd8;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        ctx.cpuRegs.GPR.r[18].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x60)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x64));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0df4;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x48)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x4c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0e10;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0e10 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[18].UL[0] < ctx.cpuRegs.GPR.r[16].UL[0]) ? 1 : 0;
+    if (branch_taken_2a0e10) {
+        goto Label_0028;
+    } else {
+        goto Label_0025;
+    }
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0025: // 0x2a0e18
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x50)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x54));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0e30;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0e30 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[16].UL[0]);
+        ctx.cpuRegs.GPR.r[3].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        if (branch_taken_2a0e30) {
+        goto Label_0027;
+    } else {
+        goto Label_0026;
+    }
+
+Label_0026: // 0x2a0e38
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[18].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[16].UL[0]) ? 1 : 0;
+    bool branch_taken_2a0e40 = (ctx.cpuRegs.GPR.r[2].UL[0] != 0);
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    if (branch_taken_2a0e40) {
+        goto Label_0029;
+    } else {
+        goto Label_0027;
+    }
+
+Label_0027: // 0x2a0e48
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0029;
+
+Label_0028: // 0x2a0e54
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ static_cast<uint64_t>(0x1);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0e58
+// Fall through to 0x2a0e58
+    goto Label_0029; // Fall through
+
+Label_0029: // 0x2a0e58
+        bool cond_2756184 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+    if (cond_2756184) {
+        // Delay Slot (Likely)
+            // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        goto Label_0033;
+    } else {
+        goto Label_0030;
+    }
+
+Label_0030: // 0x2a0e60
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x48)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x4c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0e78;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0e78 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffdf);
+    if (branch_taken_2a0e78) {
+        goto Label_0032;
+    } else {
+        goto Label_0031;
+    }
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0031: // 0x2a0e80
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x6);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0050;
+
+Label_0032: // 0x2a0e98
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
+    goto Label_0048;
+
+Label_0033: // 0x2a0eac
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x8);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
+    goto Label_0048;
+
+Label_0034: // 0x2a0ebc
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0] & static_cast<uint64_t>(0x20);
+    bool branch_taken_2a0ec4 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffdf);
+    if (branch_taken_2a0ec4) {
+        goto Label_0036;
+    } else {
+        goto Label_0035;
+    }
+
+Label_0035: // 0x2a0ecc
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0] & ctx.cpuRegs.GPR.r[2].UD[0];
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x8);
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
+        ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0] & static_cast<uint64_t>(0xf);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x8)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0ef4;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xfffffff0);
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & ctx.cpuRegs.GPR.r[2].UD[0];
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] | ctx.cpuRegs.GPR.r[16].UD[0];
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[3].UL[0]);
+    goto Label_0058;
+
+Label_0036: // 0x2a0f0c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
+    goto Label_0047;
+
+Label_0037: // 0x2a0f18
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
+    goto Label_0047;
+
+Label_0038: // 0x2a0f24
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x8)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
+    goto Label_0051;
+
+Label_0039: // 0x2a0f3c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0053;
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0040: // 0x2a0f4c
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xd) ? 1 : 0;
+    bool branch_taken_2a0f50 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+    if (branch_taken_2a0f50) {
+        goto Label_0058;
+    } else {
+        goto Label_0041;
+    }
+
+Label_0041: // 0x2a0f58
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x5d60);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0f68
+// Fall through to 0x2a0f68
+    goto Label_0042; // Fall through
+
+Label_0042: // 0x2a0f68 - SWITCH on param_2 (case 5 sub-switch)
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+        switch (target) {
+            case 0x2a0f70: goto Label_0043;  // case 3
+            case 0x2a0fbc: goto Label_0046;  // case 6
+            case 0x2a0fdc: goto Label_0049;  // case 9
+            case 0x2a101c: goto Label_0052;  // case 0xc
+            case 0x2a1080: goto Label_0058;  // case 0,1,2,4,5,7,8,0xa,0xb / default
+            default:
+                g_logFile << "[FUN_2a0bb0] SW3 unknown: 0x" << std::hex << target << std::endl;
+                goto Label_0058;
+        }
+    }
+
+
+Label_0043: // 0x2a0f70
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x20));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x48)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x4c));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[5].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0f88;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+    bool branch_taken_2a0f88 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffdf);
+    if (branch_taken_2a0f88) {
+        goto Label_0045;
+    } else {
+        goto Label_0044;
+    }
+
+Label_0044: // 0x2a0f90
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x6);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+    goto Label_0050;
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0045: // 0x2a0fa8
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x7);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
+    goto Label_0048;
+
+Label_0046: // 0x2a0fbc
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xc);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0fc4
+// Fall through to 0x2a0fc4
+    goto Label_0047; // Fall through
+
+Label_0047: // 0x2a0fc4
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0fcc
+// Fall through to 0x2a0fcc
+    goto Label_0048; // Fall through
+
+Label_0048: // 0x2a0fcc
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0fd4;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+    goto Label_0059;
+
+Label_0049: // 0x2a0fdc
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xfffffff0);
+        ctx.cpuRegs.GPR.r[3].UD[0] = static_cast<uint64_t>(memory::read<uint8_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x3));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xc);
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[4].UD[0];
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & static_cast<uint64_t>(0xf);
+        ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+        ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[3].UD[0];
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a1000
+// Fall through to 0x2a1000
+    goto Label_0050; // Fall through
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0050: // 0x2a1000
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0]) + 0x8)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[7].UL[0]) + 0xc));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a100c
+// Fall through to 0x2a100c
+    goto Label_0051; // Fall through
+
+Label_0051: // 0x2a100c
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a1014;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+    goto Label_0059;
+
+Label_0052: // 0x2a101c
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a1028
+// Fall through to 0x2a1028
+    goto Label_0053; // Fall through
+
+Label_0053: // 0x2a1028
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x30)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x34));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a1038;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+    goto Label_0059;
+
+Label_0054: // 0x2a1040
+        ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xa) ? 1 : 0;
+    bool branch_taken_2a1044 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+    if (branch_taken_2a1044) {
+        goto Label_0058;
+    } else {
+        goto Label_0055;
+    }
+)code" << std::endl;
+
+
+        file << R"code(
+Label_0055: // 0x2a104c
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x5da0);
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a105c
+// Fall through to 0x2a105c
+    goto Label_0056; // Fall through
+
+Label_0056: // 0x2a105c - SWITCH on param_2 (case 6 sub-switch)
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+        switch (target) {
+            case 0x2a1064: goto Label_0057;  // case 8
+            case 0x2a1080: goto Label_0058;  // case 0-7,9 / default
+            default:
+                g_logFile << "[FUN_2a0bb0] SW4 unknown: 0x" << std::hex << target << std::endl;
+                goto Label_0058;
+        }
+    }
+
+
+Label_0057: // 0x2a1064
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
+        ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x30)));
+        // lw instruction - 32-bit load
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x34));
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+        // JALR - Jump and Link Register
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a1080;
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        auto func_ptr = find_containing_function(target);
+        if (func_ptr != nullptr) {
+            func_ptr(ctx, target);
+            goto Label_0058;
+        } else {
+            ctx.cpuRegs.pc = target;
+        }
+    }
+
+Label_0058: // 0x2a1080
+        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
+// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a1084
+// Fall through to 0x2a1084
+    goto Label_0059; // Fall through
+
+Label_0059: // 0x2a1084
+        ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x8);
+        ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x10);
+        ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x18);
+        ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x20);
+    return; // Return from function
+
+}
+
+        )code" << std::endl;
+        return;
+    }
+
+
+    if (func.base_address == 0x0001cca78){
+        file << R"code(
+        
+        // Function: FUN_001cca78 at 0x1cca78
+        void FUN_001cca78(CpuContext& ctx) {
+        Label_0000: // 0x1cca78
+                ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0xffffffc0);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[16].UD[0]);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x38, ctx.fpuRegs.fpr[21].UL);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28, ctx.cpuRegs.GPR.r[31].UD[0]);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x30, ctx.fpuRegs.fpr[20].UL);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x4));
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & static_cast<uint64_t>(0x7);
+                ctx.cpuRegs.GPR.r[3].UD[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x5) ? 1 : 0;
+            bool branch_taken_1cca9c = (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[21].f = ctx.fpuRegs.fpr[12].f;
+            if (branch_taken_1cca9c) {
+                goto Label_0007;
+            } else {
+                goto Label_0001;
+            }
+
+
+        Label_0001: // 0x1ccaa4
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffff9cf0);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccab8
+        // Fall through to 0x1ccab8
+            goto Label_0002; // Fall through
+
+
+        Label_0002: // 0x1ccab8 - SWITCH on (param_2[1] & 7)
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+                switch (target) {
+                    case 0x1ccac0: goto Label_0003;  // case 2
+                    case 0x1ccb18: goto Label_0005;  // case 3
+                    case 0x1ccb64: goto Label_0006;  // case 4
+                    case 0x1ccbac: goto Label_0007;  // case 0,1 / default
+                    default:
+                        g_logFile << "[FUN_1cca78] SW1 unknown: 0x" << std::hex << target << std::endl;
+                        goto Label_0007;
+                }
+            }
+
+
+        )code" << std::endl;
+
+
+        file << R"code(
+
+        Label_0003: // 0x1ccac0
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x48);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[21].f;
+                ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f + ctx.fpuRegs.fpr[0].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40, ctx.fpuRegs.fpr[20].UL);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[20].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccadc
+        // The next block should be: 1ccaf8
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccadc;
+            if (recompiled_functions.count(0x18adf0)) {
+                recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18adf0;
+            }
+                ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[2].UL[0];
+            //nop
+                // cvt.s.w - Convert Word to Single
+            ctx.fpuRegs.fpr[0].f = static_cast<float>(ctx.fpuRegs.fpr[0].SL);
+                // c.lt.s - Compare Less Than (R5900)
+            if (ctx.fpuRegs.fpr[20].f < ctx.fpuRegs.fpr[0].f)
+                ctx.fpuRegs.fprc[31] |= 0x800000;
+            else ctx.fpuRegs.fprc[31] &= ~0x800000;
+            //nop
+                bool cond_1886960 = ((ctx.fpuRegs.fprc[31] & 0x800000) != 0);
+            if (cond_1886960) {
+                // Delay Slot (Likely)
+                    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+                goto Label_0004;
+            } else {
+                goto Label_0004;
+            }
+
+
+        Label_0004: // 0x1ccaf8
+                ctx.fpuRegs.fpr[1].UL = ctx.cpuRegs.GPR.r[2].UL[0];
+            //nop
+                // cvt.s.w - Convert Word to Single
+            ctx.fpuRegs.fpr[1].f = static_cast<float>(ctx.fpuRegs.fpr[1].SL);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f - ctx.fpuRegs.fpr[1].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x50, ctx.fpuRegs.fpr[0].UL);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40, ctx.fpuRegs.fpr[0].UL);
+            goto Label_0007;
+
+
+        )code" << std::endl;
+
+
+        file << R"code(
+        Label_0005: // 0x1ccb18
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x48);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[21].f;
+                ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f + ctx.fpuRegs.fpr[0].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40, ctx.fpuRegs.fpr[20].UL);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[20].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccb34
+        // The next block should be: 1ccb64
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccb34;
+            if (recompiled_functions.count(0x18adf0)) {
+                recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18adf0;
+            }
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[29].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x40c90000);
+                ctx.cpuRegs.GPR.r[1].UD[0] = ctx.cpuRegs.GPR.r[1].UD[0] | static_cast<uint64_t>(0xfdb);
+                ctx.fpuRegs.fpr[12].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[12].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccb54
+        // The next block should be: 1ccb64
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccb54;
+            if (recompiled_functions.count(0x11bfa0)) {
+                recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x11bfa0;
+            }
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[29].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called
+        // The address after JAL is: 0x1ccb5c
+        // The next block should be: 1ccb64
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccb5c;
+            if (recompiled_functions.count(0x18b8c0)) {
+                recompiled_functions[0x18b8c0](ctx, 0x18b8c0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18b8c0;
+            }
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x50, ctx.fpuRegs.fpr[0].UL);
+            goto Label_0007;
+
+
+        Label_0006: // 0x1ccb64
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x48);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[21].f;
+                ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f + ctx.fpuRegs.fpr[0].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40, ctx.fpuRegs.fpr[20].UL);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[20].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccb80
+        // The next block should be: 1ccbac
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccb80;
+            if (recompiled_functions.count(0x18adf0)) {
+                recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18adf0;
+            }
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x40);
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x10);
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x40c90000);
+                ctx.cpuRegs.GPR.r[1].UD[0] = ctx.cpuRegs.GPR.r[1].UD[0] | static_cast<uint64_t>(0xfdb);
+                ctx.fpuRegs.fpr[12].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[12].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccba0
+        // The next block should be: 1ccbac
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccba0;
+            if (recompiled_functions.count(0x11bfa0)) {
+                recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x11bfa0;
+            }
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x10);
+            // JAL was called
+        // The address after JAL is: 0x1ccba8
+        // The next block should be: 1ccbac
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccba8;
+            if (recompiled_functions.count(0x18b8e8)) {
+                recompiled_functions[0x18b8e8](ctx, 0x18b8e8);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18b8e8;
+            }
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
+
+
+        )code" << std::endl;
+
+
+        file << R"code(
+        Label_0007: // 0x1ccbac
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+                // dsrl32 - Doubleword Shift Right Logical + 32
+            ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 35;
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & static_cast<uint64_t>(0x7);
+                ctx.cpuRegs.GPR.r[3].UD[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x5) ? 1 : 0;
+            bool branch_taken_1ccbbc = (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+            if (branch_taken_1ccbbc) {
+                goto Label_0014;
+            } else {
+                goto Label_0008;
+            }
+
+
+        Label_0008: // 0x1ccbc4
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffff9d10);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccbd4
+        // Fall through to 0x1ccbd4
+            goto Label_0009; // Fall through
+
+
+        Label_0009: // 0x1ccbd4 - SWITCH on (*param_2 >> 35) & 7
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+                switch (target) {
+                    case 0x1ccbdc: goto Label_0010;  // case 2
+                    case 0x1ccc34: goto Label_0012;  // case 3
+                    case 0x1ccc80: goto Label_0013;  // case 4
+                    case 0x1cccc8: goto Label_0014;  // case 0,1 / default
+                    default:
+                        g_logFile << "[FUN_1cca78] SW2 unknown: 0x" << std::hex << target << std::endl;
+                        goto Label_0014;
+                }
+            }
+
+
+
+
+        Label_0010: // 0x1ccbdc
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x4c);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[21].f;
+                ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f + ctx.fpuRegs.fpr[0].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44, ctx.fpuRegs.fpr[20].UL);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[20].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccbf8
+        // The next block should be: 1ccc14
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccbf8;
+            if (recompiled_functions.count(0x18adf0)) {
+                recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18adf0;
+            }
+                ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[2].UL[0];
+            //nop
+                // cvt.s.w - Convert Word to Single
+            ctx.fpuRegs.fpr[0].f = static_cast<float>(ctx.fpuRegs.fpr[0].SL);
+                // c.lt.s - Compare Less Than (R5900)
+            if (ctx.fpuRegs.fpr[20].f < ctx.fpuRegs.fpr[0].f)
+                ctx.fpuRegs.fprc[31] |= 0x800000;
+            else ctx.fpuRegs.fprc[31] &= ~0x800000;
+            //nop
+                bool cond_1887244 = ((ctx.fpuRegs.fprc[31] & 0x800000) != 0);
+            if (cond_1887244) {
+                // Delay Slot (Likely)
+                    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+                goto Label_0011;
+            } else {
+                goto Label_0011;
+            }
+
+
+        )code" << std::endl;
+
+
+        file << R"code(
+        Label_0011: // 0x1ccc14
+                ctx.fpuRegs.fpr[1].UL = ctx.cpuRegs.GPR.r[2].UL[0];
+            //nop
+                // cvt.s.w - Convert Word to Single
+            ctx.fpuRegs.fpr[1].f = static_cast<float>(ctx.fpuRegs.fpr[1].SL);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f - ctx.fpuRegs.fpr[1].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44, ctx.fpuRegs.fpr[0].UL);
+            goto Label_0014;
+
+
+        Label_0012: // 0x1ccc34
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x4c);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[21].f;
+                ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f + ctx.fpuRegs.fpr[0].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44, ctx.fpuRegs.fpr[20].UL);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[20].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccc50
+        // The next block should be: 1ccc80
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccc50;
+            if (recompiled_functions.count(0x18adf0)) {
+                recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18adf0;
+            }
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[29].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x40c90000);
+                ctx.cpuRegs.GPR.r[1].UD[0] = ctx.cpuRegs.GPR.r[1].UD[0] | static_cast<uint64_t>(0xfdb);
+                ctx.fpuRegs.fpr[12].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[12].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccc70
+        // The next block should be: 1ccc80
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccc70;
+            if (recompiled_functions.count(0x11bfa0)) {
+                recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x11bfa0;
+            }
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[29].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called
+        // The address after JAL is: 0x1ccc78
+        // The next block should be: 1ccc80
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccc78;
+            if (recompiled_functions.count(0x18b8c0)) {
+                recompiled_functions[0x18b8c0](ctx, 0x18b8c0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18b8c0;
+            }
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
+            goto Label_0014;
+
+
+        Label_0013: // 0x1ccc80
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x4c);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[21].f;
+                ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f + ctx.fpuRegs.fpr[0].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44, ctx.fpuRegs.fpr[20].UL);
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[20].f;
+            // JAL was called
+        // The address after JAL is: 0x1ccc9c
+        // The next block should be: 1cccc8
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccc9c;
+            if (recompiled_functions.count(0x18adf0)) {
+                recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18adf0;
+            }
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44);
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x10);
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x40c90000);
+                ctx.cpuRegs.GPR.r[1].UD[0] = ctx.cpuRegs.GPR.r[1].UD[0] | static_cast<uint64_t>(0xfdb);
+                ctx.fpuRegs.fpr[12].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[12].f;
+            // JAL was called
+        // The address after JAL is: 0x1cccbc
+        // The next block should be: 1cccc8
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1cccbc;
+            if (recompiled_functions.count(0x11bfa0)) {
+                recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x11bfa0;
+            }
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x10);
+            // JAL was called
+        // The address after JAL is: 0x1cccc4
+        // The next block should be: 1cccc8
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1cccc4;
+            if (recompiled_functions.count(0x18b8e8)) {
+                recompiled_functions[0x18b8e8](ctx, 0x18b8e8);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x18b8e8;
+            }
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
+
+
+        )code" << std::endl;
+
+
+        file << R"code(
+        Label_0014: // 0x1cccc8
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
+                bool cond_1887436 = (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+            if (cond_1887436) {
+                // Delay Slot (Likely)
+                    ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x20);
+                goto Label_0022;
+            } else {
+                goto Label_0015;
+            }
+
+
+        Label_0015: // 0x1cccd4
+                // mov.s - Move Single (FPU)
+            ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[21].f;
+            // JAL was called
+        // The address after JAL is: 0x1cccdc
+        // The next block should be: 1cccfc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1cccdc;
+            if (recompiled_functions.count(0x298e60)) {
+                recompiled_functions[0x298e60](ctx, 0x298e60);
+
+
+            } else {
+                ctx.cpuRegs.pc = 0x298e60;
+            }
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+                ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[0].UD[0] | static_cast<uint64_t>(0xe000);
+                // dsll - Doubleword Shift Left Logical
+            ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] << 19;
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[0].UD[0] | static_cast<uint64_t>(0x8000);
+                // dsll - Doubleword Shift Left Logical
+            ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] << 17;
+                ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+            if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[4].UL[0]) {
+                    ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+                goto Label_0017;
+            } else {
+                goto Label_0016;
+            }
+
+
+        Label_0016: // 0x1cccfc
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x28);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x50, ctx.fpuRegs.fpr[0].UL);
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccd0c
+        // Fall through to 0x1ccd0c
+            goto Label_0017; // Fall through
+
+
+        Label_0017: // 0x1ccd0c
+                ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[0].UD[0] | static_cast<uint64_t>(0xe000);
+                // dsll - Doubleword Shift Left Logical
+            ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] << 22;
+                ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[0].UD[0] | static_cast<uint64_t>(0x8000);
+                // dsll - Doubleword Shift Left Logical
+            ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] << 20;
+                ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+            if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[4].UL[0]) {
+                    ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+                goto Label_0019;
+            } else {
+                goto Label_0018;
+            }
+
+
+        Label_0018: // 0x1ccd28
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x2c);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
+                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccd38
+        // Fall through to 0x1ccd38
+            goto Label_0019; // Fall through
+
+
+        Label_0019: // 0x1ccd38
+                ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[0].UD[0] | static_cast<uint64_t>(0x8000);
+                // dsll32 - Doubleword Shift Left Logical + 32
+            ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] << 45;
+                ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+            bool branch_taken_1ccd44 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x30);
+            if (branch_taken_1ccd44) {
+                goto Label_0021;
+            } else {
+                goto Label_0020;
+            }
+
+
+        )code" << std::endl;
+
+
+        file << R"code(
+        Label_0020: // 0x1ccd4c
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x43800000);
+                ctx.fpuRegs.fpr[2].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x30);
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x42fe0000);
+                ctx.fpuRegs.fpr[3].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.fpuRegs.fpr[1].f = ctx.fpuRegs.fpr[1].f * ctx.fpuRegs.fpr[2].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x30, ctx.fpuRegs.fpr[1].UL);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x34);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x4, ctx.fpuRegs.fpr[0].UL);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x38);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x8, ctx.fpuRegs.fpr[0].UL);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x3c);
+                ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[3].f;
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc, ctx.fpuRegs.fpr[0].UL);
+            // JAL was called
+        // The address after JAL is: 0x1ccda0
+        // The next block should be: 1ccda0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccda0;
+            if (recompiled_functions.count(0x1da3a0)) {
+                recompiled_functions[0x1da3a0](ctx, 0x1da3a0);
+                goto Label_0021;
+            } else {
+                ctx.cpuRegs.pc = 0x1da3a0;
+            }
+
+
+        Label_0021: // 0x1ccda0
+                ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x20);
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccda4
+        // Fall through to 0x1ccda4
+            goto Label_0022; // Fall through
+
+
+        Label_0022: // 0x1ccda4
+                ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x28);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[21].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x38);
+                // lwc1 - Load Word to Coprocessor 1
+            ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x30);
+                ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x40);
+            return; // Return from function
+
+
+        }
+
+
+
+        
+        
+        )code" << std::endl;
+    
+        return;
+
+    }
+    if(func.base_address == 0x001bb710){
+        file << R"code(
+        
+        // Function: FUN_001bb710 at 0x1bb710
+        void FUN_001bb710(CpuContext& ctx) {
+            // DEBUG: Log every call to this function
+            uint32_t caller_ra = ctx.cpuRegs.GPR.r[31].UL[0];
+            uint32_t param1 = ctx.cpuRegs.GPR.r[4].UL[0];  // a0
+            uint32_t param2 = ctx.cpuRegs.GPR.r[5].UL[0];  // a1 = the object
+            uint32_t obj_field0 = memory::read<uint32_t>(param2);
+            
+            g_logFile << "[FUN_001bb710 ENTRY] caller=0x" << std::hex << caller_ra
+                    << " a0=0x" << param1
+                    << " a1(obj)=0x" << param2
+                    << " obj[0]=0x" << obj_field0;
+            
+            // Check if obj[0] looks like a valid vtable (should be in code/data segment)
+            if (obj_field0 >= 0x100000 && obj_field0 < 0x400000) {
+                g_logFile << " (valid vtable range)";
+            } else {
+                g_logFile << " (NOT A VTABLE - value too small/large!)";
+                
+                // Dump the caller's context to understand why wrong object was passed
+                g_logFile << std::endl << "[FUN_001bb710] BAD OBJECT - dumping caller context:" << std::endl;
+                g_logFile << "  s0=0x" << ctx.cpuRegs.GPR.r[16].UL[0]
+                        << " s1=0x" << ctx.cpuRegs.GPR.r[17].UL[0]
+                        << " s2=0x" << ctx.cpuRegs.GPR.r[18].UL[0]
+                        << " s3=0x" << ctx.cpuRegs.GPR.r[19].UL[0] << std::endl;
+                g_logFile << "  s4=0x" << ctx.cpuRegs.GPR.r[20].UL[0]
+                        << " s5=0x" << ctx.cpuRegs.GPR.r[21].UL[0]
+                        << " s6=0x" << ctx.cpuRegs.GPR.r[22].UL[0]
+                        << " s7=0x" << ctx.cpuRegs.GPR.r[23].UL[0] << std::endl;
+            }
+            g_logFile << std::endl;
+
+        Label_0000: // 0x1bb710
+                ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0xffffffb0);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.cpuRegs.GPR.r[20].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x38, ctx.cpuRegs.GPR.r[21].UD[0]);
+                ctx.cpuRegs.GPR.r[20].SD[0] = ctx.cpuRegs.GPR.r[5].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[16].UD[0]);
+                ctx.cpuRegs.GPR.r[21].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[17].UD[0]);
+                ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[21].SL[0]) + 0x18);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[18].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x28, ctx.cpuRegs.GPR.r[19].UD[0]);
+                memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[31].UD[0]);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x80)));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x84));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[20].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb750;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+                
+                // DEBUG: Log the virtual call details
+                uint32_t obj_ptr = ctx.cpuRegs.GPR.r[20].UL[0];  // s4 = the object
+                uint32_t vtable = memory::read<uint32_t>(obj_ptr);
+                g_logFile << "[FUN_001bb710 VCALL] obj=0x" << std::hex << obj_ptr
+                        << " vtable=0x" << vtable
+                        << " vtable[0x80]=" << (int16_t)memory::read<uint16_t>(vtable + 0x80)
+                        << " vtable[0x84]=0x" << memory::read<uint32_t>(vtable + 0x84)
+                        << " target=0x" << target << std::endl;
+                
+                if (target == 0) {
+                    g_logFile << "[FUN_001bb710] NULL VTABLE CALL! Dumping vtable:" << std::endl;
+                    for (int i = 0; i < 40; i++) {
+                        uint32_t entry = memory::read<uint32_t>(vtable + i * 4);
+                        g_logFile << "  vtable[0x" << std::hex << (i * 4) << "] = 0x" 
+                                << entry << std::endl;
+                    }
+                    // Also dump the object itself
+                    g_logFile << "[FUN_001bb710] Object dump:" << std::endl;
+                    for (int i = 0; i < 16; i++) {
+                        g_logFile << "  obj[0x" << std::hex << (i * 4) << "] = 0x"
+                                << memory::read<uint32_t>(obj_ptr + i * 4) << std::endl;
+                    }
+                    return;  // Don't crash - bail out for now
+                }
+                
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+        )code" << std::endl;
+
+
+        file << R"code(
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[29].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x88)));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x8c));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[20].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+            ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb768;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0));
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[29].UD[0] | static_cast<uint64_t>(0x4);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x20, ctx.cpuRegs.GPR.r[4].UL[0]);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x88)));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x8c));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[20].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+            ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb788;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x4));
+                bool cond_1816460 = (ctx.cpuRegs.GPR.r[4].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+            if (cond_1816460) {
+                // Delay Slot (Likely)
+                    // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+                goto Label_0002;
+            } else {
+                goto Label_0001;
+            }
+
+        Label_0001: // 0x1bb794
+            //nop 
+            // JAL was called 
+        // The address after JAL is: 0x1bb79c
+        // The next block should be: 1bb7cc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb79c;
+            if (recompiled_functions.count(0x1815c0)) {
+                recompiled_functions[0x1815c0](ctx, 0x1815c0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1815c0;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x4));
+                ctx.cpuRegs.GPR.r[7].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[20].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+            ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb7c0;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb7c8
+        // The next block should be: 1bb7cc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb7c8;
+            if (recompiled_functions.count(0x181590)) {
+                recompiled_functions[0x181590](ctx, 0x181590);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181590;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+
+        Label_0002: // 0x1bb7cc
+                ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[21].SL[0]) + 0x10);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x88)));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x8c));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[20].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+            ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb7e4;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0]) + 0x10));
+            bool branch_taken_1bb7e8 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+            //nop 
+            if (branch_taken_1bb7e8) {
+                goto Label_0039;
+            } else {
+                goto Label_0003;
+            }
+
+        Label_0003: // 0x1bb7f0
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+            //nop 
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bb7f8
+        // Fall through to 0x1bb7f8
+            goto Label_0004; // Fall through
+
+        Label_0004: // 0x1bb7f8
+                ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[29].UD[0] | static_cast<uint64_t>(0x8);
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x88)));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x8c));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[20].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+            ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb80c;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x8));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+                ctx.cpuRegs.GPR.r[3].UD[0] = (ctx.cpuRegs.GPR.r[4].UL[0] < 0x20) ? 1 : 0;
+            bool branch_taken_1bb818 = (ctx.cpuRegs.GPR.r[3].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+            if (branch_taken_1bb818) {
+                goto Label_0037;
+            } else {
+                goto Label_0005;
+            }
+
+        Label_0005: // 0x1bb820
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffff8c90);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0));
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bb830
+        // Fall through to 0x1bb830
+            goto Label_0006; // Fall through
+
+        Label_0006: // 0x1bb830 - SWITCH DISPATCH (was incorrectly a function call)
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
+                switch (target) {
+                    case 0x1bb838: goto Label_0007;  // case 1
+                    case 0x1bb874: goto Label_0008;  // case 2
+                    case 0x1bb8b0: goto Label_0009;  // case 4
+                    case 0x1bb8ec: goto Label_0010;  // case 10 (0xa)
+                    case 0x1bb928: goto Label_0011;  // case 11 (0xb)
+                    case 0x1bb964: goto Label_0012;  // case 12 (0xc)
+                    case 0x1bb9a0: goto Label_0013;  // case 13 (0xd)
+                    case 0x1bb9dc: goto Label_0014;  // case 15 (0xf)
+                    case 0x1bba18: goto Label_0015;  // case 16 (0x10)
+                    case 0x1bba54: goto Label_0016;  // case 17 (0x11)
+                    case 0x1bba90: goto Label_0017;  // case 18 (0x12)
+                    case 0x1bbacc: goto Label_0018;  // case 19 (0x13)
+                    case 0x1bbb08: goto Label_0019;  // case 20 (0x14)
+                    case 0x1bbb44: goto Label_0020;  // case 21 (0x15)
+                    case 0x1bbb80: goto Label_0021;  // case 22 (0x16)
+                    case 0x1bbbbc: goto Label_0022;  // case 23 (0x17)
+                    case 0x1bbc64: goto Label_0027;  // case 25 (0x19)
+                    case 0x1bbca0: goto Label_0028;  // case 26 (0x1a)
+                    case 0x1bbd54: goto Label_0033;  // case 27 (0x1b)
+                    case 0x1bbd90: goto Label_0034;  // case 30 (0x1e)
+                    case 0x1bbdcc: goto Label_0035;  // case 31 (0x1f)
+                    case 0x1bbe08: goto Label_0036;  // case 32 (0x20)
+                    case 0x1bbe44: goto Label_0037;  // default
+                    default:
+                        g_logFile << "[FUN_001bb710] UNKNOWN switch target: 0x" 
+                                << std::hex << target << std::endl;
+                        goto Label_0037;  // default case
+                }
+            }
+                )code" << std::endl;
+
+
+        file << R"code(
+
+        Label_0007: // 0x1bb838
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb844
+        // The next block should be: 1bb874
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb844;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb858
+        // The next block should be: 1bb874
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb858;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffaec8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb86c
+        // The next block should be: 1bb874
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb86c;
+            if (recompiled_functions.count(0x1d8ae8)) {
+                recompiled_functions[0x1d8ae8](ctx, 0x1d8ae8);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d8ae8;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0008: // 0x1bb874
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb880
+        // The next block should be: 1bb8b0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb880;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb894
+        // The next block should be: 1bb8b0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb894;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffae38);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb8a8
+        // The next block should be: 1bb8b0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8a8;
+            if (recompiled_functions.count(0x1d8ba8)) {
+                recompiled_functions[0x1d8ba8](ctx, 0x1d8ba8);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d8ba8;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0009: // 0x1bb8b0
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb8bc
+        // The next block should be: 1bb8ec
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8bc;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb8d0
+        // The next block should be: 1bb8ec
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8d0;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffac08);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb8e4
+        // The next block should be: 1bb8ec
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8e4;
+            if (recompiled_functions.count(0x1d8eb0)) {
+                recompiled_functions[0x1d8eb0](ctx, 0x1d8eb0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d8eb0;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0010: // 0x1bb8ec
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb8f8
+        // The next block should be: 1bb928
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8f8;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb90c
+        // The next block should be: 1bb928
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb90c;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa948);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb920
+        // The next block should be: 1bb928
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb920;
+            if (recompiled_functions.count(0x1d9270)) {
+                recompiled_functions[0x1d9270](ctx, 0x1d9270);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9270;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0011: // 0x1bb928
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb934
+        // The next block should be: 1bb964
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb934;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb948
+        // The next block should be: 1bb964
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb948;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa8c8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb95c
+        // The next block should be: 1bb964
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb95c;
+            if (recompiled_functions.count(0x1d9338)) {
+                recompiled_functions[0x1d9338](ctx, 0x1d9338);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9338;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0012: // 0x1bb964
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb970
+        // The next block should be: 1bb9a0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb970;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb984
+        // The next block should be: 1bb9a0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb984;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa848);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb998
+        // The next block should be: 1bb9a0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb998;
+            if (recompiled_functions.count(0x1d93f8)) {
+                recompiled_functions[0x1d93f8](ctx, 0x1d93f8);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d93f8;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0013: // 0x1bb9a0
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb9ac
+        // The next block should be: 1bb9dc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9ac;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb9c0
+        // The next block should be: 1bb9dc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9c0;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+        )code" << std::endl;
+
+
+        file << R"code(
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffff9ed8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bb9d4
+        // The next block should be: 1bb9dc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9d4;
+            if (recompiled_functions.count(0x1d9f78)) {
+                recompiled_functions[0x1d9f78](ctx, 0x1d9f78);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9f78;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0014: // 0x1bb9dc
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bb9e8
+        // The next block should be: 1bba18
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9e8;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bb9fc
+        // The next block should be: 1bba18
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9fc;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa7c8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bba10
+        // The next block should be: 1bba18
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba10;
+            if (recompiled_functions.count(0x1d94c8)) {
+                recompiled_functions[0x1d94c8](ctx, 0x1d94c8);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d94c8;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+                )code" << std::endl;
+
+
+        file << R"code(
+        Label_0015: // 0x1bba18
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x80);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bba24
+        // The next block should be: 1bba54
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba24;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bba38
+        // The next block should be: 1bba54
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba38;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa738);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bba4c
+        // The next block should be: 1bba54
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba4c;
+            if (recompiled_functions.count(0x1d9598)) {
+                recompiled_functions[0x1d9598](ctx, 0x1d9598);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9598;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0016: // 0x1bba54
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x80);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bba60
+        // The next block should be: 1bba90
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba60;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bba74
+        // The next block should be: 1bba90
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba74;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa6a8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bba88
+        // The next block should be: 1bba90
+                )code" << std::endl;
+
+
+        file << R"code(
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba88;
+            if (recompiled_functions.count(0x1d9670)) {
+                recompiled_functions[0x1d9670](ctx, 0x1d9670);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9670;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0017: // 0x1bba90
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bba9c
+        // The next block should be: 1bbacc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba9c;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbab0
+        // The next block should be: 1bbacc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbab0;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa618);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbac4
+        // The next block should be: 1bbacc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbac4;
+            if (recompiled_functions.count(0x1d9728)) {
+                recompiled_functions[0x1d9728](ctx, 0x1d9728);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9728;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0018: // 0x1bbacc
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbad8
+        // The next block should be: 1bbb08
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbad8;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbaec
+        // The next block should be: 1bbb08
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbaec;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa588);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbb00
+        // The next block should be: 1bbb08
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb00;
+            if (recompiled_functions.count(0x1d97e0)) {
+                recompiled_functions[0x1d97e0](ctx, 0x1d97e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d97e0;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0019: // 0x1bbb08
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbb14
+        // The next block should be: 1bbb44
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb14;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbb28
+        // The next block should be: 1bbb44
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb28;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffff9e48);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbb3c
+        // The next block should be: 1bbb44
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb3c;
+            if (recompiled_functions.count(0x1da458)) {
+                recompiled_functions[0x1da458](ctx, 0x1da458);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1da458;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0020: // 0x1bbb44
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbb50
+        // The next block should be: 1bbb80
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb50;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbb64
+        // The next block should be: 1bbb80
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb64;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa4f8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbb78
+        // The next block should be: 1bbb80
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb78;
+            if (recompiled_functions.count(0x1d9898)) {
+                recompiled_functions[0x1d9898](ctx, 0x1d9898);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9898;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0021: // 0x1bbb80
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbb8c
+        // The next block should be: 1bbbbc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb8c;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbba0
+        // The next block should be: 1bbbbc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbba0;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa468);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbbb4
+        // The next block should be: 1bbbbc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbbb4;
+            if (recompiled_functions.count(0x1d9968)) {
+                recompiled_functions[0x1d9968](ctx, 0x1d9968);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9968;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0022: // 0x1bbbbc
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x280);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbbc8
+        // The next block should be: 1bbbf0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbbc8;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbbd8
+        // The next block should be: 1bbbf0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbbd8;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffff);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffa3d8);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[2].UL[0]);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffffff);
+
+        Label_0023: // 0x1bbbf0
+            //nop 
+            //nop 
+            //nop 
+            //nop 
+            bool branch_taken_1bbc00 = (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[4].UL[0]);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffffff);
+            if (branch_taken_1bbc00) {
+                goto Label_0023;
+            } else {
+                goto Label_0024;
+            }
+
+        Label_0024: // 0x1bbc08
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffff);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+            //nop 
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbc18
+        // Fall through to 0x1bbc18
+            goto Label_0025; // Fall through
+
+        Label_0025: // 0x1bbc18
+            //nop 
+            //nop 
+            //nop 
+            //nop 
+            bool branch_taken_1bbc28 = (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[3].UL[0]);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+            if (branch_taken_1bbc28) {
+                goto Label_0025;
+            } else {
+                goto Label_0026;
+            }
+                )code" << std::endl;
+
+
+        file << R"code(
+        Label_0026: // 0x1bbc30
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x3f800000);
+                ctx.fpuRegs.fpr[1].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x3dcc0000);
+                ctx.cpuRegs.GPR.r[1].UD[0] = ctx.cpuRegs.GPR.r[1].UD[0] | static_cast<uint64_t>(0xcccd);
+                ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x278, ctx.fpuRegs.fpr[1].UL);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x27c, ctx.fpuRegs.fpr[0].UL);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x274, ctx.cpuRegs.GPR.r[0].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbc5c
+        // The next block should be: 1bbc64
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbc5c;
+            if (recompiled_functions.count(0x1d99a0)) {
+                recompiled_functions[0x1d99a0](ctx, 0x1d99a0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d99a0;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0027: // 0x1bbc64
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbc70
+        // The next block should be: 1bbca0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbc70;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbc84
+        // The next block should be: 1bbca0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbc84;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa2b8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbc98
+        // The next block should be: 1bbca0
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbc98;
+            if (recompiled_functions.count(0x1d9b28)) {
+                recompiled_functions[0x1d9b28](ctx, 0x1d9b28);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9b28;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0028: // 0x1bbca0
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x290);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbcac
+        // The next block should be: 1bbcd8
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbcac;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbcbc
+        // The next block should be: 1bbcd8
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbcbc;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffff);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffa228);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[2].UL[0]);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffffff);
+            //nop 
+
+        Label_0029: // 0x1bbcd8
+            //nop 
+            //nop 
+            //nop 
+            //nop 
+            bool branch_taken_1bbce8 = (ctx.cpuRegs.GPR.r[3].UL[0] != ctx.cpuRegs.GPR.r[4].UL[0]);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffffff);
+            if (branch_taken_1bbce8) {
+                goto Label_0029;
+            } else {
+                goto Label_0030;
+            }
+
+        Label_0030: // 0x1bbcf0
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffff);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+            //nop 
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbd00
+        // Fall through to 0x1bbd00
+            goto Label_0031; // Fall through
+
+        Label_0031: // 0x1bbd00
+            //nop 
+            //nop 
+            //nop 
+            //nop 
+            bool branch_taken_1bbd10 = (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[3].UL[0]);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffffffff);
+            if (branch_taken_1bbd10) {
+                goto Label_0031;
+            } else {
+                goto Label_0032;
+            }
+
+        Label_0032: // 0x1bbd18
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x3dcc0000);
+                ctx.cpuRegs.GPR.r[1].UD[0] = ctx.cpuRegs.GPR.r[1].UD[0] | static_cast<uint64_t>(0xcccd);
+                ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x3f800000);
+                ctx.fpuRegs.fpr[1].UL = ctx.cpuRegs.GPR.r[1].UL[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x284, ctx.fpuRegs.fpr[0].UL);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x278, ctx.fpuRegs.fpr[1].UL);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x274, ctx.cpuRegs.GPR.r[0].UL[0]);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x27c, ctx.fpuRegs.fpr[0].UL);
+                // swc1 - Store Word from Coprocessor 1
+            memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x280, ctx.fpuRegs.fpr[0].UL);
+            // JAL was called 
+        // The address after JAL is: 0x1bbd4c
+        // The next block should be: 1bbd54
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd4c;
+            if (recompiled_functions.count(0x1d9b60)) {
+                recompiled_functions[0x1d9b60](ctx, 0x1d9b60);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9b60;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0033: // 0x1bbd54
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbd60
+        // The next block should be: 1bbd90
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd60;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbd74
+        // The next block should be: 1bbd90
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd74;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa198);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbd88
+        // The next block should be: 1bbd90
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd88;
+            if (recompiled_functions.count(0x1d9c30)) {
+                recompiled_functions[0x1d9c30](ctx, 0x1d9c30);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9c30;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0034: // 0x1bbd90
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbd9c
+        // The next block should be: 1bbdcc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd9c;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbdb0
+        // The next block should be: 1bbdcc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbdb0;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffa078);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbdc4
+        // The next block should be: 1bbdcc
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbdc4;
+            if (recompiled_functions.count(0x1d9d28)) {
+                recompiled_functions[0x1d9d28](ctx, 0x1d9d28);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9d28;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0035: // 0x1bbdcc
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbdd8
+        // The next block should be: 1bbe08
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbdd8;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbdec
+        // The next block should be: 1bbe08
+
+                        )code" << std::endl;
+
+
+        file << R"code(
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbdec;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffff9fe8);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbe00
+        // The next block should be: 1bbe08
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe00;
+            if (recompiled_functions.count(0x1d9de8)) {
+                recompiled_functions[0x1d9de8](ctx, 0x1d9de8);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9de8;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0036: // 0x1bbe08
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+            // JAL was called 
+        // The address after JAL is: 0x1bbe14
+        // The next block should be: 1bbe44
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe14;
+            if (recompiled_functions.count(0x181560)) {
+                recompiled_functions[0x181560](ctx, 0x181560);
+
+            } else {
+                ctx.cpuRegs.pc = 0x181560;
+            }
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbe28
+        // The next block should be: 1bbe44
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe28;
+            if (recompiled_functions.count(0x1cc8e0)) {
+                recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1cc8e0;
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0x300000);
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[16].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffff9f58);
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[3].UL[0]);
+            // JAL was called 
+        // The address after JAL is: 0x1bbe3c
+        // The next block should be: 1bbe44
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe3c;
+            if (recompiled_functions.count(0x1d9ea8)) {
+                recompiled_functions[0x1d9ea8](ctx, 0x1d9ea8);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1d9ea8;
+            }
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+            goto Label_0038;
+
+        Label_0037: // 0x1bbe44
+                ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
+                ctx.cpuRegs.GPR.r[17].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[18].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbe54
+        // Fall through to 0x1bbe54
+            goto Label_0038; // Fall through
+
+        Label_0038: // 0x1bbe54
+                ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[20].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[19].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x70)));
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x74));
+                ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
+                // JALR - Jump and Link Register
+            ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe6c;
+            {
+                uint32_t target = ctx.cpuRegs.GPR.r[2].UL[0];
+                auto func_ptr = find_containing_function(target);
+                if (func_ptr != nullptr) {
+                    func_ptr(ctx, target);
+                } else {
+                    ctx.cpuRegs.pc = target;
+                }
+            }
+                ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[21].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[18].SL[0]));
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x0, ctx.cpuRegs.GPR.r[17].UL[0]);
+                // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0]) + 0x10));
+                ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < ctx.cpuRegs.GPR.r[2].UL[0]) ? 1 : 0;
+            if (ctx.cpuRegs.GPR.r[2].UL[0] != ctx.cpuRegs.GPR.r[0].UL[0]) {
+                    // lw instruction - 32-bit load
+            ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+                goto Label_0004;
+            } else {
+                goto Label_0039;
+            }
+        )code" << std::endl;
+
+
+        file << R"code(
+        Label_0039: // 0x1bbe84
+                ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[21].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
+            // JAL was called 
+        // The address after JAL is: 0x1bbe8c
+        // The next block should be: 1bbe94
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe8c;
+            if (recompiled_functions.count(0x1c03c0)) {
+                recompiled_functions[0x1c03c0](ctx, 0x1c03c0);
+
+            } else {
+                ctx.cpuRegs.pc = 0x1c03c0;
+            }
+            bool branch_taken_1bbe8c = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x2);
+            if (branch_taken_1bbe8c) {
+                goto Label_0041;
+            } else {
+                goto Label_0040;
+            }
+
+        Label_0040: // 0x1bbe94
+                memory::write<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x60, ctx.cpuRegs.GPR.r[2].UL[0]);
+        // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbe98
+        // Fall through to 0x1bbe98
+            goto Label_0041; // Fall through
+
+        Label_0041: // 0x1bbe98
+                ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x10);
+                ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x18);
+                ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x20);
+                ctx.cpuRegs.GPR.r[19].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x28);
+                ctx.cpuRegs.GPR.r[20].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x30);
+                ctx.cpuRegs.GPR.r[21].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x38);
+                ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x40);
+                ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x50);
+            return; // Return from function
+
+        }
+
+
+        )code" << std::endl;
+        return;
+    }
+    
     /* 
         if (func.base_address == 0x001815c0) {
         std::cout << "Skipping recompile for 0x1815c0 (Hooked via HLE)" << std::endl;
@@ -2646,6 +6701,26 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         file << "// Function 0x2d6880 skipped - replaced by HLE hook\n";
         return;
     }
+
+    if (func.base_address == 0x002ad8f0) {
+        std::cout << "Skipping recompile for 0x002ad8f0 (Hooked via HLE)" << std::endl;
+        file << "// Function 0x2ad8f0 skipped - replaced by HLE hook\n";
+        return;
+    }
+
+    if (func.base_address == 0x002aac80) {
+        std::cout << "Skipping recompile for 0x002aac80 (Hooked via HLE)" << std::endl;
+        file << "// Function 0x2aac80 skipped - replaced by HLE hook\n";
+        return;
+    }
+
+
+    if (func.base_address == 0x002adb18) {
+        std::cout << "Skipping recompile for 0x002adb18 (Hooked via HLE)" << std::endl;
+        file << "// Function 0x2adb18 skipped - replaced by HLE hook\n";
+        return;
+    }
+
     if (func.base_address == 0x002c6ce0) {
         std::cout << "Skipping recompile for 0x002c6ce0 (Hooked via HLE)" << std::endl;
         file << "// Function 0x2c6ce0 skipped - replaced by HLE hook\n";
@@ -3057,350 +7132,597 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     */
 
 if (func.base_address == 0x00255188) {
-        // FUN_00255188
-        file << R"code(void FUN_00255188(CpuContext& ctx) {
-        // Prologue
-        ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] - 0x40;
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[16].UD[0]);
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[17].UD[0]);
-        ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0]; // s0 = a0
-        memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[31].UD[0]);
-        ctx.cpuRegs.GPR.r[17].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0]; // s1 = a1
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x30, ctx.fpuRegs.fpr[20].UL);
+    file << R"code(
+void FUN_00255188(CpuContext& ctx) {
+    // ================================================================
+    // Prologue: 0x255188 - 0x2551a0
+    // ================================================================
+    ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] - 0x40;
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[16].UD[0]); // sd s0
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[17].UD[0]); // sd s1
+    ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0]; // s0 = a0
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.cpuRegs.GPR.r[31].UD[0]); // sd ra
+    ctx.cpuRegs.GPR.r[17].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0]; // s1 = a1
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.fpuRegs.fpr[20].UL);      // swc1 f20
 
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
-        {
-            uint32_t v0 = ctx.cpuRegs.GPR.r[4].UL[0] & 0x100;
-            if (v0 == 0) goto Label_00255264;
-        }
+    // 0x2551a4: lw a0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
 
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4);
-        ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] >> 4;
-        
-        {
-            uint32_t v0 = ctx.cpuRegs.GPR.r[4].UL[0] & 0xFFFFFFF0;
-            uint32_t v1 = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
-            v0 = v0 | v1;
-            uint32_t p1_mask = 0xFFFFFEFF; // -0x101
-            ctx.cpuRegs.GPR.r[5].UL[0] = v0 & 0xf; // param_2
-            memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xc, ctx.cpuRegs.GPR.r[6].UL[0]);
-            
-            v0 = v0 & p1_mask;
-            memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, v0);
-            
-            if (ctx.cpuRegs.GPR.r[5].UL[0] == 2) goto Label_0025522c;
-            
-            memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, 0);
-            
-            if (ctx.cpuRegs.GPR.r[5].UL[0] < 3) {
-                if (ctx.cpuRegs.GPR.r[5].UL[0] == 1) goto Label_00255220;
-                // param_2 == 0
-                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-                goto Label_0025547c;
-            }
-        }
+    // 0x2551a8: andi v0, a0, 0x100
+    // 0x2551ac: beq v0, zero, 255264
+    // 0x2551b0: _lw a2, 0x4(s1)  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4));
+    if ((ctx.cpuRegs.GPR.r[4].UL[0] & 0x100) == 0) goto Label_00255264;
 
-    Label_00255204:
-        if (ctx.cpuRegs.GPR.r[5].UL[0] == 3) goto Label_0025523c;
-        if (ctx.cpuRegs.GPR.r[5].UL[0] == 4) goto Label_0025524c;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        goto Label_0025547c;
+    // ================================================================
+    // BIT 0x100 SET PATH: animation state transition
+    // 0x2551b4 - 0x2551dc
+    // ================================================================
+    {
+        uint32_t a0_val = ctx.cpuRegs.GPR.r[4].UL[0];
+        // 0x2551b4: srl v1, a0, 4
+        // 0x2551b8: li v0, -0x10
+        // 0x2551bc: and v0, a0, v0
+        // 0x2551c0: andi v1, v1, 0xf
+        // 0x2551c4: or v0, v0, v1
+        uint32_t v1 = (a0_val >> 4) & 0xf;
+        uint32_t v0 = (a0_val & 0xFFFFFFF0) | v1;
+        // 0x2551c8: li a0, -0x101
+        // 0x2551cc: andi a1, v0, 0xf
+        ctx.cpuRegs.GPR.r[5].UL[0] = v0 & 0xf;
+        // 0x2551d0: sw a2, 0xc(s0)
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xc, ctx.cpuRegs.GPR.r[6].UL[0]);
+        // 0x2551d4: and v0, v0, a0
+        v0 = v0 & 0xFFFFFEFF;
+        // 0x2551d8: li v1, 2
+        // 0x2551dc: sw v0, 0x0(s0)
+        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, v0);
+    }
 
-    Label_00255220:
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x1c);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0]) + 0x8);
-        goto Label_00255254;
+    // 0x2551e0: beq a1, v1, LAB_25522c  (if a1 == 2)
+    // 0x2551e4: _sw zero, 0x18(s0)  — delay slot, ALWAYS executes
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, 0);
+    if (ctx.cpuRegs.GPR.r[5].UL[0] == 2) goto Label_0025522c;
 
-    Label_0025522c:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0]) + 0xc); // Delay slot v1 load
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x10);
-        goto Label_00255254;
+    // 0x2551e8: sltiu v0, a1, 3
+    // 0x2551ec: beq v0, zero, 255204  (if a1 >= 3)
+    // 0x2551f0: _li v0, 1  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[2].UL[0] = 1;
+    if (ctx.cpuRegs.GPR.r[5].UL[0] >= 3) goto Label_00255204;
 
-    Label_0025523c:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x14); // Delay slot
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x18);
-        goto Label_00255254;
+    // 0x2551f4: beql a1, v0, LAB_255220  (if a1 == 1, likely branch)
+    // 0x2551f8: _lw v0, 0x34(s0)  — delay slot, ONLY if taken
+    if (ctx.cpuRegs.GPR.r[5].UL[0] == 1) {
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+            memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+        goto Label_00255220;
+    }
 
-    Label_0025524c:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x1c); // Delay slot
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x20);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x24);
+    // 0x2551fc: b LAB_25547c  (a1 == 0 path, default)
+    // 0x255200: _lw a2, 0x1c(s0)  — delay slot
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+    goto Label_0025547c;
 
-    Label_00255254:
-        // jalr v1
-        {
-            uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
-            ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255258;
-            if (recompiled_functions.count(target)) {
-                recompiled_functions[target](ctx, target);
-            } else {
-                ctx.cpuRegs.pc = target;
-                return;
-            }
-        }
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + ctx.cpuRegs.GPR.r[2].UL[0];
-        goto Label_0025547c;
+Label_00255204:
+    // 0x255204: li v0, 3
+    // 0x255208: beq a1, v0, LAB_25523c  (if a1 == 3)
+    // 0x25520c: _li v0, 4  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[2].UL[0] = 4;
+    if (ctx.cpuRegs.GPR.r[5].UL[0] == 3) goto Label_0025523c;
 
+    // 0x255210: beql a1, v0, LAB_25524c  (if a1 == 4, likely branch)
+    // 0x255214: _lw v0, 0x34(s0)  — delay slot, ONLY if taken
+    if (ctx.cpuRegs.GPR.r[5].UL[0] == 4) {
+        ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+            memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+        goto Label_0025524c;
+    }
 
-            )code";
-        file << R"code(
-    Label_00255264:
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x1c);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0xc);
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xf;
-        
-        // if (param_1 >= 5) goto caseD_0
-        if (ctx.cpuRegs.GPR.r[4].UL[0] >= 5) goto Label_caseD_0;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] - ctx.cpuRegs.GPR.r[2].UL[0];
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
-        
-        // Switch Jump Table at 0x302420
-        switch(ctx.cpuRegs.GPR.r[4].UL[0]) {
-            case 0: goto Label_caseD_0;
-            case 1: goto Label_caseD_1;
-            case 2: goto Label_caseD_2;
-            case 3: goto Label_caseD_3;
-            case 4: goto Label_caseD_4;
-            default: goto Label_caseD_0;
-        }
+    // 0x255218: b LAB_25547c  (default path)
+    // 0x25521c: _lw a2, 0x1c(s0)  — delay slot
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+    goto Label_0025547c;
 
-    Label_caseD_1:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x14);
-        if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) goto Label_002552c8;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0); // local_40
-        if (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[3].UL[0]) {
-             ctx.cpuRegs.GPR.r[2].UL[0] = 1;
+Label_00255220:
+    // a1==1 path. v0 (r[2]) = *(s0+0x34) from beql delay slot
+    // 0x255220: lh a0, 0x8(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x8)));
+    // 0x255224: b LAB_255254
+    // 0x255228: _lw v1, 0xc(v0)  — delay slot: function pointer
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xc));
+    goto Label_00255254;
+
+Label_0025522c:
+    // a1==2 path.
+    // 0x25522c: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x255230: lh a0, 0x10(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x10)));
+    // 0x255234: b LAB_255254
+    // 0x255238: _lw v1, 0x14(v0)  — delay slot: function pointer
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x14));
+    goto Label_00255254;
+
+Label_0025523c:
+    // a1==3 path.
+    // 0x25523c: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x255240: lh a0, 0x18(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x18)));
+    // 0x255244: b LAB_255254
+    // 0x255248: _lw v1, 0x1c(v0)  — delay slot: function pointer
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x1c));
+    goto Label_00255254;
+
+Label_0025524c:
+    // a1==4 path. v0 (r[2]) = *(s0+0x34) from beql delay slot
+    // 0x25524c: lh a0, 0x20(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x20)));
+    // 0x255250: lw v1, 0x24(v0)  — function pointer, falls through
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x24));
+    // fall through
+
+Label_00255254:
+    // 0x255254: jalr v1
+    // 0x255258: _addu a0, s0, a0  — delay slot, BEFORE call
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[16].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0]);
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x0025525c;
+        auto it = recompiled_functions.find(target);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, target);
         } else {
-             ctx.cpuRegs.GPR.r[2].UL[0] = 0;
+            g_logFile << "[255188] MISSING JALR@255254 target=0x" << std::hex << target << std::endl;
+            ctx.cpuRegs.pc = target;
+            goto Label_00255498;
         }
-        
-        // xori v0, v0, 1 -> if (!(v0 < v1))
-        if ((ctx.cpuRegs.GPR.r[2].UL[0] ^ 1) == 0) goto Label_002552c8;
-        
-        ctx.cpuRegs.GPR.r[3].UL[0] = 0xFFFFFF0F; // -0xF1
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x14, 0);
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0x120;
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    }
+    // 0x25525c: b LAB_25547c
+    // 0x255260: _lw a2, 0x1c(s0)  — delay slot
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+    goto Label_0025547c;
+)code" << std::endl;
 
-    Label_002552c8:
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x18, 0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0); // param_2 from local_40
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x28);
-        goto Label_002553c4;
+    file << R"code(
+    // ================================================================
+    // BIT 0x100 CLEAR PATH: normal update with switch on (a0 & 0xf)
+    // ================================================================
+Label_00255264:
+    // a2 (r[6]) already loaded from delay slot at 0x2551b0
+    // 0x255264: lw v0, 0xc(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0xc));
+    // 0x255268: andi a0, a0, 0xf
+    ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0xf;
+    // 0x25526c: sltiu v1, a0, 5
+    // 0x255270: subu v0, a2, v0
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[6].SL[0] - ctx.cpuRegs.GPR.r[2].SL[0]);
+    // 0x255274: beq v1, zero, caseD_0  (if a0 >= 5)
+    // 0x255278: _sw v0, 0x0(sp)  — delay slot, ALWAYS executes
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    if (ctx.cpuRegs.GPR.r[4].UL[0] >= 5) goto Label_caseD_0;
 
-    Label_caseD_2:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x10);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0); // local_40
-        
-        // slt v0, v0, v1 (local_40 < s0->0x10)
-        if (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[3].UL[0]) {
-             ctx.cpuRegs.GPR.r[2].UL[0] = 1;
-        } else {
-             ctx.cpuRegs.GPR.r[2].UL[0] = 0;
-        }
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) goto Label_0025534c;
-        
-        ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0]) - 0x7d10);
-        ctx.fpuRegs.fpr[20].UL = ctx.cpuRegs.GPR.r[3].UL[0]; // mtc1 v1, f20
-        ctx.fpuRegs.fpr[20].f = (float)(int32_t)ctx.fpuRegs.fpr[20].UL; // cvt.s.w
-        
-        // jal FUN_00259908(sp)
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255308;
-        if (recompiled_functions.count(0x259908)) {
-            recompiled_functions[0x259908](ctx, 0x259908);
+    // 0x25527c-0x255290: switch table
+    switch (ctx.cpuRegs.GPR.r[4].UL[0]) {
+        case 0: goto Label_caseD_0;
+        case 1: goto Label_caseD_1;
+        case 2: goto Label_caseD_2;
+        case 3: goto Label_caseD_3;
+        case 4: goto Label_caseD_4;
+        default: goto Label_caseD_0;
+    }
+
+    // ================================================================
+    // caseD_1: 0x255298
+    // ================================================================
+Label_caseD_1:
+    // 0x255298: lw v1, 0x14(s0)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14));
+    // 0x25529c: beq v1, zero, 2552c8
+    // 0x2552a0: _lw v0, 0x0(sp)  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) goto Label_002552c8;
+
+    // 0x2552a4: slt v0, v0, v1  — v0 = (local_40 < param[5])
+    // 0x2552a8: xori v0, v0, 1  — v0 = !(local_40 < param[5])
+    // 0x2552ac: beq v0, zero, 2552c8  — if (local_40 < param[5]) goto 2552c8
+    // 0x2552b0: _li v1, -0xf1  — delay slot, ALWAYS executes
+    if (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_002552c8;
+
+    // Timer expired — transition to state 2
+    // 0x2552b4: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    // 0x2552b8: sw zero, 0x14(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14, 0);
+    // 0x2552bc: and v0, v0, v1  (v1 = 0xFFFFFF0F from delay slot)
+    // 0x2552c0: ori v0, v0, 0x120
+    // 0x2552c4: sw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFF0F) | 0x120;
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+
+Label_002552c8:
+    // 0x2552c8: sw zero, 0x18(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, 0);
+    // 0x2552cc: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x2552d0: lw a1, 0x0(sp)
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    // 0x2552d4: lh a0, 0x28(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x28)));
+    // 0x2552d8: b LAB_2553c4
+    // 0x2552dc: _lw v1, 0x2c(v0)  — delay slot: function pointer
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x2c));
+    goto Label_002553c4;
+
+    // ================================================================
+    // caseD_2: 0x2552e0
+    // ================================================================
+Label_caseD_2:
+    // 0x2552e0: lw v1, 0x10(s0)  — duration
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10));
+    // 0x2552e4: lw v0, 0x0(sp)  — local_40
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    // 0x2552e8: slt v0, v0, v1  — v0 = (local_40 < duration)
+    // 0x2552ec: beq v0, zero, 25534c  — if (local_40 >= duration) goto expired
+    // 0x2552f0: _lwc1 f0, -0x7d10(gp)  — delay slot, ALWAYS executes
+    ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7d10);
+    if (ctx.cpuRegs.GPR.r[2].SL[0] >= ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_0025534c;
+
+    // 0x2552f4: mtc1 v1, f20
+    ctx.fpuRegs.fpr[20].UL = ctx.cpuRegs.GPR.r[3].UL[0];
+    // 0x2552fc: cvt.s.w f20, f20
+    ctx.fpuRegs.fpr[20].f = static_cast<float>(static_cast<int32_t>(ctx.fpuRegs.fpr[20].UL));
+    // 0x255300: move a0, sp
+    ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0];
+    // 0x255304: jal FUN_00259908
+    // 0x255308: _mul.s f20, f20, f0  — delay slot, BEFORE call
+    ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f * ctx.fpuRegs.fpr[0].f;
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x0025530c;
+    {
+        auto it = recompiled_functions.find(0x259908u);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, 0x259908);
         } else {
             ctx.cpuRegs.pc = 0x259908;
-            return;
+            goto Label_00255498;
         }
-        
-        // mul.s f20, f20, f0
-        ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f * ctx.fpuRegs.fpr[0].f;
-        
-        ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f / ctx.fpuRegs.fpr[20].f;
-        ctx.fpuRegs.fpr[2].UL = memory::read<uint32_t>(0x3097e0);
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
-        
-        // cvt.w.s f1, f0
-        ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[0].f;       // cvt.w.s f1, f0
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.fpuRegs.fpr[1].UL;          // mfc1 v0, f1
-        ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[2].UL[0];          // mtc1 v0, f0
-        ctx.fpuRegs.fpr[0].f = (float)(int32_t)ctx.fpuRegs.fpr[0].UL;// cvt.s.w f0, f0
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
-        
-        goto Label_0025536c;
+    }
 
-            )code";
-        file << R"code(
-    Label_0025534c:
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
-        ctx.cpuRegs.GPR.r[3].UL[0] = 0xFFFFFF0F;
-        ctx.fpuRegs.fpr[0].UL = 0x3f800000; // 1.0f
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0x130;
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL); // swc1
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    // 0x25530c-0x255310: lwc1 f1, DAT_003097dc
+    ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
+    // 0x25531c: div.s f0, f0, f20
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f / ctx.fpuRegs.fpr[20].f;
+    // 0x255324: lwc1 f2, DAT_003097e0
+    ctx.fpuRegs.fpr[2].UL = memory::read<uint32_t>(0x3097e0);
+    // 0x255328: mul.s f0, f0, f1
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+    // 0x25532c: cvt.w.s f1, f0
+    {
+        float fval = ctx.fpuRegs.fpr[0].f;
+        int32_t ival;
+        if (fval >= 2147483648.0f) ival = 0x7FFFFFFF;
+        else if (fval < -2147483648.0f) ival = (int32_t)0x80000000;
+        else ival = static_cast<int32_t>(fval);
+        ctx.fpuRegs.fpr[1].SL = ival;
+    }
+    // 0x255330: mfc1 v0, f1
+    ctx.cpuRegs.GPR.r[2].UL[0] = ctx.fpuRegs.fpr[1].UL;
+    // 0x255334: mtc1 v0, f0
+    ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[2].UL[0];
+    // 0x25533c: cvt.s.w f0, f0
+    ctx.fpuRegs.fpr[0].f = static_cast<float>(static_cast<int32_t>(ctx.fpuRegs.fpr[0].UL));
+    // 0x255340: mul.s f0, f0, f2
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
+    // 0x255344: b LAB_25536c
+    // 0x255348: _swc1 f0, 0x18(s0)  — delay slot
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
+    goto Label_0025536c;
 
-    Label_0025536c:
-        // delay slot from caseD_2 jump: swc1 f0, 0x18(s0)
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x18, ctx.fpuRegs.fpr[0].UL);
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0); // local_40
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x30);
-        goto Label_002553c4;
+Label_0025534c:
+    // Duration expired — set state to 3
+    // 0x25534c: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
+    // 0x255354-0x255358: lui at, 0x3f80 / mtc1 at, f0  — f0 = 1.0f
+    ctx.fpuRegs.fpr[0].UL = 0x3f800000;
+    // 0x25535c-0x255360: and v0, v0, 0xFFFFFF0F / ori v0, v0, 0x130
+    ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFF0F) | 0x130;
+    // 0x255364: swc1 f0, 0x18(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
+    // 0x255368: sw v0, 0x0(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+)code" << std::endl;
 
-    Label_caseD_3:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x14);
-        if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) goto Label_002553b0;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
-        if (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.GPR.r[2].UL[0] = 1; else ctx.cpuRegs.GPR.r[2].UL[0] = 0;
-        
-        if ((ctx.cpuRegs.GPR.r[2].UL[0] ^ 1) == 0) goto Label_002553b0;
-        
-        ctx.cpuRegs.GPR.r[3].UL[0] = 0xFFFFFF0F;
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x14, 0);
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0x140;
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
-    Label_002553b0:
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x18, 0);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x38);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x3c); // Delay slot
+   file << R"code(
+Label_0025536c:
+    // 0x25536c: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x255370: lw a1, 0x0(sp)
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    // 0x255374: lh a0, 0x30(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x30)));
+    // 0x255378: b LAB_002553c4
+    // 0x25537c: _lw v1, 0x34(v0)  — delay slot: function pointer
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x34));
+    goto Label_002553c4;
 
-    Label_002553c4:
-        // jalr v1
-        {
-            uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
-            ctx.cpuRegs.GPR.r[31].UL[0] = 0x002553c8;
-            if (recompiled_functions.count(target)) {
-                recompiled_functions[target](ctx, target);
-            } else {
-                ctx.cpuRegs.pc = target;
-                return;
-            }
+    // ================================================================
+    // caseD_3: 0x255380
+    // ================================================================
+Label_caseD_3:
+    // 0x255380: lw v1, 0x14(s0)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14));
+    // 0x255384: beq v1, zero, LAB_002553b0
+    // 0x255388: _lw v0, 0x0(sp)  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) goto Label_002553b0;
+
+    // 0x25538c: slt v0, v0, v1
+    // 0x255390: xori v0, v0, 1
+    // 0x255394: beq v0, zero, LAB_002553b0  — if (local_40 < v1) goto 2553b0
+    // 0x255398: _li v1, -0xf1  — delay slot, ALWAYS executes (but only used if not branching)
+    if (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_002553b0;
+
+    // Timer expired — transition to state 4
+    // 0x25539c: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    // 0x2553a0: sw zero, 0x14(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14, 0);
+    // 0x2553a4: and v0, v0, v1  (v1 = 0xFFFFFF0F)
+    // 0x2553a8: ori v0, v0, 0x140
+    // 0x2553ac: sw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFF0F) | 0x140;
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+
+Label_002553b0:
+    // 0x2553b0: sw zero, 0x18(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, 0);
+    // 0x2553b4: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x2553b8: lw a1, 0x0(sp)
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    // 0x2553bc: lh a0, 0x38(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x38)));
+    // 0x2553c0: lw v1, 0x3c(v0)  — function pointer, falls through
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x3c));
+    // fall through to Label_002553c4
+
+Label_002553c4:
+    // 0x2553c4: jalr v1
+    // 0x2553c8: _addu a0, s0, a0  — delay slot, BEFORE call
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[16].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0]);
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x002553cc;
+        auto it = recompiled_functions.find(target);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, target);
+        } else {
+            g_logFile << "[255188] MISSING JALR@2553c4 target=0x" << std::hex << target << std::endl;
+            ctx.cpuRegs.pc = target;
+            goto Label_00255498;
         }
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + ctx.cpuRegs.GPR.r[2].UL[0];
-        goto Label_0025547c;
+    }
+    // 0x2553cc: b LAB_0025547c
+    // 0x2553d0: _lw a2, 0x1c(s0)  — delay slot
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+    goto Label_0025547c;
 
-    Label_caseD_4:
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x10);
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[3].UL[0]) ctx.cpuRegs.GPR.r[2].UL[0] = 1; else ctx.cpuRegs.GPR.r[2].UL[0] = 0;
-        
-        if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) goto Label_00255440;
-        
-        ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0]) - 0x7d10);
-        ctx.fpuRegs.fpr[20].UL = ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.fpuRegs.fpr[20].f = (float)(int32_t)ctx.fpuRegs.fpr[20].UL;
-        
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0];
-        ctx.cpuRegs.GPR.r[31].UL[0] = 0x002553fc;
-        if (recompiled_functions.count(0x259908)) {
-            recompiled_functions[0x259908](ctx, 0x259908);
+    // ================================================================
+    // caseD_4: 0x2553d4
+    // ================================================================
+Label_caseD_4:
+    // 0x2553d4: lw v1, 0x10(s0)  — duration
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10));
+    // 0x2553d8: lw v0, 0x0(sp)  — local_40
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    // 0x2553dc: slt v0, v0, v1
+    // 0x2553e0: beq v0, zero, LAB_00255440  — if (local_40 >= duration)
+    // 0x2553e4: _lwc1 f0, -0x7d10(gp)  — delay slot, ALWAYS executes
+    ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7d10);
+    if (ctx.cpuRegs.GPR.r[2].SL[0] >= ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_00255440;
+
+    // 0x2553e8: mtc1 v1, f20
+    ctx.fpuRegs.fpr[20].UL = ctx.cpuRegs.GPR.r[3].UL[0];
+    // 0x2553f0: cvt.s.w f20, f20
+    ctx.fpuRegs.fpr[20].f = static_cast<float>(static_cast<int32_t>(ctx.fpuRegs.fpr[20].UL));
+    // 0x2553f4: move a0, sp
+    ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[29].UL[0];
+    // 0x2553f8: jal FUN_00259908
+    // 0x2553fc: _mul.s f20, f20, f0  — delay slot, BEFORE call
+    ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f * ctx.fpuRegs.fpr[0].f;
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255400;
+    {
+        auto it = recompiled_functions.find(0x259908u);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, 0x259908);
         } else {
             ctx.cpuRegs.pc = 0x259908;
-            return;
+            goto Label_00255498;
         }
-        
-        ctx.fpuRegs.fpr[20].f = ctx.fpuRegs.fpr[20].f * ctx.fpuRegs.fpr[0].f;
-        ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f / ctx.fpuRegs.fpr[20].f;
-        ctx.fpuRegs.fpr[2].UL = memory::read<uint32_t>(0x3097e0);
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
-        
-        ctx.fpuRegs.fpr[1].SL = (int32_t)ctx.fpuRegs.fpr[0].f;
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.fpuRegs.fpr[1].UL;
-        ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[2].UL[0];
-        ctx.fpuRegs.fpr[0].f = (float)(int32_t)ctx.fpuRegs.fpr[0].UL;
-        ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
-        
-        goto Label_00255460;
-    )code";
-        file << R"code(
-    Label_00255440:
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
-        ctx.cpuRegs.GPR.r[3].UL[0] = 0xFFFFFF0F;
-        ctx.fpuRegs.fpr[0].UL = 0x3f800000;
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[3].UL[0];
-        ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0x110;
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
-        memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
-
-    Label_00255460:
-        // delay slot from caseD_4 jump
-        memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x18, ctx.fpuRegs.fpr[0].UL);
-        
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x40);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x44);
-        
-        {
-            uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
-            ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255474;
-            if (recompiled_functions.count(target)) {
-                recompiled_functions[target](ctx, target);
-            } else {
-                ctx.cpuRegs.pc = target;
-                return;
-            }
-        }
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + ctx.cpuRegs.GPR.r[4].UL[0];
-
-    Label_caseD_0:
-        ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x1c);
-
-    Label_0025547c:
-        if (ctx.cpuRegs.GPR.r[6].UL[0] == 0) goto Label_00255498;
-        
-        ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0]; // param_2 = s1
-        ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0]) + 0x34);
-        ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x60);
-        ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x64);
-        
-        {
-            uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
-            ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255494;
-            if (recompiled_functions.count(target)) {
-                recompiled_functions[target](ctx, target);
-            } else {
-                ctx.cpuRegs.pc = target;
-                return;
-            }
-        }
-        ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[6].UL[0] + ctx.cpuRegs.GPR.r[4].UL[0];
-
-    Label_00255498:
-        ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x10);
-        ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x18);
-        ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x20);
-        ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x30);
-        ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x40;
-        return;
     }
-    )code" << std::endl;
-        return;
+
+    // 0x255400-0x255404: lwc1 f1, DAT_003097dc
+    ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
+    // 0x255410: div.s f0, f0, f20
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f / ctx.fpuRegs.fpr[20].f;
+    // 0x255414-0x255418: lwc1 f2, DAT_003097e0
+    ctx.fpuRegs.fpr[2].UL = memory::read<uint32_t>(0x3097e0);
+    // 0x25541c: mul.s f0, f0, f1
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+    // 0x255420: cvt.w.s f1, f0
+    {
+        float fval = ctx.fpuRegs.fpr[0].f;
+        int32_t ival;
+        if (fval >= 2147483648.0f) ival = 0x7FFFFFFF;
+        else if (fval < -2147483648.0f) ival = (int32_t)0x80000000;
+        else ival = static_cast<int32_t>(fval);
+        ctx.fpuRegs.fpr[1].SL = ival;
     }
+    // 0x255424: mfc1 v0, f1
+    ctx.cpuRegs.GPR.r[2].UL[0] = ctx.fpuRegs.fpr[1].UL;
+    // 0x255428: mtc1 v0, f0
+    ctx.fpuRegs.fpr[0].UL = ctx.cpuRegs.GPR.r[2].UL[0];
+    // 0x255430: cvt.s.w f0, f0
+    ctx.fpuRegs.fpr[0].f = static_cast<float>(static_cast<int32_t>(ctx.fpuRegs.fpr[0].UL));
+    // 0x255434: mul.s f0, f0, f2
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[2].f;
+    // 0x255438: b LAB_00255460
+    // 0x25543c: _swc1 f0, 0x18(s0)  — delay slot
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
+    goto Label_00255460;
+
+Label_00255440:
+    // Duration expired — set state to 1
+    // 0x255440: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0);
+    // 0x255448-0x25544c: lui at, 0x3f80 / mtc1 at, f0  — f0 = 1.0f
+    ctx.fpuRegs.fpr[0].UL = 0x3f800000;
+    // 0x255450: and v0, v0, v1  (v1 = 0xFFFFFF0F)
+    // 0x255454: ori v0, v0, 0x110
+    ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFF0F) | 0x110;
+    // 0x255458: swc1 f0, 0x18(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
+    // 0x25545c: sw v0, 0x0(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+    // fall through to Label_00255460
+
+Label_00255460:
+    // 0x255460: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x255464: lw a1, 0x0(sp)
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
+    // 0x255468: lh a0, 0x40(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x40)));
+    // 0x25546c: lw v1, 0x44(v0)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x44));
+    // 0x255470: jalr v1
+    // 0x255474: _addu a0, s0, a0  — delay slot, BEFORE call
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[16].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0]);
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255478;
+        auto it = recompiled_functions.find(target);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, target);
+        } else {
+            g_logFile << "[255188] MISSING JALR@255470 target=0x" << std::hex << target << std::endl;
+            ctx.cpuRegs.pc = target;
+            goto Label_00255498;
+        }
+    }
+    // falls through to caseD_0
+
+    // ================================================================
+    // caseD_0: 0x255478
+    // ================================================================
+Label_caseD_0:
+    // 0x255478: lw a2, 0x1c(s0)
+    ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+    // fall through to Label_0025547c
+
+Label_0025547c:
+    // 0x25547c: beq a2, zero, LAB_00255498
+    // 0x255480: _move a1, s1  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+    if (ctx.cpuRegs.GPR.r[6].UL[0] == 0) goto Label_00255498;
+
+    // 0x255484: lw v0, 0x34(a2)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x34));
+    // 0x255488: lh a0, 0x60(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x60)));
+    // 0x25548c: lw v1, 0x64(v0)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x64));
+    // 0x255490: jalr v1
+    // 0x255494: _addu a0, a2, a0  — delay slot, BEFORE call (NOTE: a2 not s0!)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0]);
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255498;
+        auto it = recompiled_functions.find(target);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, target);
+        } else {
+            g_logFile << "[255188] MISSING JALR@255490 target=0x" << std::hex << target << std::endl;
+            ctx.cpuRegs.pc = target;
+            goto Label_00255498;
+        }
+    }
+    // falls through to epilogue
+
+    // ================================================================
+    // Epilogue: 0x255498
+    // ================================================================
+Label_00255498:
+    // 0x255498: ld s0, 0x10(sp)
+    ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10);
+    // 0x25549c: ld s1, 0x18(sp)
+    ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18);
+    // 0x2554a0: ld ra, 0x20(sp)
+    ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20);
+    // 0x2554a4: lwc1 f20, 0x30(sp)
+    ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30);
+    // 0x2554a8: jr ra
+    // 0x2554ac: _addiu sp, sp, 0x40  — delay slot
+    ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x40;
+    return;
+}
+)code" << std::endl;
+    return;
+}
+
+
 
 if (func.base_address == 0x0029e408) {
     file << R"code(void FUN_0029e408(CpuContext& ctx) {
