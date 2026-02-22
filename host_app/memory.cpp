@@ -532,6 +532,40 @@ void write_io_register(uint32_t address, uint32_t value) {
 
     template <typename T>
     void write(uint32_t address, T value) {
+
+        /*
+        if (address == 0x31b008 && value != 0) {
+            g_logFile << "[POOL INIT] base=0x" << std::hex << value << std::endl;
+        }
+        // Also watch the pool size field
+        if (address == 0x31b00c) {
+            g_logFile << "[POOL INIT] total_size=0x" << std::hex << value << std::endl;
+        }
+        if (address == 0x31b010) {
+            g_logFile << "[POOL INIT] elem_size=0x" << std::hex << value << std::endl;
+        }
+
+
+        if (address == 0xb8cde0) {  // slot 42 of the array
+            g_logFile << "[WATCHPOINT SLOT42] write value=0x" << std::hex << value << std::endl;
+        }
+        if (address == 0xb8cef0) {
+            g_logFile << "[WATCHPOINT OBJ_VTABLE] write value=0x" << std::hex << value << std::endl;
+        }
+
+        if (address == 0xb8cb30 && value != 0) {
+            g_logFile << "[MANAGER INIT] write value=0x" << std::hex << value << std::endl;
+        }
+
+
+        if (address == 0x70003ABC) { // 0x70003AB0 + 0xC
+            g_logFile << "[WATCHPOINT] write to stream read_ptr: value=0x" 
+                    << std::hex << value << std::endl;
+        }
+        if (address == 0x70003AB4) { // 0x70003AB0 + 0xC
+            g_logFile << "[WATCHPOINT 70003AB4] write to stream read_ptr: value=0x" 
+                    << std::hex << value << std::endl;
+        }
         if (address == 0x31B190){
             g_logFile << "[WRITING TO VIRTUAL ADDRESS IN MAIN RAM] Address: " << std::hex << address 
                     << ", Value: " << value <<std::endl;
@@ -569,6 +603,9 @@ void write_io_register(uint32_t address, uint32_t value) {
                     << ", Value: " << value << std::endl;
 
         }
+        
+        */
+
 
         // Check I/O registers FIRST
         if (is_io_register(address)) {

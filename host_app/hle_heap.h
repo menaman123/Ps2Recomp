@@ -185,4 +185,8 @@ void HLE_001815c0(CpuContext& ctx);
 void HLE_001815f0(CpuContext& ctx);
 void HLE_002cf930(CpuContext& ctx);
 void HLE_002c6ce0(CpuContext& ctx);
+void HLE_FUN_002ad8f0(CpuContext& ctx, uint32_t addr);
+void HLE_FUN_002adb18(CpuContext& ctx, uint32_t addr);
+void HLE_FUN_002aac80(CpuContext& ctx, uint32_t addr);
+void HLE_FUN_002adb40(CpuContext& ctx, uint32_t addr);
 extern HLEHeap g_heap;
