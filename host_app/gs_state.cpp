@@ -7,6 +7,28 @@ extern std::ofstream g_logFile;
 static constexpr size_t VRAM_SIZE = 4 * 1024 * 1024;
 GSState g_gs_state;
 
+void GSState::Flush() {
+    if (draw_buffer.empty()) return;
+    
+    extern RenderQueue g_renderQueue;
+    
+    RenderJob job;
+    job.type = RenderCommandType::DrawBatch;
+    job.batch.vertices = draw_buffer;
+    job.batch.prim_type = prim_type;
+    
+    g_renderQueue.Push(job);
+    
+    if (g_logFile.is_open()) {
+        g_logFile << "[GS] Flush: " << draw_buffer.size() 
+                  << " vertices as Type " << (int)prim_type << std::endl;
+    }
+    
+    draw_buffer.clear();
+    strip_count = 0;
+}
+
+
 void GSState::SetPrim(uint64_t value) {
     GSPrimType new_type = static_cast<GSPrimType>(value & 0x7);
 

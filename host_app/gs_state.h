@@ -172,6 +172,7 @@ struct GSState {
     void SetTrxDir(uint64_t value);
     void WriteHWReg(uint64_t value);
     int GetPixelSize(uint8_t psm);
+    void Flush();
     
     // Diagnostic helper
     void DumpState(std::ostream& out);

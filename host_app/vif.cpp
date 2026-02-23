@@ -488,12 +488,7 @@ void VIF::ProcessFifo(int v) {
 
                 // Check if we have enough data (Cache + FIFO)
                 if (words_in_current + fifo_words_avail < words_needed) {
-                    // Not enough data -> Go to WAIT state
                     state[v] = VIF_STATE_WAIT_DATA;
-                    
-                    // Note: We leave 'word_index' as is, so we can drain current_qw 
-                    // properly when we return to this function later.
-                    
                     pending_cmd[v] = cmd;
                     pending_num[v] = num;
                     pending_imm[v] = imm;
@@ -509,12 +504,20 @@ void VIF::ProcessFifo(int v) {
                     return; 
                 }
 
-                // Extract Payload
+                // Extract Payload using unified drain that preserves partial QWs
                 std::vector<uint8_t> payload;
                 payload.reserve(words_needed * 4);
 
-                // A. Drain current cached QW
-                while (words_needed > 0 && word_index[v] < 4) {
+                while (words_needed > 0) {
+                    // Refill current_qw from FIFO if exhausted
+                    if (word_index[v] >= 4) {
+                        auto& packet = fifo[v].front();
+                        std::memcpy(current_qw[v], packet.data(), 16);
+                        fifo[v].pop_front();
+                        word_index[v] = 0;
+                    }
+                    
+                    // Consume one word
                     uint32_t w = current_qw[v][word_index[v]++];
                     payload.push_back(w & 0xFF);
                     payload.push_back((w >> 8) & 0xFF);
@@ -522,20 +525,8 @@ void VIF::ProcessFifo(int v) {
                     payload.push_back((w >> 24) & 0xFF);
                     words_needed--;
                 }
-
-                // B. Drain FIFO packets
-                while (words_needed > 0) {
-                    auto& packet = fifo[v].front();
-                    for (int i = 0; i < 4 && words_needed > 0; i++) {
-                        uint32_t w = packet[i];
-                        payload.push_back(w & 0xFF);
-                        payload.push_back((w >> 8) & 0xFF);
-                        payload.push_back((w >> 16) & 0xFF);
-                        payload.push_back((w >> 24) & 0xFF);
-                        words_needed--;
-                    }
-                    fifo[v].pop_front();
-                }
+                // word_index[v] now correctly points to the next unconsumed word
+                // Remaining words in current_qw will be picked up by the next iteration
 
                 ExecuteCommand(v, cmd, imm, num, payload, irq_bit, use_mask);
 
@@ -544,6 +535,7 @@ void VIF::ProcessFifo(int v) {
                 std::vector<uint8_t> empty;
                 ExecuteCommand(v, cmd, imm, num, empty, irq_bit, use_mask);
             }
+
         }
 
 
