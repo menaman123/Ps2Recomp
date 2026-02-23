@@ -464,7 +464,14 @@ void VIF::ProcessFifo(int v) {
             }
             else {
                 switch (cmd) {
+                    case CMD_STMASK:
+                        bytes_needed = 4; 
+                        force_align = false; // STMASK is usually inline, but technically could be separate
+                        break;
                     case CMD_STROW:
+                        bytes_needed = 16; 
+                        force_align = false; // STROW/STCOL are usually inline
+                        break;
                     case CMD_STCOL:
                         bytes_needed = 16; 
                         force_align = false; // STROW/STCOL are usually inline
