@@ -7826,6 +7826,186 @@ Label_epilogue:
     return;
 }
 
+if (func.base_address == 0x00202e28) {
+    file << R"code(
+void FUN_00202e28(CpuContext& ctx) {
+    // ================================================================
+    // Prologue: 0x202e28 - 0x202e38
+    // ================================================================
+    ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] - 0x10;
+    // 0x202e2c: move a2, a0  — save param_1 in a2
+    ctx.cpuRegs.GPR.r[6].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0];
+    // 0x202e30: sd s0, 0x0(sp)
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[16].UD[0]);
+    // 0x202e34: ori v0, zero, 0x8000
+    ctx.cpuRegs.GPR.r[2].UD[0] = 0x8000;
+    // 0x202e38: sd ra, 0x8(sp)
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
+
+    // ================================================================
+    // Setup: 0x202e3c - 0x202e6c
+    // ================================================================
+    // 0x202e3c: addu v0, a2, v0  — v0 = param_1 + 0x8000
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0]);
+    // 0x202e40: lw v1, 0x0(a1)  — v1 = *param_2
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x0));
+    // 0x202e44: lw a0, 0x144(v0)  — a0 = *(param_1 + 0x8144)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x144));
+    // 0x202e48: sll v1, v1, 2  — v1 = *param_2 << 2
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) << 2);
+    // 0x202e4c: addu v1, a2, v1  — v1 = param_1 + *param_2 * 4
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[3].SL[0]);
+    // 0x202e50: lw v0, 0x4(a0)  — v0 = piVar2[1]
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0] + 0x4));
+    // 0x202e54: lw a1, 0x58(v1)  — a1 = iVar1 = *(param_1 + *param_2 * 4 + 0x58)
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0] + 0x58));
+    // 0x202e58: lw v1, 0x1c(a1)  — v1 = *(iVar1 + 0x1c)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0] + 0x1c));
+    // 0x202e5c: xor v0, a1, v0  — v0 = iVar1 ^ piVar2[1]
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0] ^ ctx.cpuRegs.GPR.r[2].UD[0];
+    // 0x202e60: andi a0, v1, 0xf  — a0 = switch value
+    ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & 0xf;
+    // 0x202e64: sltiu v1, a0, 9
+    // 0x202e68: beq v1, zero, caseD_0  — if a0 >= 9, goto default
+    // 0x202e6c: _sltiu a3, v0, 1  — delay slot, ALWAYS: a3 = (v0 == 0) = (iVar1 == piVar2[1])
+    ctx.cpuRegs.GPR.r[7].UD[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+    if (ctx.cpuRegs.GPR.r[4].UL[0] >= 9) goto Label_caseD_0;
+
+    // ================================================================
+    // Switch dispatch: 0x202e70 - 0x202e88
+    // Cases 0,1,4,5,6,7,8 → caseD_0 (default/return)
+    // Case 2 → caseD_2
+    // Case 3 → caseD_3
+    // ================================================================
+    switch (ctx.cpuRegs.GPR.r[4].UL[0]) {
+        case 2: goto Label_caseD_2;
+        case 3: goto Label_caseD_3;
+        default: goto Label_caseD_0;
+    }
+
+    // ================================================================
+    // caseD_2: 0x202e8c
+    // ================================================================
+Label_caseD_2:
+    // 0x202e8c: bne a3, zero, LAB_202ea8  — if iVar1 == piVar2[1], goto shared cleanup
+    // 0x202e90: _ori v0, zero, 0x8000  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[2].UD[0] = 0x8000;
+    if (ctx.cpuRegs.GPR.r[7].UL[0] != 0) goto Label_00202ea8;
+
+    // iVar1 != piVar2[1] path:
+    // 0x202e94: jal FUN_00203230
+    // 0x202e98: _move a0, a2  — delay slot: a0 = param_1
+    // a1 still = iVar1 from 0x202e54
+    ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[6].UD[0];
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x00202e9c;
+    {
+        auto it = recompiled_functions.find(0x203230u);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, 0x203230);
+        } else {
+            ctx.cpuRegs.pc = 0x203230;
+            goto Label_00202ee0;
+        }
+    }
+    // 0x202e9c: b LAB_202ee0
+    // 0x202ea0: _ld s0, 0x0(sp)  — delay slot: restore s0
+    ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
+    goto Label_00202ee0;
+
+    // ================================================================
+    // caseD_3: 0x202ea4
+    // ================================================================
+Label_caseD_3:
+    // 0x202ea4: ori v0, zero, 0x8000
+    ctx.cpuRegs.GPR.r[2].UD[0] = 0x8000;
+    // fall through to Label_00202ea8
+
+    // ================================================================
+    // Shared cleanup path: 0x202ea8 (from caseD_2 bne and caseD_3 fallthrough)
+    // ================================================================
+Label_00202ea8:
+    // 0x202ea8: addu v0, a2, v0  — v0 = param_1 + 0x8000
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[6].SL[0] + ctx.cpuRegs.GPR.r[2].SL[0]);
+    // 0x202eac: lw s0, 0x144(v0)  — s0 = piVar2 = *(param_1 + 0x8144)
+    ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x144));
+    // 0x202eb0: lw a0, 0x14(s0)  — a0 = piVar2[5]
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14));
+    // 0x202eb4: jal FUN_00203230
+    // 0x202eb8: _lw a1, 0x0(s0)  — delay slot: a1 = piVar2[0]
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x00202ebc;
+    {
+        auto it = recompiled_functions.find(0x203230u);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, 0x203230);
+        } else {
+            ctx.cpuRegs.pc = 0x203230;
+            goto Label_caseD_0;
+        }
+    }
+
+    // 0x202ebc: lw a0, 0x14(s0)  — a0 = piVar2[5]
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14));
+    // 0x202ec0: jal FUN_00203230
+    // 0x202ec4: _lw a1, 0x4(s0)  — delay slot: a1 = piVar2[1]
+    ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x4));
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x00202ec8;
+    {
+        auto it = recompiled_functions.find(0x203230u);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, 0x203230);
+        } else {
+            ctx.cpuRegs.pc = 0x203230;
+            goto Label_caseD_0;
+        }
+    }
+
+    // 0x202ec8-0x202ed8: zero out piVar2[0..4]
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, 0);
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x00, 0);
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x04, 0);
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x08, 0);
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0c, 0);
+    // fall through to caseD_0
+
+    // ================================================================
+    // caseD_0 / default: 0x202edc
+    // ================================================================
+Label_caseD_0:
+    // 0x202edc: ld s0, 0x0(sp)  — restore s0
+    ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
+    // fall through to epilogue
+
+    // ================================================================
+    // Epilogue: 0x202ee0
+    // ================================================================
+Label_00202ee0:
+    // 0x202ee0: ld ra, 0x8(sp)
+    ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8);
+    // 0x202ee4: jr ra
+    // 0x202ee8: _addiu sp, sp, 0x10
+    ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x10;
+    return;
+}
+)code" << std::endl;
+    return;
+}
+
+
 
 if (func.base_address == 0x00202ef0) {
         // FUN_00202ef0

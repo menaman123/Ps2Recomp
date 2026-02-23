@@ -1,8 +1,8 @@
 Starting Host Application...
 ISO Loaded Successfully: C:\Users\Owner\Desktop\PS2_Recomp\Crash_TwinSanity.rep\Crash Twinsanity.iso
 [IO WRITE] Address: 1000f230, Value: 20000
-[CPU] Thread Started.
-[GFX] Graphics Thread Started.
+[CPU] Thread Started.[GFX] Graphics Thread Started.
+
 Scheduler: Thread 1 added to priority 0 queue
 [CPU] Main thread initialized and fiber created. Entering scheduler loop...
 Scheduler: Starting main loop
@@ -3597,6 +3597,44 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -3874,121 +3912,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4173,16 +4098,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4293,10 +4208,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4516,8 +4429,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4603,6 +4514,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4848,8 +4761,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4933,6 +4844,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5200,8 +5113,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5258,6 +5169,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5528,8 +5441,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5606,6 +5517,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5871,8 +5784,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5916,6 +5827,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6201,8 +6114,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6235,6 +6146,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6548,8 +6461,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6566,6 +6477,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6878,13 +6791,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7213,18 +7119,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7536,18 +7432,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7875,10 +7761,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -8195,9 +8079,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -8524,14 +8405,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -8844,13 +8719,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9171,9 +9041,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9514,19 +9381,9 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10182,18 +10039,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10508,19 +10355,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10849,18 +10685,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11176,18 +11002,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11525,18 +11341,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11852,19 +11658,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12521,28 +12316,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12877,18 +12652,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13185,11 +12950,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13206,10 +12966,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13514,6 +13272,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13521,8 +13281,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13833,12 +13591,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14144,8 +13896,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14154,6 +13904,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14780,6 +14532,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14787,8 +14541,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15427,12 +15179,12 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15766,15 +15518,9 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16084,7 +15830,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16405,6 +16150,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16422,8 +16169,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16739,11 +16484,11 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17063,6 +16808,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17073,8 +16820,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17397,11 +17142,11 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17724,6 +17469,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17743,8 +17490,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18735,15 +18480,11 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19398,12 +19139,11 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19723,8 +19463,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20387,24 +20125,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20724,6 +20446,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20735,8 +20459,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21061,6 +20783,7 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21383,6 +21106,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21401,8 +21126,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21727,7 +21450,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22047,13 +21769,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22394,13 +22111,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22718,29 +22430,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -23139,7 +22830,7 @@ HLE CDVD Search: 'CRASH6/CRASH.BD'
 [ARCHIVE] Loaded 264 entries
 HLE CDVD Search: 'Language\Code'
 [ISO9660] Searching for components: [0]='LANGUAGE' [1]='CODE' 
-[HLE CDVD] ARCHIVE PREFIX: 'Language\Code' matched 'language\code\american.txt' bd_offset=1fbe7 size=5347
+[HLE CDVD] ARCHIVE DIR PREFIX: 'Language\Code' matched 'language\code\american.txt' bd_offset=1fbe7 size=5347
 [HLE CDVD] Opened 'Language\Code' handle=0 lba=74228 offset=1fbe7 size=5347
 [HLE CDVD] GetFileSize → 5347 (handle=0)
 !!! HLE_FUN_002aac80 CALLED !!!
@@ -23555,7 +23246,6 @@ Free: freeing ptr 0x1fb9ed0
 [HLE Heap] High Alloc: 20 bytes at 0x1fb9e30
 Free: freeing ptr 0x1fdd620
 [177168] working sp=0x70003f00
-[1714a8] working sp=0x70003eb0
 [HLE Heap] High Alloc: 20 bytes at 0x1fb9e10
 [HLE Heap] High Alloc: 20 bytes at 0x1fb9df0
 Free: freeing ptr 0x1fb9e10
@@ -23583,19 +23273,3010 @@ Free: freeing ptr 0x1fb9cd0
 Free: freeing ptr 0x1fb9db0
 Free: freeing ptr 0x1fb9df0
 Free: freeing ptr 0x1fb9d10
-[259db8] working sp=0x70003e90
-[255188] working sp=0x70003e00
-[255188] working sp=0x70003d70
-[255188] working sp=0x70003e00
-[255188] working sp=0x70003e00
-[255188] working sp=0x70003e50
-[255188] working sp=0x70003e00
-[255188] working sp=0x70003e00
-[255188] working sp=0x70003e00
-[255188] working sp=0x70003e50
-[255188] working sp=0x70003e50
-[255188] working sp=0x70003e50
-[255188] working sp=0x70003e50
-[255188] working sp=0x70003e50
-[2555f8] working sp=0x70003e70
-[255188] working sp=0x70003e30
+[IO WRITE] Address: 10008020, Value: 0
+DMAC Write Address: 10008020, Value: 0
+DMAC Channel: 0 Address: 0x10008020 Value: 0x0
+[IO WRITE] Address: 10008030, Value: 2e4b30
+DMAC Write Address: 10008030, Value: 2e4b30
+DMAC Channel: 0 Address: 0x10008030 Value: 0x2e4b30
+[IO WRITE] Address: 10008000, Value: 145
+DMAC Write Address: 10008000, Value: 145
+DMAC Channel: 0 Address: 0x10008000 Value: 0x145
+DMAC DIRECTION: 1
+DMAC: Starting channel 0
+  CHCR: 0x145
+  MADR: 0x0
+  QWC:  0
+  TADR: 0x2e4b30
+DMAC: VIF0 DMA started (Mode: 1)
+========================================
+[VIF0 DMA] Chain Processing Started
+========================================
+  Initial Registers:
+    CHCR: 0x145
+    MADR: 0x0
+    TADR: 0x2e4b30
+    QWC:  0
+    ASR0: 0x0
+    ASR1: 0x0
+  CHCR Flags:
+    Mode: 1 (should be 1 for chain)
+    TTE:  YES - Tag data transferred to VIF
+    TIE:  NO
+    ASP:  0 (call stack depth)
+  Chain Start:
+    TADR (physical): 0x2e4b30
+    Starting from:   MAIN RAM
+[DEBUG] Pre-scan of DMA chain at 0x2e4b30:
+  Reading lo_tag at 0x2e4b30
+  Value at lo: 0x100000d0
+  Reading hi_tag at 0x2e4b38
+  Value at hi_tag: 0x0
+  [0] @ 0x2e4b30: ID=1 QWC=208 ADDR=0x0 LO: 0x100000d0 HI: 0x0
+  Reading lo_tag at 0x2e4b40
+  Value at lo: 0x200002ff5a000fff
+  Reading hi_tag at 0x2e4b48
+  Value at hi_tag: 0x8000033c
+  [1] @ 0x2e4b40: ID=5 QWC=4095 ADDR=0x200002f0 LO: 0x200002ff5a000fff HI: 0x8000033c
+  Reading lo_tag at 0x2e4b50
+  Value at lo: 0x2ff1001080a
+  Reading hi_tag at 0x2e4b58
+  Value at hi_tag: 0x81e20b7d
+  [2] @ 0x2e4b50: ID=1 QWC=2058 ADDR=0x2f0 LO: 0x2ff1001080a HI: 0x81e20b7d
+  Reading lo_tag at 0x2e4b60
+  Value at lo: 0x2ff81e2137d
+  Reading hi_tag at 0x2e4b68
+  Value at hi_tag: 0x81e21b7d
+  [3] @ 0x2e4b60: ID=0 QWC=4989 ADDR=0x2f0 LO: 0x2ff81e2137d HI: 0x81e21b7d
+
+Raw bytes @ 0x628990: 00 00 00 00 00 00 00 00 
+
+  ┌─────────────────────────────────────────────────
+  │ TAG #0
+  └─────────────────────────────────────────────────
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+    Reading tag from RAM @ 0x2e4b30
+    Raw tag_hi bytes:
+      00 00 00 00 00 00 00 4a 
+    Raw Tag Data:
+      tag_lo: 0x00000000100000d0
+      tag_hi: 0x4a00000000000000
+    Parsed Tag Fields:
+      ID:   1 (CNT)
+      QWC:  208 quadwords (3328 bytes)
+      ADDR: 0x0
+      UNALIGNED ADDR: 0x0
+      IRQ:  NO
+      SPR:  NO (RAM)
+      PCE:  0
+    CHCR.TAG updated: 0x145 -> 0x10000145
+    TTE Data (VIF commands in tag_hi):
+      Word 0: 0x00000000 (CMD=0x00)
+      Word 1: 0x4a000000 (CMD=0x4a)
+    Processing Tag ID 1 (CNT):
+      CNT: Transfer data after tag, continue
+        Data source: 0x2e4b40 (RAM)
+        Next TADR:   0x2e5840
+    Register Updates:
+      MADR -> 0x2e4b40
+      TADR -> 0x2e5840
+      QWC  -> 208
+    TTE Transfer:
+      Sending tag_hi (8 bytes) to VIF0 before payload
+      TTE bytes: 00 00 00 00 00 00 00 4a 
+[VIF0] ProcessData: 8 bytes
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x4a000000
+    [VIF STATE CHECK] After TTE processing:
+      VIF0 state: 0
+      Pending bytes: 0
+      About to send: 3328 bytes
+      [WARNING] VIF is in IDLE but has data pending!
+      [WARNING] Data will be interpreted as commands - likely wrong!
+    Data Transfer (RAM):
+      Source:     0x2e4b40
+      Translated: 0x2e4b40
+      Size:       3328 bytes (208 QW)
+      First 64 bytes:
+        ff 0f 00 5a ff 02 00 20 3c 03 00 80 ff 02 00 00 
+        0a 08 01 10 ff 02 00 00 7d 0b e2 81 ff 02 00 00 
+        7d 13 e2 81 ff 02 00 00 7d 1b e2 81 ff 02 00 00 
+        7d 23 e2 81 ff 02 00 00 7d 2b e2 81 ff 02 00 00 
+      Sending to VIF0...
+[VIF0] ProcessData: 3328 bytes
+[VIF0] WriteToLatch: Data=0x5a000fff
+[VIF0] WriteToLatch: Data=0x200002ff
+[VIF0] ProcessFifo: State=0
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] Code=0x4a000000 CMD=0x4a IMM=0x0
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x1001080a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 4
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 4 words
+[VIF0] WriteToLatch: Data=0x81e20b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2137d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 8
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 8 words
+[VIF0] WriteToLatch: Data=0x81e21b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2237d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 12
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 12 words
+[VIF0] WriteToLatch: Data=0x81e22b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2337d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 16
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 16 words
+[VIF0] WriteToLatch: Data=0x81e23b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a001ff5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 20
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 20 words
+[VIF0] WriteToLatch: Data=0x81e2437d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 24
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 24 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e1137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 28
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 28 words
+[VIF0] WriteToLatch: Data=0x81e2137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e3137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 32
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 32 words
+[VIF0] WriteToLatch: Data=0x81e4137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e5137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 36
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 36 words
+[VIF0] WriteToLatch: Data=0x81e6137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e7137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 40
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 40 words
+[VIF0] WriteToLatch: Data=0x81e8137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a000fff
+[VIF0] WriteToLatch: Data=0x200002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 44
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 44 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 48
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 48 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a001ff3
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 52
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 52 words
+[VIF0] WriteToLatch: Data=0x1001080a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 56
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 56 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0154a7eb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 60
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 60 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x003f07da
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x809f07c0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 64
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 64 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8140ffe6
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fff9fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 68
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 68 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00053
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x81e0f9fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 72
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 72 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00a7f
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81e00a3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 76
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 76 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81e0fa7f
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81e00fe7
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 80
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 80 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fff9fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0ffe6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 84
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 84 words
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x81fff8ea
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x81e0f95e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 88
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 88 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x81e0f91e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0f85e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 92
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 92 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e318aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e3296a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 96
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 96 words
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x81e322be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0f8de
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 100
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 100 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e2112a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e22abd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 104
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 104 words
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x81e20abd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e0fa3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 108
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 108 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e41fe9
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81c110ec
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 112
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 112 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 116
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 116 words
+[VIF0] WriteToLatch: Data=0x01e5008e
+[VIF0] WriteToLatch: Data=0x01c009fe
+[VIF0] WriteToLatch: Data=0x01e40091
+[VIF0] WriteToLatch: Data=0x01c0185e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 120
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 120 words
+[VIF0] WriteToLatch: Data=0x01e8008f
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e70090
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 124
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 124 words
+[VIF0] WriteToLatch: Data=0x01e30094
+[VIF0] WriteToLatch: Data=0x01c010a3
+[VIF0] WriteToLatch: Data=0x01e60092
+[VIF0] WriteToLatch: Data=0x01e129bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 128
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 128 words
+[VIF0] WriteToLatch: Data=0x01e50093
+[VIF0] WriteToLatch: Data=0x01e140bd
+[VIF0] WriteToLatch: Data=0x01e90080
+[VIF0] WriteToLatch: Data=0x01e13a8a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 132
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 132 words
+[VIF0] WriteToLatch: Data=0x01e80081
+[VIF0] WriteToLatch: Data=0x01e221bc
+[VIF0] WriteToLatch: Data=0x01e70082
+[VIF0] WriteToLatch: Data=0x01e230bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 136
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 136 words
+[VIF0] WriteToLatch: Data=0x01e40085
+[VIF0] WriteToLatch: Data=0x01e228be
+[VIF0] WriteToLatch: Data=0x01e60083
+[VIF0] WriteToLatch: Data=0x01e018bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 140
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 140 words
+[VIF0] WriteToLatch: Data=0x01e50084
+[VIF0] WriteToLatch: Data=0x01e0500b
+[VIF0] WriteToLatch: Data=0x01e30086
+[VIF0] WriteToLatch: Data=0x01e0500f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 144
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 144 words
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x01e149bc
+[VIF0] WriteToLatch: Data=0x100100f0
+[VIF0] WriteToLatch: Data=0x01e140bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 148
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 148 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x01e1384a
+[VIF0] WriteToLatch: Data=0x34031000
+[VIF0] WriteToLatch: Data=0x01e231bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 152
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 152 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e228bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e220be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 156
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 156 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e018bf
+[VIF0] WriteToLatch: Data=0x100400f0
+[VIF0] WriteToLatch: Data=0x01e00acb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 160
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 160 words
+[VIF0] WriteToLatch: Data=0x800308b5
+[VIF0] WriteToLatch: Data=0x01e0080f
+[VIF0] WriteToLatch: Data=0x80030874
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 164
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 164 words
+[VIF0] WriteToLatch: Data=0x100300f0
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x34042000
+[VIF0] WriteToLatch: Data=0x01e059fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 168
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 168 words
+[VIF0] WriteToLatch: Data=0x34051800
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x800520f5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 172
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 172 words
+[VIF0] WriteToLatch: Data=0x80052134
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x80012075
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 176
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 176 words
+[VIF0] WriteToLatch: Data=0x800218b5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e70004
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 180
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 180 words
+[VIF0] WriteToLatch: Data=0x01e20005
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01ef0008
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 184
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 184 words
+[VIF0] WriteToLatch: Data=0x01e10006
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01ee0007
+[VIF0] WriteToLatch: Data=0x01e539bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 188
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 188 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e510bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e67bec
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 192
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 192 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e508be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e5734b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 196
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 196 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e439bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ef7bea
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 200
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 200 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e410bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e408be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 204
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 204 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4730b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010f7bc1
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 208
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 208 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e339bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e310bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 212
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 212 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e308be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010f78c2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 216
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 216 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e372cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e639bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 220
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 220 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e610bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010f197c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 224
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 224 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e608be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6738b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 228
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 228 words
+[VIF0] WriteToLatch: Data=0x01c100a0
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 232
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 232 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01ea0098
+[VIF0] WriteToLatch: Data=0x01e051bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 236
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 236 words
+[VIF0] WriteToLatch: Data=0x01e70099
+[VIF0] WriteToLatch: Data=0x01e138bc
+[VIF0] WriteToLatch: Data=0x01e8009a
+[VIF0] WriteToLatch: Data=0x01e140bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 240
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 240 words
+[VIF0] WriteToLatch: Data=0x01e1009b
+[VIF0] WriteToLatch: Data=0x01e14a4a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e351bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 244
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 244 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e338bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e340be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 248
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 248 words
+[VIF0] WriteToLatch: Data=0x03e04808
+[VIF0] WriteToLatch: Data=0x01e30a4b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e451bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 252
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 252 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e438bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e440be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 256
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 256 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4088b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e551bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 260
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 260 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e538bd
+[VIF0] WriteToLatch: Data=0x03e04800
+[VIF0] WriteToLatch: Data=0x01e540be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 264
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 264 words
+[VIF0] WriteToLatch: Data=0x03e01001
+[VIF0] WriteToLatch: Data=0x01e5088b
+[VIF0] WriteToLatch: Data=0x01ea009c
+[VIF0] WriteToLatch: Data=0x01e651bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 268
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 268 words
+[VIF0] WriteToLatch: Data=0x01e7009d
+[VIF0] WriteToLatch: Data=0x01e638bd
+[VIF0] WriteToLatch: Data=0x01e8009e
+[VIF0] WriteToLatch: Data=0x01e640be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 272
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 272 words
+[VIF0] WriteToLatch: Data=0x01e9009f
+[VIF0] WriteToLatch: Data=0x01e6084b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e351bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 276
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 276 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e338bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e340be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 280
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 280 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e348cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e451bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 284
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 284 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e438bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e440be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 288
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 288 words
+[VIF0] WriteToLatch: Data=0x03e01804
+[VIF0] WriteToLatch: Data=0x01e4490b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e551bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 292
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 292 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e538bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e540be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 296
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 296 words
+[VIF0] WriteToLatch: Data=0x03e02005
+[VIF0] WriteToLatch: Data=0x01e5494b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e651bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 300
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 300 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e638bd
+[VIF0] WriteToLatch: Data=0x03e01002
+[VIF0] WriteToLatch: Data=0x01e640be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 304
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 304 words
+[VIF0] WriteToLatch: Data=0x03e00803
+[VIF0] WriteToLatch: Data=0x01e64a0b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 308
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 308 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x03e02806
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 312
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 312 words
+[VIF0] WriteToLatch: Data=0x03e04007
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 316
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 316 words
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81c113ec
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 320
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 320 words
+[VIF0] WriteToLatch: Data=0x01ee0091
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01ed0092
+[VIF0] WriteToLatch: Data=0x01c009fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 324
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 324 words
+[VIF0] WriteToLatch: Data=0x01ec0093
+[VIF0] WriteToLatch: Data=0x01c011e3
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c07a1e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 328
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 328 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e371bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e368bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 332
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 332 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e363ca
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e471bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 336
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 336 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e468bd
+[VIF0] WriteToLatch: Data=0x01f40083
+[VIF0] WriteToLatch: Data=0x01e4604a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 340
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 340 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e571bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e568bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 344
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 344 words
+[VIF0] WriteToLatch: Data=0x01f30084
+[VIF0] WriteToLatch: Data=0x01e5628a
+[VIF0] WriteToLatch: Data=0x01f20085
+[VIF0] WriteToLatch: Data=0x01e3a1bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 348
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 348 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01f179fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01f009fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 352
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 352 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e398bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e3908a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 356
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 356 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4a1bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e498bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 360
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 360 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4924a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e5a1bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 364
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 364 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e598bd
+[VIF0] WriteToLatch: Data=0x01f60008
+[VIF0] WriteToLatch: Data=0x01e592ca
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 368
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 368 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e671bc
+[VIF0] WriteToLatch: Data=0x01ed0094
+[VIF0] WriteToLatch: Data=0x01e668bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 372
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 372 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01f551fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6b3ac
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 376
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 376 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e660be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e06dcb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 380
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 380 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ec11fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6a1bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 384
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 384 words
+[VIF0] WriteToLatch: Data=0x01ed0086
+[VIF0] WriteToLatch: Data=0x01f649fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01f459fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 388
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 388 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e698bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e690be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 392
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 392 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e06b4b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e889bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 396
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 396 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e880bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e8ac0a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 400
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 400 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e779bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e708bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 404
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 404 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e750be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0b8bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 408
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 408 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0800b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0800f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 412
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 412 words
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x01ee73ea
+[VIF0] WriteToLatch: Data=0x100300f0
+[VIF0] WriteToLatch: Data=0x01e861bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 416
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 416 words
+[VIF0] WriteToLatch: Data=0x34041000
+[VIF0] WriteToLatch: Data=0x01e8b0bd
+[VIF0] WriteToLatch: Data=0x34051800
+[VIF0] WriteToLatch: Data=0x01e8a30a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 420
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 420 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e711bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e748bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 424
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 424 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e758be
+[VIF0] WriteToLatch: Data=0x10010040
+[VIF0] WriteToLatch: Data=0x01e068bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 428
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 428 words
+[VIF0] WriteToLatch: Data=0x800520f5
+[VIF0] WriteToLatch: Data=0x01e0660b
+[VIF0] WriteToLatch: Data=0x800118b4
+[VIF0] WriteToLatch: Data=0x01e0600f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 432
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 432 words
+[VIF0] WriteToLatch: Data=0x80052074
+[VIF0] WriteToLatch: Data=0x010f7bc1
+[VIF0] WriteToLatch: Data=0x100400f0
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 436
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 436 words
+[VIF0] WriteToLatch: Data=0x34042000
+[VIF0] WriteToLatch: Data=0x01e0c1fd
+[VIF0] WriteToLatch: Data=0x34042000
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 440
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 440 words
+[VIF0] WriteToLatch: Data=0x800220b5
+[VIF0] WriteToLatch: Data=0x010f7bc2
+[VIF0] WriteToLatch: Data=0x80011075
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 444
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 444 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x52010026
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 448
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 448 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010f797c
+[VIF0] WriteToLatch: Data=0x01eb008a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 452
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 452 words
+[VIF0] WriteToLatch: Data=0x01ea008b
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e9008c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 456
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 456 words
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x01e359bc
+[VIF0] WriteToLatch: Data=0x100400f0
+[VIF0] WriteToLatch: Data=0x01e350bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 460
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 460 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e3484a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e459bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 464
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 464 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e450bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4488a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 468
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 468 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e559bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ed09fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 472
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 472 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e550bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e54b0a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 476
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 476 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e659bc
+[VIF0] WriteToLatch: Data=0x01ee008d
+[VIF0] WriteToLatch: Data=0x01eb11fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 480
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 480 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e650bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e648be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 484
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 484 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01ea61fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0724b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 488
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 488 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e869bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e858bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 492
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 492 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e8520a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e709bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 496
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 496 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e710bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e760be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 500
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 500 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e048bf
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0440b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 504
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 504 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0400f
+[VIF0] WriteToLatch: Data=0x34042000
+[VIF0] WriteToLatch: Data=0x01e081fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 508
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 508 words
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x4a9f0100
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 2048
+[VIF0] WORDS_NEEDED: 512
+[VIF0] FIFO_WORDS: 512
+[VIF0] WAIT_DATA: Needs 512 words, FIFO has 512 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=0 Payload=2048 bytes
+[VIF0] MPG: Writing 2048 bytes to VU0 micro memory at 0x0
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] Code=0x4a9f0100 CMD=0x4a IMM=0x100
+[VIF0] WriteToLatch: Data=0x800220b5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x800310b5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 4
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 4 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x50020005
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 8
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 8 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x40000017
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 12
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 12 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 16
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 16 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e70004
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 20
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 20 words
+[VIF0] WriteToLatch: Data=0x01e20005
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e10006
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 24
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 24 words
+[VIF0] WriteToLatch: Data=0x01ee0007
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e339bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 28
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 28 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e310bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e308be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 32
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 32 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e372cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e439bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 36
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 36 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e410bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e408be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 40
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 40 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4730b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e539bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 44
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 44 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e510bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e508be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 48
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 48 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e5734b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e639bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 52
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 52 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e610bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e608be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 56
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 56 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6738b
+[VIF0] WriteToLatch: Data=0x01e20004
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 60
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 60 words
+[VIF0] WriteToLatch: Data=0x01e10005
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01ee0006
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 64
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 64 words
+[VIF0] WriteToLatch: Data=0x01ea0007
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e311bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 68
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 68 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e308bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e370be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 72
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 72 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e352cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e411bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 76
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 76 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e408bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e470be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 80
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 80 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4530b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e511bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 84
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 84 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e508bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e570be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 88
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 88 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e5534b
+[VIF0] WriteToLatch: Data=0x01f00000
+[VIF0] WriteToLatch: Data=0x01e611bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 92
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 92 words
+[VIF0] WriteToLatch: Data=0x01e20001
+[VIF0] WriteToLatch: Data=0x01e608bd
+[VIF0] WriteToLatch: Data=0x01e10002
+[VIF0] WriteToLatch: Data=0x01e670be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 96
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 96 words
+[VIF0] WriteToLatch: Data=0x01ea0003
+[VIF0] WriteToLatch: Data=0x01e6538b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e381bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 100
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 100 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e310bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e308be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 104
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 104 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e351cb
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e481bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 108
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 108 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e410bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e408be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 112
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 112 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4520b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e581bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 116
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 116 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e510bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e508be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 120
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 120 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e5524b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e681bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 124
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 124 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e610bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e608be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 128
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 128 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6528b
+[VIF0] WriteToLatch: Data=0x01fb080e
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 132
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 132 words
+[VIF0] WriteToLatch: Data=0x01e10800
+[VIF0] WriteToLatch: Data=0x01fb36ec
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 136
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 136 words
+[VIF0] WriteToLatch: Data=0x01fa0801
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01fc0804
+[VIF0] WriteToLatch: Data=0x01fbdfaa
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 140
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 140 words
+[VIF0] WriteToLatch: Data=0x01e10802
+[VIF0] WriteToLatch: Data=0x01e209bc
+[VIF0] WriteToLatch: Data=0x01fa0803
+[VIF0] WriteToLatch: Data=0x01e2d0bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 144
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 144 words
+[VIF0] WriteToLatch: Data=0x01ea0809
+[VIF0] WriteToLatch: Data=0x011ef781
+[VIF0] WriteToLatch: Data=0x01e80805
+[VIF0] WriteToLatch: Data=0x01e20f4a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 148
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 148 words
+[VIF0] WriteToLatch: Data=0x01e90806
+[VIF0] WriteToLatch: Data=0x01e6d1bc
+[VIF0] WriteToLatch: Data=0x01e10808
+[VIF0] WriteToLatch: Data=0x01e6e0bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 152
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 152 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011ef782
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e640be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 156
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 156 words
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x01e048bf
+[VIF0] WriteToLatch: Data=0x01fc0807
+[VIF0] WriteToLatch: Data=0x01e0e80b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 160
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 160 words
+[VIF0] WriteToLatch: Data=0x801e03bd
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 164
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 164 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x01e0e80f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 168
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 168 words
+[VIF0] WriteToLatch: Data=0x01e9080a
+[VIF0] WriteToLatch: Data=0x01e2e1bc
+[VIF0] WriteToLatch: Data=0x01e1080b
+[VIF0] WriteToLatch: Data=0x01e208bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 172
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 172 words
+[VIF0] WriteToLatch: Data=0x01e8080c
+[VIF0] WriteToLatch: Data=0x01e2574a
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x010007a0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 176
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 176 words
+[VIF0] WriteToLatch: Data=0x01fa080d
+[VIF0] WriteToLatch: Data=0x01e649bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e608bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 180
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 180 words
+[VIF0] WriteToLatch: Data=0x01e8080f
+[VIF0] WriteToLatch: Data=0x01e640be
+[VIF0] WriteToLatch: Data=0x807e03bc
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 184
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 184 words
+[VIF0] WriteToLatch: Data=0x01e10810
+[VIF0] WriteToLatch: Data=0x01e0d0bf
+[VIF0] WriteToLatch: Data=0x01e20811
+[VIF0] WriteToLatch: Data=0x01e0e80b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 188
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 188 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0e80f
+[VIF0] WriteToLatch: Data=0x01fa0812
+[VIF0] WriteToLatch: Data=0x01e341bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 192
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 192 words
+[VIF0] WriteToLatch: Data=0x100100f0
+[VIF0] WriteToLatch: Data=0x01e308bd
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x01e310be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 196
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 196 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x01c0dedc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e3d74b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 200
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 200 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e441bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e408bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 204
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 204 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e7ded8
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e410be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 208
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 208 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4d70b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e541bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 212
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 212 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fb31ac
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e508bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 216
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 216 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e510be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e5d6cb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 220
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 220 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e641bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e608bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 224
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 224 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e610be
+[VIF0] WriteToLatch: Data=0x800110b5
+[VIF0] WriteToLatch: Data=0x01e6d68b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 228
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 228 words
+[VIF0] WriteToLatch: Data=0x01fd080e
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 232
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 232 words
+[VIF0] WriteToLatch: Data=0x01fc0800
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01fe0801
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 236
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 236 words
+[VIF0] WriteToLatch: Data=0x01fb0802
+[VIF0] WriteToLatch: Data=0x01e6ef6c
+[VIF0] WriteToLatch: Data=0x01fc0803
+[VIF0] WriteToLatch: Data=0x01e2e1bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 240
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 240 words
+[VIF0] WriteToLatch: Data=0x01fa0804
+[VIF0] WriteToLatch: Data=0x01e2f0bd
+[VIF0] WriteToLatch: Data=0x100300f0
+[VIF0] WriteToLatch: Data=0x01fdefaa
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 244
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 244 words
+[VIF0] WriteToLatch: Data=0x01fb0805
+[VIF0] WriteToLatch: Data=0x01e2d84a
+[VIF0] WriteToLatch: Data=0x01fc0806
+[VIF0] WriteToLatch: Data=0x01e6e1bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 248
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 248 words
+[VIF0] WriteToLatch: Data=0x01e30807
+[VIF0] WriteToLatch: Data=0x01e6d0bd
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x011ef781
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 252
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 252 words
+[VIF0] WriteToLatch: Data=0x01fa0808
+[VIF0] WriteToLatch: Data=0x01e6d8be
+[VIF0] WriteToLatch: Data=0x01fb080c
+[VIF0] WriteToLatch: Data=0x01e0e0bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 256
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 256 words
+[VIF0] WriteToLatch: Data=0x01e50809
+[VIF0] WriteToLatch: Data=0x01e0080b
+[VIF0] WriteToLatch: Data=0x01fc080d
+[VIF0] WriteToLatch: Data=0x011ef782
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 260
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 260 words
+[VIF0] WriteToLatch: Data=0x01e4080a
+[VIF0] WriteToLatch: Data=0x01e0080f
+[VIF0] WriteToLatch: Data=0x01e1080b
+[VIF0] WriteToLatch: Data=0x01e219bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 264
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 264 words
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x01e2d0bd
+[VIF0] WriteToLatch: Data=0x801e03bd
+[VIF0] WriteToLatch: Data=0x01e2288a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 268
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 268 words
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x01e621bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e608bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 272
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 272 words
+[VIF0] WriteToLatch: Data=0x01fb0811
+[VIF0] WriteToLatch: Data=0x01e6d8be
+[VIF0] WriteToLatch: Data=0x01fc0810
+[VIF0] WriteToLatch: Data=0x01e0e0bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 276
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 276 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0120b
+[VIF0] WriteToLatch: Data=0x01e20812
+[VIF0] WriteToLatch: Data=0x01e0100f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 280
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 280 words
+[VIF0] WriteToLatch: Data=0x800003bf
+[VIF0] WriteToLatch: Data=0x010007a0
+[VIF0] WriteToLatch: Data=0x34031800
+[VIF0] WriteToLatch: Data=0x01e041fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 284
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 284 words
+[VIF0] WriteToLatch: Data=0x34031800
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x807e03bc
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 288
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 288 words
+[VIF0] WriteToLatch: Data=0x800003bf
+[VIF0] WriteToLatch: Data=0x01c0ef5c
+[VIF0] WriteToLatch: Data=0x01fd080f
+[VIF0] WriteToLatch: Data=0x01c7e998
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 292
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 292 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6e9bc
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e6e0bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 296
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 296 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e6d8be
+[VIF0] WriteToLatch: Data=0x800310b5
+[VIF0] WriteToLatch: Data=0x01e0168b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 300
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 300 words
+[VIF0] WriteToLatch: Data=0x01fe080e
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1f7ac
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 304
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 304 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fef7aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011ef781
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 308
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 308 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x011ef782
+[VIF0] WriteToLatch: Data=0x801e03bd
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 312
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 312 words
+[VIF0] WriteToLatch: Data=0x800003bf
+[VIF0] WriteToLatch: Data=0x010007a0
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 316
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 316 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+      Transfer complete.
+    Next iteration: TADR=0x2e5840 fromSpr=NO
+
+  ┌─────────────────────────────────────────────────
+  │ TAG #1
+  └─────────────────────────────────────────────────
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+    Reading tag from RAM @ 0x2e5840
+    Raw tag_hi bytes:
+      00 00 00 00 00 00 00 00 
+    Raw Tag Data:
+      tag_lo: 0x0000000070000000
+      tag_hi: 0x0000000000000000
+    Parsed Tag Fields:
+      ID:   7 (END)
+      QWC:  0 quadwords (0 bytes)
+      ADDR: 0x0
+      UNALIGNED ADDR: 0x0
+      IRQ:  NO
+      SPR:  NO (RAM)
+      PCE:  0
+    CHCR.TAG updated: 0x10000145 -> 0x70000145
+    TTE Data (VIF commands in tag_hi):
+      Word 0: 0x00000000 (CMD=0x00)
+      Word 1: 0x00000000 (CMD=0x00)
+    Processing Tag ID 7 (END):
+      END: Transfer data after tag, then terminate
+        Data source: 0x2e5850 (RAM)
+        Chain ends after this transfer
+    Register Updates:
+      MADR -> 0x2e5850
+      TADR -> 0x2e5850
+      QWC  -> 0
+    TTE Transfer:
+      Sending tag_hi (8 bytes) to VIF0 before payload
+      TTE bytes: 00 00 00 00 00 00 00 00 
+[VIF0] ProcessData: 8 bytes
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 320
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 320 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x100 NUM=159 Payload=1272 bytes
+[VIF0] MPG: Writing 1272 bytes to VU0 micro memory at 0x800
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+    No data to transfer (QWC=0)
+    Next iteration: TADR=0x2e5850 fromSpr=NO
+
+========================================
+[VIF0 DMA] Chain Processing Complete
+========================================
+  Tags processed: 2
+  End reason:     Normal termination
+  Final Registers:
+    CHCR: 0x70000145
+    MADR: 0x2e5850
+    TADR: 0x2e5850
+    QWC:  0
+DMAC: Channel 0 completed
+[VIF0 DMA] STR cleared, channel complete
+========================================
+
+[IO WRITE] Address: 10008020, Value: 0
+DMAC Write Address: 10008020, Value: 0
+DMAC Channel: 0 Address: 0x10008020 Value: 0x0
+[IO WRITE] Address: 10008030, Value: 2e5850
+DMAC Write Address: 10008030, Value: 2e5850
+DMAC Channel: 0 Address: 0x10008030 Value: 0x2e5850
+[IO WRITE] Address: 10008000, Value: 145
+DMAC Write Address: 10008000, Value: 145
+DMAC Channel: 0 Address: 0x10008000 Value: 0x145
+DMAC DIRECTION: 1
+DMAC: Starting channel 0
+  CHCR: 0x145
+  MADR: 0x2e5850
+  QWC:  0
+  TADR: 0x2e5850
+DMAC: VIF0 DMA started (Mode: 1)
+========================================
+[VIF0 DMA] Chain Processing Started
+========================================
+  Initial Registers:
+    CHCR: 0x145
+    MADR: 0x2e5850
+    TADR: 0x2e5850
+    QWC:  0
+    ASR0: 0x0
+    ASR1: 0x0
+  CHCR Flags:
+    Mode: 1 (should be 1 for chain)
+    TTE:  YES - Tag data transferred to VIF
+    TIE:  NO
+    ASP:  0 (call stack depth)
+  Chain Start:
+    TADR (physical): 0x2e5850
+    Starting from:   MAIN RAM
+[DEBUG] Pre-scan of DMA chain at 0x2e5850:
+  Reading lo_tag at 0x2e5850
+  Value at lo: 0x10000052
+  Reading hi_tag at 0x2e5858
+  Value at hi_tag: 0x0
+  [0] @ 0x2e5850: ID=1 QWC=82 ADDR=0x0 LO: 0x10000052 HI: 0x0
+  Reading lo_tag at 0x2e5860
+  Value at lo: 0x200002ff5a000fff
+  Reading hi_tag at 0x2e5868
+  Value at hi_tag: 0x8000033c
+  [1] @ 0x2e5860: ID=5 QWC=4095 ADDR=0x200002f0 LO: 0x200002ff5a000fff HI: 0x8000033c
+  Reading lo_tag at 0x2e5870
+  Value at lo: 0x2ff1001080a
+  Reading hi_tag at 0x2e5878
+  Value at hi_tag: 0x81e20b7d
+  [2] @ 0x2e5870: ID=1 QWC=2058 ADDR=0x2f0 LO: 0x2ff1001080a HI: 0x81e20b7d
+  Reading lo_tag at 0x2e5880
+  Value at lo: 0x2ff81e2137d
+  Reading hi_tag at 0x2e5888
+  Value at hi_tag: 0x81e21b7d
+  [3] @ 0x2e5880: ID=0 QWC=4989 ADDR=0x2f0 LO: 0x2ff81e2137d HI: 0x81e21b7d
+
+Raw bytes @ 0x628990: 00 00 00 00 00 00 00 00 
+
+  ┌─────────────────────────────────────────────────
+  │ TAG #0
+  └─────────────────────────────────────────────────
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+    Reading tag from RAM @ 0x2e5850
+    Raw tag_hi bytes:
+      00 00 00 00 00 00 a4 4a 
+    Raw Tag Data:
+      tag_lo: 0x0000000010000052
+      tag_hi: 0x4aa4000000000000
+    Parsed Tag Fields:
+      ID:   1 (CNT)
+      QWC:  82 quadwords (1312 bytes)
+      ADDR: 0x0
+      UNALIGNED ADDR: 0x0
+      IRQ:  NO
+      SPR:  NO (RAM)
+      PCE:  0
+    CHCR.TAG updated: 0x145 -> 0x10000145
+    TTE Data (VIF commands in tag_hi):
+      Word 0: 0x00000000 (CMD=0x00)
+      Word 1: 0x4aa40000 (CMD=0x4a)
+    Processing Tag ID 1 (CNT):
+      CNT: Transfer data after tag, continue
+        Data source: 0x2e5860 (RAM)
+        Next TADR:   0x2e5d80
+    Register Updates:
+      MADR -> 0x2e5860
+      TADR -> 0x2e5d80
+      QWC  -> 82
+    TTE Transfer:
+      Sending tag_hi (8 bytes) to VIF0 before payload
+      TTE bytes: 00 00 00 00 00 00 a4 4a 
+[VIF0] ProcessData: 8 bytes
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x4aa40000
+    [VIF STATE CHECK] After TTE processing:
+      VIF0 state: 0
+      Pending bytes: 0
+      About to send: 1312 bytes
+      [WARNING] VIF is in IDLE but has data pending!
+      [WARNING] Data will be interpreted as commands - likely wrong!
+    Data Transfer (RAM):
+      Source:     0x2e5860
+      Translated: 0x2e5860
+      Size:       1312 bytes (82 QW)
+      First 64 bytes:
+        ff 0f 00 5a ff 02 00 20 3c 03 00 80 ff 02 00 00 
+        0a 08 01 10 ff 02 00 00 7d 0b e2 81 ff 02 00 00 
+        7d 13 e2 81 ff 02 00 00 7d 1b e2 81 ff 02 00 00 
+        7d 23 e2 81 ff 02 00 00 7d 2b e2 81 ff 02 00 00 
+      Sending to VIF0...
+[VIF0] ProcessData: 1312 bytes
+[VIF0] WriteToLatch: Data=0x5a000fff
+[VIF0] WriteToLatch: Data=0x200002ff
+[VIF0] ProcessFifo: State=0
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] Code=0x4aa40000 CMD=0x4a IMM=0x0
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x1001080a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 4
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 4 words
+[VIF0] WriteToLatch: Data=0x81e20b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2137d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 8
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 8 words
+[VIF0] WriteToLatch: Data=0x81e21b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2237d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 12
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 12 words
+[VIF0] WriteToLatch: Data=0x81e22b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e2337d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 16
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 16 words
+[VIF0] WriteToLatch: Data=0x81e23b7d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a001ff5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 20
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 20 words
+[VIF0] WriteToLatch: Data=0x81e2437d
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 24
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 24 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e1137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 28
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 28 words
+[VIF0] WriteToLatch: Data=0x81e2137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e3137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 32
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 32 words
+[VIF0] WriteToLatch: Data=0x81e4137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e5137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 36
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 36 words
+[VIF0] WriteToLatch: Data=0x81e6137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x81e7137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 40
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 40 words
+[VIF0] WriteToLatch: Data=0x81e8137c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a000fff
+[VIF0] WriteToLatch: Data=0x200002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 44
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 44 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 48
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 48 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x5a001ff3
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 52
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 52 words
+[VIF0] WriteToLatch: Data=0x1001080a
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x400002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 56
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 56 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0154a7eb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 60
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 60 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x003f07da
+[VIF0] WriteToLatch: Data=0x3fc90fd8
+[VIF0] WriteToLatch: Data=0x809f07c0
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 64
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 64 words
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x8140ffe6
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fff9fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 68
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 68 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00053
+[VIF0] WriteToLatch: Data=0x4b400000
+[VIF0] WriteToLatch: Data=0x81e0f9fe
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 72
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 72 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00a7f
+[VIF0] WriteToLatch: Data=0xbe22f987
+[VIF0] WriteToLatch: Data=0x81e00a3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 76
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 76 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81e0fa7f
+[VIF0] WriteToLatch: Data=0x3e800000
+[VIF0] WriteToLatch: Data=0x81e00fe7
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 80
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 80 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fff9fd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0ffe6
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 84
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 84 words
+[VIF0] WriteToLatch: Data=0xc2992661
+[VIF0] WriteToLatch: Data=0x81fff8ea
+[VIF0] WriteToLatch: Data=0xc2255de0
+[VIF0] WriteToLatch: Data=0x81e0f95e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 88
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 88 words
+[VIF0] WriteToLatch: Data=0x42a33457
+[VIF0] WriteToLatch: Data=0x81e0f91e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0f85e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 92
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 92 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e318aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e3296a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 96
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 96 words
+[VIF0] WriteToLatch: Data=0x421ed7b7
+[VIF0] WriteToLatch: Data=0x81e322be
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0f8de
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 100
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 100 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e2112a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e22abd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 104
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 104 words
+[VIF0] WriteToLatch: Data=0x40c90fda
+[VIF0] WriteToLatch: Data=0x81e20abd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x41e0fa3f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 108
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 108 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e41fe9
+[VIF0] WriteToLatch: Data=0x003c0805
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 112
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 112 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x803c085b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01400762
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 116
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 116 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x80210047
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014007a2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 120
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 120 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010007e6
+[VIF0] WriteToLatch: Data=0x40400000
+[VIF0] WriteToLatch: Data=0x804007e2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 124
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 124 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0020085e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x003d097c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 128
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 128 words
+[VIF0] WriteToLatch: Data=0x8062ebfc
+[VIF0] WriteToLatch: Data=0x003de93c
+[VIF0] WriteToLatch: Data=0x80011070
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 132
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 132 words
+[VIF0] WriteToLatch: Data=0x01440804
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x003d086c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 136
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 136 words
+[VIF0] WriteToLatch: Data=0x01450805
+[VIF0] WriteToLatch: Data=0x01e3193f
+[VIF0] WriteToLatch: Data=0x01e60800
+[VIF0] WriteToLatch: Data=0x01e2113f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 140
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 140 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0140203c
+[VIF0] WriteToLatch: Data=0x01e40801
+[VIF0] WriteToLatch: Data=0x014120ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 144
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 144 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0141294b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e0303c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 148
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 148 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e130ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e121cb
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 152
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 152 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x015d29aa
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e51118
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 156
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 156 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e518da
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01fd397c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 160
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 160 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014631ea
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01df21bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 164
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 164 words
+[VIF0] WriteToLatch: Data=0x01ff0005
+[VIF0] WriteToLatch: Data=0x01df188a
+[VIF0] WriteToLatch: Data=0x01e50007
+[VIF0] WriteToLatch: Data=0x01fe21bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 168
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 168 words
+[VIF0] WriteToLatch: Data=0x01e60004
+[VIF0] WriteToLatch: Data=0x01073902
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 172
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 172 words
+[VIF0] WriteToLatch: Data=0x01fe0006
+[VIF0] WriteToLatch: Data=0x01fe18ca
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e029bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 176
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 176 words
+[VIF0] WriteToLatch: Data=0x800403bd
+[VIF0] WriteToLatch: Data=0x01e130bc
+[VIF0] WriteToLatch: Data=0x01e60000
+[VIF0] WriteToLatch: Data=0x01e1f8bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 180
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 180 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1f0be
+[VIF0] WriteToLatch: Data=0x8023033d
+[VIF0] WriteToLatch: Data=0x01fe197e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 184
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 184 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01df117e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 188
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 188 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00093
+[VIF0] WriteToLatch: Data=0x01e30003
+[VIF0] WriteToLatch: Data=0x00201860
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 192
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 192 words
+[VIF0] WriteToLatch: Data=0x01e40001
+[VIF0] WriteToLatch: Data=0x01e1100f
+[VIF0] WriteToLatch: Data=0x01e30002
+[VIF0] WriteToLatch: Data=0x01e019bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 196
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 196 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x100100f0
+[VIF0] WriteToLatch: Data=0x01e130bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 200
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 200 words
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x01e120bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e118be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 204
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 204 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1120f
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x01e041fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 208
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 208 words
+[VIF0] WriteToLatch: Data=0x800200b5
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x80011075
+[VIF0] WriteToLatch: Data=0x41c10f2b
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 212
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 212 words
+[VIF0] WriteToLatch: Data=0x803f0bfd
+[VIF0] WriteToLatch: Data=0x0020072b
+[VIF0] WriteToLatch: Data=0x01df0008
+[VIF0] WriteToLatch: Data=0x01e2113f
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 216
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 216 words
+[VIF0] WriteToLatch: Data=0x01dd0009
+[VIF0] WriteToLatch: Data=0x01e3193f
+[VIF0] WriteToLatch: Data=0x003d0805
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 220
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 220 words
+[VIF0] WriteToLatch: Data=0x01de000a
+[VIF0] WriteToLatch: Data=0x01c1f9bc
+[VIF0] WriteToLatch: Data=0x01dd000b
+[VIF0] WriteToLatch: Data=0x01c1e8bd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 224
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 224 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x003d085b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c1f0be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 228
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 228 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01c0e84b
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x80210047
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 232
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 232 words
+[VIF0] WriteToLatch: Data=0x3f000000
+[VIF0] WriteToLatch: Data=0x81400762
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x014007a2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 236
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 236 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x010007e6
+[VIF0] WriteToLatch: Data=0x40400000
+[VIF0] WriteToLatch: Data=0x804007e2
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 240
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 240 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0020085e
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x003d097c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 244
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 244 words
+[VIF0] WriteToLatch: Data=0x8062ebfc
+[VIF0] WriteToLatch: Data=0x003de93c
+[VIF0] WriteToLatch: Data=0x80011070
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 248
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 248 words
+[VIF0] WriteToLatch: Data=0x015c0804
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01440805
+[VIF0] WriteToLatch: Data=0x003d086c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 252
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 252 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 256
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 256 words
+[VIF0] WriteToLatch: Data=0x01e50800
+[VIF0] WriteToLatch: Data=0x0140e03c
+[VIF0] WriteToLatch: Data=0x100200f0
+[VIF0] WriteToLatch: Data=0x0141e0ff
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 260
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 260 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0141210b
+[VIF0] WriteToLatch: Data=0x01fc0801
+[VIF0] WriteToLatch: Data=0x01e0283c
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 264
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 264 words
+[VIF0] WriteToLatch: Data=0x100100f0
+[VIF0] WriteToLatch: Data=0x01e128ff
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x015d216a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 268
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 268 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1e18b
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e41718
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 272
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 272 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x0145296a
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e4189a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 276
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 276 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01dfe1bc
+[VIF0] WriteToLatch: Data=0x01e50000
+[VIF0] WriteToLatch: Data=0x01052902
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 280
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 280 words
+[VIF0] WriteToLatch: Data=0x01ff0003
+[VIF0] WriteToLatch: Data=0x01df10ca
+[VIF0] WriteToLatch: Data=0x01fc0001
+[VIF0] WriteToLatch: Data=0x01fee1bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 284
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 284 words
+[VIF0] WriteToLatch: Data=0x800403bd
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e20002
+[VIF0] WriteToLatch: Data=0x01fe178a
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 288
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 288 words
+[VIF0] WriteToLatch: Data=0x01e40007
+[VIF0] WriteToLatch: Data=0x01e0f9bf
+[VIF0] WriteToLatch: Data=0x8021033d
+[VIF0] WriteToLatch: Data=0x01e128bc
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 292
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 292 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1e0bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e110be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 296
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 296 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e00093
+[VIF0] WriteToLatch: Data=0x800003bf
+[VIF0] WriteToLatch: Data=0x00200860
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 300
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 300 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x000002ff
+[VIF0] WriteToLatch: Data=0x01e30004
+[VIF0] WriteToLatch: Data=0x01df197e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 304
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 304 words
+[VIF0] WriteToLatch: Data=0x81fc0b3c
+[VIF0] WriteToLatch: Data=0x01e111cf
+[VIF0] WriteToLatch: Data=0x01e50005
+[VIF0] WriteToLatch: Data=0x01e021bf
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 308
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 308 words
+[VIF0] WriteToLatch: Data=0x01e30006
+[VIF0] WriteToLatch: Data=0x01e118bc
+[VIF0] WriteToLatch: Data=0x34010800
+[VIF0] WriteToLatch: Data=0x01e039fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 312
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 312 words
+[VIF0] WriteToLatch: Data=0x80010075
+[VIF0] WriteToLatch: Data=0x01e128bd
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e118be
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 316
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 316 words
+[VIF0] WriteToLatch: Data=0x8000033c
+[VIF0] WriteToLatch: Data=0x01e1120f
+[VIF0] WriteToLatch: Data=0x34021000
+[VIF0] WriteToLatch: Data=0x01e041fd
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 320
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 320 words
+[VIF0] WriteToLatch: Data=0x80020875
+[VIF0] WriteToLatch: Data=0x41fd317c
+[VIF0] WriteToLatch: Data=0x803f0bfd
+[VIF0] WriteToLatch: Data=0x01fef17e
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 324
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 324 words
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+      Transfer complete.
+    Next iteration: TADR=0x2e5d80 fromSpr=NO
+
+  ┌─────────────────────────────────────────────────
+  │ TAG #1
+  └─────────────────────────────────────────────────
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+Bytes at 0x628990:0
+    Reading tag from RAM @ 0x2e5d80
+    Raw tag_hi bytes:
+      00 00 00 00 00 00 00 00 
+    Raw Tag Data:
+      tag_lo: 0x0000000070000000
+      tag_hi: 0x0000000000000000
+    Parsed Tag Fields:
+      ID:   7 (END)
+      QWC:  0 quadwords (0 bytes)
+      ADDR: 0x0
+      UNALIGNED ADDR: 0x0
+      IRQ:  NO
+      SPR:  NO (RAM)
+      PCE:  0
+    CHCR.TAG updated: 0x10000145 -> 0x70000145
+    TTE Data (VIF commands in tag_hi):
+      Word 0: 0x00000000 (CMD=0x00)
+      Word 1: 0x00000000 (CMD=0x00)
+    Processing Tag ID 7 (END):
+      END: Transfer data after tag, then terminate
+        Data source: 0x2e5d90 (RAM)
+        Chain ends after this transfer
+    Register Updates:
+      MADR -> 0x2e5d90
+      TADR -> 0x2e5d90
+      QWC  -> 0
+    TTE Transfer:
+      Sending tag_hi (8 bytes) to VIF0 before payload
+      TTE bytes: 00 00 00 00 00 00 00 00 
+[VIF0] ProcessData: 8 bytes
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] WriteToLatch: Data=0x00000000
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1312
+[VIF0] WORDS_NEEDED: 328
+[VIF0] FIFO_WORDS: 328
+[VIF0] WAIT_DATA: Needs 328 words, FIFO has 328 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=164 Payload=1312 bytes
+[VIF0] MPG: Writing 1312 bytes to VU0 micro memory at 0x0
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+    No data to transfer (QWC=0)
+    Next iteration: TADR=0x2e5d90 fromSpr=NO
+
+========================================
+[VIF0 DMA] Chain Processing Complete
+========================================
+  Tags processed: 2
+  End reason:     Normal termination
+  Final Registers:
+    CHCR: 0x70000145
+    MADR: 0x2e5d90
+    TADR: 0x2e5d90
+    QWC:  0
+DMAC: Channel 0 completed
+[VIF0 DMA] STR cleared, channel complete
+========================================
+
+HLE CDVD Search: 'Language\Titles\American\Hub01'
+[ISO9660] Searching for components: [0]='LANGUAGE' [1]='TITLES' [2]='AMERICAN' [3]='HUB01' 
+[HLE CDVD] ARCHIVE FILE PREFIX: 'Language\Titles\American\Hub01' matched 'language\titles\american\hub01.psm' bd_offset=7d303 size=24933
+[HLE CDVD] Opened 'Language\Titles\American\Hub01' handle=4 lba=74228 offset=7d303 size=24933
+[HLE CDVD] GetFileSize → 24933 (handle=4)
+!!! HLE_FUN_002aac80 CALLED !!!
+[HLE READ] Found handle 4 lba=0x74228 bd_offset=0x7d303 size=24933
+[HLE READ] fs=0xb9f5a8 handle=4 offset=0 size=24933 dest=0xfb8900 file_size=24933
+[HLE READ] ISO calculation: lba=0x74228 * 2048 + bd_off=0x7d303 + read_off=0 = 0x3a191303
+[HLE READ] Reading 24933 bytes → 0xfb8900
+[HLE READ] Read 24933 bytes (direct)
+[HLE READ] First 16 bytes: c5 ac 5e ef d0 c0 99 03 e0 60 00 00 00 00 cc bb 
+[HLE CDVD] CloseHandle(4)
+[FUN_001bb710 ENTRY] caller=0x1c06c0 a0=0xba5d40 a1(obj)=0x70003e20 obj[0]=0x306b50 (valid vtable range)
+[FUN_001bb710 VCALL] obj=0x70003e20 vtable=0x306b50 vtable[0x80]=0 vtable[0x84]=0x2b57e0 target=0x2b57e0
+[HLE Heap] High Alloc: 10 bytes at 0x1fb9ae0
+[HLE Heap] High Alloc: 90 bytes at 0x1fb9a50

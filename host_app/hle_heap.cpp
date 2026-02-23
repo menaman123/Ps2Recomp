@@ -414,38 +414,37 @@ void HLE_FUN_002ad8f0(CpuContext& ctx, uint32_t /*addr*/) {
     
     // Try ISO9660 first
     HleCdvdFile entry = SearchIso9660(path);
-    // ISO entries have offset=0 (read directly from their LBA)
     
     // If not on ISO, search CRASH.BH archive
     if (!entry.found && g_crash_bd_lba != 0) {
         std::string normalized = NormalizePath(path);
         
-        // Exact match first
+        // 1. Exact match
         auto it = g_archive_entries.find(normalized);
         if (it != g_archive_entries.end()) {
             entry.found = true;
             entry.lba = g_crash_bd_lba;
             entry.size = it->second.size;
-            entry.offset = it->second.offset_in_bd;  // ← SET THE OFFSET ON ENTRY
+            entry.offset = it->second.offset_in_bd;
             
             g_logFile << "[HLE CDVD] ARCHIVE EXACT: '" << path
                       << "' bd_offset=" << std::hex << it->second.offset_in_bd
                       << " size=" << std::dec << it->second.size << std::endl;
         }
         
-        // Prefix match (directory-like)
+        // 2. Directory prefix match (path + backslash)
         if (!entry.found) {
-            std::string prefix = normalized;
-            if (!prefix.empty() && prefix.back() != '\\') prefix += '\\';
+            std::string dir_prefix = normalized;
+            if (!dir_prefix.empty() && dir_prefix.back() != '\\') dir_prefix += '\\';
             
             for (auto& kv : g_archive_entries) {
-                if (kv.first.substr(0, prefix.size()) == prefix) {
+                if (kv.first.substr(0, dir_prefix.size()) == dir_prefix) {
                     entry.found = true;
                     entry.lba = g_crash_bd_lba;
                     entry.size = kv.second.size;
-                    entry.offset = kv.second.offset_in_bd;  // ← SET THE OFFSET ON ENTRY
+                    entry.offset = kv.second.offset_in_bd;
                     
-                    g_logFile << "[HLE CDVD] ARCHIVE PREFIX: '" << path
+                    g_logFile << "[HLE CDVD] ARCHIVE DIR PREFIX: '" << path
                               << "' matched '" << kv.first
                               << "' bd_offset=" << std::hex << kv.second.offset_in_bd
                               << " size=" << std::dec << kv.second.size << std::endl;
@@ -453,9 +452,32 @@ void HLE_FUN_002ad8f0(CpuContext& ctx, uint32_t /*addr*/) {
                 }
             }
         }
+        
+        // 3. File prefix match (path without backslash — matches "hub01" → "hub01.psm")
+        if (!entry.found) {
+            for (auto& kv : g_archive_entries) {
+                if (kv.first.size() > normalized.size() &&
+                    kv.first.substr(0, normalized.size()) == normalized) {
+                    // Make sure the next character after the prefix is a dot or backslash
+                    // This prevents "hub01" matching "hub01x.psm"
+                    char next_char = kv.first[normalized.size()];
+                    if (next_char == '.' || next_char == '\\') {
+                        entry.found = true;
+                        entry.lba = g_crash_bd_lba;
+                        entry.size = kv.second.size;
+                        entry.offset = kv.second.offset_in_bd;
+                        
+                        g_logFile << "[HLE CDVD] ARCHIVE FILE PREFIX: '" << path
+                                  << "' matched '" << kv.first
+                                  << "' bd_offset=" << std::hex << kv.second.offset_in_bd
+                                  << " size=" << std::dec << kv.second.size << std::endl;
+                        break;
+                    }
+                }
+            }
+        }
     }
     
-    // ONE write to the handle table — no double-write
     if (entry.found) {
         g_hle_cdvd_files[handle] = entry;
         g_hle_cdvd_last_handle = handle;

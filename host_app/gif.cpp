@@ -167,10 +167,11 @@ void GIF::ReceiveData(GIFPath path, const uint8_t* data, size_t size) {
     if (size == 0) return;
 
     g_logFile << "[GIF] ReceiveData: PATH" << (int)path 
-              << " size=" << size << " bytes" << std::endl;
+              << " size=" << size << " bytes"
+              << (in_transfer ? " (DATA)" : " (expecting TAG)") << std::endl;
 
-    // Log first 32 bytes to see what's coming in
-    if (size >= 16) {
+    // Only interpret as tag if we're NOT mid-transfer
+    if (!in_transfer && size >= 16) {
         uint64_t tag_lo, tag_hi;
         std::memcpy(&tag_lo, data, 8);
         std::memcpy(&tag_hi, data + 8, 8);
@@ -179,12 +180,8 @@ void GIF::ReceiveData(GIFPath path, const uint8_t* data, size_t size) {
         uint8_t flg = (tag_lo >> 58) & 0x3;
         const char* flg_names[] = {"PACKED", "REGLIST", "IMAGE", "DISABLE"};
         
-        g_logFile << "[GIF]   First tag: FLG=" << flg_names[flg] 
+        g_logFile << "[GIF]   Tag preview: FLG=" << flg_names[flg] 
                   << " NLOOP=" << nloop << std::endl;
-        
-        if (flg == 2) {
-            g_logFile << "[GIF] *** IMAGE MODE DETECTED! ***" << std::endl;
-        }
     }
 
     size_t current_pos = dma_buffer.size();
@@ -193,6 +190,7 @@ void GIF::ReceiveData(GIFPath path, const uint8_t* data, size_t size) {
 
     ProcessBuffer();
 }
+
 /* void GIF::ProcessBuffer() {
     size_t processed_bytes = 0;
     
@@ -610,8 +608,11 @@ void GIF::ProcessBuffer() {
             
             // Handle NLOOP=0 (Documentation: "All fields ignored except EOP")
             if (current_tag.nloop == 0) {
-                in_transfer = false;
-                if (current_tag.eop) FlushBatch(); // Finalize if EOP set
+                
+                if (current_tag.eop) {
+                    FlushBatch(); // Finalize if EOP set
+                    in_transfer = false;
+                }
                 continue;
             }
         }
@@ -701,34 +702,28 @@ void GIF::ProcessPacket(GIFPath path, const uint8_t* data, size_t size) {
 }
 
 void GIF::FinishDMA() {
+    // If we're mid-transfer, force-finish it
     if (in_transfer) {
-        g_logFile << "[GIF] WARNING: DMA Chain finished but GIF packet incomplete (NLOOP=" 
-                  << current_tag.nloop << ", Reg=" << current_reg << ")" << std::endl;
-        
-        // Force finish the packet
+        g_logFile << "[GIF] WARNING: DMA finished but GIF packet incomplete (loop=" 
+                  << current_loop << "/" << current_tag.nloop 
+                  << ", reg=" << current_reg << ")" << std::endl;
         in_transfer = false;
-        
-        // Clear any remaining partial data
-        dma_buffer.clear();
-        
-        // If we had pending draw commands, dispatch them now
-        if (!g_gs_state.draw_buffer.empty()) {
-            RenderJob job;
-            job.type = RenderCommandType::DrawBatch;
-            job.batch.vertices = std::move(g_gs_state.draw_buffer);
-            job.batch.prim_type = g_gs_state.prim_type;
-            g_renderQueue.Push(job);
-            g_gs_state.draw_buffer.clear();
-        }
-
-        RenderJob vsync_job;
-        vsync_job.type = RenderCommandType::VSync;
-        g_renderQueue.Push(vsync_job);
-        g_logFile << "[GIF] DMA Finished: Triggered VSync and signaled INTC." << std::endl;
-        
-        dma_buffer.clear();
     }
+    
+    // ALWAYS flush pending geometry, whether transfer completed normally or not
+    g_gs_state.Flush();
+    
+    // ALWAYS push VSync so the frame gets presented
+    RenderJob vsync_job;
+    vsync_job.type = RenderCommandType::VSync;
+    g_renderQueue.Push(vsync_job);
+    
+    g_logFile << "[GIF] FinishDMA: Flushed geometry and triggered VSync." << std::endl;
+    
+    // Clear any leftover partial data
+    dma_buffer.clear();
 }
+
 
 void GIF::ProcessPacked(uint8_t reg, const uint8_t* data) {
     uint64_t lo, hi;
@@ -737,7 +732,6 @@ void GIF::ProcessPacked(uint8_t reg, const uint8_t* data) {
     
     switch (reg) {
         case GS_PRIM: {
-
             FlushBatch();
             uint32_t prim_val = lo & 0x7FF;
             g_gs_state.SetPrim(prim_val);
@@ -754,105 +748,104 @@ void GIF::ProcessPacked(uint8_t reg, const uint8_t* data) {
         }
         
         case GS_RGBAQ: {
-            // PACKED RGBAQ: R[0:7], G[32:39], B[64:71], A[96:103], Q[0:31] (from internal)
             uint8_t r = lo & 0xFF;
             uint8_t g = (lo >> 32) & 0xFF;
             uint8_t b = hi & 0xFF;
             uint8_t a = (hi >> 32) & 0xFF;
-            
             g_gs_state.r = r;
             g_gs_state.g = g;
             g_gs_state.b = b;
             g_gs_state.a = a;
-            
             g_logFile << "[GIF] PACKED RGBAQ: R=" << (int)r << " G=" << (int)g 
                       << " B=" << (int)b << " A=" << (int)a << std::endl;
             break;
         }
         
         case GS_ST: {
-            // PACKED ST: S[0:31] as float, T[32:63] as float, Q stored internally
             float s, t;
             std::memcpy(&s, &lo, 4);
             std::memcpy(&t, ((uint8_t*)&lo) + 4, 4);
-            
-            // Q is in hi[0:31] - but Q is typically carried from previous RGBAQ
             float q;
             std::memcpy(&q, &hi, 4);
-            
             g_gs_state.s = s;
             g_gs_state.t = t;
             if (q != 0.0f) g_gs_state.q = q;
-            
-            g_logFile << "[GIF] PACKED ST: S=" << s << " T=" << t << " Q=" << g_gs_state.q << std::endl;
+            g_logFile << "[GIF] PACKED ST: S=" << s << " T=" << t 
+                      << " Q=" << g_gs_state.q << std::endl;
             break;
         }
         
         case GS_UV: {
-            // UV: U[0:13] (14-bit fixed point), V[16:29]
             uint16_t u = lo & 0x3FFF;
             uint16_t v = (lo >> 16) & 0x3FFF;
-            
             g_gs_state.u = u;
             g_gs_state.v = v;
-            
             g_logFile << "[GIF] PACKED UV: U=" << u << " V=" << v << std::endl;
             break;
         }
         
         case GS_XYZF2:
         case GS_XYZF3: {
-            // PACKED XYZF: X[0:15], Y[32:47], Z[68:91], F[100:107], ADC[111]
             uint16_t x_raw = lo & 0xFFFF;
             uint16_t y_raw = (lo >> 32) & 0xFFFF;
             uint32_t z_raw = (hi >> 4) & 0xFFFFFF;
-            float x_final = (float)((int16_t)x_raw) / 16.0f; 
-            float y_final = (float)((int16_t)y_raw) / 16.0f;
             uint8_t f = (hi >> 36) & 0xFF;
             bool adc = (hi >> 47) & 1;
-            
-            // Convert from 12.4 fixed point to float
-            float x = x_raw / 16.0f;
-            float y = y_raw / 16.0f;
+            float x_final = (float)((int16_t)x_raw) / 16.0f;
+            float y_final = (float)((int16_t)y_raw) / 16.0f;
             float z = (float)z_raw;
-            
             bool draw = (reg == GS_XYZF2) && !adc;
             g_gs_state.KickVertex(x_final, y_final, z, f, draw);
-            
             g_logFile << "[GIF] PACKED " << (reg == GS_XYZF2 ? "XYZF2" : "XYZF3")
                       << ": X=" << x_final << " Y=" << y_final << " Z=" << z 
                       << " F=" << (int)f << " ADC=" << adc 
                       << " draw=" << draw << std::endl;
             break;
         }
+        
+        case GS_XYZ2:
+        case GS_XYZ3: {
+            // PACKED XYZ: X[0:15], Y[32:47], Z[64:95], ADC[111]
+            uint16_t x_raw = lo & 0xFFFF;
+            uint16_t y_raw = (lo >> 32) & 0xFFFF;
+            uint32_t z_raw = hi & 0xFFFFFFFF;
+            bool adc = (hi >> 47) & 1;
+            float x_final = (float)((int16_t)x_raw) / 16.0f;
+            float y_final = (float)((int16_t)y_raw) / 16.0f;
+            bool draw = (reg == GS_XYZ2) && !adc;
+            g_gs_state.KickVertex(x_final, y_final, (float)z_raw, 0, draw);
+            g_logFile << "[GIF] PACKED " << (reg == GS_XYZ2 ? "XYZ2" : "XYZ3")
+                      << ": X=" << x_final << " Y=" << y_final << " Z=" << z_raw
+                      << " ADC=" << adc << " draw=" << draw << std::endl;
+            break;
+        }
+        
         case GS_FOG: {
-            // FOG: F[100:107] only (bits 36-43 of the 128-bit value, which is in hi)
-            uint8_t f = (hi >> 4) & 0xFF;
+            uint8_t f = (hi >> 36) & 0xFF;
             g_gs_state.fog = f;
             g_logFile << "[GIF] PACKED FOG: F=" << (int)f << std::endl;
             break;
         }
         
         case GS_AD: {
-            // A+D format: DATA[0:63], ADDR[64:71]
             uint64_t data_val = lo;
             uint8_t addr = hi & 0xFF;
-            
             g_logFile << "[GIF] PACKED A+D: Addr=0x" << std::hex << (int)addr 
                       << " Data=0x" << data_val << std::dec << std::endl;
-            
-            // Route to appropriate handler based on address
             ProcessReglist(addr, (const uint8_t*)&data_val);
             break;
         }
         
         case GS_NOP:
-            g_logFile << "[GIF] PACKED NOP" << std::endl;
             break;
             
         default:
-            g_logFile << "[GIF] PACKED unhandled reg 0x" << std::hex << (int)reg 
-                      << " lo=0x" << lo << " hi=0x" << hi << std::dec << std::endl;
+            // For all other registers in PACKED mode, the low 64 bits
+            // are written directly as the register value (same as REGLIST)
+            g_logFile << "[GIF] PACKED reg 0x" << std::hex << (int)reg 
+                      << " → routing to REGLIST (lo=0x" << lo << ")" 
+                      << std::dec << std::endl;
+            ProcessReglist(reg, (const uint8_t*)&lo);
             break;
     }
 }

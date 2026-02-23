@@ -1250,21 +1250,26 @@ void DMAC::ProcessVifDmaChain(int ch) {
         // ===== HANDLE TTE: Send tag_hi to VIF BEFORE payload =====
         if (tte) {
             g_logFile << "    TTE Transfer:" << std::endl;
-            g_logFile << "      Sending tag_hi (8 bytes) to VIF" << ch << " before payload" << std::endl;
+            g_logFile << "      Sending tag_hi as full QW to VIF" << ch << " before payload" << std::endl;
             
-            uint8_t tte_data[8];
-            std::memcpy(tte_data, &tag_hi, 8);
+            // FIX: TTE occupies a full 128-bit QW in the DMA stream.
+            // The upper 64 bits of the DMA tag are VIF commands.
+            // Pad to 16 bytes so TTE and payload don't merge in the latch.
+            uint8_t tte_qw[16];
+            std::memset(tte_qw, 0, 16);        // Zero-pad (NOPs)
+            std::memcpy(tte_qw, &tag_hi, 8);   // VIF commands in first 8 bytes
             
             // Log TTE bytes
-            g_logFile << "      TTE bytes: ";
-            for (int i = 0; i < 8; i++) {
-                g_logFile << std::hex << std::setw(2) << std::setfill('0') << (int)tte_data[i] << " ";
+            g_logFile << "      TTE QW: ";
+            for (int i = 0; i < 16; i++) {
+                g_logFile << std::hex << std::setw(2) << std::setfill('0') << (int)tte_qw[i] << " ";
             }
             g_logFile << std::dec << std::endl;
             
             int vif_idx = (ch == DMA_VIF1) ? 1 : 0;
-            g_vif.ProcessData(vif_idx, tte_data, 8);
+            g_vif.ProcessData(vif_idx, tte_qw, 16);  // Full QW, not 8 bytes
         }
+
 
         if (do_transfer && qwc > 0) {
             int vif_idx = (ch == DMA_VIF1) ? 1 : 0;
