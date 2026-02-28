@@ -934,6 +934,10 @@ void DMAC::ProcessVifDmaChain(int ch) {
 
     // ===== EXTRACT CHCR FLAGS =====
     bool tte = (channel.chcr & CHCR_TTE) != 0;
+    g_logFile << "  CHCR RAW VALUE: 0x" << std::hex << channel.chcr << std::dec << std::endl;
+    g_logFile << "  CHCR_TTE bit (bit 6): " << ((channel.chcr >> 6) & 1) << std::endl;
+    g_logFile << "  TTE ENABLED: " << (tte ? "YES - Tag data transferred to VIF" : "NO") << std::endl;
+
     bool tie = (channel.chcr & CHCR_TIE) != 0;
     int mode = (channel.chcr >> 2) & 0x3;
     int asp = (channel.chcr >> 4) & 0x3;
