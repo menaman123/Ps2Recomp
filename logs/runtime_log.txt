@@ -2,12 +2,12 @@ Starting Host Application...
 ISO Loaded Successfully: C:\Users\Owner\Desktop\PS2_Recomp\Crash_TwinSanity.rep\Crash Twinsanity.iso
 [IO WRITE] Address: 1000f230, Value: 20000
 [CPU] Thread Started.
-[GFX] Graphics Thread Started.
 Scheduler: Thread 1 added to priority 0 queue
 [CPU] Main thread initialized and fiber created. Entering scheduler loop...
 Scheduler: Starting main loop
 Scheduler: Switching to thread 1
 FiberEntry: Thread 1 starting execution at 0x100008
+[GFX] Graphics Thread Started.
 Scheduler: InitMainThread gp=0x3114f0 stack=0xffffffff size=0
 Scheduler: Main thread 1 initialized, SP=0x2000000
 Syscall: InitHeap()
@@ -1822,10 +1822,6 @@ Bytes at 0x628990:0
 [VIF0] WAIT_DATA: Needs 512 words, FIFO has 512 words
 [VIF0] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=0 Payload=2048 bytes
 [VIF0] MPG: Writing 2048 bytes to VU0 micro memory at 0x0
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF0] Code=0x01c430bd CMD=0x1 IMM=0x30bd
-[VIF0] ExecuteCommand: CMD=0x1 IMM=0x30bd NUM=196 Payload=0 bytes
-[VIF0] STCYCL: CL=189 WL=48
 [VIF0] WriteToLatch: Data=0x00000000
 [VIF0] WriteToLatch: Data=0x4ab30100
 [VIF0] WriteToLatch: Data=0x8024033c
@@ -2634,8 +2630,6 @@ Bytes at 0x628990:0
 [VIF0] WORDS_NEEDED: 358
 [VIF0] FIFO_WORDS: 356
 [VIF0] WAIT_DATA: Needs 358 words, FIFO has 356 words
-[VIF0] ExecuteCommand: CMD=0x4a IMM=0x100 NUM=179 Payload=1432 bytes
-[VIF0] MPG: Writing 1432 bytes to VU0 micro memory at 0x800
       Transfer complete.
     Next iteration: TADR=0x2e6b40 fromSpr=NO
 
@@ -2684,9 +2678,13 @@ Bytes at 0x628990:0
 [VIF0] WriteToLatch: Data=0x00000000
 [VIF0] WriteToLatch: Data=0x00000000
 [VIF0] WriteToLatch: Data=0x00000000
-[VIF0] ProcessFifo: State=0
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1432
+[VIF0] WORDS_NEEDED: 358
+[VIF0] FIFO_WORDS: 360
+[VIF0] WAIT_DATA: Needs 358 words, FIFO has 360 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x100 NUM=179 Payload=1432 bytes
+[VIF0] MPG: Writing 1432 bytes to VU0 micro memory at 0x800
 [VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
 [VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
     No data to transfer (QWC=0)
@@ -3538,6 +3536,256 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -3878,15 +4126,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -3996,228 +4235,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4437,13 +4454,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4525,8 +4537,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4770,6 +4780,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -4864,8 +4876,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5120,6 +5130,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5188,8 +5200,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5448,6 +5458,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5532,8 +5544,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5793,6 +5803,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -5846,8 +5858,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6112,6 +6122,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6178,8 +6190,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6445,6 +6455,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6478,8 +6490,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6767,6 +6777,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -6795,8 +6807,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7416,6 +7426,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7449,8 +7461,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7738,6 +7748,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -7771,8 +7783,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -8077,10 +8087,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -8400,11 +8406,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -8419,8 +8422,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9064,6 +9065,9 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9080,8 +9084,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9408,7 +9410,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9728,11 +9729,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -9752,8 +9750,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10067,14 +10063,14 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10379,6 +10375,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10399,8 +10397,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10683,8 +10679,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10720,6 +10714,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -10962,8 +10958,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11004,6 +10998,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11287,8 +11283,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11323,6 +11317,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11635,8 +11631,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11674,6 +11668,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -11965,8 +11961,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12006,6 +12000,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12293,8 +12289,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12357,6 +12351,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12638,8 +12634,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12690,6 +12684,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -12956,8 +12952,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13041,6 +13035,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13273,8 +13269,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13365,6 +13359,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13594,8 +13590,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13704,6 +13698,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -13934,8 +13930,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14027,6 +14021,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14261,8 +14257,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14368,6 +14362,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14597,8 +14593,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14693,6 +14687,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -14912,8 +14908,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15035,6 +15029,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15257,8 +15253,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15351,6 +15345,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15581,8 +15577,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15675,6 +15669,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -15899,8 +15895,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16021,6 +16015,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16243,8 +16239,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16342,6 +16336,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16562,8 +16558,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16687,6 +16681,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -16897,8 +16893,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17010,6 +17004,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17214,8 +17210,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17334,6 +17328,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17560,8 +17556,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17631,6 +17625,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17882,8 +17878,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -17967,6 +17961,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18223,8 +18219,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18287,6 +18281,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18542,8 +18538,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18615,6 +18609,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18879,8 +18875,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -18929,6 +18923,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19202,8 +19198,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19265,6 +19259,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19548,8 +19544,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19575,6 +19569,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19872,8 +19868,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -19906,6 +19900,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20198,8 +20194,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20224,6 +20218,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20547,9 +20543,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20874,8 +20867,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -20895,6 +20886,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21222,9 +21215,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21546,10 +21536,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21571,6 +21557,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -21890,8 +21878,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [IO WRITE] Address: 1000f000, Value: 4
 [IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22213,13 +22199,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22234,8 +22213,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22545,6 +22524,8 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
+[IO WRITE] Address: 1000f000, Value: 4
+[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -22554,8 +22535,6 @@ Scheduler: Switching to thread 1
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
-[IO WRITE] Address: 1000f000, Value: 4
-[IO WRITE] Address: 1000f000, Value: 4
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
 [STALL WATCH] CPU spamming read to INTC_STAT (Waiting for VSync?)
@@ -24680,10 +24659,6 @@ Bytes at 0x628990:0
 [VIF0] WAIT_DATA: Needs 512 words, FIFO has 512 words
 [VIF0] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=0 Payload=2048 bytes
 [VIF0] MPG: Writing 2048 bytes to VU0 micro memory at 0x0
-[VIF0] Code=0x34021000 CMD=0x34 IMM=0x1000
-[VIF0] ExecuteCommand: CMD=0x34 IMM=0x1000 NUM=2 Payload=0 bytes
-[VIF0] Unhandled command: 0x34
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
 [VIF0] WriteToLatch: Data=0x00000000
 [VIF0] WriteToLatch: Data=0x4a9f0100
 [VIF0] WriteToLatch: Data=0x800220b5
@@ -25402,8 +25377,6 @@ Bytes at 0x628990:0
 [VIF0] WORDS_NEEDED: 318
 [VIF0] FIFO_WORDS: 316
 [VIF0] WAIT_DATA: Needs 318 words, FIFO has 316 words
-[VIF0] ExecuteCommand: CMD=0x4a IMM=0x100 NUM=159 Payload=1272 bytes
-[VIF0] MPG: Writing 1272 bytes to VU0 micro memory at 0x800
       Transfer complete.
     Next iteration: TADR=0x2e5840 fromSpr=NO
 
@@ -25452,9 +25425,13 @@ Bytes at 0x628990:0
 [VIF0] WriteToLatch: Data=0x00000000
 [VIF0] WriteToLatch: Data=0x00000000
 [VIF0] WriteToLatch: Data=0x00000000
-[VIF0] ProcessFifo: State=0
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
+[VIF0] ProcessFifo: State=1
+[VIF0] BYTES_TOTAL: 1272
+[VIF0] WORDS_NEEDED: 318
+[VIF0] FIFO_WORDS: 320
+[VIF0] WAIT_DATA: Needs 318 words, FIFO has 320 words
+[VIF0] ExecuteCommand: CMD=0x4a IMM=0x100 NUM=159 Payload=1272 bytes
+[VIF0] MPG: Writing 1272 bytes to VU0 micro memory at 0x800
 [VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
 [VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
     No data to transfer (QWC=0)
@@ -26338,8 +26315,6 @@ Bytes at 0x628990:0
 [VIF0] WAIT_DATA: Needs 328 words, FIFO has 328 words
 [VIF0] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=164 Payload=1312 bytes
 [VIF0] MPG: Writing 1312 bytes to VU0 micro memory at 0x0
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF0] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x2e5d80 fromSpr=NO
 
@@ -27067,8 +27042,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 36 words, FIFO has 36 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x0 NUM=18 Payload=144 bytes
 [VIF1] MPG: Writing 144 bytes to VU1 micro memory at 0x0
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3daf40 fromSpr=NO
 
@@ -27262,8 +27235,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 8 words, FIFO has 8 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x12 NUM=4 Payload=32 bytes
 [VIF1] MPG: Writing 32 bytes to VU1 micro memory at 0x90
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3daf70 fromSpr=NO
 
@@ -27954,8 +27925,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 228 words, FIFO has 228 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x16 NUM=114 Payload=912 bytes
 [VIF1] MPG: Writing 912 bytes to VU1 micro memory at 0xb0
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3dafa0 fromSpr=NO
 
@@ -29132,8 +29101,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 444 words, FIFO has 444 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x88 NUM=222 Payload=1776 bytes
 [VIF1] MPG: Writing 1776 bytes to VU1 micro memory at 0x440
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3dafd0 fromSpr=NO
 
@@ -29824,8 +29791,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 228 words, FIFO has 228 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x196 NUM=114 Payload=912 bytes
 [VIF1] MPG: Writing 912 bytes to VU1 micro memory at 0xcb0
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3db000 fromSpr=NO
 
@@ -30219,8 +30184,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 96 words, FIFO has 96 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x166 NUM=48 Payload=384 bytes
 [VIF1] MPG: Writing 384 bytes to VU1 micro memory at 0xb30
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3db030 fromSpr=NO
 
@@ -30740,8 +30703,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 152 words, FIFO has 152 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x208 NUM=76 Payload=608 bytes
 [VIF1] MPG: Writing 608 bytes to VU1 micro memory at 0x1040
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3db060 fromSpr=NO
 
@@ -31117,8 +31078,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 88 words, FIFO has 88 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x254 NUM=44 Payload=352 bytes
 [VIF1] MPG: Writing 352 bytes to VU1 micro memory at 0x12a0
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3db090 fromSpr=NO
 
@@ -31512,8 +31471,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 96 words, FIFO has 96 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x2b4 NUM=48 Payload=384 bytes
 [VIF1] MPG: Writing 384 bytes to VU1 micro memory at 0x15a0
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x33c NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x2ff NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3db0c0 fromSpr=NO
 
@@ -31925,8 +31882,6 @@ Bytes at 0x628990:0
 [VIF1] WAIT_DATA: Needs 104 words, FIFO has 104 words
 [VIF1] ExecuteCommand: CMD=0x4a IMM=0x280 NUM=52 Payload=416 bytes
 [VIF1] MPG: Writing 416 bytes to VU1 micro memory at 0x1400
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
-[VIF1] ExecuteCommand: CMD=0x0 IMM=0x0 NUM=0 Payload=0 bytes
       Transfer complete.
     Next iteration: TADR=0x3db0f0 fromSpr=NO
 
@@ -36704,19 +36659,19 @@ Bytes at 0x628990:0
 [VIF1] WARNING: MSCNT called but VU1 TPC is 0. VU may not start correctly.
 [VU1] Execute start at 0x0
 [VU1] WARNING: NOP sled detected at start address 0x0(possibly uninitialized micro memory)
-[VU1] First instruction pair: Upper=0x0 Lower=0x0
+[VU1] First instruction pair: Upper=0x2ff Lower=0x90e0003
 [VU1] PC=0x0
-[VU1] Upper Instr: 0x0
-[VU1 Lower] Executing instr=0x0
-[VU1] PC=0x8
 [VU1] Upper Instr: 0x2ff
 [VU1 Lower] Executing instr=0x90e0003
-[VU1] PC=0x10
+[VU1] PC=0x8
 [VU1] Upper Instr: 0x2ff
 [VU1 Lower] Executing instr=0x8000033c
-[VU1] PC=0x18
+[VU1] PC=0x10
 [VU1] Upper Instr: 0x2ff
 [VU1 Lower] Executing instr=0x100c0001
+[VU1] PC=0x19f0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
 [VU1] PC=0x19f8
 [VU1] Upper Instr: 0x0
 [VU1 Lower] Executing instr=0x0
@@ -36755,3 +36710,131 @@ Bytes at 0x628990:0
 [VU1 Lower] Executing instr=0x0
 [VU1] PC=0x1a58
 [VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a60
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a68
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a70
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a78
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a80
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a88
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a90
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1a98
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1aa0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1aa8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ab0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ab8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ac0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ac8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ad0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ad8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ae0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ae8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1af0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1af8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b00
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b08
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b10
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b18
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b20
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b28
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b30
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b38
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b40
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b48
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b50
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b58
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b60
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b68
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b70
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b78
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b80
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b88
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b90
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1b98
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ba0
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1ba8
+[VU1] Upper Instr: 0x0
+[VU1 Lower] Executing instr=0x0
+[VU1] PC=0x1bb0
