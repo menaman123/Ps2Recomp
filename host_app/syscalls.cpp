@@ -413,6 +413,52 @@ void iSetEventFlag(CpuContext& ctx) {
     SetEventFlag(ctx);
 }
 
+void PollEventFlag(CpuContext& ctx) {
+    int event_id = ctx.cpuRegs.GPR.r[4].SL[0];
+    uint32_t bit_pattern = ctx.cpuRegs.GPR.r[5].UL[0];
+    int wait_mode = ctx.cpuRegs.GPR.r[6].SL[0];
+    uint32_t result_ptr = ctx.cpuRegs.GPR.r[7].UL[0];
+
+    g_logFile << "Syscall: PollEventFlag(id: " << std::dec << event_id
+              << ", bits: 0x" << std::hex << bit_pattern
+              << ", mode: " << wait_mode
+              << ", result_ptr: 0x" << result_ptr << ")" << std::endl;
+
+    auto it = g_eventFlags.find(event_id);
+    if (it == g_eventFlags.end()) {
+        g_logFile << "  PollEventFlag: invalid event flag id " << std::dec << event_id << std::endl;
+        ctx.cpuRegs.GPR.r[2].UD[0] = static_cast<uint64_t>(-1);
+        return;
+    }
+
+    SDL_LockMutex(it->second.mutex);
+
+    bool condition_met = false;
+    if (wait_mode & 0x01) { // WEF_AND
+        condition_met = (it->second.current_bits & bit_pattern) == bit_pattern;
+    } else { // WEF_OR
+        condition_met = (it->second.current_bits & bit_pattern) != 0;
+    }
+
+    if (condition_met) {
+        // Store current bits to result pointer if provided
+        if (result_ptr != 0) {
+            memory::write<uint32_t>(result_ptr, it->second.current_bits);
+        }
+        // Clear bits if WW (clear-on-wait) mode (bit 0x10)
+        if (wait_mode & 0x10) {
+            it->second.current_bits &= ~bit_pattern;
+        }
+        SDL_UnlockMutex(it->second.mutex);
+        g_logFile << "  PollEventFlag: condition met, returning success" << std::endl;
+        ctx.cpuRegs.GPR.r[2].UD[0] = 0; // Success
+    } else {
+        SDL_UnlockMutex(it->second.mutex);
+        g_logFile << "  PollEventFlag: condition not met, returning KE_EVF_COND" << std::endl;
+        ctx.cpuRegs.GPR.r[2].UD[0] = static_cast<uint64_t>(-1); // KE_EVF_COND
+    }
+}
+
 void sifRpcBind(CpuContext& ctx) {
     g_logFile << "Syscall: sifRpcBind() called!" << std::endl;
 
@@ -2210,6 +2256,86 @@ void dynamic_decode_and_execute(uint32_t start_address, CpuContext& ctx) {
     g_logFile << "╚════════════════════════════════════════════════╝" << std::endl;
 }
 
+void EnableIntcHandler(CpuContext& ctx) {
+    g_logFile << "Syscall: EnableIntcHandler" << std::endl;
+    int handler_id = ctx.cpuRegs.GPR.r[4].SL[0]; // $a0
+
+    for (auto& [cause, queue] : g_intc_queues) {
+        for (auto& handler : queue) {
+            if (handler.id == handler_id) {
+                handler.active = true;
+                g_logFile << "  Enabled INTC handler ID " << handler_id
+                          << " for cause " << cause << std::endl;
+                ctx.cpuRegs.GPR.r[2].SL[0] = 1;
+                return;
+            }
+        }
+    }
+
+    g_logFile << "  ERROR: INTC handler ID " << handler_id << " not found" << std::endl;
+    ctx.cpuRegs.GPR.r[2].SL[0] = -1;
+}
+
+void DisableIntcHandler(CpuContext& ctx) {
+    g_logFile << "Syscall: DisableIntcHandler" << std::endl;
+    int handler_id = ctx.cpuRegs.GPR.r[4].SL[0]; // $a0
+
+    for (auto& [cause, queue] : g_intc_queues) {
+        for (auto& handler : queue) {
+            if (handler.id == handler_id) {
+                handler.active = false;
+                g_logFile << "  Disabled INTC handler ID " << handler_id
+                          << " for cause " << cause << std::endl;
+                ctx.cpuRegs.GPR.r[2].SL[0] = 1;
+                return;
+            }
+        }
+    }
+
+    g_logFile << "  ERROR: INTC handler ID " << handler_id << " not found" << std::endl;
+    ctx.cpuRegs.GPR.r[2].SL[0] = -1;
+}
+
+void EnableDmacHandler(CpuContext& ctx) {
+    g_logFile << "Syscall: EnableDmacHandler" << std::endl;
+    int handler_id = ctx.cpuRegs.GPR.r[4].SL[0]; // $a0
+
+    for (auto& [cause, queue] : g_dmac_queues) {
+        for (auto& handler : queue) {
+            if (handler.id == handler_id) {
+                handler.active = true;
+                g_logFile << "  Enabled DMAC handler ID " << handler_id
+                          << " for cause " << cause << std::endl;
+                ctx.cpuRegs.GPR.r[2].SL[0] = 1;
+                return;
+            }
+        }
+    }
+
+    g_logFile << "  ERROR: DMAC handler ID " << handler_id << " not found" << std::endl;
+    ctx.cpuRegs.GPR.r[2].SL[0] = -1;
+}
+
+void DisableDmacHandler(CpuContext& ctx) {
+    g_logFile << "Syscall: DisableDmacHandler" << std::endl;
+    int handler_id = ctx.cpuRegs.GPR.r[4].SL[0]; // $a0
+
+    for (auto& [cause, queue] : g_dmac_queues) {
+        for (auto& handler : queue) {
+            if (handler.id == handler_id) {
+                handler.active = false;
+                g_logFile << "  Disabled DMAC handler ID " << handler_id
+                          << " for cause " << cause << std::endl;
+                ctx.cpuRegs.GPR.r[2].SL[0] = 1;
+                return;
+            }
+        }
+    }
+
+    g_logFile << "  ERROR: DMAC handler ID " << handler_id << " not found" << std::endl;
+    ctx.cpuRegs.GPR.r[2].SL[0] = -1;
+}
+
 void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
     if (syscall_num < 256 && custom_syscall_addresses[syscall_num] != 0) {
         // Instead of running C++ code, we point the CPU PC to the custom code
@@ -2310,21 +2436,21 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
         case 77: NotImplemented_Syscall("GetGsVParam", ctx); break;
         case 78: NotImplemented_Syscall("SetGsHParam", ctx); break;
         case 79: NotImplemented_Syscall("SetGsVParam", ctx); break;
-        case 80: NotImplemented_Syscall("CreateEventFlag", ctx); break;
-        case 81: NotImplemented_Syscall("DeleteEventFlag", ctx); break;
-        case 82: NotImplemented_Syscall("SetEventFlag", ctx); break;
+        case 80: CreateEventFlag(ctx); break;
+        case 81: DeleteEventFlag(ctx); break;
+        case 82: SetEventFlag(ctx); break;
         case 83: iSetEventFlag(ctx); break;
-        case 84: NotImplemented_Syscall("ClearEventFlag", ctx); break;
-        case 85: NotImplemented_Syscall("iClearEventFlag", ctx); break;
-        case 86: NotImplemented_Syscall("WaitEventFlag", ctx); break;
-        case 87: NotImplemented_Syscall("PollEventFlag", ctx); break;
-        case 88: NotImplemented_Syscall("iPollEventFlag", ctx); break;
+        case 84: ClearEventFlag(ctx); break;
+        case 85: ClearEventFlag(ctx); break;  // iClearEventFlag — same as ClearEventFlag
+        case 86: WaitEventFlag(ctx); break;
+        case 87: PollEventFlag(ctx); break;
+        case 88: PollEventFlag(ctx); break;   // iPollEventFlag — same as PollEventFlag
         case 89: NotImplemented_Syscall("ReferEventFlagStatus", ctx); break;
         case 90: NotImplemented_Syscall("iReferEventFlagStatus", ctx); break;
-        case 92: NotImplemented_Syscall("EnableIntcHandler", ctx); break;
-        case 93: NotImplemented_Syscall("DisableIntcHandler", ctx); break;
-        case 94: NotImplemented_Syscall("EnableDmacHandler", ctx); break;
-        case 95: NotImplemented_Syscall("DisableDmacHandler", ctx); break;
+        case 92: EnableIntcHandler(ctx); break;
+        case 93: DisableIntcHandler(ctx); break;
+        case 94: EnableDmacHandler(ctx); break;
+        case 95: DisableDmacHandler(ctx); break;
         case 96: NotImplemented_Syscall("KSeg0", ctx); break;
         case 97: NotImplemented_Syscall("EnableCache", ctx); break;
         case 98: NotImplemented_Syscall("DisableCache", ctx); break;
@@ -2366,3 +2492,4 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
             exit(1);
     }
 }
+
