@@ -172,6 +172,19 @@ void VU1::Execute(CpuContext& ctx, uint32_t start_addr) {
     if (g_logFile.is_open()) {
         g_logFile << "[VU1] Execute start at 0x" << std::hex << pc << std::dec << std::endl;
     }
+
+    if(pc + 8 <= vu1_code_memory.size()){
+        uint32_t first_lower, first_upper;
+        std::memcpy(&first_lower, &vu1_code_memory[pc], 4);
+        std::memcpy(&first_upper, &vu1_code_memory[pc + 4], 4);
+        if(g_logFile.is_open()) {
+            g_logFile << "[VU1] WARNING: NOP sled detected at start address 0x" << std::hex << pc << std::dec << "(possibly uninitialized micro memory)" << std::endl;
+
+        }
+        g_logFile << "[VU1] First instruction pair: Upper=0x" << std::hex << first_upper 
+                  << " Lower=0x" << first_lower << std::dec << std::endl;
+
+    }
     
     // Hardwire VF0
     ctx.vuRegs.VF[0].x = 0.0f;

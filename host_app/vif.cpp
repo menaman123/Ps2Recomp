@@ -70,13 +70,18 @@ static bool IsUnpackCmd(uint32_t cmd) {
     return (cmd >= 0x60 && cmd <= 0x7F);
 }
 
-static uint32_t GetUnpackSize(uint32_t cmd, uint32_t num) {
+static uint32_t GetUnpackSize(uint32_t cmd, uint32_t num, uint32_t cl, uint32_t wl) {
     uint32_t format = cmd & 0x0F;
     uint32_t bits = UNPACK_BITS[format];
     
     if (bits == 0) return 0;
     
     uint32_t real_num = (num == 0) ? 256 : num;
+
+    uint32_t source_vectors = real_num;
+    if ( cl > wl && cl > 0 && wl > 0) {
+        source_vectors = (real_num * wl + cl - 1) / cl;
+    }
     
     // Calculate source elements per vector
     uint32_t elems_per_vector;
@@ -454,7 +459,9 @@ void VIF::ProcessFifo(int v) {
             bool force_align = false; // UNPACK aligns to next QW, MPG does NOT necessarily
 
             if (IsUnpackCmd(cmd)) {
-                bytes_needed = GetUnpackSize(cmd, num);
+                uint32_t unpack_cl = regs[v].GetCL();
+                uint32_t unpack_wl = regs[v].GetWL();
+                bytes_needed = GetUnpackSize(cmd, num, unpack_cl, unpack_wl);
                 use_mask = (cmd & 0x10);
                 force_align = true; // UNPACK spec: "Data starts at next 128-bit boundary"
             } 
@@ -680,6 +687,11 @@ void VIF::ExecuteCommand(int v, uint32_t cmd, uint32_t immediate, uint32_t num,
                     g_logFile << "[VIF1] MSCNT: Continue VU1 at TPC=0x" 
                               << std::hex << g_cpuContext->vuRegs.TPC << std::dec << std::endl;
                 }
+
+                if(g_cpuContext->vuRegs.TPC == 0 && g_logFile.is_open()) {
+                    g_logFile << "[VIF1] WARNING: MSCNT called but VU1 TPC is 0. VU may not start correctly." << std::endl;
+
+                }
                 g_vu1.Execute(*g_cpuContext, g_cpuContext->vuRegs.TPC);
             }
             break;
@@ -801,6 +813,15 @@ void VIF::ExecuteUnpack(int v, uint32_t cmd, uint32_t immediate, uint32_t num,
         
         // Check if this is a write cycle or skip cycle
         bool do_write = (cycle_pos < wl);
+
+        if (!do_write) {
+            // Skip cycle: Still need to read source data to advance pointer, but won't write
+            addr_qw = (addr_qw + 1) & 0x3FF; // Address increments even on skip
+            g_logFile << "[VIF" << v << "] UNPACK: Cycle " << i 
+                      << " is a SKIP cycle (CL=" << cl << ", WL=" << wl << ")" << std::endl;
+            continue;
+
+        }
         
         // Read source data into temporary vector
         uint32_t vec[4] = {0, 0, 0, 0};
