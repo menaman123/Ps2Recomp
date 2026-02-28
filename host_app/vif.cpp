@@ -95,7 +95,7 @@ static uint32_t GetUnpackSize(uint32_t cmd, uint32_t num, uint32_t cl, uint32_t 
         elems_per_vector = UNPACK_ELEMS[format];
     }
     
-    uint32_t total_bits = real_num * elems_per_vector * bits;
+    uint32_t total_bits = source_vectors * elems_per_vector * bits;
     uint32_t total_bytes = (total_bits + 7) / 8;
     
     // Align to 32-bit boundary
