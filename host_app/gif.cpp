@@ -704,21 +704,27 @@ void GIF::ProcessPacket(GIFPath path, const uint8_t* data, size_t size) {
 void GIF::FinishDMA() {
     // If we're mid-transfer, force-finish it
     if (in_transfer) {
+
+        if(current_tag.flg == GIFFormat::IMAGE && current_loop < current_tag.nloop) {
+            g_logFile << "[GIF] FinishDMA: Mid-IMAGE transfer (loop=" 
+                      << current_loop << "/" << current_tag.nloop << ") - preserving state for next DMA." << std::endl;
+
+            return;
+
+        }
+
         g_logFile << "[GIF] WARNING: DMA finished but GIF packet incomplete (loop=" 
                   << current_loop << "/" << current_tag.nloop 
                   << ", reg=" << current_reg << ")" << std::endl;
         in_transfer = false;
     }
     
-    // ALWAYS flush pending geometry, whether transfer completed normally or not
-    g_gs_state.Flush();
-    
-    // ALWAYS push VSync so the frame gets presented
-    RenderJob vsync_job;
-    vsync_job.type = RenderCommandType::VSync;
-    g_renderQueue.Push(vsync_job);
-    
-    g_logFile << "[GIF] FinishDMA: Flushed geometry and triggered VSync." << std::endl;
+
+    if(!in_transfer && !g_gs_state.draw_buffer.empty()) {
+        g_gs_state.Flush();
+        FlushBatch();
+
+    }
     
     // Clear any leftover partial data
     dma_buffer.clear();
