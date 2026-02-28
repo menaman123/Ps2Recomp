@@ -973,6 +973,7 @@ void DMAC::ProcessVifDmaChain(int ch) {
     const int MAX_TAGS = 10000;
     int tag_count = 0;
     bool tag_end = false;
+    uint32_t prev_tadr = 0;
 
 
 
@@ -1019,6 +1020,10 @@ void DMAC::ProcessVifDmaChain(int ch) {
         for (int i = 0; i < 8; i++) {
             g_logFile << "Bytes at 0x628990:" << std::hex << (int)memory::read<uint8_t>(0x628990 + i) << std::endl;
         }
+
+        // Track previous tag address for diagnostics
+        prev_tadr = tadr;
+
         // ===== READ 128-BIT DMA TAG =====
         uint32_t tag_read_addr;
         if (fromSpr) {
@@ -1045,6 +1050,38 @@ void DMAC::ProcessVifDmaChain(int ch) {
         g_logFile << "      tag_lo: 0x" << std::hex << std::setw(16) << std::setfill('0') << tag_lo << std::dec << std::endl;
         g_logFile << "      tag_hi: 0x" << std::hex << std::setw(16) << std::setfill('0') << tag_hi << std::dec << std::endl;
         
+        // ===== INVALID TAG DETECTION =====
+        // Check for uninitialized memory (all 0xFF) — indicates the buffer was never
+        // populated by the game's recompiled code. This catches the bug condition where
+        // a NEXT tag jumps to a region that should contain a CLUT upload sub-chain.
+        if (tag_lo == 0xFFFFFFFFFFFFFFFF && tag_hi == 0xFFFFFFFFFFFFFFFF) {
+            g_logFile << "  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+            g_logFile << "  !! WARNING: DMA tag memory appears UNINITIALIZED !!" << std::endl;
+            g_logFile << "  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+            g_logFile << "  !! Tag address:      0x" << std::hex << tag_read_addr << std::dec << std::endl;
+            g_logFile << "  !! Referring tag at:  0x" << std::hex << prev_tadr << std::dec << std::endl;
+            g_logFile << "  !! Raw tag_lo:        0x" << std::hex << tag_lo << std::dec << std::endl;
+            g_logFile << "  !! Raw tag_hi:        0x" << std::hex << tag_hi << std::dec << std::endl;
+            g_logFile << "  !! All 128 bits are 0xFF — suspect missing recompiled" << std::endl;
+            g_logFile << "  !! function or blocked initialization path." << std::endl;
+            g_logFile << "  !! Terminating chain early to prevent garbage cascade." << std::endl;
+            g_logFile << "  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+            tag_end = true;
+            break;
+        }
+
+        // Check for suspiciously large QWC (> 4096 quadwords = 64KB)
+        {
+            uint16_t raw_qwc = tag_lo & 0xFFFF;
+            if (raw_qwc > 4096) {
+                g_logFile << "  !! WARNING: Suspiciously large QWC value: " << raw_qwc
+                          << " (" << (raw_qwc * 16) << " bytes)" << std::endl;
+                g_logFile << "  !! Tag address:      0x" << std::hex << tag_read_addr << std::dec << std::endl;
+                g_logFile << "  !! Referring tag at:  0x" << std::hex << prev_tadr << std::dec << std::endl;
+                g_logFile << "  !! This may indicate uninitialized or corrupt tag data." << std::endl;
+            }
+        }
+
         // ===== PARSE TAG FIELDS =====
         uint16_t qwc  = tag_lo & 0xFFFF;
         uint8_t  pce  = (tag_lo >> 26) & 0x3;   // Priority control
@@ -1500,3 +1537,4 @@ int RemoveDmacHandler(int channel, int handler_id) {
     // Return the number of remaining handlers (standard PS2 behavior)
     return (int)queue.size();
 }
+
