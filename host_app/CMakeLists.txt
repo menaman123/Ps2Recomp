@@ -37,6 +37,10 @@ add_executable(host_app
     hle_heap.h
     sif_rpc_handlers.h
     sif_rpc_handlers.cpp
+    texture_decoder.h
+    texture_decoder.cpp
+    texture_cache.h
+    texture_cache.cpp
 
 )
 # Set the GENERATED property on the source file.
