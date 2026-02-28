@@ -467,7 +467,7 @@ void VIF::ProcessFifo(int v) {
             } 
             else if (cmd == CMD_MPG) {
                 bytes_needed = (num == 0 ? 256 : num) * 8;
-                force_align = false; // CRITICAL FIX: MPG follows stream, no forced QW skip
+                force_align = true;
             }
             else {
                 switch (cmd) {
