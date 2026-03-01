@@ -6,6 +6,7 @@
 #include <iostream>
 #include "recompiled.h"
 #include <iomanip>
+#include <cstring>
 #include "sif.h"
 #include "gif.h"
 #include "vif.h"
@@ -604,6 +605,48 @@ void DMAC::ProcessGifDmaChain() {
     if (!full_payload.empty()) {
         g_logFile << "[DMAC] Sending full chain payload to GIF: " 
                   << (full_payload.size() / 16) << " quadwords" << std::endl;
+
+        // [GIF-DMA] Diagnostic: preview first 64 bytes and parse first GIFtag
+        {
+            g_logFile << "[GIF-DMA] Chain payload preview (first 64 bytes):";
+            for (size_t i = 0; i < std::min(full_payload.size(), (size_t)64); i++) {
+                if (i % 16 == 0) g_logFile << "\n  ";
+                g_logFile << " " << std::hex << std::setw(2) << std::setfill('0') << (int)full_payload[i];
+            }
+            g_logFile << std::dec << std::endl;
+
+            if (full_payload.size() >= 16) {
+                uint64_t tag_lo, tag_hi;
+                std::memcpy(&tag_lo, full_payload.data(), 8);
+                std::memcpy(&tag_hi, full_payload.data() + 8, 8);
+
+                uint16_t nloop = tag_lo & 0x7FFF;
+                uint8_t flg = (tag_lo >> 58) & 0x3;
+                uint8_t nregs = (tag_lo >> 60) & 0xF;
+                if (nregs == 0) nregs = 16;
+
+                const char* flg_names[] = {"PACKED", "REGLIST", "IMAGE", "DISABLE"};
+                g_logFile << "[GIF-DMA] GIFtag at offset 0: FLG=" << (int)flg
+                          << " (" << flg_names[flg] << ")"
+                          << " NLOOP=" << nloop
+                          << " NREGS=" << (int)nregs
+                          << " REGS=[";
+
+                bool found_xfer_regs = false;
+                for (int ri = 0; ri < nregs; ri++) {
+                    uint8_t reg = (tag_hi >> (ri * 4)) & 0xF;
+                    if (ri > 0) g_logFile << ",";
+                    g_logFile << std::hex << (int)reg;
+                    if (reg >= 0x50 && reg <= 0x54) found_xfer_regs = true;
+                }
+                g_logFile << "]" << std::dec << std::endl;
+
+                g_logFile << "[GIF-DMA] Transfer registers "
+                          << (found_xfer_regs ? "FOUND" : "NOT FOUND")
+                          << " in GIFtag REGS" << std::endl;
+            }
+        }
+
         g_gif.ReceiveData(GIFPath::PATH3, full_payload.data(), full_payload.size());
     } else {
         g_logFile << "[DMAC] Chain had no payload data" << std::endl;
@@ -1656,6 +1699,7 @@ int RemoveDmacHandler(int channel, int handler_id) {
     // Return the number of remaining handlers (standard PS2 behavior)
     return (int)queue.size();
 }
+
 
 
 

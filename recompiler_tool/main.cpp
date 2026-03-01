@@ -6,97 +6,115 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <filesystem> 
+#include <filesystem>
+
 
 int main(int argc, char* argv[]) {
-    std::string elf_path;
-    std::string ghidra_path;
-    std::string output_header_path = "recompiled_functions.h";
-    std::string output_cpp_path = "recompiled_functions.cpp";
-
-    // --- 1. Parse Command-Line Arguments ---
-    for (int i = 1; i < argc; ++i) {
-        std::string arg = argv[i];
-        if (arg == "--input" && i + 1 < argc) {
-            elf_path = argv[++i];
-        } else if (arg == "--ghidra-input" && i + 1 < argc) {
-            ghidra_path = argv[++i];
-        } else if (arg == "--output-header" && i + 1 < argc) {
-            output_header_path = argv[++i];
-        } else if (arg == "--output-cpp" && i + 1 < argc) {
-            output_cpp_path = argv[++i];
-        }
-    }
-
-    if (elf_path.empty() || ghidra_path.empty()) {
-        std::cerr << "Usage: " << argv[0]
-                  << " --input <elf_file>"
-                  << " --ghidra-input <ghidra_txt_file>"
-                  << " [--output-header <header_file>]"
-                  << " [--output-cpp <cpp_file>]" << std::endl;
-        return 1;
-    }
-
-    const std::string log_file_path = "logs/recompiler_tool/runtime_log.txt";
-
-    try {
-        // 2. Get the directory part of the path
-        std::filesystem::path dir_path = std::filesystem::path(log_file_path).parent_path();
-
-        // 3. Create all directories in the path if they don't exist
-        if (!dir_path.empty() && !std::filesystem::exists(dir_path)) {
-            std::filesystem::create_directories(dir_path);
-        }
-
-        // Now, safely open the log file
-        log_file.open(log_file_path);
-        if (!log_file.is_open()) {
-            // If it still fails, it's a different problem (e.g., permissions)
-            std::cerr << "Error: Could not open log file after creating directories!" << std::endl;
-            return 1;
-        }
-
-    } catch (const std::filesystem::filesystem_error& e) {
-        std::cerr << "Filesystem error: " << e.what() << std::endl;
-        return 1;
-    }
+   std::string elf_path;
+   std::string ghidra_path;
+   std::string output_header_path = "recompiled_functions.h";
+   std::string output_cpp_path = "recompiled_functions.cpp";
 
 
-    // --- 2. Read ELF File ---
-    ELFIO::elfio reader;
-    if (!reader.load(elf_path)) {
-        std::cerr << "[-] Failed to load ELF file: " << elf_path << std::endl;
-        return 1;
-    }
+   // --- 1. Parse Command-Line Arguments ---
+   for (int i = 1; i < argc; ++i) {
+       std::string arg = argv[i];
+       if (arg == "--input" && i + 1 < argc) {
+           elf_path = argv[++i];
+       } else if (arg == "--ghidra-input" && i + 1 < argc) {
+           ghidra_path = argv[++i];
+       } else if (arg == "--output-header" && i + 1 < argc) {
+           output_header_path = argv[++i];
+       } else if (arg == "--output-cpp" && i + 1 < argc) {
+           output_cpp_path = argv[++i];
+       }
+   }
 
-    const ELFIO::section* text_section = reader.sections[".text"];
-    if (text_section == nullptr) {
-        std::cerr << "[-] .text section not found in ELF file." << std::endl;
-        return 1;
-    }
 
-    const uint8_t* text_data = reinterpret_cast<const uint8_t*>(text_section->get_data());
-    uint32_t text_size = text_section->get_size();
-    uint32_t text_base = text_section->get_address();
+   if (elf_path.empty() || ghidra_path.empty()) {
+       std::cerr << "Usage: " << argv[0]
+                 << " --input <elf_file>"
+                 << " --ghidra-input <ghidra_txt_file>"
+                 << " [--output-header <header_file>]"
+                 << " [--output-cpp <cpp_file>]" << std::endl;
+       return 1;
+   }
 
-    // --- 3. Analyze Functions ---
-    // Corrected function call
 
-    const std::map<uint32_t, Function>& analyzed_functions = parse_ghidra_function_file(ghidra_path, text_data, text_size, text_base, log_file);
+   const std::string log_file_path = "logs/recompiler_tool/runtime_log.txt";
 
-    if (analyzed_functions.empty()) {
-        std::cerr << "[-] Analysis failed or no functions were found from the Ghidra file." << std::endl;
-        return 1;
-    }
-    std::cout << "[+] Analysis complete. Found " << analyzed_functions.size() << " functions." << std::endl;
 
-    // --- 5. Recompile ---
-    Recompiler recompiler(analyzed_functions);
-    recompiler.recompile_to_files("recompiled.h", "recompiled.cpp");
-    
+   try {
+       // 2. Get the directory part of the path
+       std::filesystem::path dir_path = std::filesystem::path(log_file_path).parent_path();
 
-    return 0;
+
+       // 3. Create all directories in the path if they don't exist
+       if (!dir_path.empty() && !std::filesystem::exists(dir_path)) {
+           std::filesystem::create_directories(dir_path);
+       }
+
+
+       // Now, safely open the log file
+       log_file.open(log_file_path);
+       if (!log_file.is_open()) {
+           // If it still fails, it's a different problem (e.g., permissions)
+           std::cerr << "Error: Could not open log file after creating directories!" << std::endl;
+           return 1;
+       }
+
+
+   } catch (const std::filesystem::filesystem_error& e) {
+       std::cerr << "Filesystem error: " << e.what() << std::endl;
+       return 1;
+   }
+
+
+
+
+   // --- 2. Read ELF File ---
+   ELFIO::elfio reader;
+   if (!reader.load(elf_path)) {
+       std::cerr << "[-] Failed to load ELF file: " << elf_path << std::endl;
+       return 1;
+   }
+
+
+   const ELFIO::section* text_section = reader.sections[".text"];
+   if (text_section == nullptr) {
+       std::cerr << "[-] .text section not found in ELF file." << std::endl;
+       return 1;
+   }
+
+
+   const uint8_t* text_data = reinterpret_cast<const uint8_t*>(text_section->get_data());
+   uint32_t text_size = text_section->get_size();
+   uint32_t text_base = text_section->get_address();
+
+
+   // --- 3. Analyze Functions ---
+   // Corrected function call
+
+
+   const std::map<uint32_t, Function>& analyzed_functions = parse_ghidra_function_file(ghidra_path, text_data, text_size, text_base, log_file);
+
+
+   if (analyzed_functions.empty()) {
+       std::cerr << "[-] Analysis failed or no functions were found from the Ghidra file." << std::endl;
+       return 1;
+   }
+   std::cout << "[+] Analysis complete. Found " << analyzed_functions.size() << " functions." << std::endl;
+
+
+   // --- 5. Recompile ---
+   Recompiler recompiler(analyzed_functions);
+   recompiler.recompile_to_files("recompiled.h", "recompiled.cpp");
+  
+
+
+   return 0;
 }
+
 
 /*
 #include <SDL.h>
@@ -111,97 +129,125 @@ int main(int argc, char* argv[]) {
 #include <cstring>
 #include "recompiled_functions.h"
 
+
 // Global log file stream to be used by the host and recompiled functions
 std::ofstream g_logFile;
 
+
 void init_cpu_context(CpuContext& ctx) {
-    memset(&ctx, 0, sizeof(CpuContext));
-    
-    // Set the entry point (you'll need to get this from the ELF)
-    ctx.cpuRegs.pc = 0x100008; // Example starting PC
-    
-    // Initialize stack pointer to end of main RAM
-    // PS2 typically uses the top of main RAM for the stack
-    ctx.cpuRegs.GPR.r[29].UD[0] = 0x01FFFF00; // Near end of 32MB main RAM
-    
-    // Alternative: Use scratchpad for stack (some games do this)
-    // ctx.cpuRegs.GPR.r[29].UD[0] = 0x70003FF0; // Near end of scratchpad
-    
-    // Initialize other important registers
-    ctx.cpuRegs.GPR.r[28].UD[0] = 0; // Global pointer (gp)
-    ctx.cpuRegs.GPR.r[30].UD[0] = 0; // Frame pointer (fp)
+   memset(&ctx, 0, sizeof(CpuContext));
+  
+   // Set the entry point (you'll need to get this from the ELF)
+   ctx.cpuRegs.pc = 0x100008; // Example starting PC
+  
+   // Initialize stack pointer to end of main RAM
+   // PS2 typically uses the top of main RAM for the stack
+   ctx.cpuRegs.GPR.r[29].UD[0] = 0x01FFFF00; // Near end of 32MB main RAM
+  
+   // Alternative: Use scratchpad for stack (some games do this)
+   // ctx.cpuRegs.GPR.r[29].UD[0] = 0x70003FF0; // Near end of scratchpad
+  
+   // Initialize other important registers
+   ctx.cpuRegs.GPR.r[28].UD[0] = 0; // Global pointer (gp)
+   ctx.cpuRegs.GPR.r[30].UD[0] = 0; // Frame pointer (fp)
 }
+
 
 // A simple execution loop
 void execute_recompiled_code(CpuContext& ctx) {
-    while (true) {
-        // First try exact function start match
-        auto it = recompiled_functions.find(ctx.cpuRegs.pc);
-        if (it != recompiled_functions.end()) {
-            std::cout << "Executing function at PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
-            g_logFile << "Executing function at PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
-            it->second(ctx, ctx.cpuRegs.pc); // Pass current PC as start address
-        } else {
-            // Try to find containing function for mid-function jumps
-            auto containing_func = find_containing_function(ctx.cpuRegs.pc);
-            if (containing_func) {
-                std::cout << "Resuming function containing PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
-                g_logFile << "Resuming function containing PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
-                containing_func(ctx, ctx.cpuRegs.pc); // Pass current PC as start address
-            } else {
-                std::cerr << "Error: No recompiled function found for PC 0x"
-                          << std::hex << ctx.cpuRegs.pc << std::endl;
-                g_logFile << "Error: No recompiled function found for PC 0x"
-                          << std::hex << ctx.cpuRegs.pc << std::endl;
-                break;
-            }
-        }
+   while (true) {
+       // First try exact function start match
+       auto it = recompiled_functions.find(ctx.cpuRegs.pc);
+       if (it != recompiled_functions.end()) {
+           // [FUNC-TRACE] Check if this is a watched function
+           if (!g_watched_functions.empty() && g_watched_functions.count(ctx.cpuRegs.pc)) {
+               g_logFile << "[FUNC-TRACE] Entering func_" << std::hex << ctx.cpuRegs.pc
+                         << " (watched: texture_upload_candidate)" << std::dec << std::endl;
+           }
+           std::cout << "Executing function at PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
+           g_logFile << "Executing function at PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
+           g_current_pc = ctx.cpuRegs.pc;
+           it->second(ctx, ctx.cpuRegs.pc); // Pass current PC as start address
+       } else {
+           // Try to find containing function for mid-function jumps
+           auto containing_func = find_containing_function(ctx.cpuRegs.pc);
+           if (containing_func) {
+               // [FUNC-TRACE] Check if this is a watched function
+               if (!g_watched_functions.empty() && g_watched_functions.count(ctx.cpuRegs.pc)) {
+                   g_logFile << "[FUNC-TRACE] Entering func_" << std::hex << ctx.cpuRegs.pc
+                             << " (watched: texture_upload_candidate)" << std::dec << std::endl;
+               }
+               std::cout << "Resuming function containing PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
+               g_logFile << "Resuming function containing PC: 0x" << std::hex << ctx.cpuRegs.pc << std::endl;
+               g_current_pc = ctx.cpuRegs.pc;
+               containing_func(ctx, ctx.cpuRegs.pc); // Pass current PC as start address
+           } else {
+               std::cerr << "Error: No recompiled function found for PC 0x"
+                         << std::hex << ctx.cpuRegs.pc << std::endl;
+               g_logFile << "Error: No recompiled function found for PC 0x"
+                         << std::hex << ctx.cpuRegs.pc << std::endl;
+               break;
+           }
+       }
 
-        if (ctx.cpuRegs.pc == 0) {
-            break;
-        }
-    }
+
+       if (ctx.cpuRegs.pc == 0) {
+           break;
+       }
+   }
 }
+
 
 int main(int argc, char* argv[]) {
-    // Create a "logs" directory if it doesn't already exist
-    if (!std::filesystem::exists("logs")) {
-        std::filesystem::create_directory("logs");
-    }
+   // Create a "logs" directory if it doesn't already exist
+   if (!std::filesystem::exists("logs")) {
+       std::filesystem::create_directory("logs");
+   }
 
-    // Open the log file for writing
-    g_logFile.open("logs/runtime_log.txt");
-    if (!g_logFile.is_open()) {
-        std::cerr << "Fatal Error: Could not open log file for writing." << std::endl;
-        return 1;
-    }
 
-    if (SDL_Init(SDL_INIT_TIMER) < 0) {
-        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-        return 1;
-    }
+   // Open the log file for writing
+   g_logFile.open("logs/runtime_log.txt");
+   if (!g_logFile.is_open()) {
+       std::cerr << "Fatal Error: Could not open log file for writing." << std::endl;
+       return 1;
+   }
 
-    std::cout << "Starting the host application... Logging to logs/runtime_log.txt" << std::endl;
-    g_logFile << "Starting the host application..." << std::endl;
 
-    // Initialize the CPU state.
-    CpuContext ctx;
-    init_cpu_context(ctx);
+   if (SDL_Init(SDL_INIT_TIMER) < 0) {
+       std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+       return 1;
+   }
 
-    // This map is defined in recompiled_functions.cpp and holds pointers
-    // to all your recompiled functions.
-    initialize_recompiled_functions(); 
 
-    std::cout << "Executing recompiled code..." << std::endl;
-    g_logFile << "Executing recompiled code..." << std::endl;
-    execute_recompiled_code(ctx);
+   std::cout << "Starting the host application... Logging to logs/runtime_log.txt" << std::endl;
+   g_logFile << "Starting the host application..." << std::endl;
 
-    std::cout << "Host application finished." << std::endl;
-    g_logFile << "Host application finished." << std::endl;
-    
-    g_logFile.close();
-    SDL_Quit();
-    return 0;
+
+   // Initialize the CPU state.
+   CpuContext ctx;
+   init_cpu_context(ctx);
+
+
+   // This map is defined in recompiled_functions.cpp and holds pointers
+   // to all your recompiled functions.
+   initialize_recompiled_functions();
+
+
+   std::cout << "Executing recompiled code..." << std::endl;
+   g_logFile << "Executing recompiled code..." << std::endl;
+   execute_recompiled_code(ctx);
+
+
+   std::cout << "Host application finished." << std::endl;
+   g_logFile << "Host application finished." << std::endl;
+  
+   g_logFile.close();
+   SDL_Quit();
+   return 0;
 }
 
+
 */
+
+
+
