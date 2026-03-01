@@ -181,6 +181,14 @@ void DMAC::ProcessGifDmaChain() {
         addr &= ~0xF;
         bool     spr  = (tag_lo >> 63) & 1;
 
+        // Detect uninitialized/corrupt DMA tags and terminate the chain
+        if (tag_lo == 0xFFFFFFFFFFFFFFFFULL || qwc == 0xFFFF) {
+            g_logFile << "  !! CORRUPT TAG DETECTED @ 0x" << std::hex << current_tadr
+                      << " — terminating GIF DMA chain" << std::dec << std::endl;
+            tag_end = true;
+            break;
+        }
+
         // Log tag
         g_logFile << "  [Tag " << tag_count << "] @ 0x" << std::hex << current_tadr 
                   << " ID=" << (int)id 
@@ -420,6 +428,14 @@ void DMAC::ProcessGifDmaChain() {
         uint32_t addr = (tag_lo >> 32) & 0x7FFFFFF0;
         addr &= ~0xF;
         bool     spr  = (tag_lo >> 63) & 1;
+
+        // Detect uninitialized/corrupt DMA tags and terminate the chain
+        if (tag_lo == 0xFFFFFFFFFFFFFFFFULL || qwc == 0xFFFF) {
+            g_logFile << "  !! CORRUPT TAG DETECTED @ 0x" << std::hex << current_tadr
+                      << " — terminating GIF DMA chain" << std::dec << std::endl;
+            tag_end = true;
+            break;
+        }
 
         // Log tag
         g_logFile << "  [Tag " << tag_count << "] @ 0x" << std::hex << current_tadr 
@@ -745,8 +761,11 @@ void DMAC::Write(uint32_t address, uint32_t value) {
             StartChannel(channel_id);
             
             // 4. Synchronous Cleanup (If StartChannel finishes instantly)
-            // Clear the STR bit to indicate "Done"
-            channels[channel_id].chcr &= ~(1 << 8); 
+            // Clear the STR bit to indicate "Done" — but only if the chain
+            // wasn't suspended (waiting for game to fill in a tag)
+            if (!suspended_vif_chain.active || suspended_vif_chain.channel != channel_id) {
+                channels[channel_id].chcr &= ~(1 << 8);
+            } 
         } else {
             //PauseTransfer(channel_id);
             g_logFile << "DMAC: Channel " << channel_id << " STR cleared (paused/stopped)" << std::endl;
@@ -1079,6 +1098,31 @@ void DMAC::ProcessVifDmaChain(int ch) {
                 g_logFile << "  !! Tag address:      0x" << std::hex << tag_read_addr << std::dec << std::endl;
                 g_logFile << "  !! Referring tag at:  0x" << std::hex << prev_tadr << std::dec << std::endl;
                 g_logFile << "  !! This may indicate uninitialized or corrupt tag data." << std::endl;
+            }
+
+            // Detect uninitialized/corrupt DMA tags and terminate the chain.
+            // A tag with all-FF bytes (tag_lo = 0xFFFF...FFFF) is clearly uninitialized memory.
+            // Also catch tags where QWC=0xFFFF (65535) which is unreasonably large for any
+            // real DMA transfer — games never build chains with 1MB+ transfers per tag.
+            if (tag_lo == 0xFFFFFFFFFFFFFFFFULL || raw_qwc == 0xFFFF) {
+                g_logFile << "  !! UNINITIALIZED TAG DETECTED — suspending DMA chain for retry" << std::endl;
+                g_logFile << "  !! tag_lo=0x" << std::hex << tag_lo << " tag_hi=0x" << tag_hi << std::dec << std::endl;
+                g_logFile << "  !! Will resume from TADR=0x" << std::hex << tadr << std::dec
+                          << " after game code runs" << std::endl;
+
+                // Save chain state for later resumption
+                suspended_vif_chain.active = true;
+                suspended_vif_chain.channel = ch;
+                suspended_vif_chain.tadr = tadr;
+                suspended_vif_chain.fromSpr = fromSpr;
+                suspended_vif_chain.tag_count = tag_count;
+                suspended_vif_chain.retry_count = 0;
+
+                // DON'T call CompleteChannel — the chain is still in progress
+                // DON'T clear STR — the channel is still "running"
+                g_logFile << "[VIF" << ch << " DMA] Chain SUSPENDED (waiting for game to fill tag at 0x"
+                          << std::hex << tadr << std::dec << ")" << std::endl;
+                return;
             }
         }
 
@@ -1443,6 +1487,61 @@ void DMAC::CompleteChannel(int ch) {
     g_logFile << "DMAC: Channel " << ch << " completed" << std::endl;
 }
 
+bool DMAC::HasSuspendedDma() const {
+    return suspended_vif_chain.active;
+}
+
+void DMAC::ResumeSuspendedDma() {
+    if (!suspended_vif_chain.active) return;
+
+    int ch = suspended_vif_chain.channel;
+    uint32_t tadr = suspended_vif_chain.tadr;
+
+    // Check if the tag at the suspended address is still uninitialized
+    uint64_t tag_lo = memory::read<uint64_t>(tadr & 0x1FFFFFFF);
+
+    if (tag_lo == 0xFFFFFFFFFFFFFFFFULL || (tag_lo & 0xFFFF) == 0xFFFF) {
+        // Still uninitialized — increment retry counter
+        suspended_vif_chain.retry_count++;
+
+        if (suspended_vif_chain.retry_count >= SuspendedVifChain::MAX_RETRIES) {
+            g_logFile << "[DMA-RESUME] Tag at 0x" << std::hex << tadr
+                      << " still uninitialized after " << std::dec << suspended_vif_chain.retry_count
+                      << " retries — giving up and terminating chain" << std::endl;
+            suspended_vif_chain.active = false;
+            channels[ch].chcr &= ~CHCR_STR;
+            channels[ch].qwc = 0;
+            CompleteChannel(ch);
+        }
+        // Otherwise, just return and try again next time
+        return;
+    }
+
+    // Tag is now valid — resume the chain
+    g_logFile << "[DMA-RESUME] Tag at 0x" << std::hex << tadr
+              << " is now valid (tag_lo=0x" << tag_lo << ") after "
+              << std::dec << suspended_vif_chain.retry_count << " retries — resuming chain" << std::endl;
+
+    // Restore the chain state into the channel registers and re-enter ProcessVifDmaChain
+    // We set TADR to where we left off so ProcessVifDmaChain picks up from there
+    channels[ch].tadr = tadr;
+    // Ensure STR is still set (it should be, since we didn't clear it)
+    channels[ch].chcr |= CHCR_STR;
+
+    // Clear the suspended state BEFORE calling ProcessVifDmaChain
+    // (it may suspend again at a different point)
+    suspended_vif_chain.active = false;
+
+    // Re-enter the chain processor — it will start from the current TADR
+    ProcessVifDmaChain(ch);
+
+    // If ProcessVifDmaChain didn't suspend again, do the synchronous cleanup
+    // that StartChannel normally does
+    if (!suspended_vif_chain.active) {
+        channels[ch].chcr &= ~(1 << 8); // Clear STR
+    }
+}
+
 bool DMAC::CheckInterrupt() {
     // Interrupt fires if any enabled channel has its status bit set
     uint16_t status = stat & 0xFFFF;
@@ -1537,4 +1636,5 @@ int RemoveDmacHandler(int channel, int handler_id) {
     // Return the number of remaining handlers (standard PS2 behavior)
     return (int)queue.size();
 }
+
 
