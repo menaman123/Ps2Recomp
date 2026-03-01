@@ -606,6 +606,11 @@ void write_io_register(uint32_t address, uint32_t value) {
         
         */
 
+        if (address >= 0x450180 && address < 0x450190) {
+                g_logFile << "[MEMORY WATCH] Write called for address: " << std::hex << address 
+                        << " with value: " << value <<std::endl;
+        }
+
 
         // Check I/O registers FIRST
         if (is_io_register(address)) {
