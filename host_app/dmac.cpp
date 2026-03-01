@@ -685,7 +685,27 @@ uint32_t DMAC::Read(uint32_t addr) {
         
         if (ch >= 0) {
             switch (offset) {
-                case 0x00: return channels[ch].chcr;
+                case 0x00: {
+                    // Deadlock detection: if the game reads CHCR while a DMA chain
+                    // is suspended on this channel, the game is busy-waiting for
+                    // completion. Try to resume; if still stuck, force-complete.
+                    if (suspended_vif_chain.active && suspended_vif_chain.channel == ch) {
+                        ResumeSuspendedDma();
+                        // If still suspended after resume attempt, the tag was never
+                        // going to be filled — force-terminate to break the deadlock
+                        if (suspended_vif_chain.active && suspended_vif_chain.channel == ch) {
+                            g_logFile << "[DMA-DEADLOCK] Game polling CHCR for ch" << ch
+                                      << " while chain suspended at 0x" << std::hex
+                                      << suspended_vif_chain.tadr << std::dec
+                                      << " — force-completing chain" << std::endl;
+                            suspended_vif_chain.active = false;
+                            channels[ch].chcr &= ~CHCR_STR;
+                            channels[ch].qwc = 0;
+                            CompleteChannel(ch);
+                        }
+                    }
+                    return channels[ch].chcr;
+                }
                 case 0x10: return channels[ch].madr;
                 case 0x20: return channels[ch].qwc;
                 case 0x30: return channels[ch].tadr;
@@ -1636,5 +1656,6 @@ int RemoveDmacHandler(int channel, int handler_id) {
     // Return the number of remaining handlers (standard PS2 behavior)
     return (int)queue.size();
 }
+
 
 
