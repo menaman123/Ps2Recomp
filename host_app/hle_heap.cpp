@@ -55,6 +55,10 @@ static HleCdvdFile SearchIso9660(const std::string& search_path) {
     }
     g_logFile << "HLE CDVD Search: '" << search_path << "'" << std::endl;
 
+    if (search_path == "StartUp\\Icons.psm"){
+        g_logFile << "FOUND '" << search_path << "'" << std::endl;
+    }
+
 
 static bool s_dumped_root = false;
 if (!s_dumped_root) {

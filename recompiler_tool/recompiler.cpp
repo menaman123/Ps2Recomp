@@ -396,6 +396,36 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x181490]});\n";
         }
 
+        else if (func.base_address == 0x00172b60) {
+            // Diagnostic wrapper for FUN_00172b60 - Texture Load Request
+            // Logs key decision points before calling the auto-generated function
+            file << "    recompiled_functions[0x172b60] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        uint32_t p1 = ctx.cpuRegs.GPR.r[4].UL[0];\n";
+            file << "        uint32_t tex_obj = memory::read<uint32_t>(0x309720);\n";
+            file << "        uint32_t fcur = memory::read<uint32_t>(p1 + 0x10);\n";
+            file << "        uint32_t flast = memory::read<uint32_t>(p1 + 0x18);\n";
+            file << "        uint32_t iv1 = memory::read<uint32_t>(p1 + 0x14);\n";
+            file << "        uint32_t tref = memory::read<uint32_t>(p1 + 0x1c);\n";
+            file << "        uint32_t p2t = memory::read<uint32_t>(0x323534);\n";
+            file << "        uint32_t ts = (tex_obj != 0) ? memory::read<uint32_t>(tex_obj) : 0;\n";
+            file << "        g_logFile << \"[172b60-DIAG] p1=0x\" << std::hex << p1\n";
+            file << "                  << \" tex=0x\" << tex_obj\n";
+            file << "                  << \" fcur=\" << std::dec << fcur << \" flast=\" << flast\n";
+            file << "                  << \" iv1=\" << iv1 << \" tref=\" << tref << \" p2t=\" << p2t\n";
+            file << "                  << \" ts=0x\" << std::hex << ts\n";
+            file << "                  << \" delta=\" << std::dec << ctx.cpuRegs.GPR.r[6].SL[0]\n";
+            file << "                  << \" idx=\" << ctx.cpuRegs.GPR.r[7].UL[0] << std::endl;\n";
+            file << "        if (tex_obj == 0) g_logFile << \"[172b60-DIAG] EARLY-OUT: tex_obj NULL\" << std::endl;\n";
+            file << "        else if (fcur == flast) g_logFile << \"[172b60-DIAG] EARLY-OUT: fcur==flast (\" << fcur << \")\" << std::endl;\n";
+            file << "        else if (iv1 != 0) g_logFile << \"[172b60-DIAG] PATH: iv1!=0 tex_state=0x\" << std::hex << (ts & 0xf000) << std::dec << std::endl;\n";
+            file << "        else g_logFile << \"[172b60-DIAG] PATH: fresh load -> FUN_002afb18\" << std::endl;\n";
+            file << "        FUN_00172b60(ctx);\n";
+            file << "    };\n";
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x172b60]});\n";
+        }
+
         else {
             // Standard generation for all other functions
             file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); };\n";
@@ -1148,6 +1178,14 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 44;
                 ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0x3f;
                 
+                // [DIAG] Log the switch case value and the raw 64-bit object word
+                {
+                    uint64_t raw_qw = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                    g_logFile << "[177168-SWITCH] param1=0x" << std::hex << ctx.cpuRegs.GPR.r[17].UL[0]
+                              << " raw_qw=0x" << raw_qw
+                              << " case=" << std::dec << ctx.cpuRegs.GPR.r[4].UL[0] << std::endl;
+                }
+
                 if (ctx.cpuRegs.GPR.r[4].UL[0] >= 0x17) {
                     goto Label_caseD_17;
                 }
@@ -1178,9 +1216,14 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
 
             Label_caseD_0:
                 {
-                uint32_t ptr = memory::read<uint8_t>(0x309738);
+                uint32_t ptr = memory::read<uint32_t>(0x309738);
                 ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint8_t>(ptr + 3);
                 ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0xf;
+                
+                g_logFile << "[177168-CASE0] DAT_00309738 ptr=0x" << std::hex << ptr
+                          << " byte_at_ptr3=0x" << ctx.cpuRegs.GPR.r[3].UL[0]
+                          << " (check: & 0xf == 1? " << (ctx.cpuRegs.GPR.r[3].UL[0] == 1 ? "YES-SKIP" : "NO-PROCEED") << ")"
+                          << std::dec << std::endl;
                 
                 if (ctx.cpuRegs.GPR.r[3].UL[0] == 1) {
                     goto Label_177708;
@@ -10892,3 +10935,4 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
