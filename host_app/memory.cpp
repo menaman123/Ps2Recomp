@@ -617,7 +617,20 @@ void write_io_register(uint32_t address, uint32_t value) {
    template <typename T>
   T read(uint32_t address) {
 
+        if (address == 0x437b60) {
+            g_logFile << "[Memory Read] Address: " 
+                << std::hex << address << std::endl;
+        }
+        if (address == 0x425280) {
+            g_logFile << "[Memory Read] Address: " 
+                << std::hex << address << std::endl;
+        }
 
+    
+        if (address >= 0x3068e0 && address < 0x306938) {
+            g_logFile << "[Memory Read] Address: " 
+                << std::hex << address << std::endl;
+        }
 
 
       if (address >= 0x002f67e0 && address <= 0x002f6808) {
@@ -803,6 +816,26 @@ void write_io_register(uint32_t address, uint32_t value) {
 
 
       if (address >= 0x450170 && address < 0x450198) {
+              g_logFile << "[MEMORY WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
+                      << " with value: " << (uint64_t)value << std::dec << std::endl;
+      }
+
+      if (address == 0x3d4400) {
+              g_logFile << "[MEMORY WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
+                      << " with value: " << (uint64_t)value << std::dec << std::endl;
+      }
+
+      if (address == 0x1000A000) {
+              g_logFile << "[MEMORY WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
+                      << " with value: " << (uint64_t)value << std::dec << std::endl;
+      }
+
+      if (address == 0xb9f5a8) {
+              g_logFile << "[MEMORY WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
+                      << " with value: " << (uint64_t)value << std::dec << std::endl;
+      }
+
+      if (address == 0x323300 && value == 0x50) {
               g_logFile << "[MEMORY WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
                       << " with value: " << (uint64_t)value << std::dec << std::endl;
       }
