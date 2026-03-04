@@ -1295,6 +1295,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 }
                 CHECK_SP(0x181400_case0)
                 ctx.cpuRegs.GPR.r[18].UL[0] = 1;
+                g_logFile << "[177168-CASE0] Completed! Setting next state r[18]=" << ctx.cpuRegs.GPR.r[18].UL[0] << std::endl;
                 goto Label_177714;
 
             Label_caseD_1:
@@ -1845,6 +1846,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
 
             Label_177708:
+                g_logFile << "[177168-EXIT] at Label_177708 (default exit) r[18]=0x" << std::hex << ctx.cpuRegs.GPR.r[18].UL[0] << std::dec << std::endl;
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
 
             Label_17770c:
@@ -1857,6 +1859,10 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
 
         file << R"code(
             Label_177714:
+                g_logFile << "[177168-WRITEBACK] r[18]=0x" << std::hex << ctx.cpuRegs.GPR.r[18].UL[0]
+                          << " r[2]=0x" << ctx.cpuRegs.GPR.r[2].UL[0]
+                          << " (skip write? " << (ctx.cpuRegs.GPR.r[18].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0] ? "YES" : "NO") << ")"
+                          << std::dec << std::endl;
                 if (ctx.cpuRegs.GPR.r[18].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]) {
                     goto Label_17774c;
                 }
@@ -10935,4 +10941,5 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
