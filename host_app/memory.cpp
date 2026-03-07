@@ -814,6 +814,12 @@ void write_io_register(uint32_t address, uint32_t value) {
 
 
 
+      if(address >= 0x4202e0 && address < 0x4204e8){
+          g_logFile << "[STATE-WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
+                  << " with value: " << (uint64_t)value << std::dec
+                  << " PC: 0x" << std::hex << g_current_pc << std::dec << std::endl;
+
+      }
 
       if (address >= 0x450170 && address < 0x450198) {
               g_logFile << "[MEMORY WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
