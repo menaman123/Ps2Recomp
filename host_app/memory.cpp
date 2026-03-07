@@ -820,6 +820,12 @@ void write_io_register(uint32_t address, uint32_t value) {
                   << " PC: 0x" << std::hex << g_current_pc << std::dec << std::endl;
 
       }
+
+      if(address == (0x3C73D0 + 0x20)){ // This is the address of the pointer used in the function that creates the main menu background. It gets set to a non-zero value when the game writes the background texture address into it.
+          g_logFile << "[CLIENT-ADDR 0x3C7390] Write<" << sizeof(T) << "> called for address: " << std::hex << address
+                  << " with value: " << (uint64_t)value << std::dec;
+
+      }
      
 
       if(address >= 0x4202e0 && address < 0x4204e8 && value ==  0x60000000010000){
