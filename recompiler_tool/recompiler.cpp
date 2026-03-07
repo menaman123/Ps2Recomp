@@ -1181,9 +1181,12 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
                 
                 {
-                    // Ghidra: *param_1 = *param_1 & 0xffffffff7fffffff | (long)bVar1 << 0x1f
-                    // Clear bit 31, then set it from bVar1 (r[2] & 1)
-                    uint64_t mask = 0xffffffff7fffffffULL;
+                    // MIPS: lui v1, 0xbfff ; ori v1, 0xffff ; dsll v1, 0x1 ; ori v1, 0x1
+                    // => 0xFFFFFFFF7FFFFFFF (clears bit 31 only)
+                    uint64_t mask = (uint64_t)(int32_t)0xBFFF0000;  // sign-extended lui
+                    mask |= 0xffffULL;                               // 0xFFFFFFFFBFFFFFFF
+                    mask <<= 1;                                      // 0xFFFFFFFF7FFFFFFE
+                    mask |= 1;                                       // 0xFFFFFFFF7FFFFFFF
                     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask;
                     uint64_t v0_shifted = (uint64_t)ctx.cpuRegs.GPR.r[2].UL[0] << 31;
                     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | v0_shifted;
@@ -1211,43 +1214,132 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
 
 
         file << R"code(
-                // Logic Block 2 — State promotion
-                // Ghidra: if ((uVar8 & 0xfc000000000000) == 0x60000000000000) skip promotion
-                // else: promote bits 50-55 → 44-49, set 0x60 marker
+                // Logic Block 2 — State promotion (instruction-faithful from MIPS 0x1771EC-0x177298)
+                // ld a0, 0x0(s1)
                 ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
                 {
-                    uint64_t uVar8 = ctx.cpuRegs.GPR.r[4].UD[0];
+                    // ori v0, zero, 0xfc00 ; dsll32 v0, v0, 0x8
+                    uint64_t v0 = (uint64_t)0xfc00 << (32 + 8);  // 0xfc0000000000
+                    // ori a2, zero, 0xc000 ; dsll32 a2, a2, 0x7
+                    uint64_t a2 = (uint64_t)0xc000 << (32 + 7);  // 0x60000000000000
+                    // and v0, a0, v0
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v0;
                     
-                    if ((uVar8 & 0xfc000000000000ULL) == 0x60000000000000ULL) {
-                        // Already promoted — just read and go to switch
+                    // beql v0, a2, 17729c (delay slot: ld v0, 0x0(s1))
+                    if (ctx.cpuRegs.GPR.r[2].UD[0] == a2) {
                         ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
                         goto Label_17729c;
                     }
+                }
+
+                // Not promoted — do the promotion
+                // dsrl32 v1, a0, 0xc  (v1 = a0 >> 44)
+                ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] >> 44;
+                
+                {
+                    // lui v0, 0x81ff ; ori v0, 0xffff ; dsll v0, 0xd ; ori v0, 0x1fff
+                    uint64_t v0_raw = (uint64_t)(int32_t)0x81ff0000;  // sign-extended lui: 0xFFFFFFFF81FF0000
+                    v0_raw |= 0xffffULL;                               // 0xFFFFFFFF81FFFFFF
+                    v0_raw <<= 13;                                     // 0xFFFF03FFFFFFE000
+                    v0_raw |= 0x1fffULL;                               // 0xFFFF03FFFFFFFFFF
                     
-                    // Promote: copy frame counter, rearrange state bits
-                    // param_1[3] = param_1[2]  (copy frame counter)
-                    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18,
-                                            memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10));
+                    // andi v1, v1, 0x3f
+                    ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x3f;
+                    // and v0, a0, v0
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v0_raw;
+                    // dsll32 v1, v1, 0x6  (v1 = v1 << 38)
+                    uint64_t v1_shifted = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << (32 + 6);
                     
-                    // *param_1 = uVar8 & 0xff00003fffffffff 
-                    //          | (uVar8 >> 0x2c & 0x3f) << 0x26
-                    //          | (uVar8 >> 0x32 & 0x3f) << 0x2c
-                    //          | 0x60000000000000
-                    uint64_t result = uVar8 & 0xff00003fffffffffULL;
-                    result |= ((uVar8 >> 44) & 0x3fULL) << 38;   // bits 44-49 → 38-43
-                    result |= ((uVar8 >> 50) & 0x3fULL) << 44;   // bits 50-55 → 44-49
-                    result |= 0x60000000000000ULL;                 // set marker
+                    // Build mask: ori a0, zero, 0xfffc ; dsll a0, a0, 0x14 ; ori a0, 0xffff ; dsll a0, 0x10 ; ori a0, 0xffff ; dsll a0, 0xc ; ori a0, 0xfff
+                    uint64_t a0_mask = 0xfffcULL;
+                    a0_mask <<= 0x14; a0_mask |= 0xffffULL;   // 0xfffc0000ffff
+                    a0_mask <<= 0x10; a0_mask |= 0xffffULL;   // 0xfffc0000ffffffff
+                    a0_mask <<= 0x0c; a0_mask |= 0xfffULL;    // 0xc0000fffffffffff  (need to recheck)
+                    // Actually let me just compute step by step:
+                    // 0xfffc << 20 = 0xfffc00000
+                    // | 0xffff = 0xfffc0000ffff
+                    // << 16 = 0xfffc0000ffff0000
+                    // | 0xffff = 0xfffc0000ffffffff  -- wait this is only 48 bits
+                    // Hmm, let me redo: 0xfffc is 16 bits
+                    // After <<20: 0x000000fffc00000 (36 bits)
+                    // |0xffff: 0x000000fffc0ffff -- no wait
+                    // 0xfffc << 20 = 0xFFFC00000 (36 bits set)
+                    // | 0xFFFF = 0xFFFC0FFFF -- no, OR doesn't overlap
+                    // Actually: 0xFFFC << 20 = 0x0000_00FF_FC00_0000
+                    // | 0xFFFF = 0x0000_00FF_FC00_FFFF
+                    // << 16 = 0x00FF_FC00_FFFF_0000
+                    // | 0xFFFF = 0x00FF_FC00_FFFF_FFFF
+                    // << 12 = 0xFFFC_00FF_FFFF_F000
+                    // | 0xFFF = 0xFFFC_00FF_FFFF_FFFF
+                    a0_mask = 0xfffcULL;
+                    a0_mask <<= 20; // 0xFFFC00000
+                    a0_mask |= 0xffffULL; // 0xFFFC0FFFF
+                    a0_mask <<= 16; // 0xFFFC0FFFF0000
+                    a0_mask |= 0xffffULL; // 0xFFFC0FFFFFFFF
+                    a0_mask <<= 12; // 0xFFFC0FFFFFFFF000
+                    a0_mask |= 0xfffULL; // 0xFFFC0FFFFFFFFFFF
+                    // Hmm, that doesn't look right either. Let me trace the MIPS exactly:
+                    // ori a0, zero, 0xfffc  => a0 = 0x000000000000FFFC
+                    // dsll a0, a0, 0x14     => a0 = 0x00000FFFC00000 (shift left 20)
+                    //   = 0x0000000FFFC00000
+                    // ori a0, a0, 0xffff    => a0 = 0x0000000FFFC0FFFF
+                    // dsll a0, a0, 0x10     => a0 = 0x000FFFC0FFFF0000 (shift left 16)
+                    // ori a0, a0, 0xffff    => a0 = 0x000FFFC0FFFFFFFF
+                    // dsll a0, a0, 0xc      => a0 = 0xFFFC0FFFFFFFF000 (shift left 12)
+                    // ori a0, a0, 0xfff     => a0 = 0xFFFC0FFFFFFFFFFF
+                    a0_mask = 0xfffcULL;
+                    a0_mask = (a0_mask << 20);                    // 0x0000000FFFC00000
+                    a0_mask = (a0_mask | 0xffffULL);              // 0x0000000FFFC0FFFF
+                    a0_mask = (a0_mask << 16);                    // 0x000FFFC0FFFF0000
+                    a0_mask = (a0_mask | 0xffffULL);              // 0x000FFFC0FFFFFFFF
+                    a0_mask = (a0_mask << 12);                    // 0xFFFC0FFFFFFFF000
+                    a0_mask = (a0_mask | 0xfffULL);               // 0xFFFC0FFFFFFFFFFF
                     
-                    ctx.cpuRegs.GPR.r[2].UD[0] = result;
-                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, result);
+                    // or v0, v0, v1
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shifted;
                     
-                    g_logFile << "[177168-PROMOTE] old=0x" << std::hex << uVar8
-                              << " new=0x" << result
-                              << " promoted_case=" << std::dec << ((result >> 44) & 0x3f) << std::endl;
+                    // Build mask2: ori a1, zero, 0xff03 ; dsll a1, 0x10 ; ori 0xffff ; dsll 0x10 ; ori 0xffff ; dsll 0x10 ; ori 0xffff
+                    uint64_t a1_mask = 0xff03ULL;
+                    a1_mask <<= 16; a1_mask |= 0xffffULL;  // 0xff03ffff
+                    a1_mask <<= 16; a1_mask |= 0xffffULL;  // 0xff03ffffffff
+                    a1_mask <<= 16; a1_mask |= 0xffffULL;  // 0xff03ffffffffffff
+                    
+                    // dsrl32 v1, v0, 0x12  (v1 = v0 >> 50)
+                    uint64_t v1_extracted = ctx.cpuRegs.GPR.r[2].UD[0] >> 50;
+                    // andi v1, v1, 0x3f
+                    v1_extracted &= 0x3f;
+                    
+                    // and v0, v0, a0  (apply first mask)
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & a0_mask;
+                    // dsll32 v1, v1, 0xc  (v1 = v1 << 44)
+                    v1_extracted <<= 44;
+                    
+                    // lw a0, 0x10(s1)
+                    ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
+                    
+                    // or v0, v0, v1
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_extracted;
+                    // and v0, v0, a1  (apply second mask)
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & a1_mask;
+                    
+                    // sw a0, 0x18(s1)  (param_1[0x18] = param_1[0x10])
+                    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18, ctx.cpuRegs.GPR.r[4].UL[0]);
+                    
+                    // or v0, v0, a2  (a2 = 0x60000000000000 from earlier)
+                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ((uint64_t)0xc000 << (32 + 7));
+                    
+                    // sd v0, 0x0(s1)
+                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+                    
+                    g_logFile << "[177168-PROMOTE] old=0x" << std::hex << ctx.cpuRegs.GPR.r[4].UD[0]
+                              << " new=0x" << ctx.cpuRegs.GPR.r[2].UD[0]
+                              << " promoted_case=" << std::dec << ((ctx.cpuRegs.GPR.r[2].UD[0] >> 44) & 0x3f) << std::endl;
                 }
                 
+                // lw v1, 0x4(s5)  ; sw v1, 0x1c(s1)
                 ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x4);
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c, ctx.cpuRegs.GPR.r[3].UL[0]);
+                // ld v0, 0x0(s1)
                 ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
 
 
@@ -11751,6 +11843,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
 
 
