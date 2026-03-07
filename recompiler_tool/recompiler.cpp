@@ -475,31 +475,32 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
 
         else if (func.base_address == 0x00172d88) {
             // Diagnostic wrapper for FUN_00172d88 - Streaming State Check
-            // Logs the 64-bit state word and which branch is taken
             file << "    recompiled_functions[0x172d88] = [](CpuContext& ctx, uint32_t addr) {\n";
             file << "        uint32_t p1 = ctx.cpuRegs.GPR.r[4].UL[0];\n";
             file << "        uint32_t p2 = ctx.cpuRegs.GPR.r[5].UL[0];\n";
             file << "        uint64_t state = memory::read<uint64_t>(p1 + 0x8e8);\n";
-            file << "        uint32_t iv1 = memory::read<uint32_t>(p1 + 0x14);\n";
-            file << "        bool bit32 = (state & 0x100000000ULL) != 0;\n";
-            file << "        uint64_t bits33_40 = state & 0x1fe00000000ULL;\n";
+            // Compute bVar1 faithfully using 64-bit (matching the fixed SLT)
+            file << "        uint64_t mask1 = 0x8000ULL << 17;\n"; // 0x100000000
+            file << "        uint64_t r6 = state & mask1;\n";
+            file << "        bool bit32set = (r6 != 0);\n";
             file << "        bool bVar1 = false;\n";
-            file << "        if (!bit32) bVar1 = (bits33_40 != 0x1800000000ULL);\n";
+            file << "        if (!bit32set) {\n";
+            file << "            uint64_t mask2 = 0xFF00ULL << 25;\n"; // 0x1FE00000000
+            file << "            uint64_t mask3 = 0xC000ULL << 21;\n"; // 0x1800000000
+            file << "            uint64_t masked = state & mask2;\n";
+            file << "            uint64_t xored = masked ^ mask3;\n";
+            file << "            bVar1 = (0ULL < xored);\n"; // 64-bit sltu
+            file << "        }\n";
             file << "        g_logFile << \"[172d88-DIAG] p1=0x\" << std::hex << p1\n";
             file << "                  << \" p2=\" << std::dec << p2\n";
             file << "                  << \" state64=0x\" << std::hex << state\n";
-            file << "                  << \" bit32=\" << bit32\n";
-            file << "                  << \" bits33_40=0x\" << bits33_40\n";
-            file << "                  << \" bVar1=\" << bVar1\n";
-            file << "                  << \" iv1=\" << std::dec << iv1\n";
-            file << "                  << std::endl;\n";
-            file << "        if (!bVar1) {\n";
-            file << "            bool topbit = ((state >> 0x20) & 1) == 0;\n";
-            file << "            g_logFile << \"[172d88-DIAG] PATH: bVar1=false -> return 0\"\n";
-            file << "                      << \" (topbit_check=\" << topbit << \")\" << std::endl;\n";
-            file << "        } else {\n";
-            file << "            g_logFile << \"[172d88-DIAG] PATH: bVar1=true -> checking animation state\" << std::endl;\n";
-            file << "        }\n";
+            file << "                  << \" bit32set=\" << bit32set\n";
+            file << "                  << \" bVar1=\" << bVar1 << std::endl;\n";
+            // Also log the animation state that the function will check
+            file << "        uint64_t anim718 = memory::read<uint64_t>(p1 + 0x718);\n";
+            file << "        uint32_t anim_ptr_base = memory::read<uint32_t>(p1 + 0x5d0 + 0x318);\n";
+            file << "        g_logFile << \"[172d88-DIAG] anim718=0x\" << std::hex << anim718\n";
+            file << "                  << \" anim_5d0_318=0x\" << anim_ptr_base << std::endl;\n";
             file << "        FUN_00172d88(ctx);\n";
             file << "        g_logFile << \"[172d88-DIAG] returned v0=\" << std::dec << ctx.cpuRegs.GPR.r[2].UL[0] << std::endl;\n";
             file << "    };\n";
@@ -11887,3 +11888,4 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
