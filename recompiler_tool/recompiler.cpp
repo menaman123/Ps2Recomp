@@ -4,27 +4,33 @@
 #include "rabbitizer.hpp"
 #include "instructions/InstructionR5900.hpp"
 
+
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <filesystem>
 
+
 std::ofstream log_file;
+
 
 // Helper to get a string representation of a GPR register for code generation.
 static std::string get_gpr_name(uint8_t reg_num) {
     return "ctx.cpuRegs.GPR.r[" + std::to_string(reg_num) + "]";
 }
 
+
 // Helper for floating-point registers
 static std::string get_fpr_name(uint8_t reg_num) {
     return "ctx.fpuRegs.fpr[" + std::to_string(reg_num) + "]";
 }
 
+
 static std::string get_vr_name(uint8_t reg_num) {
     return "ctx.vuRegs.VF[" + std::to_string(reg_num) + "]";
 }
+
 
 static std::string format_imm(int32_t imm) {
     std::stringstream ss;
@@ -34,7 +40,11 @@ static std::string format_imm(int32_t imm) {
 
 
 
+
+
+
 Recompiler::Recompiler(const std::map<uint32_t, Function>& functions) : m_functions(functions) {}
+
 
 bool Recompiler::recompile_to_files(const std::string& output_header, const std::string& output_cpp) {
     std::ofstream header_file(output_header);
@@ -46,6 +56,7 @@ bool Recompiler::recompile_to_files(const std::string& output_header, const std:
     header_file.close();
     std::cout << "Successfully generated header file: " << output_header << std::endl;
 
+
     std::ofstream cpp_file(output_cpp);
     if (!cpp_file.is_open()) {
         std::cerr << "Error: Could not open C++ file for writing: " << output_cpp << std::endl;
@@ -54,11 +65,14 @@ bool Recompiler::recompile_to_files(const std::string& output_header, const std:
     
     write_cpp_file(cpp_file, std::filesystem::path(output_header).filename().string());
 
+
     cpp_file.close();
     std::cout << "Successfully generated C++ file: " << output_cpp << std::endl;
 
+
     return true;
 }
+
 
 void Recompiler::write_header_file(std::ofstream& file) {
     file << "#pragma once\n\n";
@@ -71,16 +85,19 @@ void Recompiler::write_header_file(std::ofstream& file) {
     file << "#include <algorithm>\n";
     file << "#include <functional>\n\n";
 
+
     // CHANGE: Removed default parameter - addr is now required
     for (const auto& pair : m_functions) {
         const Function& func = pair.second;
         file << "void "<< func.name << "(CpuContext& ctx);\n";
     }
 
+
     file << "\nextern std::map<uint32_t, std::function<void(CpuContext&, uint32_t)>> recompiled_functions;\n";
     file << "std::function<void(CpuContext&, uint32_t)> find_containing_function(uint32_t pc);\n";
     file << "void initialize_recompiled_functions();\n";
 }
+
 
 // CHANGE: Updated to simpler function generation without switch statement
 void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_header_filename) {
@@ -97,7 +114,9 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "#include <vector>\n";
     file << "#include <fstream>\n\n";
 
+
     file << "extern std::ofstream g_logFile;\n\n";
+
 
     file << "std::map<uint32_t, std::function<void(CpuContext&, uint32_t)>> recompiled_functions;\n";
     
@@ -109,10 +128,12 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "};\n";
     file << "std::vector<FunctionRange> function_ranges;\n\n";
 
+
     for (const auto& pair : m_functions) {
         const Function& func = pair.second;
         recompile_function(func, file);
     }
+
 
     // Add the smart lookup function
     file << "std::function<void(CpuContext&, uint32_t)> find_containing_function(uint32_t pc) {\n";
@@ -125,6 +146,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "            exit(0);\n";
     file << "    return nullptr;\n";
     file << "}\n\n";
+
 
     file << "void initialize_recompiled_functions() {\n";
     for (const auto& pair : m_functions) {
@@ -145,6 +167,8 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                  << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2d1a50]});\n";
         } 
+
+
 
 
         else if (func.base_address == 0x001815c0) {
@@ -178,6 +202,9 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
 
 
 
+
+
+
         else if (func.base_address == 0x001815f0) {
             file << "    // HLE Hook for sceSifInitRpc\n";
             file << "    recompiled_functions[0x1815f0] = [](CpuContext& ctx, uint32_t addr) {\n";
@@ -192,6 +219,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                  << ", 0x" << std::hex << end_address << ", recompiled_functions[0x1815f0]});\n";
         } 
+
 
         /*
                 else if (func.base_address == 0x002cf930) {
@@ -213,6 +241,10 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
 
 
 
+
+
+
+
         /*
         else if (func.base_address == 0x002cf770) {
             file << "    // HLE Hook for WaitForVblank\n";
@@ -230,7 +262,9 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
         
         */
 
+
         
+
 
         else if (func.base_address == 0x002d6618) {
             file << "    // HLE Hook for InitTLB\n";
@@ -245,6 +279,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2d6618]});\n";
         }
+
 
         /*
         else if (func.base_address == 0x0019fb18) {
@@ -261,6 +296,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x19fb1]});\n";
         }
         */
+
 
         else if (func.base_address == 0x002d6880){
             file << "    // HLE Hook for Intitialize Graphics\n";
@@ -289,6 +325,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2adb18]});\n";
         }
 
+
         else if (func.base_address == 0x002ad8f0){
             file << "    // HLE Hook for Intitialize Graphics\n";
             file << "    recompiled_functions[0x2ad8f0] = [](CpuContext& ctx, uint32_t addr) {\n";
@@ -302,6 +339,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2ad8f0]});\n";
         }
+
 
         else if (func.base_address == 0x002aac80){
             file << "    // HLE Hook for Intitialize Graphics\n";
@@ -330,6 +368,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2adb40]});\n";
         }
 
+
         else if (func.base_address == 0x002adb18){
             file << "    // HLE Hook for Intitialize Graphics\n";
             file << "    recompiled_functions[0x2adb18] = [](CpuContext& ctx, uint32_t addr) {\n";
@@ -344,12 +383,14 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2adb18]});\n";
         }
 
+
         else if (func.base_address == 0x002d69a0) { // Check this address matches your Ghidra export
             file << "    // HLE Hook for Global Constructors (__do_global_ctors)\n";
             file << "    recompiled_functions[0x2d69a0] = [](CpuContext& ctx, uint32_t addr) {\n";
             file << "        hle_DoGlobalConstructors(ctx);\n";
             file << "        // Return mechanism handled inside the HLE function via PC update\n";
             file << "    };\n";
+
 
             // Register range so lookups don't fail
             uint32_t end_address = func.base_address + func.size;
@@ -362,6 +403,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "        hle_sceSifBindRpc(ctx);\n";
             file << "        // Return mechanism handled inside the HLE function via PC update\n";
             file << "    };\n";
+
 
             // Register range so lookups don't fail
             uint32_t end_address = func.base_address + func.size;
@@ -376,12 +418,14 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "        // Return mechanism handled inside the HLE function via PC update\n";
             file << "    };\n";
 
+
             // Register range so lookups don't fail
             uint32_t end_address = func.base_address + func.size;
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x2aa8d0]});\n";
         }
         */
+
 
         else if (func.base_address == 0x00181490) { // Check this address matches your Ghidra export
             file << "    // HLE Hook for Piracy Skip\n";
@@ -390,11 +434,13 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
             file << "        // Return mechanism handled inside the HLE function via PC update\n";
             file << "    };\n";
 
+
             // Register range so lookups don't fail
             uint32_t end_address = func.base_address + func.size;
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x181490]});\n";
         }
+
 
         else if (func.base_address == 0x00172b60) {
             // Diagnostic wrapper for FUN_00172b60 - Texture Load Request
@@ -426,6 +472,7 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
                  << ", 0x" << std::hex << end_address << ", recompiled_functions[0x172b60]});\n";
         }
 
+
         else {
             // Standard generation for all other functions
             file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); };\n";
@@ -438,13 +485,17 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
     file << "}\n";
 }
 
+
 bool Recompiler::has_delay_slot(const rabbitizer::InstructionR5900& instr) const {
     if (static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_eret) return false;
     return instr.isBranch() || instr.isJump() && !instr.isTrap();
 }
 
+
 // CHANGE: Complete rewrite - no switch statement, simple labels
 void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
+
+
 
 
         if (func.base_address == 0x001e0fa0) {
@@ -479,6 +530,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             default: goto Label_caseD_0;
         }
     )code";
+
 
         // PART 2: Case 2
         file << R"code(
@@ -523,8 +575,10 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0x1F;
         goto Label_1048;
 
+
     Label_1044:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+
 
     Label_1048:
         ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] & 0x1F;
@@ -533,6 +587,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[3].UL[0];
         goto Label_11b8;
     )code";
+
 
         // PART 3: Case 4 and Case 6
         file << R"code(
@@ -557,6 +612,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UL[0]);
         goto Label_caseD_0;
 
+
     Label_caseD_6:
         ctx.fpuRegs.fpr[12].UL = ctx.fpuRegs.fpr[20].UL;
         ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0];
@@ -578,6 +634,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0];
         }
 
+
     Label_10c0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] << 1;
@@ -585,6 +642,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | ctx.cpuRegs.GPR.r[4].UL[0];
         goto Label_11b8;
     )code";
+
 
         // PART 4: Case 5
         file << R"code(
@@ -628,6 +686,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         ctx.fpuRegs.fpr[12].UL = ctx.fpuRegs.fpr[20].UL;
 
+
     Label_1138:
         ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0];
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1e1140;
@@ -639,6 +698,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
         goto Label_11c0;
     )code";
+
 
         // PART 5: Case 8
         file << R"code(
@@ -657,6 +717,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[16].UL[0] + 0x28;
         ctx.cpuRegs.GPR.r[7].UL[0] = 0xFFFFFFDF;
 
+
     Label_1170:
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) + 0x0);
         ctx.cpuRegs.GPR.r[5].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0] + 1;
@@ -667,12 +728,14 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & ctx.cpuRegs.GPR.r[7].UL[0];
         memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
 
+
     Label_1188:
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[5].UL[0] < ctx.cpuRegs.GPR.r[6].UL[0]) ? 1 : 0;
         ctx.cpuRegs.GPR.r[4].UL[0] = ctx.cpuRegs.GPR.r[4].UL[0] + 4;
         if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) {
             goto Label_1170;
         }
+
 
     Label_1194:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x30);
@@ -689,18 +752,22 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
 
+
     Label_11ac:
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFFC1;
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] | 0x2;
     )code";
+
 
         // PART 6: Common exit paths and epilogue
         file << R"code(
     Label_11b8:
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
 
+
     Label_caseD_0:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x0);
+
 
     Label_11c0:
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x50);
@@ -717,6 +784,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
         return;
     }
+
 
     if (func.base_address == 0x002a6b68) {
         // FUN_002a6b68 - Command State Machine Dispatcher
@@ -764,6 +832,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(gp_val - 0x7538);
         }
 
+
     Label_6bc0:
         // a1 = state for switch
         ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0];
@@ -790,6 +859,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             default: goto Label_caseD_c;
         }
 
+
     Label_caseD_0:  // 0x2a6d04
         ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(gp_val - 0x7530);
         ctx.cpuRegs.GPR.r[2].SL[0] = -1;
@@ -811,6 +881,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         goto Label_caseD_c;
+
 
     Label_caseD_1:  // 0x2a6be8
         ctx.cpuRegs.GPR.r[2].SL[0] = -1;
@@ -870,11 +941,13 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[2].SL[0] = -1;
         goto Label_epilogue;
 
+
     Label_6cf4:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(gp_val - 0x7530);
         memory::write<uint32_t>(gp_val - 0x7530, ctx.cpuRegs.GPR.r[6].UL[0]);
         memory::write<uint32_t>(gp_val - 0x7538, ctx.cpuRegs.GPR.r[2].UL[0]);
         goto Label_caseD_c;
+
 
     Label_caseD_2:  // 0x2a6d34
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
@@ -889,6 +962,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_c;
 
+
     Label_caseD_3:  // 0x2a6d70
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
@@ -901,6 +975,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         goto Label_caseD_c;
+
 
     Label_caseD_4:  // 0x2a6d5c
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
@@ -915,6 +990,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_c;
 
+
     Label_caseD_5:  // 0x2a6d48
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
@@ -927,6 +1003,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         goto Label_caseD_c;
+
 
     Label_caseD_6:  // 0x2a6d84
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
@@ -941,6 +1018,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_c;
 
+
     Label_caseD_7:  // 0x2a6d98
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
@@ -953,6 +1031,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         goto Label_caseD_c;
+
 
     Label_caseD_8:  // 0x2a6dac
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
@@ -967,6 +1046,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_c;
 
+
     Label_caseD_9:  // 0x2a6dc0
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
@@ -979,6 +1059,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         goto Label_caseD_c;
+
 
     Label_caseD_a:  // 0x2a6dd4
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
@@ -993,6 +1074,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_c;
 
+
     Label_caseD_b:  // 0x2a6de8
         ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
@@ -1006,6 +1088,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         // Fall through to default
 
+
     Label_caseD_c:  // 0x2a6df4 - Default case / common exit
         // if (s2 != 0) copy 12 bytes from 0x2e7d68 to s2
         if (ctx.cpuRegs.GPR.r[18].UL[0] != 0) {
@@ -1018,6 +1101,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         
         // Return state
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(gp_val - 0x7538);
+
 
     Label_epilogue:
         // Restore registers and return
@@ -1035,12 +1119,16 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
 
 
+
+
         file << R"code(
     */
+
 
     if (func.base_address == 0x00177168) {
         // FUN_00177168 - Main Dispatcher
         file << R"code(
+
 
         void FUN_00177168(CpuContext& ctx) {
                 // Prologue
@@ -1057,9 +1145,11 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x40, ctx.cpuRegs.GPR.r[20].UD[0]);
                 memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x58, ctx.cpuRegs.GPR.r[31].UD[0]);
 
+
                 // SP tracking
                 uint32_t expected_sp = ctx.cpuRegs.GPR.r[29].UL[0];
                 g_logFile << "[177168] working sp=0x" << std::hex << expected_sp << std::endl;
+
 
         // Macro to reduce repetition
         #define CHECK_SP(call_addr) \
@@ -1068,6 +1158,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                             << std::hex << expected_sp \
                             << " got=0x" << ctx.cpuRegs.GPR.r[29].UL[0] << std::endl; \
                 }
+
 
                 // Call FUN_002b3548(s1, 0x16, 1)
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1081,6 +1172,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     return;
                 }
                 CHECK_SP(0x2b3548_prologue)
+
 
                 // Logic Block 1
                 ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
@@ -1099,6 +1191,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[4].UD[0]);
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10, ctx.cpuRegs.GPR.r[5].UL[0]);
 
+
                 // Call FUN_00173238(s1, s5)
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
@@ -1113,66 +1206,48 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
 
 
+
+
         file << R"code(
-                // Logic Block 2
+                // Logic Block 2 — State promotion
+                // Ghidra: if ((uVar8 & 0xfc000000000000) == 0x60000000000000) skip promotion
+                // else: promote bits 50-55 → 44-49, set 0x60 marker
                 ctx.cpuRegs.GPR.r[4].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
                 {
-                    uint64_t v0 = 0xfc00ULL << 40;
-                    uint64_t a2 = 0xc000ULL << 39;
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v0;
+                    uint64_t uVar8 = ctx.cpuRegs.GPR.r[4].UD[0];
                     
-                    if (ctx.cpuRegs.GPR.r[2].UD[0] == a2) {
+                    if ((uVar8 & 0xfc000000000000ULL) == 0x60000000000000ULL) {
+                        // Already promoted — just read and go to switch
                         ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
                         goto Label_17729c;
                     }
-                }
-
-                ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
-                ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] >> 44;
-                
-                {
-                    uint64_t mask_upper = 0x103ffffffffULL;
-                    ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[3].UL[0] & 0x3f;
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask_upper;
                     
-                    uint64_t v1_shifted = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << 38;
+                    // Promote: copy frame counter, rearrange state bits
+                    // param_1[3] = param_1[2]  (copy frame counter)
+                    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18,
+                                            memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10));
                     
-                    uint64_t mask_accum = 0xfffc00000ULL; 
-                    mask_accum |= 0xffffULL; 
-                    mask_accum <<= 16;
-                    mask_accum |= 0xffffULL;
-                    mask_accum <<= 12;
-                    mask_accum |= 0xfffULL;
+                    // *param_1 = uVar8 & 0xff00003fffffffff 
+                    //          | (uVar8 >> 0x2c & 0x3f) << 0x26
+                    //          | (uVar8 >> 0x32 & 0x3f) << 0x2c
+                    //          | 0x60000000000000
+                    uint64_t result = uVar8 & 0xff00003fffffffffULL;
+                    result |= ((uVar8 >> 44) & 0x3fULL) << 38;   // bits 44-49 → 38-43
+                    result |= ((uVar8 >> 50) & 0x3fULL) << 44;   // bits 50-55 → 44-49
+                    result |= 0x60000000000000ULL;                 // set marker
                     
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shifted;
+                    ctx.cpuRegs.GPR.r[2].UD[0] = result;
+                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, result);
                     
-                    uint64_t mask_p2 = 0xff03ULL << 48;
-                    mask_p2 |= 0xffffULL; mask_p2 <<= 16;
-                    mask_p2 |= 0xffffULL; mask_p2 <<= 16;
-                    mask_p2 |= 0xffffULL;
-                    
-                    uint64_t v1_extracted = ctx.cpuRegs.GPR.r[2].UD[0] >> 50;
-                    v1_extracted &= 0x3f;
-                    
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_accum;
-                    v1_extracted <<= 44;
-                    
-                    ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
-                    
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_extracted;
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_p2;
-                    
-                    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x18, ctx.cpuRegs.GPR.r[4].UL[0]);
-                    
-                    uint64_t c000_shift = 0xc000ULL << 39;
-                    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | c000_shift;
-                    
-                    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+                    g_logFile << "[177168-PROMOTE] old=0x" << std::hex << uVar8
+                              << " new=0x" << result
+                              << " promoted_case=" << std::dec << ((result >> 44) & 0x3f) << std::endl;
                 }
                 
                 ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x4);
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x1c, ctx.cpuRegs.GPR.r[3].UL[0]);
                 ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+
 
             Label_17729c:
                 ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] >> 44;
@@ -1186,10 +1261,13 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                               << " case=" << std::dec << ctx.cpuRegs.GPR.r[4].UL[0] << std::endl;
                 }
 
+
                 if (ctx.cpuRegs.GPR.r[4].UL[0] >= 0x17) {
                     goto Label_caseD_17;
                 }
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -1213,6 +1291,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     case 16: goto Label_caseD_10;
                     default: goto Label_caseD_17;
                 }
+
 
             Label_caseD_0:
                 {
@@ -1259,6 +1338,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
                 }
 
+
             Label_177308:
                 if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
                     goto Label_17731c;
@@ -1276,12 +1356,15 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 
                 ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
 
+
             Label_17731c:
                 if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
                     ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
                     goto Label_177308;
                 }
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -1297,6 +1380,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[18].UL[0] = 1;
                 g_logFile << "[177168-CASE0] Completed! Setting next state r[18]=" << ctx.cpuRegs.GPR.r[18].UL[0] << std::endl;
                 goto Label_177714;
+
 
             Label_caseD_1:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1328,6 +1412,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[20].UD[0];
                 goto Label_177714;
 
+
             Label_caseD_2:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x17736c;
@@ -1342,6 +1427,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_3:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x177384;
@@ -1355,6 +1441,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
+
 
             Label_caseD_4:
                 ctx.fpuRegs.fpr[1].UL = 0x3f000000;
@@ -1388,6 +1475,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     }
                 }
                 goto Label_177710;
+
 
             Label_caseD_5:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1444,9 +1532,11 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     goto Label_177710;
                 }
 
+
             Label_17744c:
                 ctx.cpuRegs.GPR.r[18].UL[0] = 6;
                 goto Label_177710;
+
 
             Label_caseD_6:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1464,6 +1554,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 )code" << std::endl;
 
 
+
+
         file << R"code(
             Label_caseD_7:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1479,6 +1571,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_8:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x177490;
@@ -1492,6 +1585,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
+
 
             Label_caseD_9:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1507,6 +1601,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_a:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774c0;
@@ -1520,6 +1615,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
+
 
             Label_caseD_b:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1535,6 +1631,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_c:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x1774f0;
@@ -1548,6 +1645,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
+
 
             Label_caseD_d:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1563,6 +1661,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -1602,6 +1702,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 
                 ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
 
+
             Label_177550:
                 if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
                     goto Label_177564;
@@ -1619,11 +1720,13 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 
                 ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
 
+
             Label_177564:
                 if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
                     ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
                     goto Label_177550;
                 }
+
 
             Label_17756c:
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x177570;
@@ -1634,6 +1737,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     return;
                 }
                 CHECK_SP(0x181400_caseE)
+
 
             Label_177574:
                 ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x54);
@@ -1670,9 +1774,12 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
                 goto Label_177714;
 
+
             Label_1775b0:
                 goto Label_177710;
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -1690,6 +1797,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_10:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x1775d8;
@@ -1703,6 +1811,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
+
 
             Label_caseD_11:
                 ctx.fpuRegs.fpr[1].UL = 0x3e800000;
@@ -1728,6 +1837,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
                 goto Label_177710;
 
+
             Label_caseD_12:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x177640;
@@ -1744,6 +1854,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
 
 
+
+
         file << R"code(
             Label_caseD_13:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1758,6 +1870,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[21].UD[0];
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
+
 
             Label_caseD_14:
                 ctx.fpuRegs.fpr[1].UL = 0x3e800000;
@@ -1813,6 +1926,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
 
 
+
+
         file << R"code(
             Label_caseD_15:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
@@ -1828,6 +1943,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_16:
                 ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x1776f4;
@@ -1842,19 +1958,25 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
                 goto Label_17770c;
 
+
             Label_caseD_17:
                 ctx.cpuRegs.GPR.r[18].UL[0] = 0x18;
+
 
             Label_177708:
                 g_logFile << "[177168-EXIT] at Label_177708 (default exit) r[18]=0x" << std::hex << ctx.cpuRegs.GPR.r[18].UL[0] << std::dec << std::endl;
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
 
+
             Label_17770c:
                 ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
+
 
             Label_177710:
                 ctx.cpuRegs.GPR.r[2].UL[0] = 0x18;
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -1893,6 +2015,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
                 }
 
+
             Label_17774c:
                 ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x4);
                 ctx.cpuRegs.GPR.r[3].UL[0] = 6;
@@ -1913,12 +2036,15 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[4].UL[0] = 0;
                 ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
 
+
             Label_177778:
                 ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0];
                 goto Label_177784;
 
+
             Label_177780:
                 ctx.cpuRegs.GPR.r[16].UL[0] = 0;
+
 
             Label_177784:
                 if (ctx.cpuRegs.GPR.r[16].UL[0] == 0) {
@@ -1937,14 +2063,17 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[18].UL[0] = 0;
                 goto Label_1777a4;
 
+
             Label_17779c:
                 ctx.cpuRegs.GPR.r[2].UL[0] = 0;
                 ctx.cpuRegs.GPR.r[18].UL[0] = 0;
+
 
             Label_1777a4:
                 if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) {
                     ctx.cpuRegs.GPR.r[18].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x18);
                 }
+
 
             Label_1777ac:
                 ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
@@ -1962,6 +2091,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     )code" << std::endl;
 
 
+
+
         file << R"code(
                 ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
                 ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[19].UL[0] + 0x4);
@@ -1976,6 +2107,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x56c);
                 ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[2].UL[0] - ctx.cpuRegs.GPR.r[3].UL[0];
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x56c, ctx.cpuRegs.GPR.r[2].UL[0]);
+
 
             Label_1777f8:
                 if (ctx.cpuRegs.GPR.r[5].UL[0] != 0) {
@@ -2026,9 +2158,12 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 CHECK_SP(0x259b20_post_switch)
                 ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x6d0);
 
+
             Label_17784c:
                 ctx.cpuRegs.GPR.r[6].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x34);
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -2062,6 +2197,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     }
                     ctx.cpuRegs.GPR.r[2].UL[0] = 0;
                 }
+
 
             Label_177898:
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x17789c;
@@ -2097,6 +2233,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[4].UL[0] = 0;
                 ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0);
 
+
             Label_1778c0:
                 ctx.cpuRegs.GPR.r[31].UL[0] = 0x1778c4;
                 if (recompiled_functions.count(0x1e5818)) {
@@ -2106,6 +2243,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     return;
                 }
                 CHECK_SP(0x1e5818_epilogue)
+
 
             Label_1778c8:
                 if (ctx.cpuRegs.GPR.r[22].UL[0] != 0) {
@@ -2122,6 +2260,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 CHECK_SP(0x15bcc0_epilogue)
                 ctx.cpuRegs.GPR.r[2].UL[0] = 1;
 
+
             Label_1778dc:
                 // Final SP check before epilogue restore
                 if (ctx.cpuRegs.GPR.r[29].UL[0] != expected_sp) {
@@ -2130,6 +2269,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                             << " got=0x" << ctx.cpuRegs.GPR.r[29].UL[0] << std::endl;
                 }
     )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -2144,8 +2285,10 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x60;
                 return;
 
+
         #undef CHECK_SP
             }
+
 
         )code" << std::endl;
         return;
@@ -2170,11 +2313,13 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                         ctx.cpuRegs.pc = 0x17c060;
                     }
 
+
                 Label_0001:
                     ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
                     ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0] + 0x10);
                     return;
                 }
+
 
         )code" << std::endl;
         return;
@@ -2218,6 +2363,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x20, ctx.cpuRegs.GPR.r[2].UL[0]);
         goto Label_caseD_0;
 
+
     Label_173288:
         {
             uint32_t imm_3e80 = 0x3e800000;
@@ -2259,10 +2405,16 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
         goto Label_caseD_0;
 
+
         )code" << std::endl;
 
 
+
+
         file << R"code(
+
+
+
 
 
 
@@ -2294,13 +2446,16 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             default: goto Label_caseD_1;
         }
 
+
     Label_caseD_0:  // 0x173310
         ctx.cpuRegs.GPR.r[2].UL[0] = 0;
         goto Label_epilogue;
 
+
     Label_caseD_1:  // 0x173a88
         ctx.cpuRegs.GPR.r[2].UL[0] = 1;
         goto Label_epilogue;
+
 
     Label_caseD_2:  // 0x173338
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x4);
@@ -2324,6 +2479,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_1733a4;
 
+
     Label_1733a4:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UD[0]);
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[6].UL[0] + 0x0);
@@ -2343,6 +2499,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_1;
 
+
     Label_173554:
         {
             uint64_t mask_87ff = 0x87ffffffffffffffULL;
@@ -2350,6 +2507,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
         }
         goto Label_caseD_1;
+
 
     Label_1734bc:
         {
@@ -2362,6 +2520,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x20, ctx.cpuRegs.GPR.r[4].UL[0]);
         }
         goto Label_epilogue;
+
 
     Label_caseD_3:  // 0x1733f8
         ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(0x3097dc);
@@ -2433,9 +2592,13 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
 
 
+
+
         )code" << std::endl;
 
+
         file << R"code(
+
 
     Label_173480:
         if (ctx.cpuRegs.GPR.r[4].UL[0] == 0) {
@@ -2451,11 +2614,13 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         ctx.cpuRegs.GPR.r[16].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x148);
 
+
     Label_173494:
         if (ctx.cpuRegs.GPR.r[16].UL[0] != 0) {
             ctx.cpuRegs.GPR.r[4].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x154);
             goto Label_173480;
         }
+
 
     Label_17349c:
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1734a4;
@@ -2466,6 +2631,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x4);
+
 
     Label_1734a8:
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] >> 4) & 1;
@@ -2486,6 +2652,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | set_bit;
         }
         goto Label_1733a4;
+
 
     Label_caseD_4:  // 0x17357c
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x4);
@@ -2515,6 +2682,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         ctx.cpuRegs.GPR.r[2].UL[0] = 0;
         goto Label_epilogue;
+
 
     Label_1735f4:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x0);
@@ -2553,7 +2721,9 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         goto Label_1736f8;
         )code" << std::endl;
 
+
         file << R"code(
+
 
     Label_1736ac:
         {
@@ -2562,6 +2732,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_1736f4;
 
+
     Label_1736d0:
         {
             ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
@@ -2569,8 +2740,10 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_87ff;
         }
 
+
     Label_1736f4:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+
 
     Label_1736f8:
         ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
@@ -2607,6 +2780,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x630);
         goto Label_173a6c;
 
+
     Label_caseD_5:  // 0x173758
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x4);
         ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] >> 4) & 1;
@@ -2626,6 +2800,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         ctx.cpuRegs.GPR.r[2].UL[0] = 0;
         goto Label_epilogue;
+
 
     Label_17377c:
         ctx.fpuRegs.fpr[20].UL = 0x3e800000;
@@ -2682,6 +2857,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_caseD_0;
 
+
     Label_17382c:
         {
             uint64_t mask_87ff = 0x87ffffffffffffffULL;
@@ -2689,6 +2865,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
         }
         goto Label_caseD_0;
+
 
     Label_caseD_6:  // 0x173854
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x4);
@@ -2734,6 +2911,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_173a2c;
 
+
     Label_173920:
         ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x173928;
@@ -2744,6 +2922,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
             return;
         }
         goto Label_173a2c;
+
 
     Label_173930:
         ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0] + 0x0);
@@ -2780,6 +2959,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_173a2c;
 
+
     Label_1739e4:
         {
             uint64_t mask_87ff = 0x87ffffffffffffffULL;
@@ -2787,14 +2967,17 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         }
         goto Label_173a28;
 
+
     Label_173a08:
         {
             uint64_t mask_87ff = 0x87ffffffffffffffULL;
             ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask_87ff;
         }
 
+
     Label_173a28:
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
+
 
     Label_173a2c:
         ctx.fpuRegs.fpr[20].UL = 0x3e800000;
@@ -2819,6 +3002,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[16].UD[0];
         ctx.cpuRegs.GPR.r[5].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x638);
 
+
     Label_173a6c:
         ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[20].f;
         ctx.fpuRegs.fpr[1].f = truncf(ctx.fpuRegs.fpr[0].f);
@@ -2835,6 +3019,7 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
         ctx.cpuRegs.GPR.r[2].UL[0] = 0;
         goto Label_epilogue;
 
+
     Label_epilogue:  // 0x173a8c
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x00);
         ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x08);
@@ -2848,6 +3033,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
     )code" << std::endl;
         return;
     }
+
+
 
 
     if (func.base_address == 0x002a0250) {
@@ -2896,6 +3083,7 @@ Label_0000: // 0x2a0250
         goto Label_0001;
     }
 
+
 Label_0001: // 0x2a02a4
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 8);
         ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0] & ctx.cpuRegs.GPR.r[2].UD[0];
@@ -2912,6 +3100,7 @@ Label_0001: // 0x2a02a4
 // Fall through to 0x2a02cc
     goto Label_0002; // Fall through
 
+
 Label_0002: // 0x2a02cc
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
@@ -2927,6 +3116,7 @@ Label_0002: // 0x2a02cc
         goto Label_0003;
     }
 
+
 Label_0003: // 0x2a02e8
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
@@ -2937,6 +3127,7 @@ Label_0003: // 0x2a02e8
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a02fc
 // Fall through to 0x2a02fc
     goto Label_0004; // Fall through
+
 
 Label_0004: // 0x2a02fc - SWITCH DISPATCH (jr to internal labels)
     {
@@ -2976,9 +3167,12 @@ Label_0004: // 0x2a02fc - SWITCH DISPATCH (jr to internal labels)
     }
 
 
+
+
 Label_0005: // 0x2a0304
         ctx.cpuRegs.GPR.r[16].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
     goto Label_0044;
+
 
 Label_0006: // 0x2a030c
         // lw instruction - 32-bit load
@@ -3000,6 +3194,7 @@ Label_0006: // 0x2a030c
     } else {
         goto Label_0007;
     }
+
 
 Label_0007: // 0x2a032c
         // lw instruction - 32-bit load
@@ -3027,15 +3222,18 @@ Label_0007: // 0x2a032c
         goto Label_0008;
     }
 
+
 Label_0008: // 0x2a0348
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
     goto Label_0045;
 
+
 Label_0009: // 0x2a0350
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) >> 20);
         ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & static_cast<uint64_t>(0x3f);
     goto Label_0044;
+
 
 Label_0010: // 0x2a035c
         // lw instruction - 32-bit load
@@ -3047,6 +3245,7 @@ Label_0010: // 0x2a035c
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
     goto Label_0032;
 
+
 Label_0011: // 0x2a0374
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
@@ -3055,6 +3254,7 @@ Label_0011: // 0x2a0374
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
         ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x7);
     goto Label_0016;
+
 
 Label_0012: // 0x2a0388
         // lw instruction - 32-bit load
@@ -3066,6 +3266,7 @@ Label_0012: // 0x2a0388
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
     goto Label_0032;
 
+
 Label_0013: // 0x2a03a0
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
@@ -3074,6 +3275,7 @@ Label_0013: // 0x2a03a0
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x8));
         ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xa);
     goto Label_0016;
+
 
 Label_0014: // 0x2a03b4
         // lw instruction - 32-bit load
@@ -3084,6 +3286,7 @@ Label_0014: // 0x2a03b4
 ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a03bc;
     if (recompiled_functions.count(0x2a7f60)) {
         recompiled_functions[0x2a7f60](ctx, 0x2a7f60);
+
 
     } else {
         ctx.cpuRegs.pc = 0x2a7f60;
@@ -3097,6 +3300,7 @@ ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a03bc;
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
     goto Label_0032;
 
+
 Label_0015: // 0x2a03d4
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[8].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
@@ -3108,6 +3312,7 @@ Label_0015: // 0x2a03d4
 // Fall through to 0x2a03e4
     goto Label_0016; // Fall through
         )code" << std::endl;
+
 
         file << R"code(
 Label_0016: // 0x2a03e4
@@ -3137,6 +3342,7 @@ Label_0016: // 0x2a03e4
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
 
+
 Label_0017: // 0x2a0410
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
@@ -3145,6 +3351,7 @@ Label_0017: // 0x2a0410
         ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[3].UD[0];
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
     goto Label_0044;
+
 
 Label_0018: // 0x2a0428
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -3156,11 +3363,13 @@ ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0434;
     if (recompiled_functions.count(0x29fef8)) {
         recompiled_functions[0x29fef8](ctx, 0x29fef8);
 
+
     } else {
         ctx.cpuRegs.pc = 0x29fef8;
     }
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
+
 
 Label_0019: // 0x2a043c
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -3168,6 +3377,7 @@ Label_0019: // 0x2a043c
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x5);
         ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x10);
     goto Label_0029;
+
 
 Label_0020: // 0x2a0450
         // lw instruction - 32-bit load
@@ -3179,6 +3389,7 @@ Label_0020: // 0x2a0450
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[3].UL[0]);
     goto Label_0044;
 
+
 Label_0021: // 0x2a046c
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x14));
@@ -3188,6 +3399,7 @@ Label_0021: // 0x2a046c
 ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0474;
     if (recompiled_functions.count(0x2a7f60)) {
         recompiled_functions[0x2a7f60](ctx, 0x2a7f60);
+
 
     } else {
         ctx.cpuRegs.pc = 0x2a7f60;
@@ -3214,12 +3426,14 @@ ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0474;
         ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & ctx.cpuRegs.GPR.r[8].UD[0];
     goto Label_0031;
 
+
 Label_0022: // 0x2a04b4
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x6);
         ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x13);
     goto Label_0034;
+
 
 Label_0023: // 0x2a04c8
         // lw instruction - 32-bit load
@@ -3231,6 +3445,7 @@ Label_0023: // 0x2a04c8
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
     goto Label_0032;
 
+
 Label_0024: // 0x2a04e0
         ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -3241,11 +3456,13 @@ ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a04ec;
     if (recompiled_functions.count(0x29fde0)) {
         recompiled_functions[0x29fde0](ctx, 0x29fde0);
 
+
     } else {
         ctx.cpuRegs.pc = 0x29fde0;
     }
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
+
 
 Label_0025: // 0x2a04f4
         ctx.cpuRegs.GPR.r[2].UD[0] = static_cast<uint64_t>(memory::read<uint8_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x0));
@@ -3303,6 +3520,7 @@ Label_0025: // 0x2a04f4
         goto Label_0026;
     }
 
+
 Label_0026: // 0x2a0568
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
@@ -3311,6 +3529,7 @@ Label_0026: // 0x2a0568
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x1c));
     goto Label_0032;
+
 
 Label_0027: // 0x2a057c
         // lw instruction - 32-bit load
@@ -3324,6 +3543,7 @@ Label_0027: // 0x2a057c
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
     goto Label_0044;
 
+
 Label_0028: // 0x2a05a0
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -3332,6 +3552,7 @@ Label_0028: // 0x2a05a0
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a05b0
 // Fall through to 0x2a05b0
     goto Label_0029; // Fall through
+
 
 Label_0029: // 0x2a05b0
        //nop 
@@ -3342,12 +3563,14 @@ ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a05b8;
     if (recompiled_functions.count(0x29fc98)) {
         recompiled_functions[0x29fc98](ctx, 0x29fc98);
 
+
     } else {
         ctx.cpuRegs.pc = 0x29fc98;
     }
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
         )code" << std::endl;
+
 
         file << R"code(
 Label_0030: // 0x2a05c0
@@ -3382,6 +3605,7 @@ Label_0030: // 0x2a05c0
 // Fall through to 0x2a0610
     goto Label_0031; // Fall through
 
+
 Label_0031: // 0x2a0610
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[3].UL[0]);
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -3391,6 +3615,7 @@ Label_0031: // 0x2a0610
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0620
 // Fall through to 0x2a0620
     goto Label_0032; // Fall through
+
 
 Label_0032: // 0x2a0620
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
@@ -3408,6 +3633,7 @@ Label_0032: // 0x2a0620
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
 
+
 Label_0033: // 0x2a0630
         ctx.cpuRegs.GPR.r[7].SD[0] = ctx.cpuRegs.GPR.r[18].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[17].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -3416,6 +3642,7 @@ Label_0033: // 0x2a0630
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0640
 // Fall through to 0x2a0640
     goto Label_0034; // Fall through
+
 
 Label_0034: // 0x2a0640
        //nop 
@@ -3426,11 +3653,13 @@ ctx.cpuRegs.GPR.r[31].UL[0] = 0x2a0648;
     if (recompiled_functions.count(0x29fb50)) {
         recompiled_functions[0x29fb50](ctx, 0x29fb50);
 
+
     } else {
         ctx.cpuRegs.pc = 0x29fb50;
     }
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[2].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
+
 
 Label_0035: // 0x2a0650
         // lw instruction - 32-bit load
@@ -3458,10 +3687,12 @@ Label_0035: // 0x2a0650
         goto Label_0036;
     }
 
+
 Label_0036: // 0x2a066c
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
     goto Label_0041;
+
 
 Label_0037: // 0x2a0674
         // lw instruction - 32-bit load
@@ -3489,10 +3720,12 @@ Label_0037: // 0x2a0674
         goto Label_0038;
     }
 
+
 Label_0038: // 0x2a0690
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
     goto Label_0041;
+
 
 Label_0039: // 0x2a0698
         // lw instruction - 32-bit load
@@ -3520,12 +3753,14 @@ Label_0039: // 0x2a0698
         goto Label_0040;
     }
 
+
 Label_0040: // 0x2a06b4
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[18].UL[0]) + 0x4));
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a06b8
 // Fall through to 0x2a06b8
     goto Label_0041; // Fall through
+
 
 Label_0041: // 0x2a06b8
         // lw instruction - 32-bit load
@@ -3540,9 +3775,11 @@ Label_0041: // 0x2a06b8
     if (ctx.cpuRegs.GPR.r[2].UL[0] != 0) ctx.cpuRegs.GPR.r[16].UL[0] = ctx.cpuRegs.GPR.r[5].UL[0];
     goto Label_0044;
 
+
 Label_0042: // 0x2a06d4
         ctx.cpuRegs.GPR.r[16].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0044;
+
 
 Label_0043: // 0x2a06dc
         // lw instruction - 32-bit load
@@ -3559,12 +3796,14 @@ Label_0043: // 0x2a06dc
 // Fall through to 0x2a06f4
     goto Label_0044; // Fall through
 
+
 Label_0044: // 0x2a06f4
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x20));
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a06f8
 // Fall through to 0x2a06f8
     goto Label_0045; // Fall through
+
 
 Label_0045: // 0x2a06f8
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x28)));
@@ -3598,6 +3837,7 @@ Label_0045: // 0x2a06f8
         goto Label_0046;
     }
 
+
 Label_0046: // 0x2a072c
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
     bool branch_taken_2a0730 = (ctx.cpuRegs.GPR.r[16].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -3608,9 +3848,11 @@ Label_0046: // 0x2a072c
         goto Label_0047;
     }
 
+
 Label_0047: // 0x2a0738
         ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x8);
     goto Label_0051;
+
 
 Label_0048: // 0x2a0740
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(0xffff0000);
@@ -3621,12 +3863,14 @@ Label_0048: // 0x2a0740
     goto Label_0050;
         )code" << std::endl;
 
+
         file << R"code(
 Label_0049: // 0x2a0758
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a075c
 // Fall through to 0x2a075c
     goto Label_0050; // Fall through
+
 
 Label_0050: // 0x2a075c
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
@@ -3635,22 +3879,28 @@ Label_0050: // 0x2a075c
 // Fall through to 0x2a0764
     goto Label_0051; // Fall through
 
+
 Label_0051: // 0x2a0764
         ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x10);
         ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x18);
         ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x20);
     return; // Return from function
 
+
 }
+
 
         
         
         )code" << std::endl;
         return;
 
+
     }
 
+
     if (func.base_address == 0x002a0bb0) {
+
 
         file << R"code(
         // Function: FUN_002a0bb0 at 0x2a0bb0
@@ -3674,6 +3924,7 @@ Label_0000: // 0x2a0bb0
         goto Label_0001;
     }
 
+
 Label_0001: // 0x2a0bdc
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
@@ -3684,6 +3935,7 @@ Label_0001: // 0x2a0bdc
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0bf0
 // Fall through to 0x2a0bf0
     goto Label_0002; // Fall through
+
 
 Label_0002: // 0x2a0bf0 - SWITCH on (*param_1 & 0xf)
     {
@@ -3700,6 +3952,8 @@ Label_0002: // 0x2a0bf0 - SWITCH on (*param_1 & 0xf)
                 goto Label_0058;
         }
     }
+
+
 
 
 Label_0003: // 0x2a0bf8
@@ -3734,6 +3988,8 @@ Label_0003: // 0x2a0bf8
 )code" << std::endl;
 
 
+
+
         file << R"code(
 Label_0004: // 0x2a0c18
         // lw instruction - 32-bit load
@@ -3763,6 +4019,7 @@ Label_0004: // 0x2a0c18
         goto Label_0005;
     }
 
+
 Label_0005: // 0x2a0c38
     if (ctx.cpuRegs.GPR.r[16].UL[0] != ctx.cpuRegs.GPR.r[2].UL[0]) {
             // lw instruction - 32-bit load
@@ -3771,6 +4028,7 @@ Label_0005: // 0x2a0c38
     } else {
         goto Label_0006;
     }
+
 
 Label_0006: // 0x2a0c40
         // lw instruction - 32-bit load
@@ -3842,6 +4100,8 @@ Label_0006: // 0x2a0c40
 )code" << std::endl;
 
 
+
+
         file << R"code(
 Label_0007: // 0x2a0c98
         // lw instruction - 32-bit load
@@ -3871,6 +4131,7 @@ Label_0007: // 0x2a0c98
         goto Label_0008;
     }
 
+
 Label_0008: // 0x2a0cb8
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[18].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
         ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[16].UL[0]) ? 1 : 0;
@@ -3882,16 +4143,19 @@ Label_0008: // 0x2a0cb8
         goto Label_0009;
     }
 
+
 Label_0009: // 0x2a0cc8
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0011;
+
 
 Label_0010: // 0x2a0cd4
         ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ static_cast<uint64_t>(0x1);
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0cd8
 // Fall through to 0x2a0cd8
     goto Label_0011; // Fall through
+
 
 Label_0011: // 0x2a0cd8
     bool branch_taken_2a0cd8 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -3902,11 +4166,13 @@ Label_0011: // 0x2a0cd8
         goto Label_0012;
     }
 
+
 Label_0012: // 0x2a0ce0
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0053;
+
 
 Label_0013: // 0x2a0cec
         // lw instruction - 32-bit load
@@ -3917,6 +4183,7 @@ Label_0013: // 0x2a0cec
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
     goto Label_0048;
 
+
 Label_0014: // 0x2a0d00
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x3);
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -3925,12 +4192,14 @@ Label_0014: // 0x2a0d00
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
     goto Label_0051;
 
+
 Label_0015: // 0x2a0d14
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0053;
+
 
 Label_0016: // 0x2a0d24
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
@@ -3939,6 +4208,8 @@ Label_0016: // 0x2a0d24
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
     goto Label_0048;
 )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -3968,6 +4239,7 @@ Label_0017: // 0x2a0d34
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
     goto Label_0059;
 
+
 Label_0018: // 0x2a0d60
         ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xe) ? 1 : 0;
     bool branch_taken_2a0d64 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -3978,6 +4250,7 @@ Label_0018: // 0x2a0d60
         goto Label_0019;
     }
 
+
 Label_0019: // 0x2a0d6c
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x5d20);
@@ -3987,6 +4260,7 @@ Label_0019: // 0x2a0d6c
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0d7c
 // Fall through to 0x2a0d7c
     goto Label_0020; // Fall through
+
 
 Label_0020: // 0x2a0d7c - SWITCH on param_2 (cases 3/4 sub-switch)
     {
@@ -4009,6 +4283,8 @@ Label_0020: // 0x2a0d7c - SWITCH on param_2 (cases 3/4 sub-switch)
     }
 
 
+
+
 Label_0021: // 0x2a0d84
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
@@ -4018,6 +4294,7 @@ Label_0021: // 0x2a0d84
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
     goto Label_0051;
+
 
 Label_0022: // 0x2a0d9c
         // lw instruction - 32-bit load
@@ -4029,12 +4306,15 @@ Label_0022: // 0x2a0d9c
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
     goto Label_0051;
 
+
 Label_0023: // 0x2a0db4
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
     goto Label_0047;
 )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -4108,6 +4388,8 @@ Label_0024: // 0x2a0dc0
 )code" << std::endl;
 
 
+
+
         file << R"code(
 Label_0025: // 0x2a0e18
         // lw instruction - 32-bit load
@@ -4137,6 +4419,7 @@ Label_0025: // 0x2a0e18
         goto Label_0026;
     }
 
+
 Label_0026: // 0x2a0e38
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[18].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]));
         ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < ctx.cpuRegs.GPR.r[16].UL[0]) ? 1 : 0;
@@ -4148,16 +4431,19 @@ Label_0026: // 0x2a0e38
         goto Label_0027;
     }
 
+
 Label_0027: // 0x2a0e48
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x1);
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[3].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0029;
+
 
 Label_0028: // 0x2a0e54
         ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ static_cast<uint64_t>(0x1);
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0e58
 // Fall through to 0x2a0e58
     goto Label_0029; // Fall through
+
 
 Label_0029: // 0x2a0e58
         bool cond_2756184 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -4169,6 +4455,7 @@ Label_0029: // 0x2a0e58
     } else {
         goto Label_0030;
     }
+
 
 Label_0030: // 0x2a0e60
         // lw instruction - 32-bit load
@@ -4200,6 +4487,8 @@ Label_0030: // 0x2a0e60
 )code" << std::endl;
 
 
+
+
         file << R"code(
 Label_0031: // 0x2a0e80
         // lw instruction - 32-bit load
@@ -4211,6 +4500,7 @@ Label_0031: // 0x2a0e80
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0050;
 
+
 Label_0032: // 0x2a0e98
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
@@ -4220,12 +4510,14 @@ Label_0032: // 0x2a0e98
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
     goto Label_0048;
 
+
 Label_0033: // 0x2a0eac
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x8);
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x10)));
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
     goto Label_0048;
+
 
 Label_0034: // 0x2a0ebc
         // lw instruction - 32-bit load
@@ -4238,6 +4530,7 @@ Label_0034: // 0x2a0ebc
     } else {
         goto Label_0035;
     }
+
 
 Label_0035: // 0x2a0ecc
         // lw instruction - 32-bit load
@@ -4270,17 +4563,20 @@ Label_0035: // 0x2a0ecc
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[3].UL[0]);
     goto Label_0058;
 
+
 Label_0036: // 0x2a0f0c
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
     goto Label_0047;
 
+
 Label_0037: // 0x2a0f18
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
         ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xb);
     goto Label_0047;
+
 
 Label_0038: // 0x2a0f24
         // lw instruction - 32-bit load
@@ -4292,6 +4588,7 @@ Label_0038: // 0x2a0f24
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0xc));
     goto Label_0051;
 
+
 Label_0039: // 0x2a0f3c
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
@@ -4299,6 +4596,8 @@ Label_0039: // 0x2a0f3c
         ctx.cpuRegs.GPR.r[6].SD[0] = ctx.cpuRegs.GPR.r[0].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
     goto Label_0053;
 )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -4312,6 +4611,7 @@ Label_0040: // 0x2a0f4c
         goto Label_0041;
     }
 
+
 Label_0041: // 0x2a0f58
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) << 2);
         ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0x5d60);
@@ -4321,6 +4621,7 @@ Label_0041: // 0x2a0f58
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0f68
 // Fall through to 0x2a0f68
     goto Label_0042; // Fall through
+
 
 Label_0042: // 0x2a0f68 - SWITCH on param_2 (case 5 sub-switch)
     {
@@ -4336,6 +4637,8 @@ Label_0042: // 0x2a0f68 - SWITCH on param_2 (case 5 sub-switch)
                 goto Label_0058;
         }
     }
+
+
 
 
 Label_0043: // 0x2a0f70
@@ -4366,6 +4669,7 @@ Label_0043: // 0x2a0f70
         goto Label_0044;
     }
 
+
 Label_0044: // 0x2a0f90
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x4));
@@ -4378,6 +4682,8 @@ Label_0044: // 0x2a0f90
 )code" << std::endl;
 
 
+
+
         file << R"code(
 Label_0045: // 0x2a0fa8
         // lw instruction - 32-bit load
@@ -4388,6 +4694,7 @@ Label_0045: // 0x2a0fa8
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x14));
     goto Label_0048;
 
+
 Label_0046: // 0x2a0fbc
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
@@ -4396,6 +4703,7 @@ Label_0046: // 0x2a0fbc
 // Fall through to 0x2a0fc4
     goto Label_0047; // Fall through
 
+
 Label_0047: // 0x2a0fc4
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[3].UL[0]) + 0x18)));
         // lw instruction - 32-bit load
@@ -4403,6 +4711,7 @@ Label_0047: // 0x2a0fc4
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a0fcc
 // Fall through to 0x2a0fcc
     goto Label_0048; // Fall through
+
 
 Label_0048: // 0x2a0fcc
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
@@ -4419,6 +4728,7 @@ Label_0048: // 0x2a0fcc
     }
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
     goto Label_0059;
+
 
 Label_0049: // 0x2a0fdc
         // lw instruction - 32-bit load
@@ -4438,6 +4748,8 @@ Label_0049: // 0x2a0fdc
 )code" << std::endl;
 
 
+
+
         file << R"code(
 Label_0050: // 0x2a1000
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4, ctx.cpuRegs.GPR.r[2].UL[0]);
@@ -4447,6 +4759,7 @@ Label_0050: // 0x2a1000
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a100c
 // Fall through to 0x2a100c
     goto Label_0051; // Fall through
+
 
 Label_0051: // 0x2a100c
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[17].SL[0]) + static_cast<int32_t>(ctx.cpuRegs.GPR.r[4].SL[0]));
@@ -4464,6 +4777,7 @@ Label_0051: // 0x2a100c
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
     goto Label_0059;
 
+
 Label_0052: // 0x2a101c
         // lw instruction - 32-bit load
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x18));
@@ -4472,6 +4786,7 @@ Label_0052: // 0x2a101c
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a1028
 // Fall through to 0x2a1028
     goto Label_0053; // Fall through
+
 
 Label_0053: // 0x2a1028
         ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(memory::read<uint16_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0]) + 0x30)));
@@ -4492,6 +4807,7 @@ Label_0053: // 0x2a1028
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
     goto Label_0059;
 
+
 Label_0054: // 0x2a1040
         ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[16].UL[0] < 0xa) ? 1 : 0;
     bool branch_taken_2a1044 = (ctx.cpuRegs.GPR.r[2].UL[0] == ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -4502,6 +4818,8 @@ Label_0054: // 0x2a1040
         goto Label_0055;
     }
 )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -4515,6 +4833,7 @@ Label_0055: // 0x2a104c
 // Fall through to 0x2a105c
     goto Label_0056; // Fall through
 
+
 Label_0056: // 0x2a105c - SWITCH on param_2 (case 6 sub-switch)
     {
         uint32_t target = ctx.cpuRegs.GPR.r[4].UL[0];
@@ -4526,6 +4845,8 @@ Label_0056: // 0x2a105c - SWITCH on param_2 (case 6 sub-switch)
                 goto Label_0058;
         }
     }
+
+
 
 
 Label_0057: // 0x2a1064
@@ -4550,11 +4871,13 @@ Label_0057: // 0x2a1064
         }
     }
 
+
 Label_0058: // 0x2a1080
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);
 // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x2a1084
 // Fall through to 0x2a1084
     goto Label_0059; // Fall through
+
 
 Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x8);
@@ -4563,11 +4886,15 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x20);
     return; // Return from function
 
+
 }
+
 
         )code" << std::endl;
         return;
     }
+
+
 
 
     if (func.base_address == 0x0001cca78){
@@ -4598,6 +4925,8 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0001: // 0x1ccaa4
                 ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(0x300000);
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
@@ -4608,6 +4937,8 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccab8
         // Fall through to 0x1ccab8
             goto Label_0002; // Fall through
+
+
 
 
         Label_0002: // 0x1ccab8 - SWITCH on (param_2[1] & 7)
@@ -4625,10 +4956,15 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         )code" << std::endl;
 
 
+
+
         file << R"code(
+
 
         Label_0003: // 0x1ccac0
                 // lwc1 - Load Word to Coprocessor 1
@@ -4647,6 +4983,8 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccadc;
             if (recompiled_functions.count(0x18adf0)) {
                 recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
 
 
             } else {
@@ -4671,6 +5009,8 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0004: // 0x1ccaf8
                 ctx.fpuRegs.fpr[1].UL = ctx.cpuRegs.GPR.r[2].UL[0];
             //nop
@@ -4686,7 +5026,11 @@ Label_0059: // 0x2a1084
             goto Label_0007;
 
 
+
+
         )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -4709,6 +5053,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18adf0](ctx, 0x18adf0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18adf0;
             }
@@ -4728,6 +5074,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x11bfa0;
             }
@@ -4740,12 +5088,16 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18b8c0](ctx, 0x18b8c0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18b8c0;
             }
                 // swc1 - Store Word from Coprocessor 1
             memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x50, ctx.fpuRegs.fpr[0].UL);
             goto Label_0007;
+
+
 
 
         Label_0006: // 0x1ccb64
@@ -4767,6 +5119,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18adf0](ctx, 0x18adf0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18adf0;
             }
@@ -4786,6 +5140,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x11bfa0;
             }
@@ -4798,6 +5154,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18b8e8](ctx, 0x18b8e8);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18b8e8;
             }
@@ -4805,7 +5163,11 @@ Label_0059: // 0x2a1084
             memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
 
 
+
+
         )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -4824,6 +5186,8 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0008: // 0x1ccbc4
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
                 ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffff9d10);
@@ -4833,6 +5197,8 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccbd4
         // Fall through to 0x1ccbd4
             goto Label_0009; // Fall through
+
+
 
 
         Label_0009: // 0x1ccbd4 - SWITCH on (*param_2 >> 35) & 7
@@ -4848,6 +5214,10 @@ Label_0059: // 0x2a1084
                         goto Label_0014;
                 }
             }
+
+
+
+
 
 
 
@@ -4869,6 +5239,8 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1ccbf8;
             if (recompiled_functions.count(0x18adf0)) {
                 recompiled_functions[0x18adf0](ctx, 0x18adf0);
+
+
 
 
             } else {
@@ -4893,7 +5265,11 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -4910,6 +5286,8 @@ Label_0059: // 0x2a1084
                 // swc1 - Store Word from Coprocessor 1
             memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x44, ctx.fpuRegs.fpr[0].UL);
             goto Label_0014;
+
+
 
 
         Label_0012: // 0x1ccc34
@@ -4931,6 +5309,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18adf0](ctx, 0x18adf0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18adf0;
             }
@@ -4950,6 +5330,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x11bfa0;
             }
@@ -4962,12 +5344,16 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18b8c0](ctx, 0x18b8c0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18b8c0;
             }
                 // swc1 - Store Word from Coprocessor 1
             memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
             goto Label_0014;
+
+
 
 
         Label_0013: // 0x1ccc80
@@ -4989,6 +5375,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18adf0](ctx, 0x18adf0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18adf0;
             }
@@ -5008,6 +5396,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x11bfa0](ctx, 0x11bfa0);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x11bfa0;
             }
@@ -5020,6 +5410,8 @@ Label_0059: // 0x2a1084
                 recompiled_functions[0x18b8e8](ctx, 0x18b8e8);
 
 
+
+
             } else {
                 ctx.cpuRegs.pc = 0x18b8e8;
             }
@@ -5027,7 +5419,11 @@ Label_0059: // 0x2a1084
             memory::write<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x54, ctx.fpuRegs.fpr[0].UL);
 
 
+
+
         )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -5044,6 +5440,8 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0015: // 0x1cccd4
                 // mov.s - Move Single (FPU)
             ctx.fpuRegs.fpr[12].f = ctx.fpuRegs.fpr[21].f;
@@ -5053,6 +5451,8 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1cccdc;
             if (recompiled_functions.count(0x298e60)) {
                 recompiled_functions[0x298e60](ctx, 0x298e60);
+
+
 
 
             } else {
@@ -5074,6 +5474,8 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0016: // 0x1cccfc
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
@@ -5085,6 +5487,8 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccd0c
         // Fall through to 0x1ccd0c
             goto Label_0017; // Fall through
+
+
 
 
         Label_0017: // 0x1ccd0c
@@ -5103,6 +5507,8 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0018: // 0x1ccd28
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0]) + 0x68));
@@ -5114,6 +5520,8 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccd38
         // Fall through to 0x1ccd38
             goto Label_0019; // Fall through
+
+
 
 
         Label_0019: // 0x1ccd38
@@ -5130,7 +5538,11 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -5178,11 +5590,15 @@ Label_0059: // 0x2a1084
             }
 
 
+
+
         Label_0021: // 0x1ccda0
                 ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x20);
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1ccda4
         // Fall through to 0x1ccda4
             goto Label_0022; // Fall through
+
+
 
 
         Label_0022: // 0x1ccda4
@@ -5196,7 +5612,12 @@ Label_0059: // 0x2a1084
             return; // Return from function
 
 
+
+
         }
+
+
+
 
 
 
@@ -5205,6 +5626,7 @@ Label_0059: // 0x2a1084
         )code" << std::endl;
     
         return;
+
 
     }
     if(func.base_address == 0x001bb710){
@@ -5241,6 +5663,7 @@ Label_0059: // 0x2a1084
                         << " s7=0x" << ctx.cpuRegs.GPR.r[23].UL[0] << std::endl;
             }
             g_logFile << std::endl;
+
 
         Label_0000: // 0x1bb710
                 ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0xffffffb0);
@@ -5300,6 +5723,8 @@ Label_0059: // 0x2a1084
         )code" << std::endl;
 
 
+
+
         file << R"code(
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
@@ -5352,6 +5777,7 @@ Label_0059: // 0x2a1084
                 goto Label_0001;
             }
 
+
         Label_0001: // 0x1bb794
             //nop 
             // JAL was called 
@@ -5360,6 +5786,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb79c;
             if (recompiled_functions.count(0x1815c0)) {
                 recompiled_functions[0x1815c0](ctx, 0x1815c0);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x1815c0;
@@ -5394,11 +5821,13 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x181590)) {
                 recompiled_functions[0x181590](ctx, 0x181590);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x181590;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
+
 
         Label_0002: // 0x1bb7cc
                 ctx.cpuRegs.GPR.r[5].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[21].SL[0]) + 0x10);
@@ -5428,6 +5857,7 @@ Label_0059: // 0x2a1084
                 goto Label_0003;
             }
 
+
         Label_0003: // 0x1bb7f0
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[20].UL[0]) + 0x0));
@@ -5435,6 +5865,7 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bb7f8
         // Fall through to 0x1bb7f8
             goto Label_0004; // Fall through
+
 
         Label_0004: // 0x1bb7f8
                 ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[29].UD[0] | static_cast<uint64_t>(0x8);
@@ -5465,6 +5896,7 @@ Label_0059: // 0x2a1084
                 goto Label_0005;
             }
 
+
         Label_0005: // 0x1bb820
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[4].UL[0]) << 2);
                 ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[2].SL[0]) + 0xffff8c90);
@@ -5474,6 +5906,7 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bb830
         // Fall through to 0x1bb830
             goto Label_0006; // Fall through
+
 
         Label_0006: // 0x1bb830 - SWITCH DISPATCH (was incorrectly a function call)
             {
@@ -5511,7 +5944,10 @@ Label_0059: // 0x2a1084
                 )code" << std::endl;
 
 
+
+
         file << R"code(
+
 
         Label_0007: // 0x1bb838
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5522,6 +5958,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb844;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5537,6 +5974,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5551,12 +5989,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d8ae8)) {
                 recompiled_functions[0x1d8ae8](ctx, 0x1d8ae8);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d8ae8;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0008: // 0x1bb874
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5567,6 +6007,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb880;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5582,6 +6023,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5596,12 +6038,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d8ba8)) {
                 recompiled_functions[0x1d8ba8](ctx, 0x1d8ba8);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d8ba8;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0009: // 0x1bb8b0
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5612,6 +6056,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8bc;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5627,6 +6072,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5641,12 +6087,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d8eb0)) {
                 recompiled_functions[0x1d8eb0](ctx, 0x1d8eb0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d8eb0;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0010: // 0x1bb8ec
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5657,6 +6105,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb8f8;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5672,6 +6121,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5686,12 +6136,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9270)) {
                 recompiled_functions[0x1d9270](ctx, 0x1d9270);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9270;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0011: // 0x1bb928
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5702,6 +6154,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb934;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5717,6 +6170,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5731,12 +6185,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9338)) {
                 recompiled_functions[0x1d9338](ctx, 0x1d9338);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9338;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0012: // 0x1bb964
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5747,6 +6203,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb970;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5762,6 +6219,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5776,12 +6234,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d93f8)) {
                 recompiled_functions[0x1d93f8](ctx, 0x1d93f8);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d93f8;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0013: // 0x1bb9a0
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5792,6 +6252,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9ac;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5807,10 +6268,13 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
         )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -5825,12 +6289,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9f78)) {
                 recompiled_functions[0x1d9f78](ctx, 0x1d9f78);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9f78;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0014: // 0x1bb9dc
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5841,6 +6307,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bb9e8;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5856,6 +6323,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5870,6 +6338,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d94c8)) {
                 recompiled_functions[0x1d94c8](ctx, 0x1d94c8);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d94c8;
             }
@@ -5877,6 +6346,8 @@ Label_0059: // 0x2a1084
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
                 )code" << std::endl;
+
+
 
 
         file << R"code(
@@ -5889,6 +6360,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba24;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5904,6 +6376,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5918,12 +6391,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9598)) {
                 recompiled_functions[0x1d9598](ctx, 0x1d9598);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9598;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0016: // 0x1bba54
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x80);
@@ -5934,6 +6409,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba60;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5949,6 +6425,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -5962,10 +6439,13 @@ Label_0059: // 0x2a1084
                 )code" << std::endl;
 
 
+
+
         file << R"code(
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba88;
             if (recompiled_functions.count(0x1d9670)) {
                 recompiled_functions[0x1d9670](ctx, 0x1d9670);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x1d9670;
@@ -5973,6 +6453,7 @@ Label_0059: // 0x2a1084
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0017: // 0x1bba90
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -5983,6 +6464,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bba9c;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -5998,6 +6480,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6012,12 +6495,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9728)) {
                 recompiled_functions[0x1d9728](ctx, 0x1d9728);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9728;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0018: // 0x1bbacc
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6028,6 +6513,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbad8;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6043,6 +6529,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6057,12 +6544,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d97e0)) {
                 recompiled_functions[0x1d97e0](ctx, 0x1d97e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d97e0;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0019: // 0x1bbb08
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6073,6 +6562,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb14;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6088,6 +6578,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6102,12 +6593,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1da458)) {
                 recompiled_functions[0x1da458](ctx, 0x1da458);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1da458;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0020: // 0x1bbb44
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6118,6 +6611,8 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb50;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+                )code" << std::endl;
+        file << R"code(
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6133,6 +6628,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6147,12 +6643,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9898)) {
                 recompiled_functions[0x1d9898](ctx, 0x1d9898);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9898;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0021: // 0x1bbb80
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6163,6 +6661,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbb8c;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6177,6 +6676,8 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbba0;
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+                )code" << std::endl;
+        file << R"code(
 
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
@@ -6192,12 +6693,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9968)) {
                 recompiled_functions[0x1d9968](ctx, 0x1d9968);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9968;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0022: // 0x1bbbbc
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x280);
@@ -6208,6 +6711,8 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbbc8;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+                )code" << std::endl;
+        file << R"code(
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6222,6 +6727,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6231,6 +6737,7 @@ Label_0059: // 0x2a1084
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[2].UL[0]);
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffffff);
+
 
         Label_0023: // 0x1bbbf0
             //nop 
@@ -6245,6 +6752,7 @@ Label_0059: // 0x2a1084
                 goto Label_0024;
             }
 
+
         Label_0024: // 0x1bbc08
                 ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffff);
@@ -6254,6 +6762,8 @@ Label_0059: // 0x2a1084
         // Fall through to 0x1bbc18
             goto Label_0025; // Fall through
 
+                )code" << std::endl;
+        file << R"code(
         Label_0025: // 0x1bbc18
             //nop 
             //nop 
@@ -6267,8 +6777,6 @@ Label_0059: // 0x2a1084
                 goto Label_0026;
             }
                 )code" << std::endl;
-
-
         file << R"code(
         Label_0026: // 0x1bbc30
                 ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x3f800000);
@@ -6290,12 +6798,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d99a0)) {
                 recompiled_functions[0x1d99a0](ctx, 0x1d99a0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d99a0;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0027: // 0x1bbc64
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6306,6 +6816,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbc70;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6321,6 +6832,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6335,12 +6847,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9b28)) {
                 recompiled_functions[0x1d9b28](ctx, 0x1d9b28);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9b28;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0028: // 0x1bbca0
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x290);
@@ -6351,6 +6865,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbcac;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6365,6 +6880,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6375,6 +6891,7 @@ Label_0059: // 0x2a1084
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x6c, ctx.cpuRegs.GPR.r[2].UL[0]);
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].SL[0]) + 0xffffffff);
             //nop 
+
 
         Label_0029: // 0x1bbcd8
             //nop 
@@ -6389,6 +6906,7 @@ Label_0059: // 0x2a1084
                 goto Label_0030;
             }
 
+
         Label_0030: // 0x1bbcf0
                 ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xf);
                 ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0xffffffff);
@@ -6397,6 +6915,7 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbd00
         // Fall through to 0x1bbd00
             goto Label_0031; // Fall through
+
 
         Label_0031: // 0x1bbd00
             //nop 
@@ -6410,6 +6929,7 @@ Label_0059: // 0x2a1084
             } else {
                 goto Label_0032;
             }
+
 
         Label_0032: // 0x1bbd18
                 ctx.cpuRegs.GPR.r[1].SD[0] = static_cast<int32_t>(0x3dcc0000);
@@ -6435,12 +6955,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9b60)) {
                 recompiled_functions[0x1d9b60](ctx, 0x1d9b60);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9b60;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0033: // 0x1bbd54
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6451,6 +6973,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd60;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6466,6 +6989,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6480,12 +7004,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9c30)) {
                 recompiled_functions[0x1d9c30](ctx, 0x1d9c30);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9c30;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0034: // 0x1bbd90
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6496,6 +7022,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbd9c;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6511,6 +7038,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6525,12 +7053,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9d28)) {
                 recompiled_functions[0x1d9d28](ctx, 0x1d9d28);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9d28;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0035: // 0x1bbdcc
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6541,6 +7071,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbdd8;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6553,13 +7084,17 @@ Label_0059: // 0x2a1084
         // The address after JAL is: 0x1bbdec
         // The next block should be: 1bbe08
 
+
                         )code" << std::endl;
+
+
 
 
         file << R"code(
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbdec;
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
@@ -6575,12 +7110,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9de8)) {
                 recompiled_functions[0x1d9de8](ctx, 0x1d9de8);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9de8;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0036: // 0x1bbe08
                 ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[0].SL[0]) + 0x70);
@@ -6591,6 +7128,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe14;
             if (recompiled_functions.count(0x181560)) {
                 recompiled_functions[0x181560](ctx, 0x181560);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x181560;
@@ -6606,6 +7144,7 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1cc8e0)) {
                 recompiled_functions[0x1cc8e0](ctx, 0x1cc8e0);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1cc8e0;
             }
@@ -6620,12 +7159,14 @@ Label_0059: // 0x2a1084
             if (recompiled_functions.count(0x1d9ea8)) {
                 recompiled_functions[0x1d9ea8](ctx, 0x1d9ea8);
 
+
             } else {
                 ctx.cpuRegs.pc = 0x1d9ea8;
             }
                 // lw instruction - 32-bit load
             ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0]) + 0x6c));
             goto Label_0038;
+
 
         Label_0037: // 0x1bbe44
                 ctx.cpuRegs.GPR.r[19].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0]) + 0x1);
@@ -6636,6 +7177,7 @@ Label_0059: // 0x2a1084
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbe54
         // Fall through to 0x1bbe54
             goto Label_0038; // Fall through
+
 
         Label_0038: // 0x1bbe54
                 ctx.cpuRegs.GPR.r[5].SD[0] = ctx.cpuRegs.GPR.r[20].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -6670,6 +7212,8 @@ Label_0059: // 0x2a1084
         )code" << std::endl;
 
 
+
+
         file << R"code(
         Label_0039: // 0x1bbe84
                 ctx.cpuRegs.GPR.r[4].SD[0] = ctx.cpuRegs.GPR.r[21].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
@@ -6679,6 +7223,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x1bbe8c;
             if (recompiled_functions.count(0x1c03c0)) {
                 recompiled_functions[0x1c03c0](ctx, 0x1c03c0);
+
 
             } else {
                 ctx.cpuRegs.pc = 0x1c03c0;
@@ -6691,11 +7236,13 @@ Label_0059: // 0x2a1084
                 goto Label_0040;
             }
 
+
         Label_0040: // 0x1bbe94
                 memory::write<uint32_t>(ctx.cpuRegs.GPR.r[21].UL[0] + 0x60, ctx.cpuRegs.GPR.r[2].UL[0]);
         // This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x1bbe98
         // Fall through to 0x1bbe98
             goto Label_0041; // Fall through
+
 
         Label_0041: // 0x1bbe98
                 ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x10);
@@ -6708,7 +7255,10 @@ Label_0059: // 0x2a1084
                 ctx.cpuRegs.GPR.r[29].SD[0] = static_cast<int32_t>(static_cast<int32_t>(ctx.cpuRegs.GPR.r[29].SL[0]) + 0x50);
             return; // Return from function
 
+
         }
+
+
 
 
         )code" << std::endl;
@@ -6724,6 +7274,8 @@ Label_0059: // 0x2a1084
     */
 
 
+
+
     /*
         if (func.base_address == 0x001815f0) {
         std::cout << "Skipping recompile for 0x1815c0 (Hooked via HLE)" << std::endl;
@@ -6731,6 +7283,7 @@ Label_0059: // 0x2a1084
         return;
     }
     */
+
 
     if (func.base_address == 0x002d1a50) {
         std::cout << "Skipping recompile for 0x2d1a50 (Hooked via HLE)" << std::endl;
@@ -6746,6 +7299,8 @@ Label_0059: // 0x2a1084
     */
 
 
+
+
     /*
     if (func.base_address == 0x0019fb18) {
         std::cout << "Skipping recompile for 0x0019fb18 (Hooked via HLE)" << std::endl;
@@ -6754,17 +7309,20 @@ Label_0059: // 0x2a1084
     }
     */
 
+
     if (func.base_address == 0x002d6880) {
         std::cout << "Skipping recompile for 0x002d6880 (Hooked via HLE)" << std::endl;
         file << "// Function 0x2d6880 skipped - replaced by HLE hook\n";
         return;
     }
 
+
     if (func.base_address == 0x002ad8f0) {
         std::cout << "Skipping recompile for 0x002ad8f0 (Hooked via HLE)" << std::endl;
         file << "// Function 0x2ad8f0 skipped - replaced by HLE hook\n";
         return;
     }
+
 
     if (func.base_address == 0x002aac80) {
         std::cout << "Skipping recompile for 0x002aac80 (Hooked via HLE)" << std::endl;
@@ -6773,11 +7331,14 @@ Label_0059: // 0x2a1084
     }
 
 
+
+
     if (func.base_address == 0x002adb18) {
         std::cout << "Skipping recompile for 0x002adb18 (Hooked via HLE)" << std::endl;
         file << "// Function 0x2adb18 skipped - replaced by HLE hook\n";
         return;
     }
+
 
     if (func.base_address == 0x002c6ce0) {
         std::cout << "Skipping recompile for 0x002c6ce0 (Hooked via HLE)" << std::endl;
@@ -6818,6 +7379,8 @@ Label_0059: // 0x2a1084
     */
 
 
+
+
     /*
     if (func.base_address == 0x00100360) {
         // PART 1: Setup and Label_0000
@@ -6825,6 +7388,7 @@ Label_0059: // 0x2a1084
     Label_0000: // 0x100360
         uint64_t actual_pCtx = ctx.cpuRegs.GPR.r[4].UL[0]; 
         ctx.cpuRegs.GPR.r[17].UL[0] = actual_pCtx; // Sync to r[17] for now
+
 
         g_logFile << "[DEBUG] 100360 START. Input pCtx: 0x" << std::hex << actual_pCtx << std::endl;
         ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0xffffffa0;
@@ -6876,6 +7440,7 @@ Label_0059: // 0x2a1084
         ctx.cpuRegs.GPR.r[5].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0xffffffff;
         ctx.cpuRegs.GPR.r[2].SD[0] = ctx.cpuRegs.GPR.r[4].SD[0] + ctx.cpuRegs.GPR.r[0].SD[0];
         ctx.cpuRegs.GPR.r[3].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x9;
+
 
     Label_0001: // 0x1003e0
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x0, ctx.cpuRegs.GPR.r[0].UL[0]);
@@ -6972,6 +7537,7 @@ Label_0059: // 0x2a1084
         }
     )code";
 
+
         file << R"code(
     Label_0003: // 0x1004dc
         ctx.cpuRegs.GPR.r[4].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x10;
@@ -6996,6 +7562,7 @@ Label_0059: // 0x2a1084
         }
         ctx.cpuRegs.GPR.r[1].UL[0] = 0x310000;
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[1].UL[0] + 0xffffa718, ctx.cpuRegs.GPR.r[2].UL[0]);
+
 
     Label_0004: // 0x1004f4
         ctx.cpuRegs.GPR.r[6].SL[0] = ctx.cpuRegs.GPR.r[0].SL[0] + 0x4;
@@ -7183,11 +7750,13 @@ Label_0059: // 0x2a1084
         g_logFile << "[DEBUG] 100360 FIXED RETURN: 0x" << std::hex << ctx.cpuRegs.GPR.r[2].UL[0] << std::endl;
         return; // Return from function
 
+
     }
     )code" << std::endl;
     return;
     }
     */
+
 
 if (func.base_address == 0x00255188) {
     file << R"code(
@@ -7203,9 +7772,11 @@ void FUN_00255188(CpuContext& ctx) {
     ctx.cpuRegs.GPR.r[17].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0]; // s1 = a1
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x30, ctx.fpuRegs.fpr[20].UL);      // swc1 f20
 
+
     // 0x2551a4: lw a0, 0x0(s0)
     ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+
 
     // 0x2551a8: andi v0, a0, 0x100
     // 0x2551ac: beq v0, zero, 255264
@@ -7213,6 +7784,7 @@ void FUN_00255188(CpuContext& ctx) {
     ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4));
     if ((ctx.cpuRegs.GPR.r[4].UL[0] & 0x100) == 0) goto Label_00255264;
+
 
     // ================================================================
     // BIT 0x100 SET PATH: animation state transition
@@ -7239,16 +7811,19 @@ void FUN_00255188(CpuContext& ctx) {
         memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, v0);
     }
 
+
     // 0x2551e0: beq a1, v1, LAB_25522c  (if a1 == 2)
     // 0x2551e4: _sw zero, 0x18(s0)  — delay slot, ALWAYS executes
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, 0);
     if (ctx.cpuRegs.GPR.r[5].UL[0] == 2) goto Label_0025522c;
+
 
     // 0x2551e8: sltiu v0, a1, 3
     // 0x2551ec: beq v0, zero, 255204  (if a1 >= 3)
     // 0x2551f0: _li v0, 1  — delay slot, ALWAYS executes
     ctx.cpuRegs.GPR.r[2].UL[0] = 1;
     if (ctx.cpuRegs.GPR.r[5].UL[0] >= 3) goto Label_00255204;
+
 
     // 0x2551f4: beql a1, v0, LAB_255220  (if a1 == 1, likely branch)
     // 0x2551f8: _lw v0, 0x34(s0)  — delay slot, ONLY if taken
@@ -7258,11 +7833,13 @@ void FUN_00255188(CpuContext& ctx) {
         goto Label_00255220;
     }
 
+
     // 0x2551fc: b LAB_25547c  (a1 == 0 path, default)
     // 0x255200: _lw a2, 0x1c(s0)  — delay slot
     ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
     goto Label_0025547c;
+
 
 Label_00255204:
     // 0x255204: li v0, 3
@@ -7270,6 +7847,7 @@ Label_00255204:
     // 0x25520c: _li v0, 4  — delay slot, ALWAYS executes
     ctx.cpuRegs.GPR.r[2].UL[0] = 4;
     if (ctx.cpuRegs.GPR.r[5].UL[0] == 3) goto Label_0025523c;
+
 
     // 0x255210: beql a1, v0, LAB_25524c  (if a1 == 4, likely branch)
     // 0x255214: _lw v0, 0x34(s0)  — delay slot, ONLY if taken
@@ -7279,11 +7857,13 @@ Label_00255204:
         goto Label_0025524c;
     }
 
+
     // 0x255218: b LAB_25547c  (default path)
     // 0x25521c: _lw a2, 0x1c(s0)  — delay slot
     ctx.cpuRegs.GPR.r[6].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
     goto Label_0025547c;
+
 
 Label_00255220:
     // a1==1 path. v0 (r[2]) = *(s0+0x34) from beql delay slot
@@ -7295,6 +7875,7 @@ Label_00255220:
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xc));
     goto Label_00255254;
+
 
 Label_0025522c:
     // a1==2 path.
@@ -7310,6 +7891,7 @@ Label_0025522c:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x14));
     goto Label_00255254;
 
+
 Label_0025523c:
     // a1==3 path.
     // 0x25523c: lw v0, 0x34(s0)
@@ -7324,6 +7906,7 @@ Label_0025523c:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x1c));
     goto Label_00255254;
 
+
 Label_0025524c:
     // a1==4 path. v0 (r[2]) = *(s0+0x34) from beql delay slot
     // 0x25524c: lh a0, 0x20(v0)
@@ -7333,6 +7916,7 @@ Label_0025524c:
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x24));
     // fall through
+
 
 Label_00255254:
     // 0x255254: jalr v1
@@ -7358,6 +7942,7 @@ Label_00255254:
     goto Label_0025547c;
 )code" << std::endl;
 
+
     file << R"code(
     // ================================================================
     // BIT 0x100 CLEAR PATH: normal update with switch on (a0 & 0xf)
@@ -7378,6 +7963,7 @@ Label_00255264:
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
     if (ctx.cpuRegs.GPR.r[4].UL[0] >= 5) goto Label_caseD_0;
 
+
     // 0x25527c-0x255290: switch table
     switch (ctx.cpuRegs.GPR.r[4].UL[0]) {
         case 0: goto Label_caseD_0;
@@ -7387,6 +7973,7 @@ Label_00255264:
         case 4: goto Label_caseD_4;
         default: goto Label_caseD_0;
     }
+
 
     // ================================================================
     // caseD_1: 0x255298
@@ -7401,11 +7988,13 @@ Label_caseD_1:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
     if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) goto Label_002552c8;
 
+
     // 0x2552a4: slt v0, v0, v1  — v0 = (local_40 < param[5])
     // 0x2552a8: xori v0, v0, 1  — v0 = !(local_40 < param[5])
     // 0x2552ac: beq v0, zero, 2552c8  — if (local_40 < param[5]) goto 2552c8
     // 0x2552b0: _li v1, -0xf1  — delay slot, ALWAYS executes
     if (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_002552c8;
+
 
     // Timer expired — transition to state 2
     // 0x2552b4: lw v0, 0x0(s0)
@@ -7418,6 +8007,7 @@ Label_caseD_1:
     // 0x2552c4: sw v0, 0x0(s0)
     ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFF0F) | 0x120;
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+
 
 Label_002552c8:
     // 0x2552c8: sw zero, 0x18(s0)
@@ -7437,6 +8027,7 @@ Label_002552c8:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x2c));
     goto Label_002553c4;
 
+
     // ================================================================
     // caseD_2: 0x2552e0
     // ================================================================
@@ -7452,6 +8043,7 @@ Label_caseD_2:
     // 0x2552f0: _lwc1 f0, -0x7d10(gp)  — delay slot, ALWAYS executes
     ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7d10);
     if (ctx.cpuRegs.GPR.r[2].SL[0] >= ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_0025534c;
+
 
     // 0x2552f4: mtc1 v1, f20
     ctx.fpuRegs.fpr[20].UL = ctx.cpuRegs.GPR.r[3].UL[0];
@@ -7472,6 +8064,7 @@ Label_caseD_2:
             goto Label_00255498;
         }
     }
+
 
     // 0x25530c-0x255310: lwc1 f1, DAT_003097dc
     ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
@@ -7503,6 +8096,7 @@ Label_caseD_2:
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
     goto Label_0025536c;
 
+
 Label_0025534c:
     // Duration expired — set state to 3
     // 0x25534c: lw v0, 0x0(s0)
@@ -7516,6 +8110,7 @@ Label_0025534c:
     // 0x255368: sw v0, 0x0(s0)
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
 )code" << std::endl;
+
 
    file << R"code(
 Label_0025536c:
@@ -7534,6 +8129,7 @@ Label_0025536c:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x34));
     goto Label_002553c4;
 
+
     // ================================================================
     // caseD_3: 0x255380
     // ================================================================
@@ -7547,11 +8143,13 @@ Label_caseD_3:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0));
     if (ctx.cpuRegs.GPR.r[3].UL[0] == 0) goto Label_002553b0;
 
+
     // 0x25538c: slt v0, v0, v1
     // 0x255390: xori v0, v0, 1
     // 0x255394: beq v0, zero, LAB_002553b0  — if (local_40 < v1) goto 2553b0
     // 0x255398: _li v1, -0xf1  — delay slot, ALWAYS executes (but only used if not branching)
     if (ctx.cpuRegs.GPR.r[2].SL[0] < ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_002553b0;
+
 
     // Timer expired — transition to state 4
     // 0x25539c: lw v0, 0x0(s0)
@@ -7564,6 +8162,7 @@ Label_caseD_3:
     // 0x2553ac: sw v0, 0x0(s0)
     ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] & 0xFFFFFF0F) | 0x140;
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+
 
 Label_002553b0:
     // 0x2553b0: sw zero, 0x18(s0)
@@ -7581,6 +8180,7 @@ Label_002553b0:
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x3c));
     // fall through to Label_002553c4
+
 
 Label_002553c4:
     // 0x2553c4: jalr v1
@@ -7605,6 +8205,7 @@ Label_002553c4:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
     goto Label_0025547c;
 
+
     // ================================================================
     // caseD_4: 0x2553d4
     // ================================================================
@@ -7620,6 +8221,7 @@ Label_caseD_4:
     // 0x2553e4: _lwc1 f0, -0x7d10(gp)  — delay slot, ALWAYS executes
     ctx.fpuRegs.fpr[0].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[28].UL[0] - 0x7d10);
     if (ctx.cpuRegs.GPR.r[2].SL[0] >= ctx.cpuRegs.GPR.r[3].SL[0]) goto Label_00255440;
+
 
     // 0x2553e8: mtc1 v1, f20
     ctx.fpuRegs.fpr[20].UL = ctx.cpuRegs.GPR.r[3].UL[0];
@@ -7640,6 +8242,7 @@ Label_caseD_4:
             goto Label_00255498;
         }
     }
+
 
     // 0x255400-0x255404: lwc1 f1, DAT_003097dc
     ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
@@ -7671,6 +8274,7 @@ Label_caseD_4:
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18, ctx.fpuRegs.fpr[0].UL);
     goto Label_00255460;
 
+
 Label_00255440:
     // Duration expired — set state to 1
     // 0x255440: lw v0, 0x0(s0)
@@ -7685,6 +8289,7 @@ Label_00255440:
     // 0x25545c: sw v0, 0x0(s0)
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
     // fall through to Label_00255460
+
 
 Label_00255460:
     // 0x255460: lw v0, 0x34(s0)
@@ -7717,6 +8322,7 @@ Label_00255460:
     }
     // falls through to caseD_0
 
+
     // ================================================================
     // caseD_0: 0x255478
     // ================================================================
@@ -7726,11 +8332,13 @@ Label_caseD_0:
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
     // fall through to Label_0025547c
 
+
 Label_0025547c:
     // 0x25547c: beq a2, zero, LAB_00255498
     // 0x255480: _move a1, s1  — delay slot, ALWAYS executes
     ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
     if (ctx.cpuRegs.GPR.r[6].UL[0] == 0) goto Label_00255498;
+
 
     // 0x255484: lw v0, 0x34(a2)
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
@@ -7759,6 +8367,7 @@ Label_0025547c:
     }
     // falls through to epilogue
 
+
     // ================================================================
     // Epilogue: 0x255498
     // ================================================================
@@ -7782,6 +8391,9 @@ Label_00255498:
 
 
 
+
+
+
 if (func.base_address == 0x0029e408) {
     file << R"code(void FUN_0029e408(CpuContext& ctx) {
     // Prologue
@@ -7789,13 +8401,16 @@ if (func.base_address == 0x0029e408) {
     ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0];  // move a1, a0
     memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0, ctx.cpuRegs.GPR.r[31].UD[0]);  // sd ra, 0x0(sp)
 
+
     // Load switch variable: v1 = *(a1 + 0x8)
     ctx.cpuRegs.GPR.r[3].UL[0] = memory::read<uint32_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[5].UL[0]) + 0x8);
+
 
     // Bounds check: if (v1 >= 6) goto default
     if (ctx.cpuRegs.GPR.r[3].UL[0] >= 6) {
         goto Label_default;
     }
+
 
     // Switch dispatch
     switch (ctx.cpuRegs.GPR.r[3].UL[0]) {
@@ -7808,6 +8423,7 @@ if (func.base_address == 0x0029e408) {
         default: goto Label_default;
     }
 
+
 Label_caseD_0:
     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];  // move a0, a1
     ctx.cpuRegs.GPR.r[31].UL[0] = 0x29e444;
@@ -7818,6 +8434,7 @@ Label_caseD_0:
         return;
     }
     goto Label_epilogue;
+
 
 Label_caseD_1:
     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];  // move a0, a1
@@ -7830,6 +8447,7 @@ Label_caseD_1:
     }
     goto Label_epilogue;
 
+
 Label_caseD_2:
     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];  // move a0, a1
     ctx.cpuRegs.GPR.r[31].UL[0] = 0x29e464;
@@ -7840,6 +8458,7 @@ Label_caseD_2:
         return;
     }
     goto Label_epilogue;
+
 
 Label_caseD_3:
     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];  // move a0, a1
@@ -7852,6 +8471,7 @@ Label_caseD_3:
     }
     goto Label_epilogue;
 
+
 Label_caseD_4:
     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];  // move a0, a1
     ctx.cpuRegs.GPR.r[31].UL[0] = 0x29e484;
@@ -7862,6 +8482,7 @@ Label_caseD_4:
         return;
     }
     goto Label_epilogue;
+
 
 Label_caseD_5:
     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];  // move a0, a1
@@ -7874,6 +8495,7 @@ Label_caseD_5:
     }
     // Fall through to epilogue
 
+
 Label_default:
 Label_epilogue:
     ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x0);  // ld ra, 0x0(sp)
@@ -7883,6 +8505,7 @@ Label_epilogue:
 )code" << std::endl;
     return;
 }
+
 
 if (func.base_address == 0x00202e28) {
     file << R"code(
@@ -7899,6 +8522,7 @@ void FUN_00202e28(CpuContext& ctx) {
     ctx.cpuRegs.GPR.r[2].UD[0] = 0x8000;
     // 0x202e38: sd ra, 0x8(sp)
     memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x8, ctx.cpuRegs.GPR.r[31].UD[0]);
+
 
     // ================================================================
     // Setup: 0x202e3c - 0x202e6c
@@ -7937,6 +8561,7 @@ void FUN_00202e28(CpuContext& ctx) {
     ctx.cpuRegs.GPR.r[7].UD[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
     if (ctx.cpuRegs.GPR.r[4].UL[0] >= 9) goto Label_caseD_0;
 
+
     // ================================================================
     // Switch dispatch: 0x202e70 - 0x202e88
     // Cases 0,1,4,5,6,7,8 → caseD_0 (default/return)
@@ -7949,6 +8574,7 @@ void FUN_00202e28(CpuContext& ctx) {
         default: goto Label_caseD_0;
     }
 
+
     // ================================================================
     // caseD_2: 0x202e8c
     // ================================================================
@@ -7957,6 +8583,7 @@ Label_caseD_2:
     // 0x202e90: _ori v0, zero, 0x8000  — delay slot, ALWAYS executes
     ctx.cpuRegs.GPR.r[2].UD[0] = 0x8000;
     if (ctx.cpuRegs.GPR.r[7].UL[0] != 0) goto Label_00202ea8;
+
 
     // iVar1 != piVar2[1] path:
     // 0x202e94: jal FUN_00203230
@@ -7978,6 +8605,7 @@ Label_caseD_2:
     ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
     goto Label_00202ee0;
 
+
     // ================================================================
     // caseD_3: 0x202ea4
     // ================================================================
@@ -7985,6 +8613,7 @@ Label_caseD_3:
     // 0x202ea4: ori v0, zero, 0x8000
     ctx.cpuRegs.GPR.r[2].UD[0] = 0x8000;
     // fall through to Label_00202ea8
+
 
     // ================================================================
     // Shared cleanup path: 0x202ea8 (from caseD_2 bne and caseD_3 fallthrough)
@@ -8014,6 +8643,7 @@ Label_00202ea8:
         }
     }
 
+
     // 0x202ebc: lw a0, 0x14(s0)  — a0 = piVar2[5]
     ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
         memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14));
@@ -8032,6 +8662,7 @@ Label_00202ea8:
         }
     }
 
+
     // 0x202ec8-0x202ed8: zero out piVar2[0..4]
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, 0);
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x00, 0);
@@ -8040,6 +8671,7 @@ Label_00202ea8:
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0c, 0);
     // fall through to caseD_0
 
+
     // ================================================================
     // caseD_0 / default: 0x202edc
     // ================================================================
@@ -8047,6 +8679,7 @@ Label_caseD_0:
     // 0x202edc: ld s0, 0x0(sp)  — restore s0
     ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x0);
     // fall through to epilogue
+
 
     // ================================================================
     // Epilogue: 0x202ee0
@@ -8063,8 +8696,10 @@ Label_00202ee0:
     return;
 }
 
+
 /*
 )code" << std::endl;
+
 
    file << R"code(
 */
@@ -8082,6 +8717,7 @@ void FUN_00255040(CpuContext& ctx) {
     memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]);
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.fpuRegs.fpr[20].UL);
 
+
     // lw v1, 0x0(s0)
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
     // andi v0, v1, 0x100
@@ -8093,9 +8729,11 @@ void FUN_00255040(CpuContext& ctx) {
         ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].UL[0] >> 4);
     }
 
+
 Label_255074:
     // andi v1, v1, 0xf
     ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & 0xf;
+
 
     {
         uint32_t switch_val = ctx.cpuRegs.GPR.r[3].UL[0];
@@ -8111,6 +8749,7 @@ Label_255074:
         }
     }
 
+
 Label_case1: // 0x25509c
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(-0xf1);
@@ -8118,6 +8757,7 @@ Label_case1: // 0x25509c
     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14, ctx.cpuRegs.GPR.r[18].UL[0]);
     goto Label_25514c;
+
 
 Label_case2: // 0x2550b4
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, ctx.cpuRegs.GPR.r[17].UL[0]);
@@ -8166,6 +8806,7 @@ Label_case2: // 0x2550b4
     goto Label_255150;
 )code" << std::endl;
 
+
    file << R"code(
 Label_case3: // 0x255108
     ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
@@ -8184,6 +8825,7 @@ Label_case3: // 0x255108
     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | 0x100;
     goto Label_255150;
 
+
 Label_case4: // 0x255138
     // bnel s1, zero, LAB_00255158 — likely branch
     if (ctx.cpuRegs.GPR.r[17].UL[0] != 0) {
@@ -8194,15 +8836,19 @@ Label_case4: // 0x255138
     ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(-0xf1);
     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
 
+
 Label_25514c: // 0x25514c
     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | 0x110;
+
 
 Label_255150: // 0x255150
     memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
 
+
 Label_caseD_0: // 0x255154
     ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
 )code" << std::endl;
+
 
    file << R"code(
 Label_255158: // 0x255158
@@ -8217,6 +8863,7 @@ Label_255158: // 0x255158
         }
     }
 
+
     // Epilogue
     ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x00);
     ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x08);
@@ -8228,8 +8875,11 @@ Label_255158: // 0x255158
 }
     )code" << std::endl;
 
+
     return;
 }
+
+
 
 
 if (func.base_address == 0x00202ef0) {
@@ -8244,6 +8894,7 @@ if (func.base_address == 0x00202ef0) {
         // v0 = s1 + 0x8000
         ctx.cpuRegs.GPR.r[2].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x8000;
         memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]); // sd ra
+
 
         // Logic
         // v1 = *(param_2)
@@ -8277,12 +8928,14 @@ if (func.base_address == 0x00202ef0) {
         // param_2 (boolean) = (xor_check < 1) ? 1 : 0
         ctx.cpuRegs.GPR.r[5].UL[0] = (xor_check < 1) ? 1 : 0;
 
+
         // Switch dispatch
         switch (ctx.cpuRegs.GPR.r[4].UL[0]) {
             case 2: goto Label_caseD_2;
             case 3: goto Label_caseD_3;
             default: goto Label_caseD_0;
         }
+
 
     Label_caseD_2:
         if (ctx.cpuRegs.GPR.r[5].UL[0] == 0) {
@@ -8322,6 +8975,7 @@ if (func.base_address == 0x00202ef0) {
         
         goto Label_00202fdc;
 
+
     Label_00202f98:
         ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0]; // a0 = s1
         ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[18].UD[0]; // a1 = s2
@@ -8336,6 +8990,7 @@ if (func.base_address == 0x00202ef0) {
             return;
         }
         goto Label_00203000;
+
 
     Label_caseD_3:
         // s0 = s1 + 0x8000
@@ -8362,6 +9017,7 @@ if (func.base_address == 0x00202ef0) {
         ctx.cpuRegs.GPR.r[6].UL[0] = 7; // a2
         ctx.cpuRegs.GPR.r[7].UL[0] = 0; // a3
 
+
     Label_00202fdc:
         // Call FUN_002051d8
         ctx.cpuRegs.GPR.r[31].UL[0] = 0x00202fe4;
@@ -8380,6 +9036,7 @@ if (func.base_address == 0x00202ef0) {
         memory::write<uint32_t>(struct_base + 0x08, 0);
         memory::write<uint32_t>(struct_base + 0x0C, 0);
 
+
     Label_caseD_0:
     Label_00203000: // Epilogue
         ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(static_cast<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0]) + 0x00);
@@ -8395,10 +9052,14 @@ if (func.base_address == 0x00202ef0) {
 
 
 
+
+
+
     std::cout << "Recompiling function: " << func.name << std::endl;
     std::cout << "Base address: 0x" << std::hex << func.base_address << std::endl;
     std::cout << "Size: " << std::dec << func.size << std::endl;
     std::cout << "Blocks: " << std::dec << func.blocks.size() << std::endl;
+
 
     file << "// Function: " << func.name << " at 0x" << std::hex << func.base_address << "\n";
     file << "void " << func.name << "(CpuContext& ctx) {\n";
@@ -8409,6 +9070,7 @@ if (func.base_address == 0x00202ef0) {
     // Generate each basic block with simple labels
     if (func.base_address == 0x2d4cb0 || func.base_address == 0x2d4c60){
         file << "   ctx.cpuRegs.GPR.r[2].UL[0] = 0x10000;" << std::endl;
+
 
         file << "   return;" << std::endl;
         file <<    "   }" << std::endl;
@@ -8435,7 +9097,9 @@ if (func.base_address == 0x00202ef0) {
         file << "}\n\n";
     }
 
+
 }
+
 
 // helper function to generate block code
 void Recompiler::generate_block_code(const Function& func, const Block& block, size_t block_idx, std::ofstream& file) {
@@ -8445,13 +9109,16 @@ void Recompiler::generate_block_code(const Function& func, const Block& block, s
     log_file <<  "[PROCESSING FUNCTION BLOCK] Function: " << func.name << std::endl;
     log_file <<  "[PROCESSING FUNCTION BLOCK] Block Instruction Count: " <<  std::dec << block.instructions.size() << std::endl;
 
+
     /*
     
     
     */
     for (int i = 0; i < block.instructions.size(); ++i) {
 
+
         log_file << "FUNCTION: " << func.name << " BLOCK INDEX: " << block_idx << " BLOCK INSTRUCTION INDEX: " << i << "\n \n" << std::endl;
+
 
         const auto& instr_struct = block.instructions[i];
         const auto& instr_word = instr_struct.getCPtr()->word;
@@ -8461,7 +9128,9 @@ void Recompiler::generate_block_code(const Function& func, const Block& block, s
         std::string disasm_string; 
         // Check if this is a branch/jump instruction
 
+
         if (has_delay_slot(instr)) {
+
 
             bool is_likely_branch = (static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_beql ||
                                     static_cast<int>(instr.getUniqueId()) == RABBITIZER_INSTR_ID_cpu_bnel ||
@@ -8554,6 +9223,7 @@ void Recompiler::generate_block_code(const Function& func, const Block& block, s
         file << "// This BLOCK HAS NO BRANCH SO GO TO NEXT BLOCK AFTER THIS, CURRENT BLOCK ENDS AT: 0x" << std::hex << block.end_address << "\n";
         file << "// Fall through to 0x" << std::hex << fall_through_addr << "\n"; 
 
+
         bool found_next_block = false;
         for (size_t i = 0; i < func.blocks.size(); ++i) {
             if (func.blocks[i].start_address == fall_through_addr) {
@@ -8577,6 +9247,7 @@ void Recompiler::generate_block_code(const Function& func, const Block& block, s
     }
 }
 
+
 // CHANGE: New function for control flow with function calls
 void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& instr, 
                                         const Function& func,
@@ -8588,8 +9259,10 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
     uint32_t current_pc = instr.getVram();
     std::string cond_var = "cond_" + std::to_string(current_pc);
 
+
     switch (instr.getUniqueId()) {
         // Conditional branches
+
 
         case RABBITIZER_INSTR_ID_cpu_beq: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
@@ -8603,6 +9276,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_beql: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
             uint32_t fall_through_addr = current_pc + 8;
@@ -8612,6 +9286,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             file << "    bool " << cond_var << " = (" 
                  << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] == " 
                  << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]);\n";
+
 
             // 2. CHECK CONDITION
             file << "    if (" << cond_var << ") {\n";
@@ -8658,16 +9333,20 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_blezl: {
              uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
              uint32_t fall_through_addr = current_pc + 8;
+
 
              // 1. Pre-calc
              file << "    bool " << cond_var << " = (" 
                   << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] <= 0);\n";
 
+
              // 2. Check
              file << "    if (" << cond_var << ") {\n";
+
 
              // 3. Delay Slot
              if (current_instr_idx + 1 < block.instructions.size()) {
@@ -8683,6 +9362,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
              file << "    }\n";
              break;
         }
+
 
         case RABBITIZER_INSTR_ID_cpu_bgtzl: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
@@ -8707,6 +9387,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_bltzl: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
             uint32_t fall_through_addr = current_pc + 8;
@@ -8730,6 +9411,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_bgezl: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
             uint32_t fall_through_addr = current_pc + 8;
@@ -8752,6 +9434,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             file << "    }\n";
             break;
         }
+
 
         case RABBITIZER_INSTR_ID_cpu_bc1tl: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
@@ -8783,6 +9466,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_bc1fl: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
             uint32_t fall_through_addr = current_pc + 8;
@@ -8812,6 +9496,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_bne: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
             uint32_t fall_through_addr = current_pc + 8;
@@ -8824,6 +9509,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             file << "    }\n";
             break;
         }
+
 
         
         case RABBITIZER_INSTR_ID_cpu_beqz: {
@@ -8898,6 +9584,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_bc1f: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
             uint32_t fall_through_addr = current_pc + 8;
@@ -8909,6 +9596,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
             file << "    }\n";
             break;
         }
+
 
         case RABBITIZER_INSTR_ID_cpu_bc1t: {
             uint32_t target_addr = current_pc + 4 + (static_cast<int16_t>(instr.Get_immediate()) << 2);
@@ -9032,6 +9720,7 @@ void Recompiler::translate_control_flow(const rabbitizer::InstructionR5900& inst
         }
 }
 
+
 // CHANGE: New helper function to emit branch target code
 void Recompiler::emit_branch_target(uint32_t target_addr, const Function& func, std::ofstream& file, const std::string& indent) {
     // Check if target is within current function
@@ -9056,6 +9745,7 @@ void Recompiler::emit_branch_target(uint32_t target_addr, const Function& func, 
         file << indent << "}\n";
     }
 }
+
 
 // ALL INSTRUCTION TRANSLATIONS BELOW ARE UNCHANGED - PRESERVED EXACTLY
 void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr, std::ofstream& file) {
@@ -9098,6 +9788,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ".y;\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vopmsub:
             // vopmsub fd, fs, ft - Vector Outer Product Multiply Subtract
             // Calculates negative cross-product terms, subtracts from ACC, stores in fd.
@@ -9115,6 +9806,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             // For safety in HLE:
             file << "    " << get_vr_name(static_cast<uint8_t>(instr.GetO32_fd())) << ".w = ctx.vuRegs.ACC.w;\n";
             break;
+
 
         // ----------------------------------------------------------------
         // VU0 (COP2) Broadcast Arithmetic (x, y, z, w suffixes)
@@ -9134,6 +9826,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vaddz:
             // vaddz fd, fs, ft -> fd = fs + ft.z (Broadcast Z)
             file << "    // vaddz - Vector Add (Broadcast Z)\n";
@@ -9150,21 +9843,26 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] & " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0];\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_xor:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] ^ " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0];\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_cpu_nor:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = ~(" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] | " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0]);\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_ori:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] | static_cast<uint64_t>(" << format_imm(instr.Get_immediate()) << ");\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_xori:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] ^ static_cast<uint64_t>(" << format_imm(instr.Get_immediate()) << ");\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_cpu_andi:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] & static_cast<uint64_t>(" << format_imm(instr.Get_immediate()) << ");\n";
@@ -9401,6 +10099,7 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[1];\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_por:
             // por rd, rs, rt - Parallel OR (128-bit)
             file << "    // por - Parallel OR\n";
@@ -9421,6 +10120,7 @@ case RABBITIZER_INSTR_ID_r5900_vaddq:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmulq:
             // vmulq fd, fs, (Q) -> fd = fs * Q
             file << "    // vmulq - Vector Multiply Q\n";
@@ -9431,9 +10131,11 @@ case RABBITIZER_INSTR_ID_r5900_vaddq:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Broadcast & Accumulator Arithmetic
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_vsubx:
             // vsubx fd, fs, ft -> fd = fs - ft.x (Broadcast X)
@@ -9444,6 +10146,7 @@ case RABBITIZER_INSTR_ID_r5900_vaddq:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " - VR_reg{val, val, val, val};\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmaddaw:
             // vmaddaw fs, ft -> ACC += fs * ft.w
@@ -9466,6 +10169,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmsubay:
             // vmsubay fs, ft -> ACC -= fs * ft.y
             // Multiply-Subtract from Accumulator using Broadcast Y.
@@ -9477,6 +10181,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmsubx:
             // vmsubx fd, fs, ft -> fd = ACC - (fs * ft.x)
             // Multiply-Subtract, result stored in fd (ACC unchanged).
@@ -9487,6 +10192,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " * VR_reg{val, val, val, val});\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmulax:
             // vmulax fs, ft -> ACC = fs * ft.x
@@ -9508,6 +10214,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmaddaz:
             // vmaddaz fs, ft -> ACC += fs * ft.z
             file << "    // vmaddaz - Multiply-Add Accumulator (Broadcast Z)\n";
@@ -9517,6 +10224,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " * VR_reg{val, val, val, val});\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmaddz:
             // vmaddz fd, fs, ft -> ACC += fs * ft.z, fd = ACC
@@ -9529,6 +10237,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmaddw:
             // vmaddw fd, fs, ft -> ACC += fs * ft.w, fd = ACC
             file << "    // vmaddw - Vector Multiply-Add (Broadcast W)\n";
@@ -9540,6 +10249,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmadd:
             // vmadd fd, fs, ft -> ACC += fs * ft, fd = ACC
             file << "    // vmadd - Vector Multiply-Add\n";
@@ -9548,6 +10258,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ");\n";
             file << "    " << get_vr_name(static_cast<uint8_t>(instr.GetO32_fd())) << " = ctx.vuRegs.ACC;\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmsubw:
             // vmsubw fd, fs, ft -> fd = ACC - (fs * ft.w)
@@ -9559,6 +10270,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmula:
             // vmula fs, ft -> ACC = fs * ft
             file << "    // vmula - Vector Multiply into Accumulator\n";
@@ -9566,9 +10278,11 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << " * " << get_vr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ";\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Misc & I Register
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_vmuli:
             // vmuli fd, fs, I -> fd = fs * I
@@ -9580,6 +10294,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " * VR_reg{val, val, val, val};\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmr32:
             // vmr32 fd, fs -> Rotate elements (XYZW -> YZWX)
@@ -9593,6 +10308,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
         // VU0 (COP2) Broadcast Accumulator Arithmetic
         // ----------------------------------------------------------------
 
+
         case RABBITIZER_INSTR_ID_r5900_vaddaw:
             // vaddaw fs, ft -> ACC = fs + ft.w
             // Adds fs and broadcast ft.w, stores result in Accumulator.
@@ -9605,6 +10321,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmsubax:
             // vmsubax fs, ft -> ACC -= fs * ft.x
             // Multiply-Subtract from Accumulator using Broadcast X.
@@ -9615,6 +10332,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << " * VR_reg{val, val, val, val});\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmsuby:
             // vmsuby fd, fs, ft -> fd = ACC - (fs * ft.y)
@@ -9627,6 +10345,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmsubz:
             // vmsubz fd, fs, ft -> fd = ACC - (fs * ft.z)
             // Multiply-Subtract, result to fd, Broadcast Z.
@@ -9638,9 +10357,11 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Broadcast Arithmetic (Sub/Mul)
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_vsubw:
             // vsubw fd, fs, ft -> fd = fs - ft.w
@@ -9652,6 +10373,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmulx:
             // vmulx fd, fs, ft -> fd = fs * ft.x
             file << "    // vmulx - Vector Multiply (Broadcast X)\n";
@@ -9662,6 +10384,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmove:
             // vmove fd, fs -> fd = fs
             file << "    // vmove - Vector Move\n";
@@ -9669,9 +10392,11 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_vr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ";\n";
             break;
 
+
         // ----------------------------------------------------------------
         // MMI Parallel Extensions
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_pextlw:
             // pextlw rd, rs, rt
@@ -9688,6 +10413,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
                  << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[1];\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_pextuw:
             // pextuw rd, rs, rt
             // Extends the upper 32-bit words of rs and rt into rd (interleaved).
@@ -9702,6 +10428,7 @@ case RABBITIZER_INSTR_ID_r5900_vsubaz:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UL[3] = " 
                  << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[3];\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vaddw:
             // vaddw fd, fs, ft -> fd = fs + ft.w
@@ -9729,6 +10456,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_swr:
             // swr rt, offset(base) - Store Word Right
             // Little Endian: Stores the least significant part of rt to memory
@@ -9746,9 +10474,11 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Min/Max Instructions
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_vmini:
             // vmini fd, fs, ft -> fd = min(fs, ft)
@@ -9766,6 +10496,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmax:
             // vmax fd, fs, ft -> fd = max(fs, ft)
             file << "    // vmax - Vector Maximum\n";
@@ -9781,9 +10512,11 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Broadcast Min/Max
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_vminiy:
             // vminiy fd, fs, ft -> fd = min(fs, ft.y)
@@ -9797,6 +10530,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vminiw:
             // vminiw fd, fs, ft -> fd = min(fs, ft.w)
             file << "    // vminiw - Vector Minimum (Broadcast W)\n";
@@ -9808,6 +10542,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "        };\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vminiz:
             // vminiz fd, fs, ft -> fd = min(fs, ft.z)
@@ -9821,6 +10556,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmaxy:
             // vmaxy fd, fs, ft -> fd = max(fs, ft.y)
             file << "    // vmaxy - Vector Maximum (Broadcast Y)\n";
@@ -9832,6 +10568,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "        };\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vmaxw:
             // vmaxw fd, fs, ft -> fd = max(fs, ft.w)
@@ -9845,9 +10582,11 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Special Instructions
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_vclipw:
             // vclipw fs, ft (Broadcast W)
@@ -9868,6 +10607,7 @@ case RABBITIZER_INSTR_ID_cpu_swl:
             file << "    }\n";
             break;
 
+
 case RABBITIZER_INSTR_ID_r5900_vmaxz:
             // vmaxz fd, fs, ft -> fd = max(fs, ft.z)
             file << "    // vmaxz - Vector Maximum (Broadcast Z)\n";
@@ -9879,6 +10619,7 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "        };\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vaddax:
             // vaddax fs, ft -> ACC = ACC + (fs + ft.x) ??? 
@@ -9892,6 +10633,7 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vmsubaw:
             // vmsubaw fs, ft -> ACC -= fs * ft.w
             file << "    // vmsubaw - Multiply-Subtract Accumulator (Broadcast W)\n";
@@ -9902,9 +10644,11 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // MIPS Control
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_cpu_break:
             file << "    // break - Breakpoint\n";
@@ -9915,9 +10659,11 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "    exit(1);\n";
             break;
 
+
         // ----------------------------------------------------------------
         // MMI Parallel Arithmetic (Halfwords)
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_paddh:
             // paddh rd, rs, rt - Parallel Add Halfword (8x16-bit)
@@ -9932,6 +10678,7 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_pminh:
             // pminh rd, rs, rt - Parallel Minimum Halfword
             file << "    // pminh - Parallel Minimum Halfword\n";
@@ -9944,6 +10691,7 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "        }\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_pmaxh:
             // pmaxh rd, rs, rt - Parallel Maximum Halfword
@@ -9958,9 +10706,11 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // MMI Pack & Shift
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_ppacb:
             // ppacb rd, rs, rt - Parallel Pack Byte
@@ -9981,6 +10731,7 @@ case RABBITIZER_INSTR_ID_r5900_vmaxz:
             file << "        for (int i = 0; i < 8; ++i) rd.SC[i+8] = pack_half(rs.SS[i]);\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_mtsab:
             // mtsab rs, immediate - Move to Shift Amount Byte
@@ -10009,6 +10760,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_pextub:
             // pextub rd, rs, rt - Parallel Extend Upper Byte
             // Interleaves the upper 8 bytes of rs and rt.
@@ -10025,9 +10777,11 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // MMI Parallel Shifts (Halfwords)
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_psrlh:
             // psrlh rd, rt, sa - Parallel Shift Right Logical Halfword
@@ -10043,6 +10797,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_psrah:
             // psrah rd, rt, sa - Parallel Shift Right Arithmetic Halfword
             file << "    // psrah - Parallel Shift Right Arithmetic Halfword\n";
@@ -10056,6 +10811,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "        }\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_psllh:
             // psllh rd, rt, sa - Parallel Shift Left Logical Halfword
@@ -10071,9 +10827,11 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // MMI Parallel Compare & Subtract
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_pcgth:
             // pcgth rd, rs, rt - Parallel Compare Greater Than Halfword
@@ -10089,6 +10847,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_psubw:
             // psubw rd, rs, rt - Parallel Subtract Word
             file << "    // psubw - Parallel Subtract Word\n";
@@ -10102,9 +10861,11 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
 
+
         // ----------------------------------------------------------------
         // Pipeline 1 Transfers (hi1 / lo1)
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_mfhi1:
             // mfhi1 rd - Move From HI1
@@ -10112,11 +10873,13 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UQ = ctx.cpuRegs.HI.UQ;\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_mflo1:
             // mflo1 rd - Move From LO1
             file << "    // mflo1 - Move From LO1\n";
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UQ = ctx.cpuRegs.LO1.UQ;\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_mthi1:
             // mthi1 rs - Move To HI1
@@ -10124,15 +10887,18 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    ctx.cpuRegs.HI1.UQ = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UQ;\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_mtlo1:
             // mtlo1 rs - Move To LO1
             file << "    // mtlo1 - Move To LO1\n";
             file << "    ctx.cpuRegs.LO1.UQ = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UQ;\n";
             break;
 
+
         // ----------------------------------------------------------------
         // Pipeline 0 Transfers (hi) & Special
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_cpu_mthi:
             // mthi rs - Move To HI (Pipeline 0)
@@ -10140,12 +10906,14 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    ctx.cpuRegs.HI.UQ = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UQ;\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_mtsa:
             // mtsa rs - Move To Shift Amount
             // Sets the SA register to the value in rs. Used for qfsrv.
             file << "    // mtsa - Move To Shift Amount\n";
             file << "    ctx.cpuRegs.sa = " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0];\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_qfsrv:
             // qfsrv rd, rs, rt - Quadword Funnel Shift Right Variable
@@ -10191,11 +10959,13 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f;\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_abs_s:
             file << "    // abs.s - Absolute Value Single\n";
             file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fd())) << ".f = std::abs(" 
                  << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f);\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_rsqrt_s:
             // rsqrt.s fd, fs -> fd = 1.0 / sqrt(fs)
@@ -10203,6 +10973,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fd())) << ".f = 1.0f / std::sqrt(" 
                  << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f);\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_max_s:
             // max.s fd, fs, ft
@@ -10212,6 +10983,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ".f);\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_min_s:
             // min.s fd, fs, ft
             file << "    // min.s - Minimum Single\n";
@@ -10220,9 +10992,11 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << get_fpr_name(static_cast<uint8_t>(instr.GetO32_ft())) << ".f);\n";
             break;
 
+
         // ----------------------------------------------------------------
         // VU0 (COP2) Load/Store & Control
         // ----------------------------------------------------------------
+
 
         case RABBITIZER_INSTR_ID_r5900_lqc2:
             // lqc2 vt, offset(base) (Rabbitizer maps 'vt' to the rt field)
@@ -10234,6 +11008,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << "*reinterpret_cast<QuadWord*>(&" << get_vr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_sqc2:
             // sqc2 vt, offset(base)
             file << "    // sqc2 - Store Quadword from COP2 (VU0 VF)\n";
@@ -10243,10 +11018,12 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << "*reinterpret_cast<const QuadWord*>(&" << get_vr_name(static_cast<uint8_t>(instr.GetO32_rt())) << "));\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_vnop:
             file << "    // vnop - Vector No Operation\n";
             // No code needed
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_vcallms:
             // vcallms - Call Micro Subroutine (VU0)
@@ -10256,6 +11033,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    // vcallms - Call Micro Subroutine (Stubbed)\n";
             file << "    // TODO: Invoke VU0 microcode execution at " << format_imm(instr.Get_immediate()) << "\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_pxor:
             // pxor rd, rs, rt - Parallel XOR (128-bit)
@@ -10292,6 +11070,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    " << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fd())) << ".f = sqrt(" 
                  << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f);\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_cfc2_ni:
         case RABBITIZER_INSTR_ID_r5900_cfc2_i: {
@@ -10334,6 +11113,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_r5900_ctc2_ni:
         case RABBITIZER_INSTR_ID_r5900_ctc2_i: {
             // ctc2[.i/.ni] rt, rd - Copy from GPR to VU0 control register
@@ -10369,6 +11149,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_r5900_qmfc2_ni:
         case RABBITIZER_INSTR_ID_r5900_qmfc2_i: {
             // qmfc2[.i/.ni] rt, vd - Copy 128-bit VF register to GPR
@@ -10388,6 +11169,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    memcpy(&" << get_gpr_name(rt) << ", &ctx.vuRegs.VF[" << std::dec << (int)vd << "], 16);\n";
             break;
         }
+
 
         case RABBITIZER_INSTR_ID_r5900_qmtc2_ni:
         case RABBITIZER_INSTR_ID_r5900_qmtc2_i: {
@@ -10427,6 +11209,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_ldr: {
             // Load Doubleword Right - loads bytes into LOW part of register
             uint8_t rt = static_cast<uint8_t>(instr.GetO32_rt());
@@ -10464,6 +11247,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_cpu_lwr: {
             // Load Word Right - loads bytes into LOW part of register
             uint8_t rt = static_cast<uint8_t>(instr.GetO32_rt());
@@ -10500,6 +11284,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
         }
+
 
         case RABBITIZER_INSTR_ID_cpu_sdr: {
             uint8_t rt = static_cast<uint8_t>(instr.GetO32_rt());
@@ -10617,6 +11402,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             break;
         }
 
+
         case RABBITIZER_INSTR_ID_r5900_multu1: {
             // multu1 rd, rs, rt - Unsigned 32x32 -> 64-bit result in HI1:LO1, rd = LO1
             uint8_t rs = static_cast<uint8_t>(instr.GetO32_rs());
@@ -10636,6 +11422,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    }\n";
             break;
         }
+
 
         case RABBITIZER_INSTR_ID_cpu_syscall:
             file << "    runtime_syscall_dispatcher(" << get_gpr_name(3) << ".UL[0], ctx);\n";
@@ -10682,6 +11469,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0];\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_pcpyh:
             // Parallel Copy Halfword - broadcast lowest halfword to all 8 positions
             file << "    // pcpyh - Parallel Copy Halfword\n";
@@ -10693,6 +11481,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "        }\n";
             file << "    }\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_cpu_dsll:
             // Doubleword Shift Left Logical
@@ -10710,6 +11499,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] & 0x3F);\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_dsrl32:
             // dsrl32 rd, rt, sa - Doubleword Shift Right Logical + 32
             // Shift amount is sa + 32
@@ -10723,6 +11513,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    // mflo - Move From LO\n";
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = ctx.cpuRegs.LO.UD[0];\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_cpu_mfhi:
             // mfhi rd - Move From HI
@@ -10754,6 +11545,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                 << std::to_string(instr.Get_sa() + 32) << ";\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_dsllv:
             // Doubleword Shift Left Logical Variable
             file << "    // dsllv - Doubleword Shift Left Logical Variable\n";
@@ -10762,6 +11554,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] & 0x3F);\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_dsrl:
             // Doubleword Shift Right Logical
             file << "    // dsrl - Doubleword Shift Right Logical\n";
@@ -10769,6 +11562,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] >> " 
                 << std::to_string(instr.Get_sa()) << ";\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_cpu_dsra:
             // Doubleword Shift Right Arithmetic
@@ -10822,6 +11616,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                  << (int)static_cast<uint8_t>(instr.GetO32_fs()) << "]);\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_cpu_ctc1:
             // ctc1 rt, fs - Copy To FPU Control Register from GPR
             file << "    // ctc1 - Copy to FPU Control Register " << (int)static_cast<uint8_t>(instr.GetO32_fs()) << "\n";
@@ -10831,6 +11626,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
         // --- Coprocessor 1 (FPU) Comparisons ---
         // These set Bit 23 (0x800000) of FCR31 if true, clear it if false.
 
+
         case RABBITIZER_INSTR_ID_cpu_c_eq_s:
             file << "    // c.eq.s - Compare Equal (Single)\n";
             file << "    if (" << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f == " 
@@ -10839,6 +11635,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "    else ctx.fpuRegs.fprc[31] &= ~0x800000;\n";
             break;
 
+
         case RABBITIZER_INSTR_ID_r5900_c_lt_s:
             file << "    // c.lt.s - Compare Less Than (R5900)\n";
             file << "    if (" << get_fpr_name(static_cast<uint8_t>(instr.GetO32_fs())) << ".f < " 
@@ -10846,6 +11643,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "        ctx.fpuRegs.fprc[31] |= 0x800000;\n";
             file << "    else ctx.fpuRegs.fprc[31] &= ~0x800000;\n";
             break;
+
 
         case RABBITIZER_INSTR_ID_r5900_c_le_s:
             file << "    // c.le.s - Compare Less Than or Equal (R5900)\n";
@@ -10939,6 +11737,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             file << "      g_logFile << \"Unhandled OP Code: 0x\" << std::hex << 0x" << std::hex << instr.getVram() << " << \" Instruction: \" << \"" << instr.getOpcodeName() << "\";\n";
             file << "    exit(1);\n";
 
+
             log_file << "    // ----------------------------------------------------------------\n";
             log_file << "    // UNHANDLED INSTRUCTION: " << instr.getOpcodeName() << "\n";
             log_file << "    // Opcode: 0x" << std::hex << static_cast<int>(instr.Get_opcode()) << "\n";
@@ -10950,6 +11749,12 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
+
+
+
+
+
 
 
 
