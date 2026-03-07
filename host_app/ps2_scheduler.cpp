@@ -45,10 +45,42 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ============================================================================
 // GLOBAL INSTANCE
 // ============================================================================
 PS2Scheduler g_scheduler;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -75,23 +107,39 @@ extern std::ofstream g_logFile;
 extern HLEHeap g_heap;
 void PS2Scheduler::Reset() {
 for (int i = 0; i < MAX_THREADS; i++) {
-    threads_[i] = PS2Thread{};
-    threads_[i].prev_id = -1;
-    threads_[i].next_id = -1;
+   threads_[i] = PS2Thread{};
+   threads_[i].prev_id = -1;
+   threads_[i].next_id = -1;
 }
- for (int i = 0; i < MAX_PRIORITIES; i++) {
-    ready_queues_[i].head = -1;
-    ready_queues_[i].tail = -1;
+for (int i = 0; i < MAX_PRIORITIES; i++) {
+   ready_queues_[i].head = -1;
+   ready_queues_[i].tail = -1;
 }
- for (int i = 0; i < MAX_SEMAPHORES; i++) {
-    semaphores_[i] = PS2Semaphore{};
-    semaphores_[i].wait_head = -1;
-    semaphores_[i].wait_tail = -1;
+for (int i = 0; i < MAX_SEMAPHORES; i++) {
+   semaphores_[i] = PS2Semaphore{};
+   semaphores_[i].wait_head = -1;
+   semaphores_[i].wait_tail = -1;
 }
- current_thread_id_ = 0;
+current_thread_id_ = 0;
 dispatch_enabled_ = true;
- g_logFile << "Scheduler: Reset complete" << std::endl;
+g_logFile << "Scheduler: Reset complete" << std::endl;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -113,14 +161,30 @@ dispatch_enabled_ = true;
 // ============================================================================
 int PS2Scheduler::AllocateThreadSlot() {
 for (int i = 1; i < MAX_THREADS; i++) {
-    if (!threads_[i].active) {
-        threads_[i].active = true;
-        threads_[i].id = i;
-        return i;
-    }
+   if (!threads_[i].active) {
+       threads_[i].active = true;
+       threads_[i].id = i;
+       return i;
+   }
 }
 return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -139,9 +203,9 @@ return -1;
 
 int PS2Scheduler::AllocateSemaSlot() {
 for (int i = 1; i < MAX_SEMAPHORES; i++) {
-    if (!semaphores_[i].active) {
-        return i;
-    }
+   if (!semaphores_[i].active) {
+       return i;
+   }
 }
 return -1;
 }
@@ -161,23 +225,55 @@ return -1;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void PS2Scheduler::AddToReadyQueue(int tid) {
 if (tid < 0 || tid >= MAX_THREADS || !threads_[tid].active) return;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 int prio = t.current_priority;
 if (prio < 0) prio = 0;
 if (prio >= MAX_PRIORITIES) prio = MAX_PRIORITIES - 1;
- PriorityQueue& q = ready_queues_[prio];
- t.prev_id = q.tail;
+PriorityQueue& q = ready_queues_[prio];
+t.prev_id = q.tail;
 t.next_id = -1;
- if (q.tail >= 0) {
-    threads_[q.tail].next_id = tid;
+if (q.tail >= 0) {
+   threads_[q.tail].next_id = tid;
 } else {
-    q.head = tid;
+   q.head = tid;
 }
 q.tail = tid;
- g_logFile << "Scheduler: Thread " << tid << " added to priority " << prio << " queue" << std::endl;
+g_logFile << "Scheduler: Thread " << tid << " added to priority " << prio << " queue" << std::endl;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -196,23 +292,39 @@ q.tail = tid;
 
 void PS2Scheduler::RemoveFromReadyQueue(int tid) {
 if (tid < 0 || tid >= MAX_THREADS || !threads_[tid].active) return;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 int prio = t.current_priority;
 if (prio < 0 || prio >= MAX_PRIORITIES) return;
- PriorityQueue& q = ready_queues_[prio];
- if (t.prev_id >= 0) {
-    threads_[t.prev_id].next_id = t.next_id;
+PriorityQueue& q = ready_queues_[prio];
+if (t.prev_id >= 0) {
+   threads_[t.prev_id].next_id = t.next_id;
 } else {
-    q.head = t.next_id;
+   q.head = t.next_id;
 }
- if (t.next_id >= 0) {
-    threads_[t.next_id].prev_id = t.prev_id;
+if (t.next_id >= 0) {
+   threads_[t.next_id].prev_id = t.prev_id;
 } else {
-    q.tail = t.prev_id;
+   q.tail = t.prev_id;
 }
- t.prev_id = -1;
+t.prev_id = -1;
 t.next_id = -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -232,14 +344,14 @@ t.next_id = -1;
 void PS2Scheduler::AddToSemaWaitQueue(int sid, int tid) {
 if (sid < 0 || sid >= MAX_SEMAPHORES) return;
 if (tid < 0 || tid >= MAX_THREADS) return;
- PS2Semaphore& s = semaphores_[sid];
+PS2Semaphore& s = semaphores_[sid];
 PS2Thread& t = threads_[tid];
- t.sema_wait_prev = s.wait_tail;
+t.sema_wait_prev = s.wait_tail;
 t.sema_wait_next = -1;
- if (s.wait_tail >= 0) {
-    threads_[s.wait_tail].sema_wait_next = tid;
+if (s.wait_tail >= 0) {
+   threads_[s.wait_tail].sema_wait_next = tid;
 } else {
-    s.wait_head = tid;
+   s.wait_head = tid;
 }
 s.wait_tail = tid;
 s.wait_threads++;
@@ -260,22 +372,38 @@ s.wait_threads++;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void PS2Scheduler::RemoveFromSemaWaitQueue(int sid, int tid) {
 if (sid < 0 || sid >= MAX_SEMAPHORES) return;
 if (tid < 0 || tid >= MAX_THREADS) return;
- PS2Semaphore& s = semaphores_[sid];
+PS2Semaphore& s = semaphores_[sid];
 PS2Thread& t = threads_[tid];
- if (t.sema_wait_prev >= 0) {
-    threads_[t.sema_wait_prev].sema_wait_next = t.sema_wait_next;
+if (t.sema_wait_prev >= 0) {
+   threads_[t.sema_wait_prev].sema_wait_next = t.sema_wait_next;
 } else {
-    s.wait_head = t.sema_wait_next;
+   s.wait_head = t.sema_wait_next;
 }
- if (t.sema_wait_next >= 0) {
-    threads_[t.sema_wait_next].sema_wait_prev = t.sema_wait_prev;
+if (t.sema_wait_next >= 0) {
+   threads_[t.sema_wait_next].sema_wait_prev = t.sema_wait_prev;
 } else {
-    s.wait_tail = t.sema_wait_prev;
+   s.wait_tail = t.sema_wait_prev;
 }
- t.sema_wait_prev = -1;
+t.sema_wait_prev = -1;
 t.sema_wait_next = -1;
 s.wait_threads--;
 }
@@ -295,14 +423,46 @@ s.wait_threads--;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::FindHighestPriorityThread() {
 for (int prio = 0; prio < MAX_PRIORITIES; prio++) {
-    if (ready_queues_[prio].head >= 0) {
-        return ready_queues_[prio].head;
-    }
+   if (ready_queues_[prio].head >= 0) {
+       return ready_queues_[prio].head;
+   }
 }
 return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -323,6 +483,22 @@ void PS2Scheduler::SaveContext(int tid, const CpuContext& ctx) {
 if (tid < 0 || tid >= MAX_THREADS || !threads_[tid].active) return;
 threads_[tid].ctx = ctx;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -407,14 +583,110 @@ ctx = threads_[tid].ctx;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ============================================================================
 // CORE SCHEDULING
 // ============================================================================
 void PS2Scheduler::Reschedule(CpuContext& ctx) {
 if (!dispatch_enabled_) {
-    g_logFile << "Scheduler: Dispatch disabled, skipping reschedule" << std::endl;
-    return;
+   g_logFile << "Scheduler: Dispatch disabled, skipping reschedule" << std::endl;
+   return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -464,16 +736,48 @@ int old_tid = current_thread_id_;
 
 
 
- // Save current thread
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Save current thread
 if (old_tid > 0 && threads_[old_tid].active) {
-    PS2Thread& current = threads_[old_tid];
-    SaveContext(old_tid, ctx);
-     if (current.status == THS_RUN) {
-        current.status = THS_READY;
-        AddToReadyQueue(old_tid);
-    }
+   PS2Thread& current = threads_[old_tid];
+   SaveContext(old_tid, ctx);
+    if (current.status == THS_RUN) {
+       current.status = THS_READY;
+       AddToReadyQueue(old_tid);
+   }
 }
- g_logFile << "Scheduler: Thread " << old_tid << " yielded, looking for next thread to run..." << std::endl;
+g_logFile << "Scheduler: Thread " << old_tid << " yielded, looking for next thread to run..." << std::endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -493,6 +797,22 @@ if (old_tid > 0 && threads_[old_tid].active) {
 SwitchToFiber(scheduler_fiber_);
 ctx = threads_[current_thread_id_].ctx;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -532,8 +852,40 @@ PS2Thread& t = g_scheduler.threads_[tid];
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 g_logFile << "FiberEntry: Thread " << tid << " starting execution at 0x"
-          << std::hex << t.ctx.cpuRegs.pc << std::dec << std::endl;
+         << std::hex << t.ctx.cpuRegs.pc << std::dec << std::endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -583,14 +935,62 @@ uint32_t entry_pc = t.ctx.cpuRegs.pc;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 auto it = recompiled_functions.find(entry_pc);
 if (it == recompiled_functions.end()) {
-    g_logFile << "FiberEntry: No recompiled function for entry PC 0x" << std::hex << entry_pc << std::dec << std::endl;
-    t.status = THS_DORMANT;
-    t.needs_fiber_cleanup = true;
-    SwitchToFiber(g_scheduler.scheduler_fiber_);
-    return;
+   g_logFile << "FiberEntry: No recompiled function for entry PC 0x" << std::hex << entry_pc << std::dec << std::endl;
+   t.status = THS_DORMANT;
+   t.needs_fiber_cleanup = true;
+   SwitchToFiber(g_scheduler.scheduler_fiber_);
+   return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -626,7 +1026,39 @@ g_scheduler.ExitThread(t.ctx);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -645,7 +1077,7 @@ g_scheduler.ExitThread(t.ctx);
 
 CpuContext& PS2Scheduler::GetCurrentContext() {
 if (current_thread_id_ > 0 && threads_[current_thread_id_].active) {
-    return threads_[current_thread_id_].ctx;
+   return threads_[current_thread_id_].ctx;
 }
 static CpuContext dummy;
 return dummy;
@@ -666,12 +1098,44 @@ return dummy;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 PS2Thread* PS2Scheduler::GetCurrentThread() {
 if (current_thread_id_ > 0 && threads_[current_thread_id_].active) {
-    return &threads_[current_thread_id_];
+   return &threads_[current_thread_id_];
 }
 return nullptr;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -690,10 +1154,26 @@ return nullptr;
 
 PS2Thread* PS2Scheduler::GetThread(int tid) {
 if (tid > 0 && tid < MAX_THREADS && threads_[tid].active) {
-    return &threads_[tid];
+   return &threads_[tid];
 }
 return nullptr;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -714,26 +1194,26 @@ return nullptr;
 // INITIALIZATION
 // ============================================================================
 uint32_t PS2Scheduler::InitMainThread(uint32_t gp, uint32_t stack, int stack_size,
-                                   uint32_t args, int root, CpuContext& caller_ctx) {
+                                  uint32_t args, int root, CpuContext& caller_ctx) {
 g_logFile << "Scheduler: InitMainThread gp=0x" << std::hex << gp
-          << " stack=0x" << stack << " size=" << std::dec << stack_size << std::endl;
- uint32_t sp;
+         << " stack=0x" << stack << " size=" << std::dec << stack_size << std::endl;
+uint32_t sp;
 if (stack == 0xFFFFFFFF) {
-    sp = 0x02000000 - stack_size;
+   sp = 0x02000000 - stack_size;
 } else {
-    sp = stack + stack_size;
+   sp = stack + stack_size;
 }
 sp &= ~0xF;
- int tid = current_thread_id_;
+int tid = current_thread_id_;
 if (tid <= 0 || !threads_[tid].active){
-    g_logFile << "Scheduler: Invalid thread ID or inactive thread. Allocating as fallback thread." << std::endl;
-    tid = AllocateThreadSlot();
-    if (tid < 0) {
-        g_logFile << "Scheduler: Failed to allocate thread slot for main thread initialization." << std::endl;
-        return 0;
-    }
+   g_logFile << "Scheduler: Invalid thread ID or inactive thread. Allocating as fallback thread." << std::endl;
+   tid = AllocateThreadSlot();
+   if (tid < 0) {
+       g_logFile << "Scheduler: Failed to allocate thread slot for main thread initialization." << std::endl;
+       return 0;
+   }
 }
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 t.status = THS_RUN;
 t.entry_func = caller_ctx.cpuRegs.pc;
 t.stack_base = (stack == 0xFFFFFFFF) ? (0x02000000 - stack_size) : stack;
@@ -741,11 +1221,27 @@ t.stack_size = stack_size;
 t.gp_reg = gp;
 t.current_priority = 0;
 t.init_priority = 0;
- t.ctx = caller_ctx;
+t.ctx = caller_ctx;
 t.ctx.cpuRegs.GPR.r[28].UL[0] = gp;
 t.ctx.cpuRegs.GPR.r[29].UL[0] = sp;
- caller_ctx.cpuRegs.GPR.r[28].UL[0] = gp;
+caller_ctx.cpuRegs.GPR.r[28].UL[0] = gp;
 caller_ctx.cpuRegs.GPR.r[29].UL[0] = sp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -764,10 +1260,26 @@ caller_ctx.cpuRegs.GPR.r[29].UL[0] = sp;
 
 t.heap_base = 0x00400000;
 t.heap_end = sp;
- g_logFile << "Scheduler: Main thread " << tid << " initialized, SP=0x"
-          << std::hex << sp << std::dec << std::endl;
- return sp;
+g_logFile << "Scheduler: Main thread " << tid << " initialized, SP=0x"
+         << std::hex << sp << std::dec << std::endl;
+return sp;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -804,13 +1316,45 @@ if (!t) return 0;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 1. Determine Heap START
 if (heap != 0xFFFFFFFF) {
-    t->heap_base = heap;
+   t->heap_base = heap;
 }
 else if (t->heap_base == 0) {
-    t->heap_base = 0x00200000; // Default safe start
+   t->heap_base = 0x00200000; // Default safe start
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -829,12 +1373,12 @@ else if (t->heap_base == 0) {
 
 // 2. Determine Heap END (Limit)
 if (heap_size == -1) {
-    uint32_t stack_ptr = ctx.cpuRegs.GPR.r[29].UL[0];
-     // --- FIX STARTS HERE ---
-     // 1. Sanity Check: If SP is wild (Host Ptr), clamp to physical max
-    if (stack_ptr > 0x02000000) {
-        stack_ptr = 0x02000000;
-    }
+   uint32_t stack_ptr = ctx.cpuRegs.GPR.r[29].UL[0];
+    // --- FIX STARTS HERE ---
+    // 1. Sanity Check: If SP is wild (Host Ptr), clamp to physical max
+   if (stack_ptr > 0x02000000) {
+       stack_ptr = 0x02000000;
+   }
 
 
 
@@ -851,14 +1395,46 @@ if (heap_size == -1) {
 
 
 
-    // 2. Alignment Check: The heap end usually needs to be 16-byte aligned.
-    // We do NOT subtract 0x1000 anymore. The game likely wants every byte.
-    // We just ensure it doesn't align *up* past 32MB.
-    heap_limit = stack_ptr & ~0xF;
-     // -----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   // 2. Alignment Check: The heap end usually needs to be 16-byte aligned.
+   // We do NOT subtract 0x1000 anymore. The game likely wants every byte.
+   // We just ensure it doesn't align *up* past 32MB.
+   heap_limit = stack_ptr & ~0xF;
+    // -----------------------
 } else {
-    heap_limit = t->heap_base + heap_size;
+   heap_limit = t->heap_base + heap_size;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -879,21 +1455,37 @@ if (heap_size == -1) {
 // Allow up to 0x02000000 (Exact 32MB).
 // Do NOT stop at 0x1FFFFF0.
 if (heap_limit > 0x02000000) {
-    heap_limit = 0x02000000;
+   heap_limit = 0x02000000;
 }
- t->heap_end = heap_limit;
- // 4. Initialize Allocator
+t->heap_end = heap_limit;
+// 4. Initialize Allocator
 if (heap_limit > t->heap_base) {
-    uint32_t actual_size = heap_limit - t->heap_base;
-    g_logFile << "InitHeap: Start=0x" << std::hex << t->heap_base
-              << " End=0x" << heap_limit << " Size=0x" << actual_size << std::dec << std::endl;
-     g_heap.initialize(t->heap_base, actual_size);
+   uint32_t actual_size = heap_limit - t->heap_base;
+   g_logFile << "InitHeap: Start=0x" << std::hex << t->heap_base
+             << " End=0x" << heap_limit << " Size=0x" << actual_size << std::dec << std::endl;
+    g_heap.initialize(t->heap_base, actual_size);
 } else {
-    return 0;
+   return 0;
 }
-      
+    
 return heap_limit;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -933,6 +1525,22 @@ return 0x02000000;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ============================================================================
 // THREAD LIFECYCLE
 // ============================================================================
@@ -944,12 +1552,12 @@ int32_t stack_size = memory::read<int32_t>(param_addr + 0x0C);
 uint32_t gp = memory::read<uint32_t>(param_addr + 0x10);
 int32_t priority = memory::read<int32_t>(param_addr + 0x14);
 uint32_t attr = memory::read<uint32_t>(param_addr + 0x1C);
- int tid = AllocateThreadSlot();
+int tid = AllocateThreadSlot();
 if (tid < 0) {
-    g_logFile << "Scheduler: CreateThread failed - no slots" << std::endl;
-    return -1;
+   g_logFile << "Scheduler: CreateThread failed - no slots" << std::endl;
+   return -1;
 }
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 t.status = THS_DORMANT;
 t.entry_func = func;
 t.stack_base = stack;
@@ -957,20 +1565,36 @@ t.stack_size = stack_size;
 t.gp_reg = gp;
 t.init_priority = priority;
 t.current_priority = priority;
- // Initialize context
+// Initialize context
 std::memset(&t.ctx, 0, sizeof(CpuContext));
 t.ctx.cpuRegs.pc = func;
 t.ctx.cpuRegs.GPR.r[28].UL[0] = gp;
 t.ctx.cpuRegs.GPR.r[29].UL[0] = (stack + stack_size) & ~0xF;
- // Inherit heap from parent
+// Inherit heap from parent
 if (current_thread_id_ > 0) {
-    t.heap_base = threads_[current_thread_id_].heap_base;
+   t.heap_base = threads_[current_thread_id_].heap_base;
 }
- g_logFile << "Scheduler: CreateThread id=" << tid
-          << " func=0x" << std::hex << func
-          << " prio=" << std::dec << priority << std::endl;
- return tid;
+g_logFile << "Scheduler: CreateThread id=" << tid
+         << " func=0x" << std::hex << func
+         << " prio=" << std::dec << priority << std::endl;
+return tid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -990,9 +1614,9 @@ if (current_thread_id_ > 0) {
 int PS2Scheduler::DeleteThread(int tid) {
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
 if (tid == current_thread_id_) return -1;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 if (t.status != THS_DORMANT) return -1;
- t.active = false;
+t.active = false;
 g_logFile << "Scheduler: DeleteThread id=" << tid << std::endl;
 return tid;
 }
@@ -1012,12 +1636,28 @@ return tid;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::StartThread(int tid, uint32_t arg, CpuContext& ctx) {
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
 if (tid == current_thread_id_) return -1;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 if (t.status != THS_DORMANT) return -1;
- // Reset context
+// Reset context
 t.ctx.cpuRegs.pc = t.entry_func;
 t.ctx.cpuRegs.GPR.r[4].UL[0] = arg;  // $a0
 t.ctx.cpuRegs.GPR.r[28].UL[0] = t.gp_reg;
@@ -1038,14 +1678,46 @@ t.ctx.cpuRegs.GPR.r[29].UL[0] = (t.stack_base + t.stack_size) & ~0xF;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if (!t.fiber_created) {
 #ifdef _WIN32
-    t.fiber = CreateFiber(1024 * 1024, FiberEntry, reinterpret_cast<void*>(tid));
+   t.fiber = CreateFiber(1024 * 1024, FiberEntry, reinterpret_cast<void*>(tid));
 #else
-    // LINUX STUFF
+   // LINUX STUFF
 #endif
-    t.fiber_created = true;
+   t.fiber_created = true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1064,7 +1736,7 @@ if (!t.fiber_created) {
 
 t.status = THS_READY;
 AddToReadyQueue(tid);
- g_logFile << "Scheduler: StartThread id=" << tid << std::endl;
+g_logFile << "Scheduler: StartThread id=" << tid << std::endl;
 Reschedule(ctx);
 return tid;
 }
@@ -1084,15 +1756,47 @@ return tid;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void PS2Scheduler::ExitThread(CpuContext& ctx) {
 if (current_thread_id_ <= 0) return;
- int tid = current_thread_id_;
+int tid = current_thread_id_;
 g_logFile << "Scheduler: ExitThread id=" << tid << std::endl;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 RemoveFromReadyQueue(tid);
 t.status = THS_DORMANT;
 t.wait_type = WAIT_NONE;
 t.needs_fiber_cleanup = true; // Mark fiber for cleanup after switching out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1127,17 +1831,49 @@ SwitchToFiber(scheduler_fiber_);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void PS2Scheduler::ExitDeleteThread(CpuContext& ctx) {
 if (current_thread_id_ <= 0) return;
- int tid = current_thread_id_;
+int tid = current_thread_id_;
 g_logFile << "Scheduler: ExitDeleteThread id=" << tid << std::endl;
- RemoveFromReadyQueue(tid);
+RemoveFromReadyQueue(tid);
 threads_[tid].active = false;
 threads_[tid].status = THS_DORMANT;
 threads_[tid].wait_type = WAIT_NONE;
 threads_[tid].needs_fiber_cleanup = true;
- SwitchToFiber(scheduler_fiber_);
+SwitchToFiber(scheduler_fiber_);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1157,7 +1893,7 @@ threads_[tid].needs_fiber_cleanup = true;
 int PS2Scheduler::TerminateThread(int tid, CpuContext& ctx) {
 int result = iTerminateThread(tid);
 if (result >= 0) {
-    Reschedule(ctx);
+   Reschedule(ctx);
 }
 return result;
 }
@@ -1177,21 +1913,37 @@ return result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iTerminateThread(int tid) {
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
- g_logFile << "Scheduler: iTerminateThread id=" << tid
-          << " status=" << t.status << std::endl;
- if (t.status == 0 || t.status == THS_RUN || t.status == THS_DORMANT) {
-    return -1;
+PS2Thread& t = threads_[tid];
+g_logFile << "Scheduler: iTerminateThread id=" << tid
+         << " status=" << t.status << std::endl;
+if (t.status == 0 || t.status == THS_RUN || t.status == THS_DORMANT) {
+   return -1;
 }
- if (t.status == THS_READY) {
-    RemoveFromReadyQueue(tid);
+if (t.status == THS_READY) {
+   RemoveFromReadyQueue(tid);
 }
- if ((t.status & THS_WAIT) && t.wait_type == WAIT_SEMA && t.sema_id > 0) {
-    RemoveFromSemaWaitQueue(t.sema_id, tid);
+if ((t.status & THS_WAIT) && t.wait_type == WAIT_SEMA && t.sema_id > 0) {
+   RemoveFromSemaWaitQueue(t.sema_id, tid);
 }
- t.status = THS_DORMANT;
+t.status = THS_DORMANT;
 t.wait_type = WAIT_NONE;
 
 
@@ -1209,11 +1961,43 @@ t.wait_type = WAIT_NONE;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if(t.fiber_created){
-    t.needs_fiber_cleanup = true;
+   t.needs_fiber_cleanup = true;
 }
 return tid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1236,10 +2020,26 @@ return tid;
 int PS2Scheduler::ChangeThreadPriority(int tid, int priority, CpuContext& ctx) {
 int result = iChangeThreadPriority(tid, priority);
 if (result >= 0) {
-    Reschedule(ctx);
+   Reschedule(ctx);
 }
 return result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1259,20 +2059,36 @@ return result;
 int PS2Scheduler::iChangeThreadPriority(int tid, int priority) {
 if (tid == 0) tid = current_thread_id_;
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 if (t.status == THS_DORMANT) return -1;
- int old_priority = t.current_priority;
- if (t.status == THS_READY) {
-    RemoveFromReadyQueue(tid);
-    t.current_priority = priority;
-    AddToReadyQueue(tid);
+int old_priority = t.current_priority;
+if (t.status == THS_READY) {
+   RemoveFromReadyQueue(tid);
+   t.current_priority = priority;
+   AddToReadyQueue(tid);
 } else {
-    t.current_priority = priority;
+   t.current_priority = priority;
 }
- g_logFile << "Scheduler: iChangeThreadPriority id=" << tid
-          << " " << old_priority << " -> " << priority << std::endl;
- return old_priority;
+g_logFile << "Scheduler: iChangeThreadPriority id=" << tid
+         << " " << old_priority << " -> " << priority << std::endl;
+return old_priority;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1292,7 +2108,7 @@ if (t.status == THS_DORMANT) return -1;
 int PS2Scheduler::RotateThreadReadyQueue(int priority, CpuContext& ctx) {
 int result = iRotateThreadReadyQueue(priority);
 if (result >= 0) {
-    Reschedule(ctx);
+   Reschedule(ctx);
 }
 return result;
 }
@@ -1312,23 +2128,55 @@ return result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iRotateThreadReadyQueue(int priority) {
 if (priority < 0 || priority >= MAX_PRIORITIES) return -1;
- PriorityQueue& q = ready_queues_[priority];
+PriorityQueue& q = ready_queues_[priority];
 if (q.head < 0 || q.head == q.tail) return priority;
- int old_head = q.head;
+int old_head = q.head;
 PS2Thread& t = threads_[old_head];
- q.head = t.next_id;
+q.head = t.next_id;
 if (q.head >= 0) {
-    threads_[q.head].prev_id = -1;
+   threads_[q.head].prev_id = -1;
 }
- t.prev_id = q.tail;
+t.prev_id = q.tail;
 t.next_id = -1;
 threads_[q.tail].next_id = old_head;
 q.tail = old_head;
- g_logFile << "Scheduler: iRotateThreadReadyQueue priority=" << priority << std::endl;
+g_logFile << "Scheduler: iRotateThreadReadyQueue priority=" << priority << std::endl;
 return priority;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1351,7 +2199,7 @@ return priority;
 int PS2Scheduler::ReleaseWaitThread(int tid, CpuContext& ctx) {
 int result = iReleaseWaitThread(tid);
 if (result >= 0) {
-    Reschedule(ctx);
+   Reschedule(ctx);
 }
 return result;
 }
@@ -1371,30 +2219,62 @@ return result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iReleaseWaitThread(int tid) {
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
- if (t.status == THS_WAIT) {
-    if (t.wait_type == WAIT_SEMA && t.sema_id > 0) {
-        RemoveFromSemaWaitQueue(t.sema_id, tid);
-    }
-    t.wait_type = WAIT_NONE;
-    t.sema_id = -1;
-    t.status = THS_READY;
-    AddToReadyQueue(tid);
-    return tid;
+PS2Thread& t = threads_[tid];
+if (t.status == THS_WAIT) {
+   if (t.wait_type == WAIT_SEMA && t.sema_id > 0) {
+       RemoveFromSemaWaitQueue(t.sema_id, tid);
+   }
+   t.wait_type = WAIT_NONE;
+   t.sema_id = -1;
+   t.status = THS_READY;
+   AddToReadyQueue(tid);
+   return tid;
 }
 else if (t.status == THS_WAITSUSPEND) {
-    if (t.wait_type == WAIT_SEMA && t.sema_id > 0) {
-        RemoveFromSemaWaitQueue(t.sema_id, tid);
-    }
-    t.wait_type = WAIT_NONE;
-    t.sema_id = -1;
-    t.status = THS_SUSPEND;
-    return tid;
+   if (t.wait_type == WAIT_SEMA && t.sema_id > 0) {
+       RemoveFromSemaWaitQueue(t.sema_id, tid);
+   }
+   t.wait_type = WAIT_NONE;
+   t.sema_id = -1;
+   t.status = THS_SUSPEND;
+   return tid;
 }
- return -1;
+return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1433,19 +2313,67 @@ return current_thread_id_;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::ReferThreadStatus(int tid, uint32_t status_addr) {
 if (tid == 0) tid = current_thread_id_;
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
- memory::write<int32_t>(status_addr + 0x00, t.status);
+PS2Thread& t = threads_[tid];
+memory::write<int32_t>(status_addr + 0x00, t.status);
 memory::write<uint32_t>(status_addr + 0x04, t.entry_func);
 memory::write<uint32_t>(status_addr + 0x08, t.stack_base);
 memory::write<int32_t>(status_addr + 0x0C, t.stack_size);
 memory::write<uint32_t>(status_addr + 0x10, t.gp_reg);
 memory::write<int32_t>(status_addr + 0x14, t.init_priority);
 memory::write<int32_t>(status_addr + 0x18, t.current_priority);
- return tid;
+return tid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1496,6 +2424,22 @@ g_logFile << "Scheduler: Starting main loop" << std::endl;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 while (true) {
 
 
@@ -1513,16 +2457,6 @@ while (true) {
 
 
 
-    // Clean
-    for (int i = 1; i < MAX_THREADS; i++) {
-        if ( threads_[i].needs_fiber_cleanup && threads_[i].fiber_created) {
-            g_logFile << "Cleaning up fiber for thread " << i << std::endl;
-            DeleteFiber(threads_[i].fiber);
-            threads_[i].fiber = nullptr;
-            threads_[i].fiber_created = false;
-            threads_[i].needs_fiber_cleanup = false;
-        }
-    }
 
 
 
@@ -1539,6 +2473,16 @@ while (true) {
 
 
 
+   // Clean
+   for (int i = 1; i < MAX_THREADS; i++) {
+       if ( threads_[i].needs_fiber_cleanup && threads_[i].fiber_created) {
+           g_logFile << "Cleaning up fiber for thread " << i << std::endl;
+           DeleteFiber(threads_[i].fiber);
+           threads_[i].fiber = nullptr;
+           threads_[i].fiber_created = false;
+           threads_[i].needs_fiber_cleanup = false;
+       }
+   }
 
 
 
@@ -1555,7 +2499,6 @@ while (true) {
 
 
 
-    CheckAndFireVBlank();
 
 
 
@@ -1564,11 +2507,6 @@ while (true) {
 
 
 
-    // Resume any suspended DMA chains — the game may have filled in
-    // the tag data since we last checked
-    if (g_dmac.HasSuspendedDma()) {
-        g_dmac.ResumeSuspendedDma();
-    }
 
 
 
@@ -1609,6 +2547,7 @@ while (true) {
 
 
 
+   CheckAndFireVBlank();
 
 
 
@@ -1617,12 +2556,6 @@ while (true) {
 
 
 
-    int next_tid = FindHighestPriorityThread();
-    if (next_tid < 0) {
-        g_logFile << "Scheduler: No ready threads, idling..." << std::endl;
-        Sleep(1);
-        continue;
-    }
 
 
 
@@ -1631,6 +2564,11 @@ while (true) {
 
 
 
+   // Resume any suspended DMA chains — the game may have filled in
+   // the tag data since we last checked
+   if (g_dmac.HasSuspendedDma()) {
+       g_dmac.ResumeSuspendedDma();
+   }
 
 
 
@@ -1639,13 +2577,155 @@ while (true) {
 
 
 
-    RemoveFromReadyQueue(next_tid);
-    threads_[next_tid].status = THS_RUN;
-    current_thread_id_ = next_tid;
-    g_logFile << "Scheduler: Switching to thread " << next_tid << std::endl;
-    SwitchToFiber(threads_[next_tid].fiber);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   int next_tid = FindHighestPriorityThread();
+   if (next_tid < 0) {
+       g_logFile << "Scheduler: No ready threads, idling..." << std::endl;
+       Sleep(1);
+       continue;
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   RemoveFromReadyQueue(next_tid);
+   threads_[next_tid].status = THS_RUN;
+   current_thread_id_ = next_tid;
+   g_logFile << "Scheduler: Switching to thread " << next_tid << std::endl;
+   SwitchToFiber(threads_[next_tid].fiber);
 }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1667,13 +2747,29 @@ while (true) {
 // ============================================================================
 void PS2Scheduler::SleepThread(CpuContext& ctx) {
 if (current_thread_id_ <= 0) return;
- PS2Thread& t = threads_[current_thread_id_];
- g_logFile << "Scheduler: SleepThread id=" << current_thread_id_
-          << " wakeup_count=" << t.wakeup_count << std::endl;
- if (t.wakeup_count > 0) {
-    t.wakeup_count--;
-    return;
+PS2Thread& t = threads_[current_thread_id_];
+g_logFile << "Scheduler: SleepThread id=" << current_thread_id_
+         << " wakeup_count=" << t.wakeup_count << std::endl;
+if (t.wakeup_count > 0) {
+   t.wakeup_count--;
+   return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1710,7 +2806,39 @@ Reschedule(ctx);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1730,7 +2858,7 @@ Reschedule(ctx);
 int PS2Scheduler::WakeupThread(int tid, CpuContext& ctx) {
 int result = iWakeupThread(tid);
 if (result >= 0) {
-    Reschedule(ctx);
+   Reschedule(ctx);
 }
 return result;
 }
@@ -1750,29 +2878,61 @@ return result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iWakeupThread(int tid) {
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
- g_logFile << "Scheduler: iWakeupThread id=" << tid
-          << " status=" << t.status << " wait_type=" << t.wait_type << std::endl;
- if (t.status == THS_WAIT && t.wait_type == WAIT_SLEEP) {
-    t.status = THS_READY;
-    t.wait_type = WAIT_NONE;
-    AddToReadyQueue(tid);
-    return tid;
+PS2Thread& t = threads_[tid];
+g_logFile << "Scheduler: iWakeupThread id=" << tid
+         << " status=" << t.status << " wait_type=" << t.wait_type << std::endl;
+if (t.status == THS_WAIT && t.wait_type == WAIT_SLEEP) {
+   t.status = THS_READY;
+   t.wait_type = WAIT_NONE;
+   AddToReadyQueue(tid);
+   return tid;
 }
 else if (t.status == THS_WAITSUSPEND && t.wait_type == WAIT_SLEEP) {
-    t.status = THS_SUSPEND;
-    t.wait_type = WAIT_NONE;
-    return tid;
+   t.status = THS_SUSPEND;
+   t.wait_type = WAIT_NONE;
+   return tid;
 }
 else if (t.status == THS_READY || t.status == THS_SUSPEND ||
-         ((t.status & THS_WAIT) && t.wait_type == WAIT_SEMA)) {
-    t.wakeup_count++;
-    return tid;
+        ((t.status & THS_WAIT) && t.wait_type == WAIT_SEMA)) {
+   t.wakeup_count++;
+   return tid;
 }
- return -1;
+return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1808,14 +2968,46 @@ return iCancelWakeupThread(tid);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iCancelWakeupThread(int tid) {
 if (tid == 0) tid = current_thread_id_;
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
+PS2Thread& t = threads_[tid];
 int old_count = t.wakeup_count;
 t.wakeup_count = 0;
- return old_count;
+return old_count;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1855,22 +3047,54 @@ return iSuspendThread(tid);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iSuspendThread(int tid) {
 if (tid == 0) tid = current_thread_id_;
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
- g_logFile << "Scheduler: iSuspendThread id=" << tid << " status=" << t.status << std::endl;
- if (t.status == THS_READY || t.status == THS_RUN) {
-    RemoveFromReadyQueue(tid);
-    t.status = THS_SUSPEND;
-    return tid;
+PS2Thread& t = threads_[tid];
+g_logFile << "Scheduler: iSuspendThread id=" << tid << " status=" << t.status << std::endl;
+if (t.status == THS_READY || t.status == THS_RUN) {
+   RemoveFromReadyQueue(tid);
+   t.status = THS_SUSPEND;
+   return tid;
 }
 else if (t.status == THS_WAIT) {
-    t.status = THS_WAITSUSPEND;
-    return tid;
+   t.status = THS_WAITSUSPEND;
+   return tid;
 }
- return -1;
+return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1890,7 +3114,7 @@ else if (t.status == THS_WAIT) {
 int PS2Scheduler::ResumeThread(int tid, CpuContext& ctx) {
 int result = iResumeThread(tid);
 if (result >= 0) {
-    Reschedule(ctx);
+   Reschedule(ctx);
 }
 return result;
 }
@@ -1910,21 +3134,53 @@ return result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iResumeThread(int tid) {
 if (tid <= 0 || tid >= MAX_THREADS || !threads_[tid].active) return -1;
- PS2Thread& t = threads_[tid];
- g_logFile << "Scheduler: iResumeThread id=" << tid << " status=" << t.status << std::endl;
- if (t.status == THS_SUSPEND) {
-    t.status = THS_READY;
-    AddToReadyQueue(tid);
-    return tid;
+PS2Thread& t = threads_[tid];
+g_logFile << "Scheduler: iResumeThread id=" << tid << " status=" << t.status << std::endl;
+if (t.status == THS_SUSPEND) {
+   t.status = THS_READY;
+   AddToReadyQueue(tid);
+   return tid;
 }
 else if (t.status == THS_WAITSUSPEND) {
-    t.status = THS_WAIT;
-    return tid;
+   t.status = THS_WAIT;
+   return tid;
 }
- return -1;
+return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1965,12 +3221,44 @@ return 1;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::EnableDispatchThread(CpuContext& ctx) {
 g_logFile << "Scheduler: EnableDispatchThread" << std::endl;
 dispatch_enabled_ = true;
 Reschedule(ctx);
 return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1995,12 +3283,12 @@ int32_t init_count = memory::read<int32_t>(param_addr + 0x08);
 int32_t max_count = memory::read<int32_t>(param_addr + 0x04);
 uint32_t attr = memory::read<uint32_t>(param_addr + 0x00);
 uint32_t option = memory::read<uint32_t>(param_addr + 0x0C);
- int sid = AllocateSemaSlot();
+int sid = AllocateSemaSlot();
 if (sid < 0) {
-    g_logFile << "Scheduler: CreateSema failed - no slots" << std::endl;
-    return -1;
+   g_logFile << "Scheduler: CreateSema failed - no slots" << std::endl;
+   return -1;
 }
- PS2Semaphore& s = semaphores_[sid];
+PS2Semaphore& s = semaphores_[sid];
 s.active = true;
 s.init_count = init_count;
 s.count = init_count;
@@ -2010,10 +3298,26 @@ s.option = option;
 s.wait_threads = 0;
 s.wait_head = -1;
 s.wait_tail = -1;
- g_logFile << "Scheduler: CreateSema id=" << sid
-          << " init=" << init_count << " max=" << max_count << std::endl;
- return sid;
+g_logFile << "Scheduler: CreateSema id=" << sid
+         << " init=" << init_count << " max=" << max_count << std::endl;
+return sid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2032,27 +3336,27 @@ s.wait_tail = -1;
 
 int PS2Scheduler::DeleteSema(int sid, CpuContext& ctx) {
 if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
- PS2Semaphore& s = semaphores_[sid];
- g_logFile << "Scheduler: DeleteSema id=" << sid
-          << " wait_threads=" << s.wait_threads << std::endl;
- // Wake all waiting threads
+PS2Semaphore& s = semaphores_[sid];
+g_logFile << "Scheduler: DeleteSema id=" << sid
+         << " wait_threads=" << s.wait_threads << std::endl;
+// Wake all waiting threads
 int tid = s.wait_head;
 while (tid >= 0) {
-    PS2Thread& t = threads_[tid];
-    int next = t.sema_wait_next;
-     t.sema_id = -1;
-    t.wait_type = WAIT_NONE;
-     if (t.status == THS_WAIT) {
-        t.status = THS_READY;
-        AddToReadyQueue(tid);
-    } else if (t.status == THS_WAITSUSPEND) {
-        t.status = THS_SUSPEND;
-    }
-     t.sema_wait_prev = -1;
-    t.sema_wait_next = -1;
-    tid = next;
+   PS2Thread& t = threads_[tid];
+   int next = t.sema_wait_next;
+    t.sema_id = -1;
+   t.wait_type = WAIT_NONE;
+    if (t.status == THS_WAIT) {
+       t.status = THS_READY;
+       AddToReadyQueue(tid);
+   } else if (t.status == THS_WAITSUSPEND) {
+       t.status = THS_SUSPEND;
+   }
+    t.sema_wait_prev = -1;
+   t.sema_wait_next = -1;
+   tid = next;
 }
- s.active = false;
+s.active = false;
 Reschedule(ctx);
 return sid;
 }
@@ -2072,11 +3376,27 @@ return sid;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::SignalSema(int sid, CpuContext& ctx) {
 int result = iSignalSema(sid);
 if (result == -2) {
-    Reschedule(ctx);
-    return sid;
+   Reschedule(ctx);
+   return sid;
 }
 return result;
 }
@@ -2096,41 +3416,73 @@ return result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iSignalSema(int sid) {
 if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
- PS2Semaphore& s = semaphores_[sid];
- g_logFile << "Scheduler: iSignalSema id=" << sid
-          << " count=" << s.count << " waiters=" << s.wait_threads << std::endl;
- if (s.wait_head >= 0) {
-    int tid = s.wait_head;
-    PS2Thread& t = threads_[tid];
-     // Remove from wait queue
-    s.wait_head = t.sema_wait_next;
-    if (s.wait_head >= 0) {
-        threads_[s.wait_head].sema_wait_prev = -1;
-    } else {
-        s.wait_tail = -1;
-    }
-    t.sema_wait_prev = -1;
-    t.sema_wait_next = -1;
-    s.wait_threads--;
-     t.sema_id = -1;
-    t.wait_type = WAIT_NONE;
-     if (t.status == THS_WAIT) {
-        t.status = THS_READY;
-        AddToReadyQueue(tid);
-    } else if (t.status == THS_WAITSUSPEND) {
-        t.status = THS_SUSPEND;
-    }
-     g_logFile << "Scheduler: iSignalSema woke thread " << tid << std::endl;
-    return -2;  // Thread released
+PS2Semaphore& s = semaphores_[sid];
+g_logFile << "Scheduler: iSignalSema id=" << sid
+         << " count=" << s.count << " waiters=" << s.wait_threads << std::endl;
+if (s.wait_head >= 0) {
+   int tid = s.wait_head;
+   PS2Thread& t = threads_[tid];
+    // Remove from wait queue
+   s.wait_head = t.sema_wait_next;
+   if (s.wait_head >= 0) {
+       threads_[s.wait_head].sema_wait_prev = -1;
+   } else {
+       s.wait_tail = -1;
+   }
+   t.sema_wait_prev = -1;
+   t.sema_wait_next = -1;
+   s.wait_threads--;
+    t.sema_id = -1;
+   t.wait_type = WAIT_NONE;
+    if (t.status == THS_WAIT) {
+       t.status = THS_READY;
+       AddToReadyQueue(tid);
+   } else if (t.status == THS_WAITSUSPEND) {
+       t.status = THS_SUSPEND;
+   }
+    g_logFile << "Scheduler: iSignalSema woke thread " << tid << std::endl;
+   return -2;  // Thread released
 }
- s.count++;
+s.count++;
 if (s.count > s.max_count) {
-    s.count = s.max_count;
+   s.count = s.max_count;
 }
- return sid;
+return sid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2165,8 +3517,40 @@ if(!g_intc.IsEnabled(cause)) return;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 auto it = g_intc_queues.find(cause);
 if(it == g_intc_queues.end() || it->second.empty()) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2217,9 +3601,41 @@ memset(&irq_ctx, 0, sizeof(CpuContext));
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 for (const auto& handler : it->second) {
-    if(!handler.active) continue;
-    g_logFile << "DispatchIntHandler: Dispatching handler for cause " << cause << std::endl;
+   if(!handler.active) continue;
+   g_logFile << "DispatchIntHandler: Dispatching handler for cause " << cause << std::endl;
 
 
 
@@ -2236,8 +3652,6 @@ for (const auto& handler : it->second) {
 
 
 
-    irq_ctx.cpuRegs.GPR.r[4].SL[0] = handler.cause;
-    irq_ctx.cpuRegs.GPR.r[28].UL[0] = handler.gp;
 
 
 
@@ -2254,13 +3668,8 @@ for (const auto& handler : it->second) {
 
 
 
-    auto func_it = recompiled_functions.find(handler.handler_pc);
-    if(func_it != recompiled_functions.end()){
-        func_it->second(irq_ctx, handler.handler_pc);
-    }
-    else{
-        dynamic_decode_and_execute(handler.handler_pc, irq_ctx);
-    }
+   irq_ctx.cpuRegs.GPR.r[4].SL[0] = handler.cause;
+   irq_ctx.cpuRegs.GPR.r[28].UL[0] = handler.gp;
 
 
 
@@ -2277,7 +3686,78 @@ for (const auto& handler : it->second) {
 
 
 
-    if (irq_ctx.cpuRegs.GPR.r[2].SL[0] == -1) break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   auto func_it = recompiled_functions.find(handler.handler_pc);
+   if(func_it != recompiled_functions.end()){
+       func_it->second(irq_ctx, handler.handler_pc);
+   }
+   else{
+       dynamic_decode_and_execute(handler.handler_pc, irq_ctx);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   if (irq_ctx.cpuRegs.GPR.r[2].SL[0] == -1) break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2296,6 +3776,22 @@ for (const auto& handler : it->second) {
 
 }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2331,7 +3827,39 @@ auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(now - la
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if (elapsed_us < 1000) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2366,9 +3894,57 @@ int64_t scanlines_elapsed = (elapsed_us * 147) / 9370;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if (scanlines_elapsed > 524){
-    scanlines_elapsed = 524;
+   scanlines_elapsed = 524;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2402,48 +3978,63 @@ if (scanlines_elapsed > 524){
 
 
 for (int64_t s = 0; s < scanlines_elapsed; s++){
-    current_scanline_++;
-    if (current_scanline_ == 240 && !in_vblank_) {
-        in_vblank_ = true;
-        vblank_count_++;
-        DispatchIntHandler(2); // VBlank interrupt
-        g_intc.RaiseInterrupt(INTC_VBON);
+   current_scanline_++;
+   if (current_scanline_ == 240 && !in_vblank_) {
+       in_vblank_ = true;
+       vblank_count_++;
+       DispatchIntHandler(2); // VBlank interrupt
+       g_intc.RaiseInterrupt(INTC_VBON);
 
 
 
 
-        // Fire Timer 0 interrupt (INTC cause 9) every VBlank.
-        // The game registers a Timer 0 handler at init that drives its
-        // internal clock. Without this, the game's state machine never
-        // advances because it thinks no time has passed.
-        DispatchIntHandler(9);  // Timer 0 interrupt
-        g_intc.RaiseInterrupt(9);  // INTC_TIM0
 
 
-        // Timer 2 (INTC cause 11) — the game registers its main frame-sync
-        // handler on Timer 2 (AddIntcHandler cause=11 handler=0x2d5898).
-        // This handler signals the semaphore that wakes the main thread.
-        // Without this, the main thread blocks on WaitSema forever.
-        DispatchIntHandler(11); // Timer 2 interrupt
-        g_intc.RaiseInterrupt(INTC_TIM2);
-        // RC2 FIX: Push VSync render job so SDL_RenderPresent fires every frame
-        if (!vsync_pushed_this_frame_) {
-            RenderJob vsync_job;
-            vsync_job.type = RenderCommandType::VSync;
-            g_renderQueue.Push(vsync_job);
-            vsync_pushed_this_frame_ = true;
-            g_logFile << "[VSYNC-FIX] Pushed VSync render job, vblank_count=" << vblank_count_ << std::endl;
-        }
-    }
-    else if (current_scanline_ >= 262) {
-        if (in_vblank_){
-            DispatchIntHandler(3); // VBlank end interrupt
-            g_intc.RaiseInterrupt(INTC_VBOF);
-            in_vblank_ = false;
-        }
-        current_scanline_ = 0;
-        vsync_pushed_this_frame_ = false;
-    }
+
+
+       // Fire Timer 0 interrupt (INTC cause 9) every VBlank.
+       // The game registers a Timer 0 handler at init that drives its
+       // internal clock. Without this, the game's state machine never
+       // advances because it thinks no time has passed.
+       DispatchIntHandler(9);  // Timer 0 interrupt
+       g_intc.RaiseInterrupt(9);  // INTC_TIM0
+
+
+
+
+       // Timer 2 (INTC cause 11) — the game registers its main frame-sync
+       // handler on Timer 2 (AddIntcHandler cause=11 handler=0x2d5898).
+       // This handler signals the semaphore that wakes the main thread.
+       // Without this, the main thread blocks on WaitSema forever.
+       DispatchIntHandler(11); // Timer 2 interrupt
+       g_intc.RaiseInterrupt(INTC_TIM2);
+
+
+       // HLE: The Timer 2 handler's job is to signal semaphore 1 (the
+       // VBlank wait semaphore) via iSignalSema. The recompiled handler
+       // runs but its syscall dispatch doesn't work in the interrupt
+       // context (blank irq_ctx). Directly signal it here as HLE.
+       iSignalSema(1);
+
+
+       // RC2 FIX: Push VSync render job so SDL_RenderPresent fires every frame
+       if (!vsync_pushed_this_frame_) {
+           RenderJob vsync_job;
+           vsync_job.type = RenderCommandType::VSync;
+           g_renderQueue.Push(vsync_job);
+           vsync_pushed_this_frame_ = true;
+           g_logFile << "[VSYNC-FIX] Pushed VSync render job, vblank_count=" << vblank_count_ << std::endl;
+       }
+   }
+   else if (current_scanline_ >= 262) {
+       if (in_vblank_){
+           DispatchIntHandler(3); // VBlank end interrupt
+           g_intc.RaiseInterrupt(INTC_VBOF);
+           in_vblank_ = false;
+       }
+       current_scanline_ = 0;
+       vsync_pushed_this_frame_ = false;
+   }
 }
 
 
@@ -2477,7 +4068,55 @@ for (int64_t s = 0; s < scanlines_elapsed; s++){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2496,12 +4135,28 @@ for (int64_t s = 0; s < scanlines_elapsed; s++){
 
 int PS2Scheduler::WaitSema(int sid, CpuContext& ctx) {
 if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
- PS2Semaphore& s = semaphores_[sid];
- g_logFile << "Scheduler: WaitSema id=" << sid << " count=" << s.count << std::endl;
- if (s.count > 0) {
-    s.count--;
-    return sid;
+PS2Semaphore& s = semaphores_[sid];
+g_logFile << "Scheduler: WaitSema id=" << sid << " count=" << s.count << std::endl;
+if (s.count > 0) {
+   s.count--;
+   return sid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2520,9 +4175,9 @@ if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
 
 bool any_alive = false;
 for (int i = 1; i < MAX_THREADS; i++) {
-    if (i == current_thread_id_) continue;
-    if (!threads_[i].active) continue;
-    if (threads_[i].status != THS_DORMANT) continue;
+   if (i == current_thread_id_) continue;
+   if (!threads_[i].active) continue;
+   if (threads_[i].status != THS_DORMANT) continue;
 
 
 
@@ -2539,9 +4194,41 @@ for (int i = 1; i < MAX_THREADS; i++) {
 
 
 
-    any_alive = true;
-    break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   any_alive = true;
+   break;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2559,9 +4246,25 @@ for (int i = 1; i < MAX_THREADS; i++) {
 
 
 if(!any_alive && FindHighestPriorityThread() < 0){
-    g_logFile << "Scheduler: WaitSema TRUE deadlock on sema: " << sid <<
-        " no other threads alive" << std::endl;
-    return sid;
+   g_logFile << "Scheduler: WaitSema TRUE deadlock on sema: " << sid <<
+       " no other threads alive" << std::endl;
+   return sid;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2579,16 +4282,32 @@ if(!any_alive && FindHighestPriorityThread() < 0){
 
 
 }
- // Normal blocking path - there are other threads to run
+// Normal blocking path - there are other threads to run
 PS2Thread& t = threads_[current_thread_id_];
 RemoveFromReadyQueue(current_thread_id_);
 t.status = THS_WAIT;
 t.wait_type = WAIT_SEMA;
 t.sema_id = sid;
 AddToSemaWaitQueue(sid, current_thread_id_);
- Reschedule(ctx);
- return sid;
+Reschedule(ctx);
+return sid;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2624,15 +4343,47 @@ return iPollSema(sid);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int PS2Scheduler::iPollSema(int sid) {
 if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
- PS2Semaphore& s = semaphores_[sid];
- if (s.count > 0) {
-    s.count--;
-    return sid;
+PS2Semaphore& s = semaphores_[sid];
+if (s.count > 0) {
+   s.count--;
+   return sid;
 }
- return -1;  // Would block
+return -1;  // Would block
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2652,6 +4403,22 @@ if (sid <= 0 || sid >= MAX_SEMAPHORES || !semaphores_[sid].active) return -1;
 // ============================================================================
 // SYSCALL WRAPPERS
 // ============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2689,11 +4456,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = tid;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_DeleteThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.DeleteThread(tid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2732,6 +4531,22 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_ExitThread(CpuContext& ctx) {
 g_scheduler.ExitThread(ctx);
 }
@@ -2751,9 +4566,41 @@ g_scheduler.ExitThread(ctx);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_ExitDeleteThread(CpuContext& ctx) {
 g_scheduler.ExitDeleteThread(ctx);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2791,11 +4638,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iTerminateThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iTerminateThread(tid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2832,10 +4711,42 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_EnableDispatchThread(CpuContext& ctx) {
 int result = g_scheduler.EnableDispatchThread(ctx);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2874,12 +4785,44 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iChangeThreadPriority(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int priority = ctx.cpuRegs.GPR.r[5].SL[0];
 int result = g_scheduler.iChangeThreadPriority(tid, priority);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2917,11 +4860,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iRotateThreadReadyQueue(CpuContext& ctx) {
 int priority = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iRotateThreadReadyQueue(priority);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2959,6 +4934,22 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iReleaseWaitThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iReleaseWaitThread(tid);
@@ -2980,9 +4971,41 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_GetThreadId(CpuContext& ctx) {
 ctx.cpuRegs.GPR.r[2].SL[0] = g_scheduler.GetThreadId();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3021,6 +5044,22 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iReferThreadStatus(CpuContext& ctx) {
 Syscall_ReferThreadStatus(ctx);
 }
@@ -3040,9 +5079,41 @@ Syscall_ReferThreadStatus(ctx);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_SleepThread(CpuContext& ctx) {
 g_scheduler.SleepThread(ctx);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3080,11 +5151,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iWakeupThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iWakeupThread(tid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3122,11 +5225,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iCancelWakeupThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iCancelWakeupThread(tid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3165,11 +5300,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iSuspendThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iSuspendThread(tid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3207,11 +5374,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iResumeThread(CpuContext& ctx) {
 int tid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iResumeThread(tid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3234,9 +5433,25 @@ uint32_t stack = ctx.cpuRegs.GPR.r[5].UL[0];
 int32_t stack_size = ctx.cpuRegs.GPR.r[6].SL[0];
 uint32_t args = ctx.cpuRegs.GPR.r[7].UL[0];
 int32_t root = ctx.cpuRegs.GPR.r[8].SL[0];
- uint32_t sp = g_scheduler.InitMainThread(gp, stack, stack_size, args, root, ctx);
+uint32_t sp = g_scheduler.InitMainThread(gp, stack, stack_size, args, root, ctx);
 ctx.cpuRegs.GPR.r[2].UL[0] = sp;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3258,7 +5473,7 @@ g_logFile << "Syscall: InitHeap()" << std::endl;
 printf("Syscall: InitHeap()\n");
 uint32_t heap = ctx.cpuRegs.GPR.r[4].UL[0];
 int32_t heap_size = ctx.cpuRegs.GPR.r[5].SL[0];
- uint32_t heap_end = g_scheduler.InitHeap(heap, heap_size, ctx);
+uint32_t heap_end = g_scheduler.InitHeap(heap, heap_size, ctx);
 ctx.cpuRegs.GPR.r[2].UL[0] = heap_end;
 }
 void Syscall_EndOfHeap(CpuContext& ctx) {
@@ -3267,6 +5482,22 @@ g_logFile << "Syscall: EndOfHeap() returning 0x" << std::hex << current_heap << 
 printf("Syscall: EndOfHeap() returning 0x%X\n", current_heap);
 ctx.cpuRegs.GPR.r[2].UL[0] = current_heap;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3304,11 +5535,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = sid;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_DeleteSema(CpuContext& ctx) {
 int sid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.DeleteSema(sid, ctx);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3346,11 +5609,43 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iSignalSema(CpuContext& ctx) {
 int sid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iSignalSema(sid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3388,6 +5683,22 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_PollSema(CpuContext& ctx) {
 int sid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.PollSema(sid);
@@ -3409,11 +5720,33 @@ ctx.cpuRegs.GPR.r[2].SL[0] = result;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Syscall_iPollSema(CpuContext& ctx) {
 int sid = ctx.cpuRegs.GPR.r[4].SL[0];
 int result = g_scheduler.iPollSema(sid);
 ctx.cpuRegs.GPR.r[2].SL[0] = result;
 }
+
+
+
+
+
+
 
 
 
