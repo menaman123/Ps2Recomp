@@ -10184,10 +10184,11 @@ void Recompiler::translate_instruction(const rabbitizer::InstructionR5900& instr
         case RABBITIZER_INSTR_ID_cpu_slti:
             // slti rt, rs, immediate - Set on Less Than Immediate (Signed)
             // if GPR[rs] < sign_extended(immediate) then GPR[rt] = 1 else GPR[rt] = 0
+            // R5900 compares full 64-bit signed values
             file << "    // slti - Set on Less Than Immediate (Signed)\n";
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = (" 
-                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < " 
-                << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ") ? 1 : 0;\n";
+                << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SD[0] < " 
+                << "static_cast<int64_t>(" << format_imm(static_cast<int16_t>(instr.Get_immediate())) << ")) ? 1 : 0;\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_lwc1:
             // lwc1 ft, offset(base) - Load Word to FPU
@@ -11188,7 +11189,9 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[1];\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_sltiu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] < " << format_imm(static_cast<uint16_t>(instr.Get_immediate())) << ") ? 1 : 0;\n";
+            // sltiu compares full 64-bit unsigned values on R5900
+            // immediate is sign-extended to 64 bits then compared unsigned
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] < static_cast<uint64_t>(static_cast<int64_t>(" << format_imm(static_cast<int16_t>(instr.Get_immediate())) << "))) ? 1 : 0;\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_psubb:
             // psubb rd, rs, rt - Parallel Subtract Byte (16 x 8-bit)
@@ -11439,15 +11442,16 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             break;
         }
         case RABBITIZER_INSTR_ID_cpu_sltu:
-            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UL[0] < " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UL[0]) ? 1 : 0;\n";
+            // sltu compares full 64-bit GPR values on R5900
+            file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = (" << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".UD[0] < " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".UD[0]) ? 1 : 0;\n";
             break;
         case RABBITIZER_INSTR_ID_cpu_slt:
             // Set on Less Than (Signed)
-            // We use .SL[0] to enforce a signed comparison between registers.
+            // slt compares full 64-bit GPR values (signed) on R5900
             file << "    // slt - Set on Less Than (Signed)\n";
             file << "    " << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rd())) << ".UD[0] = (" 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SL[0] < " 
-                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SL[0]) ? 1 : 0;\n";
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rs())) << ".SD[0] < " 
+                 << get_gpr_name(static_cast<uint8_t>(instr.GetO32_rt())) << ".SD[0]) ? 1 : 0;\n";
             break;
         case RABBITIZER_INSTR_ID_r5900_lq:
             file << "    // lq instruction - 128-bit load\n";
@@ -11883,16 +11887,3 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
