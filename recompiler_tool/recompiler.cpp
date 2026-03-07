@@ -510,6 +510,35 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
         }
 
 
+        else if (func.base_address == 0x00259af0) {
+            // Diagnostic wrapper for FUN_00259af0 - Animation Channel Lookup
+            // Called by FUN_00172d88 to find which animation channel matches a mask
+            file << "    recompiled_functions[0x259af0] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        uint32_t a0 = ctx.cpuRegs.GPR.r[4].UL[0];\n";
+            file << "        uint64_t a1 = ctx.cpuRegs.GPR.r[5].UD[0];\n";
+            file << "        g_logFile << \"[259af0-DIAG] ENTER anim_base=0x\" << std::hex << a0\n";
+            file << "                  << \" channel_mask=0x\" << a1 << std::endl;\n";
+            file << "        FUN_00259af0(ctx);\n";
+            file << "        int32_t ret = ctx.cpuRegs.GPR.r[2].SL[0];\n";
+            file << "        g_logFile << \"[259af0-DIAG] RETURN v0=\" << std::dec << ret;\n";
+            file << "        if (ret >= 0) {\n";
+            file << "            uint32_t p1 = a0 - 0x5d0;\n"; // recover param_1 from anim_base
+            file << "            uint32_t ptr_addr = p1 + ret * 4 + 0x7d8;\n";
+            file << "            uint32_t anim_ptr = memory::read<uint32_t>(ptr_addr);\n";
+            file << "            uint32_t anim_state = memory::read<uint32_t>(anim_ptr);\n";
+            file << "            g_logFile << \" ptr_addr=0x\" << std::hex << ptr_addr\n";
+            file << "                      << \" anim_ptr=0x\" << anim_ptr\n";
+            file << "                      << \" anim_state=0x\" << anim_state\n";
+            file << "                      << \" (state&0xf=\" << (anim_state & 0xf) << \")\";\n";
+            file << "        }\n";
+            file << "        g_logFile << std::endl;\n";
+            file << "    };\n";
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x259af0]});\n";
+        }
+
+
         else {
             // Standard generation for all other functions
             file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); };\n";
@@ -11888,4 +11917,5 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
