@@ -1181,7 +1181,9 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 ctx.cpuRegs.GPR.r[5].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x10);
                 
                 {
-                    uint64_t mask = 0x17fffffffULL; 
+                    // Ghidra: *param_1 = *param_1 & 0xffffffff7fffffff | (long)bVar1 << 0x1f
+                    // Clear bit 31, then set it from bVar1 (r[2] & 1)
+                    uint64_t mask = 0xffffffff7fffffffULL;
                     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & mask;
                     uint64_t v0_shifted = (uint64_t)ctx.cpuRegs.GPR.r[2].UL[0] << 31;
                     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] | v0_shifted;
@@ -11749,6 +11751,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
 
 
