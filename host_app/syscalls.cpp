@@ -681,9 +681,32 @@ void sceSifSetDma(CpuContext& ctx) {
             uint32_t client_data_addr = memory::read<uint32_t>(packet_addr + 0x1C);
             uint32_t server_id        = memory::read<uint32_t>(packet_addr + 0x20);
             
-            g_logFile << "    [SIF] Bind Request: Server 0x" << std::hex << server_id 
-                      << " (" << sif_bind_rpc::GetServerName(server_id) << ")"
-                      << " Client: 0x" << client_data_addr << std::dec << std::endl;
+            g_logFile << "    [SIF-BIND-DMA] ========== BIND VIA SIF DMA ==========" << std::endl;
+            g_logFile << "    [SIF-BIND-DMA] packet_addr=0x" << std::hex << packet_addr << std::endl;
+            g_logFile << "    [SIF-BIND-DMA] client_data_addr=0x" << client_data_addr << std::endl;
+            g_logFile << "    [SIF-BIND-DMA] server_id=0x" << server_id 
+                      << " (" << sif_bind_rpc::GetServerName(server_id) << ")" << std::endl;
+            
+            // Dump the full SIF packet to see what's really in there
+            g_logFile << "    [SIF-BIND-DMA] Full packet dump:" << std::endl;
+            for (int i = 0; i < 0x30; i += 4) {
+                g_logFile << "      [+" << std::hex << i << "] = 0x" 
+                          << memory::read<uint32_t>(packet_addr + i) << std::endl;
+            }
+            
+            // Check if this client was already bound by hle_sceSifBindRpc
+            sif_bind_rpc::BoundClient* existing = sif_bind_rpc::FindBindingByClient(client_data_addr);
+            if (existing) {
+                g_logFile << "    [SIF-BIND-DMA] WARNING: Client 0x" << client_data_addr 
+                          << " already bound to server 0x" << existing->server_id 
+                          << " via HLE! DMA bind server_id=0x" << server_id 
+                          << " may be STALE/WRONG" << std::endl;
+            }
+            
+            // Also check what's currently at client+0x24 (the server handle)
+            uint32_t current_handle = memory::read<uint32_t>(client_data_addr + 0x24);
+            g_logFile << "    [SIF-BIND-DMA] Current client+0x24 handle=0x" << current_handle << std::endl;
+            g_logFile << "    [SIF-BIND-DMA] ========================================" << std::dec << std::endl;
 
             if (client_data_addr != 0) {
                 uint32_t fake_server_ptr = 0xDEAD0000 | (server_id & 0xFFFF);
@@ -720,11 +743,20 @@ void sceSifSetDma(CpuContext& ctx) {
             sif_bind_rpc::BoundClient* binding = sif_bind_rpc::FindBindingByClient(rpc.client_data_addr);
             if (binding) {
                 rpc.server_id = binding->server_id;
+                g_logFile << "    [SIF-RPC-RESOLVE] Found binding: client=0x" << std::hex 
+                          << rpc.client_data_addr << " -> server=0x" << rpc.server_id 
+                          << " (from tracker)" << std::dec << std::endl;
             } else {
+                g_logFile << "    [SIF-RPC-RESOLVE] No binding found for client=0x" << std::hex 
+                          << rpc.client_data_addr << ", using fallback" << std::dec << std::endl;
                 // Fallback: reconstruct from fake handle
                 uint32_t server_handle = memory::read<uint32_t>(rpc.client_data_addr + 0x24);
+                g_logFile << "    [SIF-RPC-RESOLVE] client+0x24 handle=0x" << std::hex 
+                          << server_handle << std::dec << std::endl;
                 if ((server_handle & 0xFFFF0000) == 0xDEAD0000) {
                     uint16_t low = server_handle & 0xFFFF;
+                    g_logFile << "    [SIF-RPC-RESOLVE] DEAD handle, low=0x" << std::hex 
+                              << low << std::dec << std::endl;
                     // System servers have bit 31 set in the real ID
                     // Our fake handles store only the low 16 bits
                     // If the low bits are >= 0x0001, reconstruct as system server
@@ -737,9 +769,8 @@ void sceSifSetDma(CpuContext& ctx) {
                         if (low == 0x2345) rpc.server_id = 0x00012345;
                     }
                 }
-                g_logFile << "    [SIF WARNING] Fallback server resolve: handle=0x" 
-                          << std::hex << server_handle << " -> server=0x" 
-                          << rpc.server_id << std::dec << std::endl;
+                g_logFile << "    [SIF-RPC-RESOLVE] Fallback result: server=0x" 
+                          << std::hex << rpc.server_id << std::dec << std::endl;
             }
             
             // Dispatch to the appropriate handler
@@ -2492,4 +2523,5 @@ void runtime_syscall_dispatcher(uint32_t syscall_num, CpuContext& ctx) {
             exit(1);
     }
 }
+
 
