@@ -1385,9 +1385,14 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 // [DIAG] Log the switch case value and the raw 64-bit object word
                 {
                     uint64_t raw_qw = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
+                    uint32_t ft_raw = memory::read<uint32_t>(0x3097dc);
+                    float ft_val;
+                    memcpy(&ft_val, &ft_raw, 4);
                     g_logFile << "[177168-SWITCH] param1=0x" << std::hex << ctx.cpuRegs.GPR.r[17].UL[0]
                               << " raw_qw=0x" << raw_qw
-                              << " case=" << std::dec << ctx.cpuRegs.GPR.r[4].UL[0] << std::endl;
+                              << " case=" << std::dec << ctx.cpuRegs.GPR.r[4].UL[0]
+                              << " DAT_3097dc=0x" << std::hex << ft_raw << "(" << std::dec << ft_val << ")"
+                              << std::endl;
                 }
 
 
@@ -11878,6 +11883,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
 
 
