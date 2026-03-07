@@ -1859,6 +1859,9 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
 
         file << R"code(
             Label_177714:
+                // Delay slot: andi v1, s2, 0x3f executes BEFORE the branch
+                ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[18].UL[0] & 0x3f;
+                
                 g_logFile << "[177168-WRITEBACK] r[18]=0x" << std::hex << ctx.cpuRegs.GPR.r[18].UL[0]
                           << " r[2]=0x" << ctx.cpuRegs.GPR.r[2].UL[0]
                           << " (skip write? " << (ctx.cpuRegs.GPR.r[18].UL[0] == ctx.cpuRegs.GPR.r[2].UL[0] ? "YES" : "NO") << ")"
@@ -1867,20 +1870,26 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     goto Label_17774c;
                 }
                 
-                ctx.cpuRegs.GPR.r[3].UL[0] = ctx.cpuRegs.GPR.r[18].UL[0] & 0x3f;
                 ctx.cpuRegs.GPR.r[2].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0);
                 
                 {
-                    uint64_t mask = 0xff03ULL << 48;
-                    mask |= 0xffffULL; mask <<= 16;
-                    mask |= 0xffffULL; mask <<= 16;
-                    mask |= 0xffffULL;
+                    // Build mask 0xff03ffffffffffff (clears bits 48-55 except top 2)
+                    // MIPS: ori 0xff03, dsll 16, ori 0xffff, dsll 16, ori 0xffff, dsll 16, ori 0xffff
+                    uint64_t mask = 0xff03ULL;
+                    mask <<= 16; mask |= 0xffffULL;  // 0xff03ffff
+                    mask <<= 16; mask |= 0xffffULL;  // 0xff03ffffffff
+                    mask <<= 16; mask |= 0xffffULL;  // 0xff03ffffffffffff
                     
                     uint64_t v1_shift = (uint64_t)ctx.cpuRegs.GPR.r[3].UL[0] << 50;
                     
                     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & mask;
                     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | v1_shift;
                     
+                    g_logFile << "[177168-WRITE] Writing state to addr=0x" << std::hex << ctx.cpuRegs.GPR.r[17].UL[0]
+                              << " new_qw=0x" << ctx.cpuRegs.GPR.r[2].UD[0]
+                              << " mask=0x" << mask
+                              << " shift=0x" << v1_shift
+                              << " new_case=" << std::dec << ((ctx.cpuRegs.GPR.r[2].UD[0] >> 44) & 0x3f) << std::endl;
                     memory::write<uint64_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UD[0]);
                 }
 
@@ -10941,5 +10950,6 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
 
