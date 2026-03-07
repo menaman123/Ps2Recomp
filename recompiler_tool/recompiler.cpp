@@ -473,10 +473,45 @@ void Recompiler::write_cpp_file(std::ofstream& file, const std::string& output_h
         }
 
 
+        else if (func.base_address == 0x00172d88) {
+            // Diagnostic wrapper for FUN_00172d88 - Streaming State Check
+            // Logs the 64-bit state word and which branch is taken
+            file << "    recompiled_functions[0x172d88] = [](CpuContext& ctx, uint32_t addr) {\n";
+            file << "        uint32_t p1 = ctx.cpuRegs.GPR.r[4].UL[0];\n";
+            file << "        uint32_t p2 = ctx.cpuRegs.GPR.r[5].UL[0];\n";
+            file << "        uint64_t state = memory::read<uint64_t>(p1 + 0x8e8);\n";
+            file << "        uint32_t iv1 = memory::read<uint32_t>(p1 + 0x14);\n";
+            file << "        bool bit32 = (state & 0x100000000ULL) != 0;\n";
+            file << "        uint64_t bits33_40 = state & 0x1fe00000000ULL;\n";
+            file << "        bool bVar1 = false;\n";
+            file << "        if (!bit32) bVar1 = (bits33_40 != 0x1800000000ULL);\n";
+            file << "        g_logFile << \"[172d88-DIAG] p1=0x\" << std::hex << p1\n";
+            file << "                  << \" p2=\" << std::dec << p2\n";
+            file << "                  << \" state64=0x\" << std::hex << state\n";
+            file << "                  << \" bit32=\" << bit32\n";
+            file << "                  << \" bits33_40=0x\" << bits33_40\n";
+            file << "                  << \" bVar1=\" << bVar1\n";
+            file << "                  << \" iv1=\" << std::dec << iv1\n";
+            file << "                  << std::endl;\n";
+            file << "        if (!bVar1) {\n";
+            file << "            bool topbit = ((state >> 0x20) & 1) == 0;\n";
+            file << "            g_logFile << \"[172d88-DIAG] PATH: bVar1=false -> return 0\"\n";
+            file << "                      << \" (topbit_check=\" << topbit << \")\" << std::endl;\n";
+            file << "        } else {\n";
+            file << "            g_logFile << \"[172d88-DIAG] PATH: bVar1=true -> checking animation state\" << std::endl;\n";
+            file << "        }\n";
+            file << "        FUN_00172d88(ctx);\n";
+            file << "        g_logFile << \"[172d88-DIAG] returned v0=\" << std::dec << ctx.cpuRegs.GPR.r[2].UL[0] << std::endl;\n";
+            file << "    };\n";
+            uint32_t end_address = func.base_address + func.size;
+            file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
+                 << ", 0x" << std::hex << end_address << ", recompiled_functions[0x172d88]});\n";
+        }
+
+
         else {
             // Standard generation for all other functions
             file << "    recompiled_functions[0x" << std::hex << func.base_address << "] = [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); };\n";
-            
             uint32_t end_address = func.base_address + func.size;
             file << "    function_ranges.push_back({0x" << std::hex << func.base_address 
                  << ", 0x" << std::hex << end_address << ", [](CpuContext& ctx, uint32_t addr) { " << func.name << "(ctx); }});\n";
@@ -11843,6 +11878,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
 
 
