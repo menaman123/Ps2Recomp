@@ -909,6 +909,16 @@ void write_io_register(uint32_t address, uint32_t value) {
   
      */
 
+    if (address >= 0x437b60 && address < 0x437b80) {
+        g_logFile << "[Memory WATCH LOAD-STATE] Write called for address: " << std::hex << address
+                << " with value: " << value << std::endl;
+    }
+
+    if (address == 0x309720) {
+        g_logFile << "[Memory WATCH LOAD-PTR] Address: "
+            << std::hex << address << " Value: " << value << std::endl;
+    }
+
      if(address >= 0x4202e0 && address < 0x4204e8){
          g_logFile << "[STATE-WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
                  << " with value: " << (uint64_t)value << std::dec
