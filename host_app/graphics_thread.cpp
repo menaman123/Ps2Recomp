@@ -1692,8 +1692,6 @@ while (true) {
 
 
                  if (!pages_written) {
-                     // RC7: Allow all textures through — page tracker misses
-                     // framebuffer writes and VRAM-to-VRAM copies
                      g_logFile << "[TEX] VRAM pages not tracked for TBP=0x" << std::hex << ti.tbp
                                << std::dec << " — attempting decode anyway" << std::endl;
                  }
