@@ -15,9 +15,21 @@
 
 
 
+
+
+
+
 extern RenderQueue g_renderQueue;
 extern SDL_Renderer* g_renderer;
 extern std::ofstream g_logFile;
+
+
+
+
+
+
+
+
 
 
 
@@ -36,6 +48,14 @@ static TextureCache g_textureCache;
 
 
 
+
+
+
+
+
+
+
+
 // Defined in main.cpp or wherever globals live — declared in render.h
 std::atomic<bool> g_texflush_pending{false};
 std::mutex g_vram_pages_mutex;
@@ -44,20 +64,44 @@ std::unordered_set<uint32_t> g_vram_written_pages;
 
 
 
+
+
+
+
 void GraphicsThreadFunc() {
 g_logFile << "[GFX] Graphics Thread Started." << std::endl;
- RenderJob job;
- uint8_t clearR = 0, clearG = 0, clearB = 0;
+RenderJob job;
+uint8_t clearR = 0, clearG = 0, clearB = 0;
 int windowW = 640, windowH = 448;
+
+
+
+
 
 
 
 
 // Initial clear so first frame isn't garbage
 if (g_renderer) {
-    SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
-    SDL_RenderClear(g_renderer);
+   SDL_SetRenderDrawColor(g_renderer, 0, 0, 0, 255);
+   SDL_RenderClear(g_renderer);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -75,9 +119,9 @@ if (g_renderer) {
 
 
 while (true) {
-    if (!g_renderQueue.Pop(job)) {
-        break;
-    }
+   if (!g_renderQueue.Pop(job)) {
+       break;
+   }
 
 
 
@@ -94,25 +138,10 @@ while (true) {
 
 
 
-    switch (job.type) {
-        case RenderCommandType::VSync:
-        {
-            static uint32_t s_frame_count = 0;
-            s_frame_count++;
 
 
-            // [XFER-SUMMARY] Log session-wide transfer counters at each VSync
-            g_logFile << "[XFER-SUMMARY] Frame " << s_frame_count
-                      << ": BITBLTBUF=#" << g_bitbltbuf_count
-                      << " TRXDIR=#" << g_trxdir_count
-                      << " HWREG=#" << g_hwreg_count
-                      << " (total transfers: " << g_trxdir_count << ")" << std::endl;
 
 
-            SDL_RenderPresent(g_renderer);
-        
-            g_gs_regs.GS_CSR |= (1 << 3);
-            g_intc.RaiseInterrupt(INTC_VBON);
 
 
 
@@ -125,19 +154,29 @@ while (true) {
 
 
 
+   switch (job.type) {
+       case RenderCommandType::VSync:
+       {
+           static uint32_t s_frame_count = 0;
+           s_frame_count++;
 
 
 
 
-            // Clear for next frame
-            SDL_SetRenderDrawColor(g_renderer, clearR, clearG, clearB, 255);
-            SDL_RenderClear(g_renderer);
-            break;
-        }
+           // [XFER-SUMMARY] Log session-wide transfer counters at each VSync
+           g_logFile << "[XFER-SUMMARY] Frame " << s_frame_count
+                     << ": BITBLTBUF=#" << g_bitbltbuf_count
+                     << " TRXDIR=#" << g_trxdir_count
+                     << " HWREG=#" << g_hwreg_count
+                     << " (total transfers: " << g_trxdir_count << ")" << std::endl;
 
 
 
 
+           SDL_RenderPresent(g_renderer);
+      
+           g_gs_regs.GS_CSR |= (1 << 3);
+           g_intc.RaiseInterrupt(INTC_VBON);
 
 
 
@@ -150,11 +189,6 @@ while (true) {
 
 
 
-        case RenderCommandType::SetClearColor:
-            clearR = (uint8_t)job.args.arg1;
-            clearG = (uint8_t)job.args.arg2;
-            clearB = (uint8_t)job.args.arg3;
-            break;
 
 
 
@@ -171,25 +205,15 @@ while (true) {
 
 
 
-        case RenderCommandType::SetWindow:
-        {
-            int newW = job.args.arg2;
-            int newH = job.args.arg3;
-        
-            if (newW != windowW || newH != windowH) {
-                windowW = newW;
-                windowH = newH;
-                SDL_Window* win = SDL_RenderGetWindow(g_renderer);
-                SDL_SetWindowSize(win, windowW, windowH);
-                SDL_SetWindowPosition(win, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-                std::cout << "[GFX] Resizing Window to " << windowW << "x" << windowH << std::endl;
-            }
-            break;
-        }
 
 
 
 
+           // Clear for next frame
+           SDL_SetRenderDrawColor(g_renderer, clearR, clearG, clearB, 255);
+           SDL_RenderClear(g_renderer);
+           break;
+       }
 
 
 
@@ -202,8 +226,6 @@ while (true) {
 
 
 
-        case RenderCommandType::SetFrontBuffer:
-            break;
 
 
 
@@ -212,15 +234,6 @@ while (true) {
 
 
 
-        case RenderCommandType::InvalidateTextures:
-        {
-            uint32_t base = job.args.arg1;
-            uint32_t size = job.args.arg2;
-            g_textureCache.InvalidateRegion(base, size);
-            g_logFile << "[TEX] Transfer invalidation: base=0x" << std::hex << base
-                      << " size=0x" << size << std::dec << std::endl;
-            break;
-        }
 
 
 
@@ -233,13 +246,15 @@ while (true) {
 
 
 
+       case RenderCommandType::SetClearColor:
+           clearR = (uint8_t)job.args.arg1;
+           clearG = (uint8_t)job.args.arg2;
+           clearB = (uint8_t)job.args.arg3;
+           break;
 
 
 
 
-        case RenderCommandType::DrawBatch:
-        {
-            if (!g_renderer) break;
 
 
 
@@ -248,15 +263,6 @@ while (true) {
 
 
 
-            // TEXFLUSH: check and clear the atomic flag, invalidate cache
-            if (g_texflush_pending.exchange(false, std::memory_order_acquire)) {
-                g_textureCache.InvalidateAll();
-                g_logFile << "[TEX] TEXFLUSH consumed — cache invalidated" << std::endl;
-            }
-        
-            const auto& batch = job.batch;
-            size_t vCount = batch.vertices.size();
-            if (vCount < 3) break;
 
 
 
@@ -265,9 +271,6 @@ while (true) {
 
 
 
-            const auto& ti = batch.tex_info;
-            int tex_w = ti.enabled ? (1 << ti.tw) : 0;
-            int tex_h = ti.enabled ? (1 << ti.th) : 0;
 
 
 
@@ -276,45 +279,29 @@ while (true) {
 
 
 
-            // --- 5.1: Texture lookup, decode, and SDL_Texture creation ---
-            SDL_Texture* sdl_tex = nullptr;
 
 
 
 
+       case RenderCommandType::SetWindow:
+       {
+           int newW = job.args.arg2;
+           int newH = job.args.arg3;
+      
+           if (newW != windowW || newH != windowH) {
+               windowW = newW;
+               windowH = newH;
+               SDL_Window* win = SDL_RenderGetWindow(g_renderer);
+               SDL_SetWindowSize(win, windowW, windowH);
+               SDL_SetWindowPosition(win, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+               std::cout << "[GFX] Resizing Window to " << windowW << "x" << windowH << std::endl;
+           }
+           break;
+       }
 
 
 
 
-            if (ti.enabled && !ti.vram_snapshot.empty() && tex_w > 0 && tex_h > 0) {
-                // Reject Z-buffer PSM formats as texture source
-                if (ti.psm >= 0x30 && ti.psm <= 0x3A) {
-                    g_logFile << "[TEX] Z-buffer PSM=0x" << std::hex << ti.psm
-                              << std::dec << " rejected, vertex-color fallback" << std::endl;
-                } else {
-                    // Task 9.3: Check if texture VRAM pages have been written
-                    bool pages_written = false;
-                    {
-                        static constexpr uint32_t PAGE_SIZE = 8192;
-                        uint32_t tex_start_page = (ti.tbp / PAGE_SIZE) * PAGE_SIZE;
-                        // Compute how many pages the texture spans
-                        size_t tex_bytes = 0;
-                        switch (ti.psm) {
-                            case 0x00: tex_bytes = (size_t)tex_w * tex_h * 4; break;
-                            case 0x02: tex_bytes = (size_t)tex_w * tex_h * 2; break;
-                            case 0x13: tex_bytes = (size_t)tex_w * tex_h; break;
-                            case 0x14: tex_bytes = (size_t)tex_w * tex_h / 2; break;
-                            default:   tex_bytes = (size_t)tex_w * tex_h * 4; break;
-                        }
-                        uint32_t tex_end = ti.tbp + (uint32_t)tex_bytes;
-                        std::lock_guard<std::mutex> lock(g_vram_pages_mutex);
-                        for (uint32_t page = tex_start_page; page < tex_end; page += PAGE_SIZE) {
-                            if (g_vram_written_pages.count(page)) {
-                                pages_written = true;
-                                break;
-                            }
-                        }
-                    }
 
 
 
@@ -323,14 +310,6 @@ while (true) {
 
 
 
-                    if (!pages_written) {
-                        g_logFile << "[TEX] VRAM pages not written for TBP=0x" << std::hex << ti.tbp
-                                  << std::dec << " — skipping texture, vertex-color fallback" << std::endl;
-                        // sdl_tex stays nullptr → vertex-color rendering
-                    } else {
-                    // Check texture cache first
-                    TextureCacheKey key{ti.tbp, ti.tbw, ti.psm, ti.tw, ti.th, ti.cbp, ti.cpsm};
-                    sdl_tex = g_textureCache.Lookup(key);
 
 
 
@@ -339,9 +318,6 @@ while (true) {
 
 
 
-                    if (!sdl_tex) {
-                        // Cache miss — decode VRAM snapshot via TextureDecoder
-                        auto pixels = TextureDecoder::Decode(ti);
 
 
 
@@ -350,35 +326,16 @@ while (true) {
 
 
 
-                        if (!pixels.empty()) {
-                            sdl_tex = SDL_CreateTexture(g_renderer,
-                                SDL_PIXELFORMAT_ABGR8888,
-                                SDL_TEXTUREACCESS_STATIC,
-                                tex_w, tex_h);
 
 
 
 
+       case RenderCommandType::SetFrontBuffer:
+           break;
 
 
 
 
-                            if (sdl_tex) {
-                                SDL_UpdateTexture(sdl_tex, nullptr, pixels.data(), tex_w * 4);
-                                SDL_SetTextureBlendMode(sdl_tex, SDL_BLENDMODE_BLEND);
-                                g_textureCache.Insert(key, sdl_tex);
-                            } else {
-                                g_logFile << "[TEX] SDL_CreateTexture failed: " << SDL_GetError() << std::endl;
-                            }
-                        } else {
-                            // Empty decode result — fallback to vertex-color rendering
-                            g_logFile << "[TEX] Decode returned empty for TBP=0x" << std::hex << ti.tbp
-                                      << " PSM=0x" << ti.psm << std::dec << std::endl;
-                        }
-                    }
-                    } // pages_written else
-                }
-            }
 
 
 
@@ -387,25 +344,23 @@ while (true) {
 
 
 
-            // --- Build SDL_Vertex array ---
-            std::vector<SDL_Vertex> sdl_verts;
-            sdl_verts.reserve(vCount);
 
 
 
 
+       case RenderCommandType::InvalidateTextures:
+       {
+           uint32_t base = job.args.arg1;
+           uint32_t size = job.args.arg2;
+           g_textureCache.InvalidateRegion(base, size);
+           g_logFile << "[TEX] Transfer invalidation: base=0x" << std::hex << base
+                     << " size=0x" << size << std::dec << std::endl;
+           break;
+       }
 
 
 
 
-            for (size_t i = 0; i < vCount; i++) {
-                const auto& v = batch.vertices[i];
-                SDL_Vertex sv;
-            
-                float x = v.x;
-                float y = v.y;
-                if (x > 1000.0f) x -= 2048.0f;
-                if (y > 1000.0f) y -= 2048.0f;
 
 
 
@@ -414,8 +369,6 @@ while (true) {
 
 
 
-                sv.position.x = x;
-                sv.position.y = y;
 
 
 
@@ -424,8 +377,6 @@ while (true) {
 
 
 
-                // --- 5.3: TFX vertex color adjustment ---
-                uint8_t vr = v.r, vg = v.g, vb = v.b, va = v.a;
 
 
 
@@ -434,49 +385,33 @@ while (true) {
 
 
 
-                if (sdl_tex) {
-                    uint32_t tfx = ti.tfx;
-                    // HIGHLIGHT/HIGHLIGHT2 fall back to MODULATE
-                    if (tfx == 2 || tfx == 3) tfx = 0;
 
 
 
 
+       case RenderCommandType::DrawBatch:
+       {
+           if (!g_renderer) break;
 
 
+           // ===== DIAGNOSTIC: Log every DrawBatch received =====
+           {
+               const auto& db = job.batch;
+               size_t vc = db.vertices.size();
+               uint8_t r0=0,g0=0,b0=0,a0=0;
+               float x0=0,y0=0;
+               if (vc > 0) { r0=db.vertices[0].r; g0=db.vertices[0].g; b0=db.vertices[0].b; a0=db.vertices[0].a; x0=db.vertices[0].x; y0=db.vertices[0].y; }
+               g_logFile << "[DRAW-BATCH] verts=" << vc
+                         << " type=" << (int)db.prim_type
+                         << " tex=" << db.tex_info.enabled
+                         << " alpha_blend=" << db.alpha_blend
+                         << " v0=(" << x0 << "," << y0 << ") RGBA=(" << (int)r0 << "," << (int)g0 << "," << (int)b0 << "," << (int)a0 << ")"
+                         << " TBP=0x" << std::hex << db.tex_info.tbp << std::dec
+                         << " PSM=0x" << std::hex << db.tex_info.psm << std::dec
+                         << std::endl;
+           }
 
 
-                    if (tfx == 0) {
-                        // MODULATE: scale vertex color by 2 (PS2 128=1.0 → SDL 255=1.0)
-                        vr = (uint8_t)std::min((int)vr * 2, 255);
-                        vg = (uint8_t)std::min((int)vg * 2, 255);
-                        vb = (uint8_t)std::min((int)vb * 2, 255);
-                        if (ti.tcc == 1) {
-                            // TCC=1: alpha from texture×vertex
-                            va = (uint8_t)std::min((int)va * 2, 255);
-                        } else {
-                            // TCC=0: alpha from vertex only, still scale
-                            va = (uint8_t)std::min((int)va * 2, 255);
-                        }
-                    } else if (tfx == 1) {
-                        // DECAL
-                        if (ti.tcc == 1) {
-                            // TCC=1: texture RGBA passes through, vertex = white opaque
-                            vr = 255; vg = 255; vb = 255; va = 255;
-                        } else {
-                            // TCC=0: texture RGB, alpha from vertex
-                            vr = 255; vg = 255; vb = 255;
-                            va = (uint8_t)std::min((int)va * 2, 255);
-                        }
-                    }
-                } else {
-                    // No texture — apply TEXA alpha expansion for TCC=0
-                    uint8_t effective_alpha = va;
-                    if (ti.enabled && ti.tcc == 0) {
-                        effective_alpha = (va == 0) ? ti.texa_ta0 : ti.texa_ta1;
-                    }
-                    va = (uint8_t)std::min((int)effective_alpha * 2, 255);
-                }
 
 
 
@@ -485,40 +420,27 @@ while (true) {
 
 
 
-                sv.color.r = vr;
-                sv.color.g = vg;
-                sv.color.b = vb;
-                sv.color.a = va;
 
 
 
 
-                // PS2: When alpha blending is disabled (ABE=0), pixels are always
-                // written to the framebuffer regardless of alpha value. SDL needs
-                // alpha=255 to render opaque pixels with SDL_BLENDMODE_BLEND.
-                if (!batch.alpha_blend) {
-                    sv.color.a = 255;
-                }
 
 
+           // TEXFLUSH: check and clear the atomic flag, invalidate cache
+           if (g_texflush_pending.exchange(false, std::memory_order_acquire)) {
+               g_textureCache.InvalidateAll();
+               g_logFile << "[TEX] TEXFLUSH consumed — cache invalidated" << std::endl;
+           }
+      
+           const auto& batch = job.batch;
+           size_t vCount = batch.vertices.size();
+           if (vCount < 3) break;
 
 
 
 
 
 
-                // --- 5.2: UV coordinate computation ---
-                if (sdl_tex && tex_w > 0 && tex_h > 0) {
-                    if (ti.fst) {
-                        // FST=1 (UV mode): s,t already in texel units
-                        sv.tex_coord.x = v.s / (float)tex_w;
-                        sv.tex_coord.y = v.t / (float)tex_h;
-                    } else {
-                        // FST=0 (STQ mode): perspective-correct, divide by Q
-                        float q = (v.q != 0.0f) ? v.q : 1.0f;
-                        sv.tex_coord.x = (v.s / q) / (float)tex_w;
-                        sv.tex_coord.y = (v.t / q) / (float)tex_h;
-                    }
 
 
 
@@ -527,49 +449,17 @@ while (true) {
 
 
 
-                    // --- 6.1: Apply wrap/clamp modes ---
-                    // WMS applied to U (S axis), WMT applied to V (T axis)
-                    auto applyWrapClamp = [](float coord, uint8_t mode,
-                                             uint16_t minc, uint16_t maxc, int dim) -> float {
-                        switch (mode) {
-                            case 0: // REPEAT
-                                return coord - std::floor(coord);
-                            case 1: // CLAMP
-                                return std::clamp(coord, 0.0f, 1.0f);
-                            case 2: // REGION_CLAMP
-                                if (dim > 0) {
-                                    float lo = (float)minc / (float)dim;
-                                    float hi = (float)maxc / (float)dim;
-                                    return std::clamp(coord, lo, hi);
-                                }
-                                return coord;
-                            case 3: // REGION_REPEAT
-                                if (dim > 0) {
-                                    int mask   = (int)minc;  // MINU/MINV is mask
-                                    int offset = (int)maxc;  // MAXU/MAXV is offset
-                                    return (float)((int(coord * dim) & mask) | offset) / (float)dim;
-                                }
-                                return coord;
-                            default:
-                                return coord;
-                        }
-                    };
 
 
+           const auto& ti = batch.tex_info;
+           int tex_w = ti.enabled ? (1 << ti.tw) : 0;
+           int tex_h = ti.enabled ? (1 << ti.th) : 0;
 
 
 
 
 
 
-                    sv.tex_coord.x = applyWrapClamp(sv.tex_coord.x, ti.wms,
-                                                     ti.minu, ti.maxu, tex_w);
-                    sv.tex_coord.y = applyWrapClamp(sv.tex_coord.y, ti.wmt,
-                                                     ti.minv, ti.maxv, tex_h);
-                } else {
-                    sv.tex_coord.x = 0.0f;
-                    sv.tex_coord.y = 0.0f;
-                }
 
 
 
@@ -578,26 +468,16 @@ while (true) {
 
 
 
-                sdl_verts.push_back(sv);
-            }
 
 
+           // --- 5.1: Texture lookup, decode, and SDL_Texture creation ---
+           SDL_Texture* sdl_tex = nullptr;
 
 
 
 
 
 
-            // Ensure vertex count is multiple of 3 (triangle list)
-            size_t tri_verts = (sdl_verts.size() / 3) * 3;
-        
-            if (tri_verts >= 3) {
-                SDL_RenderGeometry(g_renderer,
-                                  sdl_tex,
-                                  sdl_verts.data(),
-                                  (int)tri_verts,
-                                  nullptr, 0);
-            }
 
 
 
@@ -606,11 +486,481 @@ while (true) {
 
 
 
-            break;
-        }
-    }
+
+
+           if (ti.enabled && !ti.vram_snapshot.empty() && tex_w > 0 && tex_h > 0) {
+               // Reject Z-buffer PSM formats as texture source
+               if (ti.psm >= 0x30 && ti.psm <= 0x3A) {
+                   g_logFile << "[TEX] Z-buffer PSM=0x" << std::hex << ti.psm
+                             << std::dec << " rejected, vertex-color fallback" << std::endl;
+               } else {
+                   // Task 9.3: Check if texture VRAM pages have been written
+                   bool pages_written = false;
+                   {
+                       static constexpr uint32_t PAGE_SIZE = 8192;
+                       uint32_t tex_start_page = (ti.tbp / PAGE_SIZE) * PAGE_SIZE;
+                       // Compute how many pages the texture spans
+                       size_t tex_bytes = 0;
+                       switch (ti.psm) {
+                           case 0x00: tex_bytes = (size_t)tex_w * tex_h * 4; break;
+                           case 0x02: tex_bytes = (size_t)tex_w * tex_h * 2; break;
+                           case 0x13: tex_bytes = (size_t)tex_w * tex_h; break;
+                           case 0x14: tex_bytes = (size_t)tex_w * tex_h / 2; break;
+                           default:   tex_bytes = (size_t)tex_w * tex_h * 4; break;
+                       }
+                       uint32_t tex_end = ti.tbp + (uint32_t)tex_bytes;
+                       std::lock_guard<std::mutex> lock(g_vram_pages_mutex);
+                       for (uint32_t page = tex_start_page; page < tex_end; page += PAGE_SIZE) {
+                           if (g_vram_written_pages.count(page)) {
+                               pages_written = true;
+                               break;
+                           }
+                       }
+                   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   if (!pages_written) {
+                       g_logFile << "[TEX] VRAM pages not written for TBP=0x" << std::hex << ti.tbp
+                                 << std::dec << " — skipping texture, vertex-color fallback" << std::endl;
+                       // sdl_tex stays nullptr → vertex-color rendering
+                   } else {
+                   // Check texture cache first
+                   TextureCacheKey key{ti.tbp, ti.tbw, ti.psm, ti.tw, ti.th, ti.cbp, ti.cpsm};
+                   sdl_tex = g_textureCache.Lookup(key);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   if (!sdl_tex) {
+                       // Cache miss — decode VRAM snapshot via TextureDecoder
+                       auto pixels = TextureDecoder::Decode(ti);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                       if (!pixels.empty()) {
+                           sdl_tex = SDL_CreateTexture(g_renderer,
+                               SDL_PIXELFORMAT_ABGR8888,
+                               SDL_TEXTUREACCESS_STATIC,
+                               tex_w, tex_h);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           if (sdl_tex) {
+                               SDL_UpdateTexture(sdl_tex, nullptr, pixels.data(), tex_w * 4);
+                               SDL_SetTextureBlendMode(sdl_tex, SDL_BLENDMODE_BLEND);
+                               g_textureCache.Insert(key, sdl_tex);
+                           } else {
+                               g_logFile << "[TEX] SDL_CreateTexture failed: " << SDL_GetError() << std::endl;
+                           }
+                       } else {
+                           // Empty decode result — fallback to vertex-color rendering
+                           g_logFile << "[TEX] Decode returned empty for TBP=0x" << std::hex << ti.tbp
+                                     << " PSM=0x" << ti.psm << std::dec << std::endl;
+                       }
+                   }
+                   } // pages_written else
+               }
+           }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           // --- Build SDL_Vertex array ---
+           std::vector<SDL_Vertex> sdl_verts;
+           sdl_verts.reserve(vCount);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           for (size_t i = 0; i < vCount; i++) {
+               const auto& v = batch.vertices[i];
+               SDL_Vertex sv;
+          
+               float x = v.x;
+               float y = v.y;
+               if (x > 1000.0f) x -= 2048.0f;
+               if (y > 1000.0f) y -= 2048.0f;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               sv.position.x = x;
+               sv.position.y = y;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               // --- 5.3: TFX vertex color adjustment ---
+               uint8_t vr = v.r, vg = v.g, vb = v.b, va = v.a;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               if (sdl_tex) {
+                   uint32_t tfx = ti.tfx;
+                   // HIGHLIGHT/HIGHLIGHT2 fall back to MODULATE
+                   if (tfx == 2 || tfx == 3) tfx = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   if (tfx == 0) {
+                       // MODULATE: scale vertex color by 2 (PS2 128=1.0 → SDL 255=1.0)
+                       vr = (uint8_t)std::min((int)vr * 2, 255);
+                       vg = (uint8_t)std::min((int)vg * 2, 255);
+                       vb = (uint8_t)std::min((int)vb * 2, 255);
+                       if (ti.tcc == 1) {
+                           // TCC=1: alpha from texture×vertex
+                           va = (uint8_t)std::min((int)va * 2, 255);
+                       } else {
+                           // TCC=0: alpha from vertex only, still scale
+                           va = (uint8_t)std::min((int)va * 2, 255);
+                       }
+                   } else if (tfx == 1) {
+                       // DECAL
+                       if (ti.tcc == 1) {
+                           // TCC=1: texture RGBA passes through, vertex = white opaque
+                           vr = 255; vg = 255; vb = 255; va = 255;
+                       } else {
+                           // TCC=0: texture RGB, alpha from vertex
+                           vr = 255; vg = 255; vb = 255;
+                           va = (uint8_t)std::min((int)va * 2, 255);
+                       }
+                   }
+               } else {
+                   // No texture — apply TEXA alpha expansion for TCC=0
+                   uint8_t effective_alpha = va;
+                   if (ti.enabled && ti.tcc == 0) {
+                       effective_alpha = (va == 0) ? ti.texa_ta0 : ti.texa_ta1;
+                   }
+                   va = (uint8_t)std::min((int)effective_alpha * 2, 255);
+               }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               sv.color.r = vr;
+               sv.color.g = vg;
+               sv.color.b = vb;
+               sv.color.a = va;
+
+
+
+
+
+
+
+
+               // PS2: When alpha blending is disabled (ABE=0), pixels are always
+               // written to the framebuffer regardless of alpha value. SDL needs
+               // alpha=255 to render opaque pixels with SDL_BLENDMODE_BLEND.
+               if (!batch.alpha_blend) {
+                   sv.color.a = 255;
+               }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               // --- 5.2: UV coordinate computation ---
+               if (sdl_tex && tex_w > 0 && tex_h > 0) {
+                   if (ti.fst) {
+                       // FST=1 (UV mode): s,t already in texel units
+                       sv.tex_coord.x = v.s / (float)tex_w;
+                       sv.tex_coord.y = v.t / (float)tex_h;
+                   } else {
+                       // FST=0 (STQ mode): perspective-correct, divide by Q
+                       float q = (v.q != 0.0f) ? v.q : 1.0f;
+                       sv.tex_coord.x = (v.s / q) / (float)tex_w;
+                       sv.tex_coord.y = (v.t / q) / (float)tex_h;
+                   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   // --- 6.1: Apply wrap/clamp modes ---
+                   // WMS applied to U (S axis), WMT applied to V (T axis)
+                   auto applyWrapClamp = [](float coord, uint8_t mode,
+                                            uint16_t minc, uint16_t maxc, int dim) -> float {
+                       switch (mode) {
+                           case 0: // REPEAT
+                               return coord - std::floor(coord);
+                           case 1: // CLAMP
+                               return std::clamp(coord, 0.0f, 1.0f);
+                           case 2: // REGION_CLAMP
+                               if (dim > 0) {
+                                   float lo = (float)minc / (float)dim;
+                                   float hi = (float)maxc / (float)dim;
+                                   return std::clamp(coord, lo, hi);
+                               }
+                               return coord;
+                           case 3: // REGION_REPEAT
+                               if (dim > 0) {
+                                   int mask   = (int)minc;  // MINU/MINV is mask
+                                   int offset = (int)maxc;  // MAXU/MAXV is offset
+                                   return (float)((int(coord * dim) & mask) | offset) / (float)dim;
+                               }
+                               return coord;
+                           default:
+                               return coord;
+                       }
+                   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   sv.tex_coord.x = applyWrapClamp(sv.tex_coord.x, ti.wms,
+                                                    ti.minu, ti.maxu, tex_w);
+                   sv.tex_coord.y = applyWrapClamp(sv.tex_coord.y, ti.wmt,
+                                                    ti.minv, ti.maxv, tex_h);
+               } else {
+                   sv.tex_coord.x = 0.0f;
+                   sv.tex_coord.y = 0.0f;
+               }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               sdl_verts.push_back(sv);
+           }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           // Ensure vertex count is multiple of 3 (triangle list)
+           size_t tri_verts = (sdl_verts.size() / 3) * 3;
+      
+           if (tri_verts >= 3) {
+               SDL_RenderGeometry(g_renderer,
+                                 sdl_tex,
+                                 sdl_verts.data(),
+                                 (int)tri_verts,
+                                 nullptr, 0);
+           }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           break;
+       }
+   }
 }
 }
+
+
+
+
+
+
+
+
 
 
 
