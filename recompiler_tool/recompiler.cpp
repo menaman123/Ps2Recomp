@@ -1453,6 +1453,12 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     case 14: goto Label_caseD_e;
                     case 15: goto Label_caseD_f;
                     case 16: goto Label_caseD_10;
+                    case 17: goto Label_caseD_11;
+                    case 18: goto Label_caseD_12;
+                    case 19: goto Label_caseD_13;
+                    case 20: goto Label_caseD_14;
+                    case 21: goto Label_caseD_15;
+                    case 22: goto Label_caseD_16;
                     default: goto Label_caseD_17;
                 }
 
@@ -1997,7 +2003,9 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                 }
                 
                 ctx.cpuRegs.GPR.r[20].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x5d0;
-                ctx.cpuRegs.GPR.r[2].UL[0] = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4);
+                // lwu v0, 0x4(s1) ; dsll32 v0, v0, 0x0 ; dsra32 v0, v0, 0x0
+                // This is a sign-extension pattern: load unsigned 32-bit, sign-extend to 64-bit
+                ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(memory::read<uint32_t>(ctx.cpuRegs.GPR.r[17].UL[0] + 0x4));
                 ctx.cpuRegs.GPR.r[19].UL[0] = ctx.cpuRegs.GPR.r[17].UL[0] + 0x4f0;
                 goto Label_177710;
 
@@ -2246,7 +2254,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     uint64_t a0 = 0xc000ULL << 32;
                     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & v1;
                     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] ^ a0;
-                    ctx.cpuRegs.GPR.r[2].UL[0] = (ctx.cpuRegs.GPR.r[2].UL[0] < 1) ? 1 : 0;
+                    // sltiu v0, v0, 0x1 — PCSX2: compares full 64-bit .UD[0]
+                    ctx.cpuRegs.GPR.r[2].UD[0] = (ctx.cpuRegs.GPR.r[2].UD[0] < 1) ? 1 : 0;
                     
                     if (ctx.cpuRegs.GPR.r[2].UL[0] == 0) {
                         goto Label_177850;
@@ -2350,8 +2359,8 @@ void Recompiler::recompile_function(const Function& func, std::ofstream& file) {
                     uint64_t a0 = 0xc000ULL << 32;
                     ctx.cpuRegs.GPR.r[4].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] & v1;
                     ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0] ^ a0;
-                    
-                    if (ctx.cpuRegs.GPR.r[2].UL[0] < 1) {
+                    // sltiu v0, v0, 0x1 — PCSX2: compares full 64-bit .UD[0]
+                    if (ctx.cpuRegs.GPR.r[2].UD[0] < 1) {
                         goto Label_177898;
                     }
                     
@@ -8867,6 +8876,257 @@ Label_00202ee0:
 
    file << R"code(
 */
+if (func.base_address == 0x00254ee0){
+    file << R"code(
+
+void FUN_00254ee0(CpuContext& ctx) {
+    // ================================================================
+    // Prologue: 0x254ee0 - 0x254f00
+    // ================================================================
+    ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] - 0x30;
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x00, ctx.cpuRegs.GPR.r[16].UD[0]); // sd s0
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x08, ctx.cpuRegs.GPR.r[17].UD[0]); // sd s1
+    ctx.cpuRegs.GPR.r[16].UD[0] = ctx.cpuRegs.GPR.r[4].UD[0]; // s0 = a0 (param_1)
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10, ctx.cpuRegs.GPR.r[18].UD[0]); // sd s2
+    ctx.cpuRegs.GPR.r[17].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0]; // s1 = a1 (param_2)
+    memory::write<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18, ctx.cpuRegs.GPR.r[31].UD[0]); // sd ra
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20, ctx.fpuRegs.fpr[20].UL);      // swc1 f20
+
+    // 0x254f00: lw v1, 0x0(s0)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+
+    // 0x254f04: andi v0, v1, 0x100
+    // 0x254f08: beq v0, zero, 254f14
+    // 0x254f0c: _move s2, a2  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[18].UD[0] = ctx.cpuRegs.GPR.r[6].UD[0]; // s2 = a2 (param_3)
+    if ((ctx.cpuRegs.GPR.r[3].UL[0] & 0x100) != 0) {
+        // 0x254f10: srl v1, v1, 0x4
+        ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].UL[0] >> 4);
+    }
+
+    // 0x254f14: andi v1, v1, 0xf
+    ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[3].UD[0] & 0xf;
+
+    // 0x254f18: sltiu v0, v1, 5
+    // 0x254f1c: beq v0, zero, caseD_5
+    if (ctx.cpuRegs.GPR.r[3].UL[0] >= 5) goto Label_caseD_5;
+
+    // Switch dispatch
+    switch (ctx.cpuRegs.GPR.r[3].UL[0]) {
+        case 0: goto Label_caseD_0;
+        case 1: goto Label_caseD_1;
+        case 2: goto Label_caseD_2;
+        case 3: goto Label_caseD_3;
+        case 4: goto Label_caseD_4;
+        default: goto Label_caseD_5;
+    }
+
+    // ================================================================
+    // caseD_0: 0x254f3c — jalr to vtable function
+    // ================================================================
+Label_caseD_0:
+    // 0x254f3c: lw v0, 0x34(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x34));
+    // 0x254f40: lh a0, 0x8(v0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(static_cast<int16_t>(
+        memory::read<uint16_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0x8)));
+    // 0x254f44: lw v1, 0xc(v0)
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[2].UL[0] + 0xc));
+    // 0x254f48: jalr v1
+    // 0x254f4c: _addu a0, s0, a0  — delay slot
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        ctx.cpuRegs.GPR.r[16].SL[0] + ctx.cpuRegs.GPR.r[4].SL[0]);
+    {
+        uint32_t target = ctx.cpuRegs.GPR.r[3].UL[0];
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x00254f50;
+        auto it = recompiled_functions.find(target);
+        if (it != recompiled_functions.end()) {
+            it->second(ctx, target);
+        } else {
+            auto func_ptr = find_containing_function(target);
+            if (func_ptr) func_ptr(ctx, target);
+        }
+    }
+    // Fall through to caseD_1
+
+    // ================================================================
+    // caseD_1: 0x254f50 — state transition
+    // ================================================================
+Label_caseD_1:
+    // 0x254f50: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    // 0x254f54: li a1, 2
+    ctx.cpuRegs.GPR.r[5].SD[0] = 2;
+    // 0x254f58: li v1, 3
+    ctx.cpuRegs.GPR.r[3].SD[0] = 3;
+    // 0x254f5c: li a0, -0xf1 (= 0xFFFFFF0F)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(-0xf1);
+    // 0x254f60: movn v1, a1, s1  — if s1 != 0, v1 = a1
+    if (ctx.cpuRegs.GPR.r[17].UD[0] != 0) {
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];
+    }
+    // 0x254f64: and v0, v0, a0
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[4].UD[0];
+    // 0x254f68: sll v1, v1, 4
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].UL[0] << 4);
+    // 0x254f6c: sw s1, 0x10(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, ctx.cpuRegs.GPR.r[17].UL[0]);
+    // 0x254f70: or v0, v0, v1
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[3].UD[0];
+    // 0x254f74: sw s2, 0x14(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14, ctx.cpuRegs.GPR.r[18].UL[0]);
+    // 0x254f78: b LAB_00255008
+    // 0x254f7c: _ori v0, v0, 0x100  — delay slot
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | 0x100;
+    goto Label_00255008;
+
+    // ================================================================
+    // caseD_2: 0x254f80 — conditional on s1
+    // ================================================================
+Label_caseD_2:
+    // 0x254f80: bnel s1, zero, LAB_00255010
+    // 0x254f84: _lw a0, 0x1c(s0)  — delay slot, ONLY if taken
+    if (ctx.cpuRegs.GPR.r[17].UL[0] != 0) {
+        ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+            memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+        goto Label_00255010;
+    }
+    // Not taken path:
+    // 0x254f88: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    // 0x254f8c: li v1, -0xf1
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(-0xf1);
+    // 0x254f90: and v0, v0, v1
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+    // 0x254f94: b LAB_00255008
+    // 0x254f98: _ori v0, v0, 0x130  — delay slot
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | 0x130;
+    goto Label_00255008;
+
+    // ================================================================
+    // caseD_3: 0x254f9c — store params and set state 0x130
+    // ================================================================
+Label_caseD_3:
+    // 0x254f9c: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    // 0x254fa0: li v1, -0xf1
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(-0xf1);
+    // 0x254fa4: sw s1, 0x10(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, ctx.cpuRegs.GPR.r[17].UL[0]);
+    // 0x254fa8: and v0, v0, v1
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[3].UD[0];
+    // 0x254fac: sw s2, 0x14(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14, ctx.cpuRegs.GPR.r[18].UL[0]);
+    // 0x254fb0: b LAB_00255008
+    // 0x254fb4: _ori v0, v0, 0x130  — delay slot
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | 0x130;
+    goto Label_00255008;
+
+    // ================================================================
+    // caseD_4: 0x254fb8 — animation interpolation with FPU
+    // ================================================================
+Label_caseD_4:
+    // 0x254fb8: sw s1, 0x10(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, ctx.cpuRegs.GPR.r[17].UL[0]);
+    // 0x254fbc: addiu a0, s0, 0x10
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[16].SL[0] + 0x10);
+    // 0x254fc0: jal FUN_00259908
+    // 0x254fc4: _lwc1 f20, 0x18(s0)  — delay slot
+    ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x18);
+    ctx.cpuRegs.GPR.r[31].UL[0] = 0x00254fc8;
+    if (recompiled_functions.count(0x259908)) {
+        recompiled_functions[0x259908](ctx, 0x259908);
+    } else {
+        ctx.cpuRegs.pc = 0x259908;
+    }
+    // 0x254fc8: mul.s f0, f0, f20
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[20].f;
+    // 0x254fcc-0x254fd0: lwc1 f1, DAT_003097dc
+    ctx.fpuRegs.fpr[1].UL = memory::read<uint32_t>(0x3097dc);
+    // 0x254fd4: lw v0, 0x0(s0)
+    ctx.cpuRegs.GPR.r[2].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0));
+    // 0x254fd8: li a1, 2
+    ctx.cpuRegs.GPR.r[5].SD[0] = 2;
+    // 0x254fdc: li v1, 3
+    ctx.cpuRegs.GPR.r[3].SD[0] = 3;
+    // 0x254fe0: li a0, -0xf1
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(-0xf1);
+    // 0x254fe4: mul.s f0, f0, f1
+    ctx.fpuRegs.fpr[0].f = ctx.fpuRegs.fpr[0].f * ctx.fpuRegs.fpr[1].f;
+    // 0x254fe8: movn v1, a1, s1
+    if (ctx.cpuRegs.GPR.r[17].UD[0] != 0) {
+        ctx.cpuRegs.GPR.r[3].UD[0] = ctx.cpuRegs.GPR.r[5].UD[0];
+    }
+    // 0x254fec: sll v1, v1, 4
+    ctx.cpuRegs.GPR.r[3].SD[0] = static_cast<int32_t>(ctx.cpuRegs.GPR.r[3].UL[0] << 4);
+    // 0x254ff0: and v0, v0, a0
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] & ctx.cpuRegs.GPR.r[4].UD[0];
+    // 0x254ff4: or v0, v0, v1
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | ctx.cpuRegs.GPR.r[3].UD[0];
+    // 0x254ff8: sw s2, 0x14(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x14, ctx.cpuRegs.GPR.r[18].UL[0]);
+    // 0x254ffc: ori v0, v0, 0x100
+    ctx.cpuRegs.GPR.r[2].UD[0] = ctx.cpuRegs.GPR.r[2].UD[0] | 0x100;
+    // 0x255000: cvt.w.s f1, f0
+    ctx.fpuRegs.fpr[1].SL = static_cast<int32_t>(ctx.fpuRegs.fpr[0].f);
+    // 0x255004: swc1 f1, 0x10(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x10, ctx.fpuRegs.fpr[1].UL);
+    // Fall through to Label_00255008
+
+    // ================================================================
+    // Common write-back: 0x255008
+    // ================================================================
+Label_00255008:
+    // 0x255008: sw v0, 0x0(s0)
+    memory::write<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x0, ctx.cpuRegs.GPR.r[2].UL[0]);
+
+    // ================================================================
+    // caseD_5 / tail: 0x25500c — recursive call if param_1[0x1c] != 0
+    // ================================================================
+Label_caseD_5:
+    // 0x25500c: lw a0, 0x1c(s0)
+    ctx.cpuRegs.GPR.r[4].SD[0] = static_cast<int32_t>(
+        memory::read<uint32_t>(ctx.cpuRegs.GPR.r[16].UL[0] + 0x1c));
+
+Label_00255010:
+    // 0x255010: beq a0, zero, LAB_00255020
+    // 0x255014: _move a1, s1  — delay slot, ALWAYS executes
+    ctx.cpuRegs.GPR.r[5].UD[0] = ctx.cpuRegs.GPR.r[17].UD[0];
+    if (ctx.cpuRegs.GPR.r[4].UL[0] != 0) {
+        // 0x255018: jal FUN_00254ee0 (recursive call)
+        // 0x25501c: _move a2, s2  — delay slot
+        ctx.cpuRegs.GPR.r[6].UD[0] = ctx.cpuRegs.GPR.r[18].UD[0];
+        ctx.cpuRegs.GPR.r[31].UL[0] = 0x00255020;
+        if (recompiled_functions.count(0x254ee0)) {
+            recompiled_functions[0x254ee0](ctx, 0x254ee0);
+        } else {
+            ctx.cpuRegs.pc = 0x254ee0;
+        }
+    }
+
+    // ================================================================
+    // Epilogue: 0x255020
+    // ================================================================
+    ctx.cpuRegs.GPR.r[16].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x00);
+    ctx.cpuRegs.GPR.r[17].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x08);
+    ctx.cpuRegs.GPR.r[18].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x10);
+    ctx.cpuRegs.GPR.r[31].UD[0] = memory::read<uint64_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x18);
+    ctx.fpuRegs.fpr[20].UL = memory::read<uint32_t>(ctx.cpuRegs.GPR.r[29].UL[0] + 0x20);
+    ctx.cpuRegs.GPR.r[29].SL[0] = ctx.cpuRegs.GPR.r[29].SL[0] + 0x30;
+    return;
+}
+    )code" << std::endl;
+    return;
+}
+
+
 if (func.base_address == 0x00255040){
     file << R"code(
     
@@ -11925,6 +12185,7 @@ case RABBITIZER_INSTR_ID_r5900_pextlb:
             log_file << "    exit(1);\n";
     }
 }
+
 
 
 
