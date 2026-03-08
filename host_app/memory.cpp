@@ -729,21 +729,11 @@ void write_io_register(uint32_t address, uint32_t value) {
 
 
 
-
-
-
-
-
  if(address == 0x12001000){
      g_logFile << "Writing to GS_CSR Register: " << std::hex << value << std::endl;
      g_gs_regs.GS_CSR = value;
      return;
  }
-
-
-
-
-
 
 
 
@@ -757,12 +747,6 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
      return;
  }
-
-
-
-
-
-
 
 
  // Log unknown IO writes to help debug missed registers
@@ -781,26 +765,14 @@ void write_io_register(uint32_t address, uint32_t value) {
                << std::hex << address << std::endl;
        }
 
-
-  
        if (address >= 0x3068e0 && address < 0x306938) {
            g_logFile << "[Memory Read] Address: "
                << std::hex << address << std::endl;
        }
 
-
-
-
      if (address >= 0x002f67e0 && address <= 0x002f6808) {
          g_logFile << "[Memory Read] Address: " << std::hex << address << std::endl;
      }
-
-
-
-
-
-
-
 
      if (address >= 0x002f67e0 && address <= 0x002f6810) {
          g_logFile << "[VTable Read] Address: 0x" << std::hex << address << std::endl;
@@ -837,12 +809,6 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
 
 
-
-
-
-
-
-
      uint8_t* ptr = translate_address(address, sizeof(T));
      if (!ptr) {
          return 0;
@@ -853,11 +819,6 @@ void write_io_register(uint32_t address, uint32_t value) {
 
 
 
-
-
-
-
-
      if (address == 0x4A16A0){
          g_logFile << "[FILENAME ADDR READ] Address: " << std::hex << address
                  << ", Value: " << value << std::endl;
@@ -865,30 +826,12 @@ void write_io_register(uint32_t address, uint32_t value) {
 
 
 
-
-
-
-
-
      //g_logFile << "[Read] Address: " << std::hex << address << ", Value: " << value << std::endl;
      return value;
  }
 
-
-
-
-
-
-
-
  template <typename T>
  void write(uint32_t address, T value) {
-
-
-
-
-
-
 
 
      /*
@@ -904,20 +847,6 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
      if (address == 0xb8cde0) {  // slot 42 of the array
          g_logFile << "[WATCHPOINT SLOT42] write value=0x" << std::hex << value << std::endl;
      }
@@ -925,31 +854,9 @@ void write_io_register(uint32_t address, uint32_t value) {
          g_logFile << "[WATCHPOINT OBJ_VTABLE] write value=0x" << std::hex << value << std::endl;
      }
 
-
-
-
-
-
-
-
      if (address == 0xb8cb30 && value != 0) {
          g_logFile << "[MANAGER INIT] write value=0x" << std::hex << value << std::endl;
      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
      if (address == 0x70003ABC) { // 0x70003AB0 + 0xC
          g_logFile << "[WATCHPOINT] write to stream read_ptr: value=0x"
@@ -972,23 +879,10 @@ void write_io_register(uint32_t address, uint32_t value) {
                  << " with value: " << value <<std::endl;
 
 
-
-
-
-
-
-
      }
      if (address == 0x306b50){
          g_logFile << "[MEMORY WATCH] Potential .BIN/ .DAT write called for address: " << std::hex << address
                  << " with value: " << value <<std::endl;
-
-
-
-
-
-
-
 
      }
      if (address >= 0x12000000 && address < 0x12000100) {
@@ -1001,50 +895,24 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
 
 
-
-
-
-
-
-
      if (address == 0x4A16A0){
          g_logFile << "[FILENAME ADDR WRITE] Address: " << std::hex << address
                  << ", Value: " << value << std::endl;
      }
 
 
-
-
-
-
-
-
      if (address == 0x4A18D0){
          g_logFile << "[SUSPECTED TEXTURE BUFFER ADDRESS] Address: " << std::hex << address
                  << ", Value: " << value << std::endl;
-
-
-
-
-
-
-
 
      }
   
      */
 
-
-
-
-
-
      if(address >= 0x4202e0 && address < 0x4204e8){
          g_logFile << "[STATE-WATCH] Write<" << sizeof(T) << "> called for address: " << std::hex << address
                  << " with value: " << (uint64_t)value << std::dec
                  << " PC: 0x" << std::hex << g_current_pc << std::dec << std::endl;
-
-
      }
 
 
@@ -1102,20 +970,6 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
      // Check I/O registers FIRST
      if (is_io_register(address)) {
          if constexpr (sizeof(T) <= 4) {
@@ -1132,23 +986,11 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
 
 
-
-
-
-
-
-
      uint8_t* ptr = translate_address(address, sizeof(T));
      if (!ptr) {
          return;
      }
      std::memcpy(ptr, &value, sizeof(T));
-
-
-
-
-
-
 
 
      //g_logFile << "[Write] Address: " << std::hex << address << ", Value: " << value << std::endl;
@@ -1162,24 +1004,10 @@ void write_io_register(uint32_t address, uint32_t value) {
              // ACTION: Signal your Graphics Thread Condition Variable here
              g_logFile << "Check to see if sceSifSetDma woke up the graphics thread.\n" << std::endl;
 
-
-
-
-
-
-
-
          }
          else{
              g_logFile << "Writing to this adddress but with a different bit set\n" << std::endl;
              g_logFile << "Address: " << std::hex << address << ", Value: " << value << std::endl;
-
-
-
-
-
-
-
 
          }
      }
@@ -1188,22 +1016,10 @@ void write_io_register(uint32_t address, uint32_t value) {
          g_logFile << "Address: " << std::hex << address << ", Value: " << value << std::endl;
 
 
-
-
-
-
-
-
      }
      if (address == 0x1000F010){
          g_logFile << "Writing to INTC_MASK\n" << std::endl;
          g_logFile << "Address: " << std::hex << address << ", Value: " << value << std::endl;
-
-
-
-
-
-
 
 
      }
@@ -1212,19 +1028,7 @@ void write_io_register(uint32_t address, uint32_t value) {
          g_logFile << "Address: " << std::hex << address << ", Value: " << value << std::endl;
 
 
-
-
-
-
-
-
      }
-
-
-
-
-
-
 
 
      if (address == 0x700039b0 && value == 0x30024000){
@@ -1232,25 +1036,11 @@ void write_io_register(uint32_t address, uint32_t value) {
          //g_logFile << "FUNCTION WROTE HERE!!!!!" << std::endl;
      }
 
-
-
-
-
-
-
-
      if (address >= 0x2ec190 && address < 0x2ec200) {
              printf("[Overlay Trap] Write to %x detected! Value: %x\n", address, value);
              // Print the current PC to see which function triggered the write
              // If PC is 0 (or inside kernel), it's likely a DMA transfer.
          }
-
-
-
-
-
-
-
 
      //g_logFile << "[Write] Address: " << std::hex << address << ", Value: " << value << std::endl;
      if (address >= 0x6280 && address <= 0x6290) {
@@ -1270,13 +1060,6 @@ void write_io_register(uint32_t address, uint32_t value) {
          return;
      }
 
-
-
-
-
-
-
-
      uint8_t* ptr = translate_address(address, sizeof(QuadWord));
      if (!ptr) {
          std::memset(&value, 0, sizeof(QuadWord));
@@ -1284,13 +1067,6 @@ void write_io_register(uint32_t address, uint32_t value) {
      }
      std::memcpy(&value, ptr, sizeof(QuadWord));
  }
-
-
-
-
-
-
-
 
  // Implementation for 128-bit write
  void write_quad(uint32_t address, const QuadWord& value) {
@@ -1319,26 +1095,12 @@ void write_io_register(uint32_t address, uint32_t value) {
          return;
      }
 
-
-
-
-
-
-
-
      uint8_t* ptr = translate_address(address, sizeof(QuadWord));
      if (!ptr) {
          return;
      }
      std::memcpy(ptr, &value, sizeof(QuadWord));
  }
-
-
-
-
-
-
-
 
  void* get_pointer(uint32_t address) {
      // Don't return pointers to I/O registers!
@@ -1359,16 +1121,4 @@ void write_io_register(uint32_t address, uint32_t value) {
  template void write<int32_t>(uint32_t address, int32_t value);
  template void write<uint64_t>(uint32_t address, uint64_t value);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
